@@ -5,6 +5,11 @@ import en from './lang/en.js';
 import es from './lang/es.js';
 
 
+// Utils for hash and routing
+import {setHashValue, getHashValue} from './utils.js';
+window.location.setHashValue = setHashValue;
+window.location.getHashValue = getHashValue;
+
 
 const i18n = VueI18n.createI18n();
 

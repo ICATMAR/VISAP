@@ -19,8 +19,20 @@
 export default {
   name: "app-manager",
   created(){
-    // Set default navigator language
-    this.$i18n.locale = navigator.language;
+    // Set language
+    // Check if there is a language in the url
+    if (window.location.hash.indexOf('lang=') != -1){
+      let lang = window.location.hash.substring(window.location.hash.indexOf('lang=') + 5, 9);
+      this.$i18n.locale = lang;
+    } 
+    // Use default navigator language
+    else {
+      this.$i18n.locale = navigator.language;
+      window.location.setHashValue('lang', this.$i18n.locale);
+    }
+    
+
+    
     // Close the dropdown menu if the user clicks outside of it
     window.onclick = function(event) {
       if (!event.target.matches('.dropbtn')) {
@@ -50,8 +62,13 @@ export default {
     },
     // Change language
     changeLanguage: function(el){
-      this.$i18n.locale = el.target.getAttribute('value');
+      let lang = el.target.getAttribute('value');
+      this.$i18n.locale = lang;
+      // Set url hash
+      window.location.setHashValue('lang', this.$i18n.locale);
+      
     },
+
   },
   components: {
 
