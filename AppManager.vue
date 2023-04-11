@@ -6,14 +6,14 @@
     <language-selector style='position:absolute;margin-top: 4.5rem;margin-left:0.5rem;'></language-selector>
 
     <!-- Map  container-->
-    <ol-map id="ol-map" ref="map"
+    <ol-map id="ol-map" ref="map" v-show="app=='map'"
       @onTrackClicked="trackClicked" 
       @onFishingTracksLoad="fishingTracksLoad"
     ></ol-map>
     <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
     
     <!-- Side panel -->
-    <app-side-panel ref="sidePanel" 
+    <app-side-panel ref="sidePanel" v-show="app=='map'"
       @selectedTrack='selectedTrack' 
       @onTabClicked='sidePanelTabClicked' 
       @onPanelTransitionEnd='sidePanelTabClicked'
@@ -64,14 +64,16 @@ import LanguageSelector from "LanguageSelector.vue"
 export default {
   name: "app-manager",
   created(){
-    
+    // Get app from window location hash
+    let appType = window.location.getHashValue('app');
+    this.app = appType;
   },
   mounted () {
 
   },
   data () {
     return {
-      
+      app: 'map'
     }
   },
   methods: {
