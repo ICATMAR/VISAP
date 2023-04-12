@@ -21,9 +21,9 @@ export default {
   created(){
     // Set language
     // Check if there is a language in the url
-    if (window.location.hash.indexOf('lang=') != -1){
-      let lang = window.location.hash.substring(window.location.hash.indexOf('lang=') + 5, 9);
-      this.$i18n.locale = lang;
+    let langURL = window.location.getHashValue('lang');
+    if (langURL != undefined){
+      this.$i18n.locale = langURL;
     } 
     // Use default navigator language
     else {
@@ -151,16 +151,16 @@ export default {
 
 .es:before {
   content: '';
-  background-image: url(img/es-200.png);
+  background-image: url(./img/es-200.png);
 }
 
 .en:before {
   content: '';
-  background-image: url(img/en-200.png);
+  background-image: url(./img/en-200.png);
 }
 .cat:before {
   content: '';
-  background-image: url(img/ca-200.png);
+  background-image: url(./img/ca-200.png);
 }
 
 

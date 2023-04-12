@@ -18,7 +18,7 @@ const setHashValue = function(id, value){
       contentLength = hashSection.length - id.length - 1;
     } else {
       let hashSubSection = hashSection.substring(0, indexSeparator);
-      contentLength = hashSubSection.length - id.lenght - 1;
+      contentLength = hashSubSection.length - id.length - 1;
     }
     
     
@@ -58,7 +58,7 @@ const getHashValue = function(id){
       contentLength = hashSection.length - id.length - 1;
     } else {
       let hashSubSection = hashSection.substring(0, indexSeparator);
-      contentLength = hashSubSection.length - id.lenght - 1;
+      contentLength = hashSubSection.length - id.length - 1;
     }
     
     let content = hash.substring(indexId + id.length + 1, indexId + id.length + 1 + contentLength);
