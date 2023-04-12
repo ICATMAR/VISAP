@@ -62,15 +62,15 @@ whiteboard or event manager. For example, one could send and event like (from, t
 
 
 // Import components
-import Map from "Map.vue";
-import AnimationCanvas from "AnimationCanvas.vue";
-import AppSidePanel from "AppSidePanel.vue"
+import Map from "Components/Map.vue";
+import AnimationCanvas from "Components/AnimationCanvas.vue";
+import AppSidePanel from "Components/AppSidePanel.vue"
 
-import AppOverview from "AppOverview.vue"
+import AppOverview from "Components/AppOverview.vue"
 
-import WeatherWidget from "WeatherWidget.vue"
+import WeatherWidget from "Components/WeatherWidget.vue"
 
-import LanguageSelector from "LanguageSelector.vue"
+import LanguageSelector from "Components/LanguageSelector.vue"
 
 export default {
   name: "app-manager",

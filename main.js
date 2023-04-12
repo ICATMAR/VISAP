@@ -44,7 +44,7 @@ const { loadModule } = window['vue3-sfc-loader'];
 
 const app = Vue.createApp({
   components: {
-    'app-manager': Vue.defineAsyncComponent(() => loadModule('./AppManager.vue', options)),
+    'app-manager': Vue.defineAsyncComponent(() => loadModule('./Components/AppManager.vue', options)),
   },
   template: '<app-manager></app-manager>'
 });

@@ -33,6 +33,8 @@
             </div>
 
           </div>
+
+        </div>
         
       </div>
     </div>
@@ -45,7 +47,7 @@
 
 <script>
 // Import components
-import RangeSlider from 'RangeSlider.vue'
+import RangeSlider from 'Components/RangeSlider.vue'
 
 export default {
     name: "app-timebar",

@@ -46,8 +46,8 @@
 
 
 <script>
-import WeatherWidget from './WeatherWidget.vue';
-import SeaHabitat from './SeaHabitat.vue';
+import WeatherWidget from 'Components/WeatherWidget.vue';
+import SeaHabitat from 'Components/SeaHabitat.vue';
 
 export default {
   // REQUIRES FishingTracks.js

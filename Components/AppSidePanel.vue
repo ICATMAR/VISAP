@@ -64,10 +64,10 @@
 
 <script>
 // Import components
-import HaulInfo from "HaulInfo.vue"
-import FishingEffortPanel from "FishingEffortPanel.vue"
-import LayerPanel from "LayerPanel.vue"
-import AboutPanel from "About.vue"
+import HaulInfo from "Components/HaulInfo.vue"
+import FishingEffortPanel from "Components/FishingEffortPanel.vue"
+import LayerPanel from "Components/LayerPanel.vue"
+import AboutPanel from "Components/About.vue"
 //import Map from "Map.vue";
 //import AnimationCanvas from "AnimationCanvas.vue";
 

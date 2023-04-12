@@ -48,8 +48,8 @@
 
 
 <script>
-import TimeRangeBar from "TimeRangeBar.vue";
-import TracksTimeLine from "TracksTimeLine.vue";
+import TimeRangeBar from "Components/TimeRangeBar.vue";
+import TracksTimeLine from "Components/TracksTimeLine.vue";
 //import WMSLegend from "WMSLegend.vue";
 
 export default {
