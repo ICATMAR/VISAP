@@ -1,0 +1,14 @@
+{
+    "name": "shoreline.mbtiles",
+    "description": "shoreline.mbtiles",
+    "version": "2",
+    "minzoom": "0",
+    "maxzoom": "10",
+    "center": "-15.292969,11.350745,10",
+    "bounds": "-51.000000,-59.461089,105.000000,79.012950",
+    "type": "overlay",
+    "format": "pbf",
+    "generator": "tippecanoe v1.36.0",
+    "generator_options": "tippecanoe -zg -o shoreline.mbtiles --drop-densest-as-needed shoreline.geojson --force",
+    "json": "{\"vector_layers\": [ { \"id\": \"shoreline\", \"description\": \"\", \"minzoom\": 0, \"maxzoom\": 10, \"fields\": {\"ACC\": \"Number\", \"ACC_DESCRI\": \"String\", \"F_CODE\": \"String\", \"F_CODE_DES\": \"String\", \"ID\": \"Number\", \"SLT\": \"Number\", \"SLT_DESCRI\": \"String\", \"SOURCE\": \"String\", \"SRC\": \"String\", \"SRC_DESCRI\": \"String\"} } ],\"tilestats\": {\"layerCount\": 1,\"layers\": [{\"layer\": \"shoreline\",\"count\": 402925,\"geometry\": \"LineString\",\"attributeCount\": 10,\"attributes\": [{\"attribute\": \"ACC\",\"count\": 2,\"type\": \"number\",\"values\": [1,2],\"min\": 1,\"max\": 2},{\"attribute\": \"ACC_DESCRI\",\"count\": 2,\"type\": \"string\",\"values\": [\"Accurate\",\"Approximate\"]},{\"attribute\": \"F_CODE\",\"count\": 1,\"type\": \"string\",\"values\": [\"BA010\"]},{\"attribute\": \"F_CODE_DES\",\"count\": 2,\"type\": \"string\",\"values\": [\"Coaltal/Shoreline\",\"Coastal/Shoreline\"]},{\"attribute\": \"ID\",\"count\": 1000,\"type\": \"number\",\"values\": [0,1,10,100,1000,10000,10001,10002,10003,10004,10005,10006,10007,10008,10009,1001,10010,10011,10012,10013,10014,10015,10016,10017,10018,10019,1002,10020,10021,10022,10023,10024,10025,10026,10027,10028,10029,1003,10030,10031,10032,10033,10034,10035,10036,10037,10038,10039,1004,10040,10041,10042,10043,10044,10045,10046,10047,10048,10049,1005,10050,10051,10052,10053,10054,10055,10056,10057,10058,10059,1006,10060,10061,10062,10063,10064,10065,10066,10067,10068,10069,1007,10070,10071,10072,10073,10074,10075,10076,10077,10078,10079,1008,10080,10081,10082,10083,10084,10085,10086],\"min\": 0,\"max\": 1434407},{\"attribute\": \"SLT\",\"count\": 1,\"type\": \"number\",\"values\": [0],\"min\": 0,\"max\": 0},{\"attribute\": \"SLT_DESCRI\",\"count\": 1,\"type\": \"string\",\"values\": [\"Unknown\"]},{\"attribute\": \"SOURCE\",\"count\": 6,\"type\": \"string\",\"values\": [\"Landsat\",\"Landsat GF\",\"Landsat PGS\",\"Landsat TS\",\"SRTM\",\"SRTM Void\"]},{\"attribute\": \"SRC\",\"count\": 3,\"type\": \"string\",\"values\": [\"0\",\"1\",\"2\"]},{\"attribute\": \"SRC_DESCRI\",\"count\": 2,\"type\": \"string\",\"values\": [\"Landsat\",\"SRTM\"]}]}]}}"
+}

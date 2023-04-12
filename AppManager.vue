@@ -3,26 +3,35 @@
   <div id="app-manager">
 
     <!-- Language selector -->
-    <language-selector style='position:absolute;margin-top: 4.5rem;margin-left:0.5rem;'></language-selector>
+    <language-selector style='position: absolute;margin-top: 4.5rem;margin-left:0.5rem;'></language-selector>
 
-    <!-- Map  container-->
-    <ol-map id="ol-map" ref="map" v-show="app=='map'"
-      @onTrackClicked="trackClicked" 
-      @onFishingTracksLoad="fishingTracksLoad"
-    ></ol-map>
-    <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
-    
-    <!-- Side panel -->
-    <app-side-panel ref="sidePanel" v-show="app=='map'"
-      @selectedTrack='selectedTrack' 
-      @onTabClicked='sidePanelTabClicked' 
-      @onPanelTransitionEnd='sidePanelTabClicked'
-      @setEffortLayerOpacity='setEffortLayerOpacity'
-      @setEffortMap='setEffortMap'
-      @setBaseLayer='setBaseLayer'
-      @setLayerOpacity='setLayerOpacity'
-      @setClimaLayer='setClimaLayer'
-    ></app-side-panel>
+      <!-- APP MAP -->
+      <!-- Map  container-->
+      <ol-map id="ol-map" ref="map" v-show="app=='map'"
+        @onTrackClicked="trackClicked" 
+        @onFishingTracksLoad="fishingTracksLoad"
+      ></ol-map>
+      <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
+      
+      <!-- Side panel -->
+      <app-side-panel ref="sidePanel" v-show="app=='map'"
+        @selectedTrack='selectedTrack' 
+        @onTabClicked='sidePanelTabClicked' 
+        @onPanelTransitionEnd='sidePanelTabClicked'
+        @setEffortLayerOpacity='setEffortLayerOpacity'
+        @setEffortMap='setEffortMap'
+        @setBaseLayer='setBaseLayer'
+        @setLayerOpacity='setLayerOpacity'
+        @setClimaLayer='setClimaLayer'
+      ></app-side-panel>
+
+
+
+      <!-- APP OVERVIEW -->
+      <app-overview v-show="app=='overview'">
+
+      </app-overview>
+
 
     <!-- <weather-widget></weather-widget> -->
   </div>
@@ -57,6 +66,8 @@ import Map from "Map.vue";
 import AnimationCanvas from "AnimationCanvas.vue";
 import AppSidePanel from "AppSidePanel.vue"
 
+import AppOverview from "AppOverview.vue"
+
 import WeatherWidget from "WeatherWidget.vue"
 
 import LanguageSelector from "LanguageSelector.vue"
@@ -69,6 +80,12 @@ export default {
     this.app = appType;
   },
   mounted () {
+    // EVENTS
+    window.onhashchange= (event) => {
+      // event.newURL, event.oldURL
+      let appType = window.location.getHashValue('app');
+      this.app = appType;
+    }
 
   },
   data () {
@@ -127,6 +144,7 @@ export default {
     "ol-map": Map,
     "animation-canvas": AnimationCanvas,
     "app-side-panel": AppSidePanel,
+    "app-overview": AppOverview,
 
     "weather-widget": WeatherWidget,
 
