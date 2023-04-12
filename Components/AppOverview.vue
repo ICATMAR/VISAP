@@ -1,17 +1,20 @@
 <template>
   <!-- Container -->
   <div id='appOverivew' ref='appOverivew'>
-    <div class="container">
-      
-      <!-- Title -->
-      <div class="h3">
-        {{$t('Bottom trawling')}}
-      </div>
-      
-      <!-- Pie chart section -->
-      <piechart-section type="port"></piechart-section>
 
+      
+    <!-- Title -->
+    <div class="h3">
+      {{$t('Bottom trawling')}}
     </div>
+    
+    <!-- Pie chart section -->
+    <piechart-section type="port"></piechart-section>
+
+    <!-- Pie chart section -->
+    <piechart-section type="season"></piechart-section>
+
+
   </div>
 </template>
 
@@ -51,6 +54,10 @@ export default {
 <style scoped>
 #appOverivew {
   font-family: "Poppins", Sans-serif;
+  scroll-behavior: auto;
+  overflow: auto;
+  /* overflow-x: hidden; */
+  width: 100%;
 }
 
 div.piechart {

@@ -8,3 +8,24 @@
   --red: rgb(255, 115, 105);
   --redRGB: 255, 115, 105;
 }
+
+
+button {
+  font-family: "Poppins", Sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+
+  padding: 10px 20px 10px 20px;
+  background-color: var(--darkBlue);
+  color: white;
+
+
+  border-radius: 50px;
+  border: none;
+}
+
+button:hover {
+  background-color: var(--lightBlue);
+  transition: all 0.2s ease-in-out;
+}

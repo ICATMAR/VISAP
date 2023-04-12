@@ -3,13 +3,17 @@
   <div id='piechart' ref='piechart'>
 
     <!-- D3 chart -->
-    <div style="width: 600px; height: 600px; background: red">
+    <div ref="d3chart" style="width: 600px; height: 600px;">
 
     </div>
-    <!-- Filter per species button -->
-    <button>{{ $t('Filter per species') }}</button>
-    <!-- Export data button -->
-    <button>{{ $t('Export data') }}</button>
+
+    <!-- Buttons -->
+    <div class="centered-rows">
+      <!-- Filter per species button -->
+      <button>{{ $t('Filter per species') }}</button>
+      <!-- Export data button -->
+      <button>{{ $t('Export data') }}</button>
+    </div>
 
   </div>
 </template>
@@ -22,11 +26,14 @@
 
 export default {
   name: 'piechart', // Caps, no -
+  props: {
+    title: String,
+  },
   created() {
     
   },
   mounted() {
-    
+    this.piechart = new PieChart();
   },
   data (){
     return {
@@ -35,6 +42,10 @@ export default {
   },
   methods: {
     //onclick: function(e){},
+    setPieData: function(data){
+      // HTMLcontainer, data, d3, title, measure, unit
+      this.piechart.runApp(this.$refs.d3chart, data, d3, this.title, 'Biomass', 'kg / km<sup>2</sup>')
+    }
   },
   components: {
     //'map': Map,
@@ -50,5 +61,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.centered-rows{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 </style>

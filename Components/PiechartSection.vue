@@ -3,24 +3,13 @@
   <div id='piechartSection' ref='piechartSection'>
     
     <!-- Title Section -->
-    <div>
-      <!-- Subtitle -->
-      <span class="h4">{{$t('Catch per ' + type)}}</span>
+    <span class="h4">{{$t('Catch per ' + type)}}</span>
 
-      <!-- Maybe filter and export button should go together with the pie chart? -->
-      <!-- Filter button -->
-      
-      <!-- Export button -->
-      
-      <!-- TODO: ADD GOOGLE TAG?-->
-
-      
-    </div>
     
     <!-- Container pie charts section -->
     <div class="pieSection">
       <!-- Pie chart 1-->
-      <piechart></piechart>
+      <piechart ref='portPiechart' :title="$t('Catch per ' + type)"></piechart>
       <!-- Pie chart 2-->
       <!-- Compare button-->
       <button>+ Compare</button>
@@ -43,7 +32,26 @@ export default {
     
   },
   mounted() {
-    
+    // TEST, ORGANIZE BETTER
+    // Load test data
+    let url = 'data/';
+    if (this.type == 'port')
+      url += 'pesca_arrossegament_port_biomassa.json';
+    else if (this.type == 'season')
+      url += 'pesca_arrossegament_any_biomassa.json';
+    // Fetch
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        let procData = undefined;
+        if (this.type == 'port')
+          procData = PieChart.prepDataPortBiomass(data);
+        else if (this.type == 'season')
+          procData = PieChart.prepDataYearBiomass(data);
+        // Set data to pie chart
+        this.$refs.portPiechart.setPieData(procData);
+      })
+      .catch(e => console.error(e))
   },
   data (){
     return {
@@ -64,11 +72,16 @@ export default {
 
 <style scoped>
 #piechartSection {
-  
+  width: 100%;
+  background: white;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
 }
 
 .pieSection {
-  background: black;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
