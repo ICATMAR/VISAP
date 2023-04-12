@@ -170,7 +170,9 @@ export default {
     // Event coming from HaulInfo.vue, when a track is clicked in the dropdown list.
     selectedTrack: function(id){
       // Change the date on the WMS Layer panel
-      this.$refs.layers.fishingTrackSelected(id);
+      if (this.$refs.layers)
+        if (this.$refs.layers.fishingTrackSelected)
+          this.$refs.layers.fishingTrackSelected(id);
       // Emit
       this.$emit('selectedTrack', id);
     },
@@ -215,7 +217,9 @@ export default {
     fishingTrackClicked: function(id){
       this.openFishingTab(id);
       // Send event to layers panel
-      this.$refs.layers.fishingTrackSelected(id);
+      if (this.$refs.layers)
+        if (this.$refs.layers.fishingTrackSelected)
+          this.$refs.layers.fishingTrackSelected(id);
     },
 
     // Opens the fishing tracks tab with the corresponding track id selected

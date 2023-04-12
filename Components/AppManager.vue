@@ -7,28 +7,29 @@
 
       <!-- APP MAP -->
       <!-- Map  container-->
-      <ol-map id="ol-map" ref="map" v-show="app=='map'"
-        @onTrackClicked="trackClicked" 
-        @onFishingTracksLoad="fishingTracksLoad"
-      ></ol-map>
-      <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
-      
-      <!-- Side panel -->
-      <app-side-panel ref="sidePanel" v-show="app=='map'"
-        @selectedTrack='selectedTrack' 
-        @onTabClicked='sidePanelTabClicked' 
-        @onPanelTransitionEnd='sidePanelTabClicked'
-        @setEffortLayerOpacity='setEffortLayerOpacity'
-        @setEffortMap='setEffortMap'
-        @setBaseLayer='setBaseLayer'
-        @setLayerOpacity='setLayerOpacity'
-        @setClimaLayer='setClimaLayer'
-      ></app-side-panel>
-
+      <template v-if="app=='map'">
+        <ol-map id="ol-map" ref="map"
+          @onTrackClicked="trackClicked" 
+          @onFishingTracksLoad="fishingTracksLoad"
+        ></ol-map>
+        <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
+        
+        <!-- Side panel -->
+        <app-side-panel ref="sidePanel"
+          @selectedTrack='selectedTrack' 
+          @onTabClicked='sidePanelTabClicked' 
+          @onPanelTransitionEnd='sidePanelTabClicked'
+          @setEffortLayerOpacity='setEffortLayerOpacity'
+          @setEffortMap='setEffortMap'
+          @setBaseLayer='setBaseLayer'
+          @setLayerOpacity='setLayerOpacity'
+          @setClimaLayer='setClimaLayer'
+        ></app-side-panel>
+      </template>
 
 
       <!-- APP OVERVIEW -->
-      <app-overview v-show="app=='overview'">
+      <app-overview v-else-if="app=='overview'">
 
       </app-overview>
 
@@ -98,7 +99,8 @@ export default {
     // Event coming from side panel HaulInfo.vue
     selectedTrack: function(id){
       // Send this message to map
-      this.$refs.map.setSelectedTrack(id);
+      if (this.$refs.map)
+        this.$refs.map.setSelectedTrack(id);
     },
     // When a track is clicked on the map (Map.vue / TracksTimeLine.vue)
     trackClicked: function(id){
