@@ -212,7 +212,7 @@ export default {
         fishingEffort: new ol.layer.Image({
           name: 'fishingEffort',
           source: new ol.source.ImageStatic({
-            url: 'data/fishingEffortExample_m1_39_6_44.png',
+            url: 'data/fishingEffort/fishingEffortExample_m1_39_6_44.png',
             imageExtent: [-1, 39, 6, 44],
             projection: 'EPSG:4326'
           }),
@@ -648,7 +648,7 @@ export default {
       let effortLayer = this.getMapLayer('fishingEffort');
       // let olSource = effortLayer.getSource(); // setUrl does not exists for ol.Layer.Image
       let source = new ol.source.ImageStatic({
-        url: inUrl, // 'data/fishingEffort_<effortType>_<year>_<gear>'
+        url: inUrl, // 'data/fishingEffort/fishingEffort_<effortType>_<year>_<gear>'
         imageExtent: [-1, 39, 6, 44],
         projection: 'EPSG:4326'
       });

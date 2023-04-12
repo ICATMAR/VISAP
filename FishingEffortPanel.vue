@@ -96,8 +96,8 @@ export default {
 
       // https://www.emodnet-humanactivities.eu/view-data.php
       // https://ows.emodnet-humanactivities.eu/wms?LAYERS=2020_st_01_avg&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG%3A4326&BBOX=-1,39,6,44&WIDTH=1024&HEIGHT=1024
-      exampleImgURL: 'data/fishingEffortExample_m1_39_6_44.png',
-      exampleLegendURL: 'data/fishingEffort_hours_2020_all_legend.png',
+      exampleImgURL: 'data/fishingEffort/fishingEffortExample_m1_39_6_44.png',
+      exampleLegendURL: 'data/fishingEffort/fishingEffort_hours_2020_all_legend.png',
     }
   },
   watch: {
@@ -140,11 +140,11 @@ export default {
     effortParamsChange: function(){
       let selGear = this.selGear.toLowerCase();
       selGear = selGear.replace(' ', '');
-      let outUrl = 'data/fishingEffort_' + this.selEffortType + '_' +  this.selYear + '_' + selGear + '.png';
+      let outUrl = 'data/fishingEffort/fishingEffort_' + this.selEffortType + '_' +  this.selYear + '_' + selGear + '.png';
       this.$refs['effortImg'].src = outUrl;
       this.$emit('effortParamsChange', outUrl);
       // Legend
-      let legUrl = 'data/fishingEffort_' + this.selEffortType + '_' + selGear + '_legend.png';
+      let legUrl = 'data/fishingEffort/fishingEffort_' + this.selEffortType + '_' + selGear + '_legend.png';
       this.$refs['effortLegend'].src = legUrl;
       this.loading = true;
     },
