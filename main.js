@@ -6,7 +6,7 @@ import es from './lang/es.js';
 
 
 // Utils for hash and routing
-import {setHashValue, getHashValue} from './utils.js';
+import {setHashValue, getHashValue} from './Scripts/utils.js';
 window.location.setHashValue = setHashValue;
 window.location.getHashValue = getHashValue;
 
