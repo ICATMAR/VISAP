@@ -53,6 +53,10 @@ const app = Vue.createApp({
 i18n.global.mergeLocaleMessage('ca', ca);
 i18n.global.mergeLocaleMessage('en', en);
 i18n.global.mergeLocaleMessage('es', es);
+// Debug
+i18n.global.silentFallbackWarn = true;
+i18n.global.silentTranslationWarn = true;
+
 app.use(i18n);
 
 app.mount(document.body);
