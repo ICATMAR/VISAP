@@ -1,0 +1,239 @@
+<template>
+  <!-- Container -->
+  <div id='filterMenu' ref='filterMenu'>
+
+    <!-- Filter input -->
+
+      <!-- User buttons -->
+      <div class="center-buttons" ref="controlButtons">
+        <input onclick="event.stopPropagation();" placeholder="Search" />
+        <button onclick="event.stopPropagation();" data-sort="name">
+          Sort by name
+        </button>
+        <button ref="selectAll" onclick="event.stopPropagation();"> Select all </button>
+        <button ref="deselectAll" onclick="event.stopPropagation();"> Deselect all </button>
+        <button ref="closeGUI" onclick="event.stopPropagation();"> Close </button>
+      </div>
+
+      <!-- Selected species -->
+      <div ref="selSpecies">
+        <div class="list listSel"></div>
+      </div>
+
+      <!-- Species list -->
+      <div ref="availableSpecies">
+        <div class="list"></div>
+      </div>
+
+
+    <!-- Species -->
+    <!-- <button v-for="sp in species">
+      <span :style="{color: 'rgb(' + sp.color +')'}" > ■ </span> {{sp.name}}
+    </button> -->
+
+  </div>
+</template>
+
+
+<script>
+
+// Import components
+//import Map from 'Components/Map.vue'
+// palette.js is required
+
+export default {
+  name: 'filterMenu', // Caps, no -
+  created() {
+    
+  },
+  mounted() {
+    this.palette = palette;
+  },
+  data (){
+    return {
+      species: [],
+      selSpecies: [],
+    }
+  },
+  methods: {
+    // USER INTERACTION
+
+    // Select item
+    selectItem: function(e){
+      e.stopPropagation();
+      //console.log(e.srcElement.innerText.split("■ ")[1]);
+      let speciesName = e.currentTarget.innerText.split("■ ")[1];
+      this.switchFromList(speciesName, this.speciesList, this.selSpeciesList, this.deselectItem);
+    },
+
+    // Deselect item
+    deselectItem: function(e){
+      e.stopPropagation();
+      let speciesName = e.currentTarget.innerText.split("■ ")[1];
+      this.switchFromList(speciesName, this.selSpeciesList, this.speciesList, this.selectItem);
+    },
+
+    selectAll: function(e){
+      e.stopPropagation();
+      for (var i = 0; i<this.speciesList.items.length; i++){
+        this.switchFromList(this.speciesList.items[i]._values.name, this.speciesList, this.selSpeciesList, this.deselectItem)
+        i--;
+      }
+    },
+
+    deselectAll: function(e){
+      e.stopPropagation();
+      for (var i = 0; i<this.selSpeciesList.items.length; i++){
+        this.switchFromList(this.selSpeciesList.items[i]._values.name, this.selSpeciesList, this.speciesList, this.selectItem)
+        i--;
+      }
+    },
+
+    // Close filter menu
+    closeGUI: function(e){
+      // TODO: COULD DO EMIT OR STORE A VARIABLE HERE
+    },
+
+
+
+
+
+    // PUBLIC METHODS
+    //onclick: function(e){},
+    setData: function(data){
+      let species = this.getUnique(data, "ScientificName");
+      let spObj = [];
+      let selSpObj = [];
+      // Order alphabethically
+      species.sort();
+      // Get color
+      species.forEach((sp, i) => {
+        spObj.push({
+          'name': sp,
+          'color': palette[sp] != undefined ? palette[sp].color : [127, 127, 127],
+        });
+      });
+
+      // https://listjs.com/api/
+      let options = {
+        item: (sp) =>
+          `<button class="speciesItem">
+            <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.name}
+          </button>
+          `
+      }
+      let optionsSel = {
+        item: (sp) =>
+          `<button class="selSpeciesItem">
+            <span style='color:red'> ✖ </span>
+            <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.name}
+          </button>
+          `
+      }
+
+      // Create list      
+      this.speciesList = new List(this.$refs.availableSpecies, options, spObj);
+      this.selSpeciesList = new List(this.$refs.selSpecies, optionsSel);
+
+      // Add button events
+      this.speciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=>this.selectItem(e)));
+      this.selSpeciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=> this.deselectItem(e)));
+      this.$refs.selectAll.addEventListener("click", (e)=>this.selectAll(e));
+      this.$refs.deselectAll.addEventListener("click", (e)=>this.deselectAll(e));
+      this.$refs.closeGUI.addEventListener("click", (e) => this.closeGUI(e));
+  
+    },
+
+
+
+
+
+
+
+
+
+    // INTERNAL METHODS
+    // Switch values from one list to the other
+    switchFromList(speciesName, removeFromList, insertToList, callbackFuncBtn){
+      let item = removeFromList.get("name", speciesName)[0];
+      removeFromList.remove("name", speciesName);
+
+      let itNew = insertToList.add({
+        "name": speciesName,
+        "color":  item._values.color
+      });
+      // Add event listener
+      callbackFuncBtn = callbackFuncBtn.bind(this); // bind callback with this
+      itNew[0].elm.addEventListener("click", (e)=>callbackFuncBtn(e));
+    },
+
+
+
+
+
+
+
+    // Get unique values in an array of objects
+    getUnique: function(data, key){
+      let uniqueKeys = [];
+      // Iterate
+      for (let i = 0; i < data.length; i++){
+        let value = data[i][key];
+        if (value !== undefined && uniqueKeys.findIndex((item) => item == value) == -1)
+          uniqueKeys.push(value);
+      }
+      return uniqueKeys;
+    }
+  },
+  components: {
+    //'map': Map,
+  }
+}
+</script>
+
+
+
+
+<style scoped>
+#filterMenu {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 10;
+
+  background: rgba(133, 133, 133, 0.329);
+}
+
+.center-buttons {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 20px;
+}
+
+.list {
+  background: rgba(255, 255, 255, 0.247);
+
+  overflow-y: auto;
+
+  padding: 10px;
+  text-align: center;
+  font-size: small;
+}
+
+.listSel {
+  background-color: var(--red);
+}
+
+.speciesItem {
+  margin: 2px;
+}
+
+.selSpeciesItem{
+  font-size: medium;
+}
+</style>

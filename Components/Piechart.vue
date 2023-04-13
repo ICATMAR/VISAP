@@ -15,6 +15,9 @@
       <button>{{ $t('Export data') }}</button>
     </div>
 
+    <!-- Filter menu -->
+    <filter-menu ref="filterMenu"></filter-menu>
+
   </div>
 </template>
 
@@ -22,7 +25,7 @@
 <script>
 
 // Import components
-//import Map from 'Components/Map.vue'
+import FilterMenu from 'Components/FilterMenu.vue'
 
 export default {
   name: 'piechart', // Caps, no -
@@ -42,13 +45,16 @@ export default {
   },
   methods: {
     //onclick: function(e){},
-    setPieData: function(data){
+    setPieData: function(prepData, rawData){
       // HTMLcontainer, data, d3, title, measure, unit
-      this.piechart.runApp(this.$refs.d3chart, data, d3, this.title, 'Biomass', 'kg / km<sup>2</sup>')
+      this.piechart.runApp(this.$refs.d3chart, prepData, d3, this.title, 'Biomass', 'kg / km<sup>2</sup>');
+
+      // Fill filter menu with data
+      this.$refs.filterMenu.setData(rawData);
     }
   },
   components: {
-    //'map': Map,
+    'filter-menu': FilterMenu,
   }
 }
 </script>

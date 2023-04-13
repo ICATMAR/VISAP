@@ -49,7 +49,7 @@ export default {
         else if (this.type == 'season')
           procData = PieChart.prepDataYearBiomass(data);
         // Set data to pie chart
-        this.$refs.portPiechart.setPieData(procData);
+        this.$refs.portPiechart.setPieData(procData, data);
       })
       .catch(e => console.error(e))
   },
