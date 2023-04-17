@@ -3,6 +3,11 @@
 import ca from './lang/ca.js';
 import en from './lang/en.js';
 import es from './lang/es.js';
+// Import species translations
+import sp_ca from './lang/species_ca.js';
+import sp_en from './lang/species_en.js';
+import sp_es from './lang/species_es.js';
+
 
 
 // Utils for hash and routing
@@ -53,6 +58,10 @@ const app = Vue.createApp({
 i18n.global.mergeLocaleMessage('ca', ca);
 i18n.global.mergeLocaleMessage('en', en);
 i18n.global.mergeLocaleMessage('es', es);
+// Translations species
+i18n.global.mergeLocaleMessage('ca', sp_ca);
+i18n.global.mergeLocaleMessage('en', sp_en);
+i18n.global.mergeLocaleMessage('es', sp_es);
 // Debug
 i18n.global.silentFallbackWarn = true;
 i18n.global.silentTranslationWarn = true;

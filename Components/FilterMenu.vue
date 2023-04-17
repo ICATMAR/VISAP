@@ -6,10 +6,6 @@
 
       <!-- User buttons -->
       <div class="center-buttons" ref="controlButtons">
-        <input onclick="event.stopPropagation();" placeholder="Search" />
-        <button onclick="event.stopPropagation();" data-sort="name">
-          Sort by name
-        </button>
         <button ref="selectAll" onclick="event.stopPropagation();"> Select all </button>
         <button ref="deselectAll" onclick="event.stopPropagation();"> Deselect all </button>
         <button ref="closeGUI" onclick="event.stopPropagation();"> Close </button>
@@ -22,6 +18,7 @@
 
       <!-- Species list -->
       <div ref="availableSpecies">
+        <input class="search form-control" onclick="event.stopPropagation();" placeholder="Search" />
         <div class="list"></div>
       </div>
 
@@ -107,9 +104,12 @@ export default {
       // Order alphabethically
       species.sort();
       // Get color
+      debugger;
+      // TODO: ADD TRANSLATIONS AS KEYS IN spObj
       species.forEach((sp, i) => {
         spObj.push({
           'name': sp,
+          'commonName': this.$i18n.t(sp), // TODO: check if this is made every time the filter is cliked. maybe yes?
           'color': palette[sp] != undefined ? palette[sp].color : [127, 127, 127],
         });
       });
@@ -160,6 +160,7 @@ export default {
 
       let itNew = insertToList.add({
         "name": speciesName,
+        'commonName': this.$i18n.t(speciesName), // TODO: check if this is made every time the filter is cliked. maybe yes?
         "color":  item._values.color
       });
       // Add event listener
@@ -227,6 +228,7 @@ export default {
 
 .listSel {
   background-color: var(--red);
+  max-height: 30vh;
 }
 
 .speciesItem {
