@@ -55,6 +55,15 @@ export default ca = {
   "Est": "Est",
   "Oest": "Oest",
 
+  "Spring": "Primavera",
+  "Summer": "Estiu",
+  "Autumn": "Tardor",
+  "Winter": "Hivern",
+  "North": "North",
+  "South": "Sud",
+  "East": "Est",
+  "West": "Oest",
+
 
   "Sea habitats": "Hàbitats marins",
   "Base layer": "Capa base",
@@ -69,5 +78,13 @@ export default ca = {
   "Salinity": "Salinitat",
   "Wind": "Vent",
   "Wave Significant Height": "Altura significativa d'onatge",
-  "Current": "Corrent marí"
+  "Current": "Corrent marí",
+
+
+  "Catch per port": "Captura per port",
+  "Catch per season": "Captura per estació",
+  "Biomass": "Biomassa",
+  "Filter per species": "Filtrar per espècies",
+  "Export data": "Exportar dades",
+  "Compare": "Comparar"
 }

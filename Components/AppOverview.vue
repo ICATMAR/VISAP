@@ -5,7 +5,7 @@
       
     <!-- Title -->
     <div class="h3">
-      {{$t('Bottom trawling')}}
+      {{$t('fishingGears.Bottom trawling')}}
     </div>
     
     <!-- Pie chart section -->

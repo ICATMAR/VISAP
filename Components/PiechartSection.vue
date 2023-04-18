@@ -12,7 +12,7 @@
       <piechart ref='portPiechart' :title="$t('Catch per ' + type)"></piechart>
       <!-- Pie chart 2-->
       <!-- Compare button-->
-      <button>+ Compare</button>
+      <button>+ {{$t('Compare')}}</button>
     </div>
   </div>
 </template>

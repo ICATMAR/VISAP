@@ -55,6 +55,15 @@ export default en = {
   "Sud": "South",
   "Est": "East",
   "Oest": "West",
+  
+  "Spring": "Spring",
+  "Summer": "Summer",
+  "Autumn": "Autumn",
+  "Winter": "Winter",
+  "North": "North",
+  "South": "South",
+  "East": "East",
+  "West": "West",
 
 
 
@@ -71,5 +80,13 @@ export default en = {
   "Salinity": "Salinity",
   "Wind": "Wind",
   "Wave Significant Height": "Wave Significant Height",
-  "Current": "Current"
+  "Current": "Current",
+
+
+  "Catch per port": "Catch per port",
+  "Catch per season": "Catch per season",
+  "Biomass": "Biomass",
+  "Filter per species": "Filter per species",
+  "Export data": "Export data",
+  "Compare": "Compare"
 }

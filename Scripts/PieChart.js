@@ -229,7 +229,7 @@ class PieChart {
 	    centerLabel
 	      .select(".centerText")
 	      .style("visibility", null)
-	      .text(p.data.translation || p.data.species || p.data.name)
+	      .text(p.data.species || p.data.translation || p.data.name)
 
 	    // Get the ancestors of the current segment, minus the root
 	    const sequence = [];

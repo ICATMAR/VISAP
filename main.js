@@ -7,7 +7,13 @@ import es from './lang/es.js';
 import sp_ca from './lang/species_ca.js';
 import sp_en from './lang/species_en.js';
 import sp_es from './lang/species_es.js';
-
+// Remove nulls in spanish
+Object.keys(sp_es).forEach(key=> {
+  let el = sp_es[key];
+  if (el == 'null'){
+    delete sp_es[key];
+  }
+})
 
 
 // Utils for hash and routing

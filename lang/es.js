@@ -56,6 +56,15 @@ export default es  = {
   "Est": "Este",
   "Oest": "Oeste",
 
+  "Spring": "Primavera",
+  "Summer": "Verano",
+  "Autumn": "Otoño",
+  "Winter": "Invierno",
+  "North": "Norte",
+  "South": "Sur",
+  "East": "Este",
+  "West": "Oeste",
+
 
 
   "Sea habitats": "Hábitats marinos",
@@ -71,5 +80,13 @@ export default es  = {
   "Salinity": "Salinidad",
   "Wind": "Viento",
   "Wave Significant Height": "Altura significativa de oleaje",
-  "Current": "Corriente marino"
+  "Current": "Corriente marino",
+
+
+  "Catch per port": "Captura por puerto",
+  "Catch per season": "Captura por estación",
+  "Biomass": "Biomasa",
+  "Filter per species": "Filtrar por especies",
+  "Export data": "Exportar datos",
+  "Compare": "Comparar"
 }
