@@ -2,7 +2,8 @@
   <!-- Container -->
   <div id='filterMenu' ref='filterMenu'>
 
-    <!-- Filter input -->
+    <!-- Wrapper -->
+    <div class="wrapper">
 
       <!-- User buttons -->
       <div class="center-buttons" ref="controlButtons">
@@ -12,12 +13,13 @@
       </div>
 
       <!-- Selected species -->
-      <div ref="selSpecies">
+      <div ref="selSpecies" class="listSpeciesContainer selSpeciesContainer">
+        <input class="search form-control" onclick="event.stopPropagation();" placeholder="Search" v-show="showSearchBarSelSpecies"/>
         <div class="list listSel"></div>
       </div>
 
       <!-- Species list -->
-      <div ref="availableSpecies">
+      <div ref="availableSpecies" class="listSpeciesContainer">
         <input class="search form-control" onclick="event.stopPropagation();" placeholder="Search" />
         <div class="list"></div>
       </div>
@@ -27,6 +29,9 @@
     <!-- <button v-for="sp in species">
       <span :style="{color: 'rgb(' + sp.color +')'}" > ■ </span> {{sp.name}}
     </button> -->
+
+
+    </div>
 
   </div>
 </template>
@@ -45,11 +50,11 @@ export default {
   },
   mounted() {
     this.palette = palette;
+
   },
   data (){
     return {
-      species: [],
-      selSpecies: [],
+      showSearchBarSelSpecies: false,
     }
   },
   methods: {
@@ -89,6 +94,7 @@ export default {
     // Close filter menu
     closeGUI: function(e){
       // TODO: COULD DO EMIT OR STORE A VARIABLE HERE
+      this.$emit('onclose', this.selSpeciesList.toJSON());
     },
 
 
@@ -104,8 +110,6 @@ export default {
       // Order alphabethically
       species.sort();
       // Get color
-      debugger;
-      // TODO: ADD TRANSLATIONS AS KEYS IN spObj
       species.forEach((sp, i) => {
         spObj.push({
           'name': sp,
@@ -117,14 +121,14 @@ export default {
       // https://listjs.com/api/
       let options = {
         item: (sp) =>
-          `<button class="speciesItem">
+          `<button class="speciesItem" title="${sp.commonName}">
             <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.name}
           </button>
           `
       }
       let optionsSel = {
         item: (sp) =>
-          `<button class="selSpeciesItem">
+          `<button class="selSpeciesItem" title="${sp.commonName}">
             <span style='color:red'> ✖ </span>
             <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.name}
           </button>
@@ -166,6 +170,10 @@ export default {
       // Add event listener
       callbackFuncBtn = callbackFuncBtn.bind(this); // bind callback with this
       itNew[0].elm.addEventListener("click", (e)=>callbackFuncBtn(e));
+
+      // Turn on/off the search bar for selected species
+      this.showSearchBarSelSpecies = this.selSpeciesList.size() > 20 ? true : false;
+      
     },
 
 
@@ -206,7 +214,13 @@ export default {
   bottom: 0px;
   z-index: 10;
 
-  background: rgba(133, 133, 133, 0.329);
+  background: rgba(133, 133, 133, 0.623);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .center-buttons {
@@ -215,6 +229,28 @@ export default {
   justify-content: center;
   padding: 20px;
 }
+
+.listSpeciesContainer {
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 auto;
+  overflow-y: auto;
+
+  align-items: center;
+}
+
+.selSpeciesContainer {
+  background-color: var(--red);
+  flex: 0 0 auto;
+  padding: 20px;
+}
+
+input {
+  width: 50%;
+  margin-top: 20px;
+}
+
+
 
 .list {
   background: rgba(255, 255, 255, 0.247);
