@@ -10,13 +10,15 @@
     <!-- Buttons -->
     <div class="centered-rows">
       <!-- Filter per species button -->
-      <button>{{ $t('Filter per species') }}</button>
+      <button @click="isFilterMenuVisible = true">{{ $t('Filter per species') }}</button>
+      <!-- Deactivate filter -->
+      <button v-show="isFilterActive" @click="deactivateFilter($event)"> <span style="color:red"> ✖ </span> {{ $t('Deactivate filter') }}</button>
       <!-- Export data button -->
       <button>{{ $t('Export data') }}</button>
     </div>
 
     <!-- Filter menu -->
-    <filter-menu ref="filterMenu"></filter-menu>
+    <filter-menu ref="filterMenu" @onclose="filterMenuClosed" v-show="isFilterMenuVisible"></filter-menu>
 
   </div>
 </template>
@@ -40,7 +42,8 @@ export default {
   },
   data (){
     return {
-      
+      isFilterActive: false,
+      isFilterMenuVisible: false,
     }
   },
   methods: {
@@ -51,7 +54,24 @@ export default {
 
       // Fill filter menu with data
       this.$refs.filterMenu.setData(rawData);
-    }
+    },
+
+
+    filterMenuClosed: function(e){
+      // Array with objects containing name, commonName and color
+      // Close menu
+      this.isFilterMenuVisible = false;
+      // Filter is active or not
+      this.isFilterActive = e.length != 0 ? true : false;
+      // Filter species
+
+    },
+
+
+    deactivateFilter: function(e){
+      this.isFilterActive = false;
+      this.$refs.filterMenu.deselectAll(e);
+    },
   },
   components: {
     'filter-menu': FilterMenu,
