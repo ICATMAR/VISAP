@@ -10,11 +10,11 @@
     <!-- Buttons -->
     <div class="centered-rows">
       <!-- Filter per species button -->
-      <button @click="isFilterMenuVisible = true">{{ $t('Filter per species') }}</button>
+      <button @click="isFilterMenuVisible = true">&#x25BD; {{ $t('Filter per species') }}</button>
       <!-- Deactivate filter -->
       <button v-show="isFilterActive" @click="deactivateFilter($event)"> <span style="color:red"> ✖ </span> {{ $t('Deactivate filter') }}</button>
       <!-- Export data button -->
-      <button>{{ $t('Export data') }}</button>
+      <button>&#x21E9; {{ $t('Export data') }}</button>
     </div>
 
     <!-- Filter menu -->
@@ -53,6 +53,12 @@ export default {
       // Store prep data
       this.prepData = prepData;
 
+      // Translations
+      if (this.$i18n){
+        this.translateData(prepData);
+      }
+
+
       // HTMLcontainer, data, d3, title, measure, unit
       this.piechart.runApp(this.$refs.d3chart, prepData, d3, this.title, 'Biomass', 'kg / km2');
 
@@ -61,16 +67,13 @@ export default {
     },
     // Update the pie chart with filtered or unfiltered data
     updateTrawlingChart(inDataForD3){
+      // Translations (not necessary?)
+      // if (this.$i18n){
+      //   this.translateData(inDataForD3);
+      // }
       // Restart pie charts (TODO: instead of runApp function, update and transition of values)
       this.$refs.d3chart.innerHTML = "";
-      debugger;
       this.piechart.runApp(this.$refs.d3chart, inDataForD3, d3, this.title, 'Biomass', 'kg / km2');
-      // If pie chart comparison exists
-      // TODO
-      if (this.pieChartCompareEl !== undefined){
-        this.pieChartCompareEl.innerHTML = "";
-        this.pieChart.runApp(this.pieChartCompareEl, inDataForD3, d3, this.title, 'Biomass', 'kg / km2');
-      }
     },
 
 
@@ -104,7 +107,6 @@ export default {
      // This function is not optimal, but real-time is not requiered
     markItems(itemJSON, selectedSpecies, parentJSON){
       // Has children and its not selected (higher level than species)
-      debugger;
       if (itemJSON.children && selectedSpecies.indexOf(itemJSON.species) == -1) {
         itemJSON.children.forEach((child) => this.markItems(child, selectedSpecies, itemJSON)); // Go to children
       }
@@ -131,6 +133,19 @@ export default {
     
 
 
+    // Translate data using $i18n
+    translateData(prepData){
+
+      Object.keys(prepData).forEach(key => {
+        let el = prepData[key];
+        if (typeof(el) == 'object'){
+          this.translateData(el);
+        } else if (typeof(el) == 'string') {
+          prepData["translation"] = this.$i18n.t(el);
+        }
+      });
+
+    },
 
 
 

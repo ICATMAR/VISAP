@@ -133,7 +133,7 @@ class PieChart {
 	      .attr("fill-opacity", d => +labelVisible(d.current))
 				.style("font", d => (d.x1 - d.x0) < 0.01 ?  (d.x1-d.x0)*100 * 15 +"px sans-serif" : "15px sans-serif")//(d.y1 - d.y0) * (d.x1 - d.x0) > 0.03 ? "15px sans-serif" : "8px sans-serif")
 	      .attr("transform", d => labelTransform(d.current, d.target))
-	      .text(d => d.data.name);
+	      .text(d => d.data.translation || d.data.name);
 
 	  const parent = g.append("circle")
 	      .datum(root)
@@ -178,7 +178,7 @@ class PieChart {
 
 	    // Breadcrumb
 	    let bcrumbstr = "";
-	    p.ancestors().reverse().forEach((item,i) => bcrumbstr += (i == 0 || i == p.ancestors().length-1 || i > 2) ? "" : item.data.name + " > ");
+	    p.ancestors().reverse().forEach((item,i) => bcrumbstr += (i == 0 || i == p.ancestors().length-1 || i > 2) ? "" : (item.data.translation || item.data.name) + " > ");
 	    centerLabel
 	      .select(".breadcrumb")
 	      .text(bcrumbstr)
@@ -229,7 +229,7 @@ class PieChart {
 	    centerLabel
 	      .select(".centerText")
 	      .style("visibility", null)
-	      .text(p.data.species || p.data.name)
+	      .text(p.data.translation || p.data.species || p.data.name)
 
 	    // Get the ancestors of the current segment, minus the root
 	    const sequence = [];
