@@ -398,7 +398,7 @@ class PieChart {
 
 
 	// Prepare the data from the server-database
-  static prepDataPortBiomass(inData){
+  	static prepDataPortBiomass(inData){
 
 		const outData = {};
 		outData.children = [];
@@ -455,7 +455,7 @@ class PieChart {
 	}
 
 
-// Prepare the data from the server-database
+	// Prepare the data from the server-database
 	static prepDataYearBiomass(inData){
 
 		const outData = {};
