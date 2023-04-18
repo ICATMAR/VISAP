@@ -78,6 +78,12 @@ export default {
   created(){
     // Get app from window location hash
     let appType = window.location.getHashValue('app');
+    // Set default
+    if (appType == undefined){
+      appType = 'overview';
+      window.location.setHashValue('app', appType);
+    }
+    // Store
     this.app = appType;
   },
   mounted () {
