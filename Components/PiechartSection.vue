@@ -11,8 +11,10 @@
       <!-- Pie chart 1-->
       <piechart ref='portPiechart' :title="$t('Catch per ' + type)"></piechart>
       <!-- Pie chart 2-->
+      <piechart ref='comparePortPiechart' :title="$t('Catch per ' + type)" v-show="showComparison"></piechart>
       <!-- Compare button-->
-      <button>+ {{$t('Compare')}}</button>
+      <button @click="showComparison = true" v-show="!showComparison">+ {{$t('Compare')}}</button>
+      <button @click="showComparison = false" v-show="showComparison"><span style="color:red"> ✖ </span> {{$t('Close comparison')}}</button>
     </div>
   </div>
 </template>
@@ -50,12 +52,13 @@ export default {
           procData = PieChart.prepDataYearBiomass(data);
         // Set data to pie chart
         this.$refs.portPiechart.setPieData(procData, data);
+        this.$refs.comparePortPiechart.setPieData(procData, data);
       })
       .catch(e => console.error(e))
   },
   data (){
     return {
-      
+      showComparison: false,
     }
   },
   methods: {
@@ -86,6 +89,12 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   align-content: center;
-  /*align-items: center;*/
+  align-items: center;
+}
+
+.pieSection > button {
+  display: flex;
+  align-items: center;
+  max-height: 60px;
 }
 </style>

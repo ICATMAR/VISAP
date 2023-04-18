@@ -88,5 +88,6 @@ export default en = {
   "Biomass": "Biomass",
   "Filter per species": "Filter per species",
   "Export data": "Export data",
-  "Compare": "Compare"
+  "Compare": "Compare",
+  "Close comparison": "Close comparison"
 }

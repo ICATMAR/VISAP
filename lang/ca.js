@@ -86,5 +86,6 @@ export default ca = {
   "Biomass": "Biomassa",
   "Filter per species": "Filtrar per espècies",
   "Export data": "Exportar dades",
-  "Compare": "Comparar"
+  "Compare": "Comparar",
+  "Close comparison": "Tancar comparació"
 }
