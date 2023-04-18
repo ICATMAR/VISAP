@@ -7,9 +7,9 @@
 
       <!-- User buttons -->
       <div class="center-buttons" ref="controlButtons">
-        <button ref="selectAll" onclick="event.stopPropagation();"> Select all </button>
-        <button ref="deselectAll" onclick="event.stopPropagation();"> Deselect all </button>
-        <button ref="closeGUI" onclick="event.stopPropagation();"> Close </button>
+        <button ref="selectAll" onclick="event.stopPropagation();">&#x25C6; Select all </button>
+        <button ref="deselectAll" onclick="event.stopPropagation();">&#x25C7; Deselect all </button>
+        <button ref="closeGUI" onclick="event.stopPropagation();"><span style="color:red"> ✖ </span> Close </button>
       </div>
 
       <!-- Selected species -->
@@ -237,6 +237,8 @@ export default {
   overflow-y: auto;
 
   align-items: center;
+
+  padding: 20px;
 }
 
 .selSpeciesContainer {

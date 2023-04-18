@@ -13,8 +13,6 @@
       <button @click="isFilterMenuVisible = true">&#x25BD; {{ $t('Filter per species') }}</button>
       <!-- Deactivate filter -->
       <button v-show="isFilterActive" @click="deactivateFilter($event)"> <span style="color:red"> ✖ </span> {{ $t('Deactivate filter') }}</button>
-      <!-- Export data button -->
-      <button>&#x21E9; {{ $t('Export data') }}</button>
     </div>
 
     <!-- Filter menu -->

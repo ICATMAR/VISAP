@@ -3,7 +3,12 @@
   <div id='piechartSection' ref='piechartSection'>
     
     <!-- Title Section -->
-    <span class="h4">{{$t('Catch per ' + type)}}</span>
+    <div>
+      <span class="h4">{{$t('Catch per ' + type)}}</span>
+
+      <!-- Export data button -->
+      <button>&#x21E9; {{ $t('Export data') }}</button>
+    </div>
 
     
     <!-- Container pie charts section -->
