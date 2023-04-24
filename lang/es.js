@@ -91,5 +91,8 @@ export default es  = {
   "Compare": "Comparar",
   "Close comparison": "Cerrar comparación",
   "Show chart": "Muestra el gráfico",
-  "Hide chart": "Esconde el gráfico"
+  "Hide chart": "Esconde el gráfico",
+  "Catch composition": "Composición de captura",
+  "Length frequency": "Frecuencia de tallas",
+  "Sampling map": "Mapa de mostreo"
 }

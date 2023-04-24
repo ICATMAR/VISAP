@@ -89,5 +89,8 @@ export default ca = {
   "Compare": "Comparar",
   "Close comparison": "Tancar comparació",
   "Show chart": "Mostra el gràfic",
-  "Hide chart": "Amaga el gràfic"
+  "Hide chart": "Amaga el gràfic",
+  "Catch composition": "Composició de captura",
+  "Length frequency": "Freqüència de talles",
+  "Sampling map": "Mapa de mostreig"
 }

@@ -91,5 +91,8 @@ export default en = {
   "Compare": "Compare",
   "Close comparison": "Close comparison",
   "Show chart": "Show chart",
-  "Hide chart": "Hide chart"
+  "Hide chart": "Hide chart",
+  "Catch composition": "Catch composition",
+  "Length frequency": "Length frequency",
+  "Sampling map": "Sampling map"
 }

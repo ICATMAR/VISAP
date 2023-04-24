@@ -7,14 +7,21 @@
 
       <!-- Title -->
       <div class="h3">
-        <!-- White background-->
-        <div class="tiltedBackground"></div>
         <!-- Text -->
-        <div>
         {{$t('fishingGears.Bottom trawling')}}
-        </div>
-        
       </div>
+
+      <!-- App buttons -->
+      <div class="switchPanels">
+        <!-- Buttons -->
+        <button class="selected">{{ $t('Catch composition') }}</button>
+        <button @click="changeHash('length-freq')">{{ $t('Length frequency') }}</button>
+        <button @click="changeHash('map')">{{ $t('Sampling map') }}</button>
+      </div>
+
+      <!-- White background-->
+      <div class="tiltedBackground"></div>
+      
     </div>
     
     <!-- Pie chart section -->
@@ -48,7 +55,9 @@ export default {
     }
   },
   methods: {
-    //onclick: function(e){},
+    changeHash: function(appType){
+      window.location.setHashValue('app', appType)
+    }
   },
   components: {
     //'map': Map,
@@ -85,7 +94,7 @@ export default {
 .h3 {
   position: relative;
   text-align: center;
-  padding: 60px;
+  padding-top: 60px;
 
   color: var(--darkBlue);
   font-family: "Poppins", Sans-serif;
@@ -98,6 +107,23 @@ export default {
   z-index:2;
 }
 
+.switchPanels {
+  position:relative;
+  padding-bottom:40px;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  z-index:2;
+}
+.selected {
+  background: var(--red);
+  pointer-events: none;
+  cursor:default;
+}
+
 .tiltedBackground {
   background:white;
   transform:rotate(-3deg);
@@ -106,7 +132,7 @@ export default {
   height: 130%;
   top:-50%;
   left:-10px;
-  z-index:-1;
+  z-index:0;
   overflow:hidden;
 }
 
