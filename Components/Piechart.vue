@@ -171,6 +171,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin:10px;
 }
 
 .centered-rows{

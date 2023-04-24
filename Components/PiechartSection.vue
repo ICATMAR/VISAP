@@ -3,7 +3,7 @@
   <div id='piechartSection' ref='piechartSection'>
     
     <!-- Title Section -->
-    <div>
+    <div class="titleContainer">
       <span class="h4">{{$t('Catch per ' + type)}}</span>
 
       <!-- Export data button -->
@@ -95,11 +95,35 @@ export default {
   flex-wrap: wrap;
   align-content: center;
   align-items: center;
+
+  margin-bottom: 20px;
 }
 
 .pieSection > button {
   display: flex;
   align-items: center;
   max-height: 60px;
+}
+
+.titleContainer {
+  width: 100%;
+  background: var(--darkBlue);
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.h4 {
+  position: relative;
+  text-align: center;
+  padding: 60px;
+  color:white;
+
+  background: var(--darkBlue);
+  font-family: "Poppins", Sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  text-transform: none;
+  line-height: 35px;
 }
 </style>
