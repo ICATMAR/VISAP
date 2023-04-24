@@ -7,7 +7,7 @@
 
       <!-- APP MAP -->
       <!-- Map  container-->
-      <div v-show="app=='map'" style="width:100%;height:100%;position:fixed">
+      <div v-show="app=='map'" class="mapContainer">
         <ol-map id="ol-map" ref="map"
           @onTrackClicked="trackClicked" 
           @onFishingTracksLoad="fishingTracksLoad"
@@ -84,6 +84,9 @@ import LanguageSelector from "Components/LanguageSelector.vue"
 export default {
   name: "app-manager",
   created(){
+    
+  },
+  mounted () {
     // Get app from window location hash
     let appType = window.location.getHashValue('app');
     // Set default
@@ -93,8 +96,7 @@ export default {
     }
     // Store
     this.app = appType;
-  },
-  mounted () {
+
     // EVENTS
     window.onhashchange= (event) => {
       // event.newURL, event.oldURL
@@ -205,6 +207,14 @@ export default {
   background: none;
 }
 
+.mapContainer {
+  width:100%;
+  height:100%;
+  position:fixed;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
 
 .switchPanels {
   position:absolute;
