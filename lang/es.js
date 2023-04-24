@@ -89,5 +89,7 @@ export default es  = {
   "Filter per species": "Filtrar por especies",
   "Export data": "Exportar datos",
   "Compare": "Comparar",
-  "Close comparison": "Cerrar comparación"
+  "Close comparison": "Cerrar comparación",
+  "Show chart": "Muestra el gráfico",
+  "Hide chart": "Esconde el gráfico"
 }

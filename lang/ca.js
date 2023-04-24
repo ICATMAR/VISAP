@@ -87,5 +87,7 @@ export default ca = {
   "Filter per species": "Filtrar per espècies",
   "Export data": "Exportar dades",
   "Compare": "Comparar",
-  "Close comparison": "Tancar comparació"
+  "Close comparison": "Tancar comparació",
+  "Show chart": "Mostra el gràfic",
+  "Hide chart": "Amaga el gràfic"
 }

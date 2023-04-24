@@ -124,6 +124,7 @@ svg {
   .h3 {
     padding: 40px;
     font-size: 25px;
+    padding-left: 40%;
   }
 
   svg {

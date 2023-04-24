@@ -6,22 +6,27 @@
     <div class="titleContainer">
       <span class="h4">{{$t('Catch per ' + type)}}</span>
 
+      <!-- Show / Hide button -->
+      <button @click="showPie = !showPie"> {{ showPie ? $t('Hide chart') : $t('Show chart') }}</button>
+
       <!-- Export data button -->
       <button>&#x21E9; {{ $t('Export data') }}</button>
     </div>
 
     
     <!-- Container pie charts section -->
-    <div class="pieSection">
-      <!-- Pie chart 1-->
-      <piechart ref='portPiechart' :title="$t('Catch per ' + type)"></piechart>
-      <!-- Pie chart 2-->
-      <piechart ref='comparePortPiechart' :title="$t('Catch per ' + type)" v-show="showComparison"></piechart>
-    </div>
-    <!-- Compare button-->
-    <div class="compareButtons">
-      <button @click="showComparison = true" v-show="!showComparison">+ {{$t('Compare')}}</button>
-      <button @click="showComparison = false" v-show="showComparison"><span style="color:red"> ✖ </span> {{$t('Close comparison')}}</button>
+    <div class="chartContainer" v-show="showPie">
+      <div class="pieSection">
+        <!-- Pie chart 1-->
+        <piechart ref='portPiechart' :title="$t('Catch per ' + type)"></piechart>
+        <!-- Pie chart 2-->
+        <piechart ref='comparePortPiechart' :title="$t('Catch per ' + type)" v-show="showComparison"></piechart>
+      </div>
+      <!-- Compare button-->
+      <div class="compareButtons">
+        <button @click="showComparison = true" v-show="!showComparison">+ {{$t('Compare')}}</button>
+        <button @click="showComparison = false" v-show="showComparison"><span style="color:red"> ✖ </span> {{$t('Close comparison')}}</button>
+      </div>
     </div>
   </div>
 </template>
@@ -66,6 +71,7 @@ export default {
   data (){
     return {
       showComparison: false,
+      showPie: false,
     }
   },
   methods: {
@@ -114,6 +120,18 @@ export default {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  align-items: center;
+}
+
+button {
+  max-height: -webkit-fill-available;
+}
+
+.chartContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .h4 {
