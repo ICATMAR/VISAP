@@ -3,11 +3,11 @@
   <div id="app-manager">
 
     <!-- Language selector -->
-    <language-selector style='position: absolute;margin-top: 4.5rem;margin-left:0.5rem;'></language-selector>
+    <language-selector style='position:absolute;margin-top:4.5rem;margin-left:0.5rem;'></language-selector>
 
       <!-- APP MAP -->
       <!-- Map  container-->
-      <template v-if="app=='map'">
+      <div v-show="app=='map'" style="width:100%;height:100%;position:fixed">
         <ol-map id="ol-map" ref="map"
           @onTrackClicked="trackClicked" 
           @onFishingTracksLoad="fishingTracksLoad"
@@ -25,11 +25,19 @@
           @setLayerOpacity='setLayerOpacity'
           @setClimaLayer='setClimaLayer'
         ></app-side-panel>
-      </template>
+
+        <!-- Buttons to switch from app -->
+        <div class="switchPanels">
+          <!-- Buttons -->
+          <button @click="changeHash('overview')" >{{ $t('Catch composition') }}</button>
+          <button @click="changeHash('length-freq')">{{ $t('Length frequency') }}</button>
+          <button class="selected">{{ $t('Sampling map') }}</button>
+        </div>
+      </div>
 
 
       <!-- APP OVERVIEW -->
-      <app-overview v-else-if="app=='overview'">
+      <app-overview v-show="app=='overview'">
 
       </app-overview>
 
@@ -102,6 +110,10 @@ export default {
   },
   methods: {
     // INTERNAL EVENTS
+    // Change hash from application
+    changeHash: function(appType){
+      window.location.setHashValue('app', appType);
+    },
     // Event coming from side panel HaulInfo.vue
     selectedTrack: function(id){
       // Send this message to map
@@ -191,6 +203,30 @@ export default {
 
 #animationCanvas {
   background: none;
+}
+
+
+.switchPanels {
+  position:absolute;
+  margin-top: 150px;
+  top: 0px;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:start;
+
+  z-index:2;
+}
+
+.switchPanels>button {
+  font-size: 11px;
+  margin: 3px;
+}
+.selected {
+  background: var(--red);
+  pointer-events: none;
+  cursor:default;
 }
 
 </style>

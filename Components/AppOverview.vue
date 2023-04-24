@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     changeHash: function(appType){
-      window.location.setHashValue('app', appType)
+      window.location.setHashValue('app', appType);
     }
   },
   components: {
@@ -109,7 +109,7 @@ export default {
 
 .switchPanels {
   position:relative;
-  padding-bottom:40px;
+  padding-bottom:60px;
   
   display: flex;
   justify-content: center;
