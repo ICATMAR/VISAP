@@ -4,13 +4,16 @@
 
     <!--Header -->
     <div class="titleHeader">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 264" fill="none">
-        <path d="M0 0H1440V195L0 264V0Z" fill="white"></path>
-      </svg>
-        
+
       <!-- Title -->
       <div class="h3">
+        <!-- White background-->
+        <div class="tiltedBackground"></div>
+        <!-- Text -->
+        <div>
         {{$t('fishingGears.Bottom trawling')}}
+        </div>
+        
       </div>
     </div>
     
@@ -95,6 +98,18 @@ export default {
   z-index:2;
 }
 
+.tiltedBackground {
+  background:white;
+  transform:rotate(-3deg);
+  position:absolute;
+  width:150%;
+  height: 130%;
+  top:-50%;
+  left:-10px;
+  z-index:-1;
+  overflow:hidden;
+}
+
 svg {
   position: absolute;
   width: 100vw;
@@ -108,6 +123,7 @@ svg {
 @media (max-width: 800px) {
   .h3 {
     padding: 40px;
+    font-size: 25px;
   }
 
   svg {

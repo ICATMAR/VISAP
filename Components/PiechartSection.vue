@@ -138,6 +138,7 @@ export default {
 @media (max-width: 800px) {
   .h4 {
     padding: 20px;
+    font-size: 20px;
   }
 }
 </style>
