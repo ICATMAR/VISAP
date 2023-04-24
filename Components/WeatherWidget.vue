@@ -252,7 +252,7 @@ export default {
                 }
               })
               .catch(error => {
-                console.error(error);
+                console.error("Can't get CMEMS-WMS " + layerName + " on " + date.getUTCFullYear() + "/" + (date.getMonth()+1));
                 rr.data[dIndex].value = 'x';
                 rr.data[dIndex].loading = false;
               });
