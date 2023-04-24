@@ -779,7 +779,7 @@ export default {
 }
 
 #wmsLegend {
-  top: 130px; 
+  top: 300px; 
   left: 15px;
   position: absolute; 
   z-index: 2;

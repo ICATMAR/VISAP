@@ -604,6 +604,11 @@ export default {
   user-select:none;
 }
 
+button {
+  color:black;
+  text-decoration: none;
+}
+
 .infoStartEndDate {
   font-size: 13px;
   /*width: fit-content;*/

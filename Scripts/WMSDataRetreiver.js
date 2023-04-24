@@ -635,7 +635,7 @@ dataTypes = {
       timeScaleCorrection = dataType.forecast.timeScaleCorrection;
 
 
-    if (isUsingForecast){debugger}
+    //if (isUsingForecast){debugger}
     // Add time parameter
     date = date.substring(0, 11) + '00:00:00.000Z'// Clean date
     if (tScale.includes('d') || tScale.includes('1D-m')){
