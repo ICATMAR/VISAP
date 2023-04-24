@@ -76,7 +76,7 @@ export default {
 
   },
   mounted(){
-
+    this.effortParamsChange();
   },
   unmounted(){
 
@@ -92,7 +92,7 @@ export default {
 
       selEffortType: 'hours',
       selYear: 2020,
-      selGear: 'All',
+      selGear: 'Bottom trawling',
 
       // https://www.emodnet-humanactivities.eu/view-data.php
       // https://ows.emodnet-humanactivities.eu/wms?LAYERS=2020_st_01_avg&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG%3A4326&BBOX=-1,39,6,44&WIDTH=1024&HEIGHT=1024
