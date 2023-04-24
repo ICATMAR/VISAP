@@ -3,7 +3,7 @@
   <div id='piechart' ref='piechart'>
 
     <!-- D3 chart -->
-    <div ref="d3chart" style="width: 600px; height: 600px;">
+    <div ref="d3chart" class="svgContainer" style="width: 600px; height: 600px;">
 
     </div>
 
@@ -178,5 +178,12 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+@media (max-width: 800px) {
+  .svgContainer{
+    width: 90vw !important;
+    height: 90vw !important;
+  }
 }
 </style>

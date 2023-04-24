@@ -62,9 +62,15 @@ export default {
   font-family: "Poppins", Sans-serif;
   scroll-behavior: auto;
   overflow: auto;
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
   width: 100%;
   background:var(--darkBlue);
+}
+
+@media (max-width: 800px) {
+  #appOverivew {
+    overflow-x:auto;
+  }
 }
 
 .titleHeader {
@@ -72,10 +78,6 @@ export default {
   position: relative;
 }
 
-div.piechart {
-  width: 100%;
-  max-width: 600px;
-}
 
 .h3 {
   position: relative;
@@ -101,6 +103,16 @@ svg {
   left: 0px;
 
   z-index:1;
+}
+
+@media (max-width: 800px) {
+  .h3 {
+    padding: 40px;
+  }
+
+  svg {
+    top:-90px;
+  }
 }
 
 

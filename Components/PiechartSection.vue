@@ -17,7 +17,9 @@
       <piechart ref='portPiechart' :title="$t('Catch per ' + type)"></piechart>
       <!-- Pie chart 2-->
       <piechart ref='comparePortPiechart' :title="$t('Catch per ' + type)" v-show="showComparison"></piechart>
-      <!-- Compare button-->
+    </div>
+    <!-- Compare button-->
+    <div class="compareButtons">
       <button @click="showComparison = true" v-show="!showComparison">+ {{$t('Compare')}}</button>
       <button @click="showComparison = false" v-show="showComparison"><span style="color:red"> ✖ </span> {{$t('Close comparison')}}</button>
     </div>
@@ -95,6 +97,7 @@ export default {
   flex-wrap: wrap;
   align-content: center;
   align-items: center;
+  justify-content: center;
 
   margin-bottom: 20px;
 }
@@ -125,5 +128,16 @@ export default {
   font-weight: 400;
   text-transform: none;
   line-height: 35px;
+}
+
+.compareButtons {
+  margin-bottom: 20px;
+  margin-top: -20px;
+}
+
+@media (max-width: 800px) {
+  .h4 {
+    padding: 20px;
+  }
 }
 </style>
