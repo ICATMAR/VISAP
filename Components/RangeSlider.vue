@@ -268,6 +268,8 @@ export default {
   color: rgba(4, 85, 117, 0.8);
   user-select: none;
 
+  text-decoration:none;
+
   display: flex;
   align-items: center;
   justify-content: center;
