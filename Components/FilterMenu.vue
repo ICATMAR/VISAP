@@ -93,7 +93,6 @@ export default {
 
     // Close filter menu
     closeGUI: function(e){
-      // TODO: COULD DO EMIT OR STORE A VARIABLE HERE
       this.$emit('onclose', this.selSpeciesList.toJSON());
     },
 
@@ -105,6 +104,9 @@ export default {
     //onclick: function(e){},
     setData: function(data){
       let species = this.getUnique(data, "ScientificName");
+      if (species.length == 0) // Legacy
+        species = this.getUnique(data, "NomEspecie");
+      
       let spObj = [];
       let selSpObj = [];
       // Order alphabethically
@@ -149,6 +151,10 @@ export default {
     },
 
 
+    // Set selected
+    addSelected(speciesName){
+      this.switchFromList(speciesName, this.speciesList, this.selSpeciesList, this.deselectItem);
+    },
 
 
 
