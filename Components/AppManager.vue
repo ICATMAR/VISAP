@@ -93,7 +93,7 @@ export default {
     let appType = window.location.getHashValue('app');
     // Set default
     if (appType == undefined){
-      appType = 'overview';
+      appType = 'map';
       window.location.setHashValue('app', appType);
     }
     // Store
