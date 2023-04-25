@@ -169,6 +169,12 @@ export default {
         let pieChart = new PieChart();
         let preparedData = pieChart.processSample(r);
         this.$refs.pieChart.innerHTML = "";
+
+        // Translations
+        if (this.$i18n){
+          this.translateData(preparedData);
+        }
+        
         pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Data, "Biomassa", "kg / km2");
 
       }).catch(e => {
@@ -180,6 +186,20 @@ export default {
           console.error("Could not fetch from " + address + ". Error: " + e + ".");
         }
       })
+    },
+
+
+
+    // Translate data using $i18n
+    translateData(prepData){
+      Object.keys(prepData).forEach(key => {
+        let el = prepData[key];
+        if (typeof(el) == 'object'){
+          this.translateData(el);
+        } else if (typeof(el) == 'string') {
+          prepData["translation"] = this.$i18n.t(el);
+        }
+      });
     },
 
 
