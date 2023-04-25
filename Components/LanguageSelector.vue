@@ -25,9 +25,14 @@ export default {
     if (langURL != undefined){
       this.$i18n.locale = langURL;
     } 
-    // Use default navigator language
-    else {
+    // Use default navigator language if available
+    else if (navigator.language.includes('es') || navigator.language.includes('en') || navigator.language.includes('ca')){
       this.$i18n.locale = navigator.language;
+      window.location.setHashValue('lang', this.$i18n.locale);
+    } 
+    // Default is english
+    else {
+      this.$i18n.locale = 'en';
       window.location.setHashValue('lang', this.$i18n.locale);
     }
     
@@ -104,7 +109,7 @@ export default {
 }
 
 .dropbtnBackground{
-  background-color: #ffffff74;
+  /* background-color: #ffffff74; */
   border-radius: 4px;
   padding: 3px;
 }
