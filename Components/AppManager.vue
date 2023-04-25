@@ -3,7 +3,7 @@
   <div id="app-manager">
 
     <!-- Language selector -->
-    <language-selector style='position:absolute;margin-top:4.5rem;margin-left:0.5rem;'></language-selector>
+    <language-selector style='position:absolute; top:75px; right:3.5%;'></language-selector>
 
       <!-- APP MAP -->
       <!-- Map  container-->
@@ -37,9 +37,10 @@
 
 
       <!-- APP OVERVIEW -->
-      <app-overview v-show="app=='overview'">
+      <app-overview v-show="app=='overview'"></app-overview>
 
-      </app-overview>
+      <!-- APP LENGTH FREQ -->
+      <app-lengthfreq v-show="app=='length-freq'"></app-lengthfreq>
 
 
     <!-- <weather-widget></weather-widget> -->
@@ -76,6 +77,7 @@ import AnimationCanvas from "Components/AnimationCanvas.vue";
 import AppSidePanel from "Components/AppSidePanel.vue"
 
 import AppOverview from "Components/AppOverview.vue"
+import AppLengthFreq from "./AppLengthFreq.vue";
 
 import WeatherWidget from "Components/WeatherWidget.vue"
 
@@ -167,6 +169,7 @@ export default {
     "animation-canvas": AnimationCanvas,
     "app-side-panel": AppSidePanel,
     "app-overview": AppOverview,
+    "app-lengthfreq": AppLengthFreq,
 
     "weather-widget": WeatherWidget,
 

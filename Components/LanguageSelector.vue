@@ -2,7 +2,7 @@
 
   <div class="dropdown">
     <div class="dropbtnBackground">
-      <button @click="dropdownClick" class="dropbtn">&#127760;</button>
+      <button @click="dropdownClick" class="dropbtn" :style="{'background-image': 'url(./img/'+ $i18n.locale + '-200.png)'}"></button>
     </div>
     <div id="myDropdown" class="dropdown-content">
       <div class="lgItem cat" value='ca' @click='changeLanguage' href="#">Català</div>
@@ -84,13 +84,23 @@ export default {
 <style scoped>
 /* Dropdown Button */
 .dropbtn {
-  background-color: #5580b4;
-  border-radius: 4px;
+  background-color: var(--darkBlue);
+  border-radius: 50%;
   color: white;
+  width:36px;
+  height: 36px;
+  text-decoration: none;
   padding: 4px;
   font-size: 16px;
   border: none;
   cursor: pointer;
+
+  
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-origin: content-box;
+
 }
 
 .dropbtnBackground{
@@ -101,7 +111,7 @@ export default {
 
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
-  background-color: #2d5a91;
+  background-color: var(--blue);
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -115,14 +125,14 @@ export default {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #a0d7f2;;
+  background-color: var(--darkBlue);
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
 /* Links inside the dropdown */
 .dropdown-content .lgItem {
-  color: black;
+  color: white;
   padding: 4px 4px;
   text-decoration: none;
   display: block;
@@ -130,12 +140,15 @@ export default {
 
 /* Change color of dropdown links on hover */
 .dropdown-content .lgItem:hover {
-  background-color: #63c0ee;
+  background-color: var(--blue);
   cursor: pointer;
 }
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:block;}
+.show {
+  display:block;
+  right: 3%;
+}
 
 .lgItem:before {
   content: '';
