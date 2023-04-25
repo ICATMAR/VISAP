@@ -3,7 +3,7 @@
   <div id='appOverivew' ref='appOverivew'>
 
     <!--Header -->
-    <title-header :title="$t('fishingGears.Bottom trawling')"></title-header>
+    <title-header title="Catch composition"></title-header>
     
     <!-- Pie chart section -->
     <piechart-section type="port"></piechart-section>

@@ -4,14 +4,14 @@
       <!-- Title -->
         <div class="h3">
             <!-- Text -->
-            {{title}}
+            {{$t(title)}}
         </div>
 
         <!-- App buttons -->
         <div class="switchPanels">
             <!-- Buttons -->
-            <button class="selected">{{ $t('Catch composition') }}</button>
-            <button @click="changeHash('length-freq')">{{ $t('Length frequency') }}</button>
+            <button :class="{selected: title=='Catch composition'}"  @click="changeHash('overview')">{{ $t('Catch composition') }}</button>
+            <button :class="{selected: title=='Length frequency'}" @click="changeHash('length-freq')">{{ $t('Length frequency') }}</button>
             <button @click="changeHash('map')">{{ $t('Sampling map') }}</button>
         </div>
 
@@ -117,6 +117,10 @@ export default {
   left:-10px;
   z-index:0;
   overflow:hidden;
+}
+
+button {
+  user-select: none;
 }
 
 @media (max-width: 800px) {
