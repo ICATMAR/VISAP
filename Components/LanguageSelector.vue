@@ -93,6 +93,7 @@ export default {
 /* Dropdown Button */
 .dropbtn {
   background-color: var(--darkBlue);
+  box-shadow: 0px 0px 6px 1px white;
   border-radius: 50%;
   color: white;
   width:36px;
