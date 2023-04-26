@@ -102,5 +102,20 @@ export default ca = {
   "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km2)",
   "Abundance": "Abundància",
   "individuals of": " individus de ",
-  "per": "per"
+  "per": "per",
+  "Length": "Longitud",
+
+  "viewFullscreen": "Pantalla completa",
+  "exitFullscreen": "Sortir de la pantalla completa",
+  "printChart": "Imprimir gràfic",
+  "downloadPNG": "Baixar imatge PNG",
+  "downloadJPEG": "Baixar imatge JPG",
+  "downloadPDF": "Baixar document PDF",
+  "downloadSVG": "Baixar vector SVG",
+  "contextButtonTitle": "Menú del gràfic",
+  "loading": "Carregant...",
+  "downloadCSV": "Exportar dades (CSV)",
+  "downloadXLS": "Exportar dades (XLS)",
+  "viewData": "Mostrar taula de dades",
+  "hideData": "Amagar taula de dades"
 }

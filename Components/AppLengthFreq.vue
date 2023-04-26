@@ -41,6 +41,16 @@
     },
     mounted() {
       this.getDataFile('data/sizes.json');
+
+      // EVENTS
+      // When language changes, update language of the highchart
+      window.eventBus.on('LanguageSelector_languageChange', (e) => {
+        // Translate menu options
+        this.translateHighcharts();
+        // Reset graph
+        if (this.rawData)
+          this.createGraph(this.rawData);
+      });
     },
     data (){
       return {
@@ -144,6 +154,10 @@
         // Translation not possible inside context of Highcharts. Doing hack?
         window.i18n = this.$i18n;
 
+        // Translation
+        this.translateHighcharts();
+        
+
         const hChart = Highcharts.chart('tamanyContainer', {
           chart: {
               type: 'area'
@@ -175,10 +189,13 @@
               //}
           },
           xAxis: {
+              title: {
+                text: this.$i18n.t('Length') + ' (cm)'
+              },
               allowDecimals: false,
               labels: {
                   formatter: function () {
-                      return this.value/10 + ' cm'; // clean, unformatted number for year
+                      return this.value/10; // clean, unformatted number for year
                   }
               },
               /*accessibility: {
@@ -228,6 +245,16 @@
         });
 
         return hChart;
+      },
+
+      // Translate high charts options
+      translateHighcharts: function(){
+        let lang = Highcharts.getOptions().lang;
+        Object.keys(lang).forEach(key => {
+          if (this.$i18n.te(key) && typeof(lang[key]) == "string"){
+            lang[key] = this.$i18n.t(key);
+          }
+        })
       },
 
 

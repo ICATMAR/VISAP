@@ -71,7 +71,8 @@ export default {
       this.$i18n.locale = lang;
       // Set url hash
       window.location.setHashValue('lang', this.$i18n.locale);
-      
+      // Emit (manual translations such as in Highcharts)
+      window.eventBus.emit('LanguageSelector_languageChange', lang);
     },
 
   },

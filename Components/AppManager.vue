@@ -100,6 +100,7 @@ export default {
     this.app = appType;
 
     // EVENTS
+    // Manual hash change
     window.onhashchange= (event) => {
       // event.newURL, event.oldURL
       let appType = window.location.getHashValue('app');

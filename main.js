@@ -21,6 +21,10 @@ import {setHashValue, getHashValue} from './Scripts/utils.js';
 window.location.setHashValue = setHashValue;
 window.location.getHashValue = getHashValue;
 
+// Declare event emitter
+// https://github.com/developit/mitt
+window.eventBus = window.mitt();
+
 
 const i18n = VueI18n.createI18n();
 
