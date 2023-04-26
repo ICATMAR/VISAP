@@ -7,20 +7,20 @@
 
       <!-- User buttons -->
       <div class="center-buttons" ref="controlButtons">
-        <button ref="selectAll" onclick="event.stopPropagation();">&#x25C6; Select all </button>
-        <button ref="deselectAll" onclick="event.stopPropagation();">&#x25C7; Deselect all </button>
-        <button ref="closeGUI" onclick="event.stopPropagation();"><span style="color:red"> ✖ </span> Close </button>
+        <button ref="selectAll" onclick="event.stopPropagation();">&#x25C6; {{$t('Select all')}} </button>
+        <button ref="deselectAll" onclick="event.stopPropagation();">&#x25C7; {{$t('Deselect all')}} </button>
+        <button ref="closeGUI" onclick="event.stopPropagation();"><span style="color:red"> ✖ </span> {{$t('Close')}} </button>
       </div>
 
       <!-- Selected species -->
       <div ref="selSpecies" class="listSpeciesContainer selSpeciesContainer">
-        <input class="search form-control" onclick="event.stopPropagation();" placeholder="Search" v-show="showSearchBarSelSpecies"/>
+        <input class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" v-show="showSearchBarSelSpecies"/>
         <div class="list listSel"></div>
       </div>
 
       <!-- Species list -->
       <div ref="availableSpecies" class="listSpeciesContainer">
-        <input class="search form-control" onclick="event.stopPropagation();" placeholder="Search" />
+        <input class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" />
         <div class="list"></div>
       </div>
 
