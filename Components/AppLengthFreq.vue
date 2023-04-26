@@ -23,11 +23,6 @@
         </p>
       </figure>
 
-      <!-- Could not load data -->
-      <div v-show="noData">
-        COULD NOT LOAD DATA
-      </div>
-
     </div>
   </template>
   
@@ -50,7 +45,6 @@
     data (){
       return {
         isFilterMenuVisible: false,
-        noData: false,
       }
     },
     methods: {
@@ -147,6 +141,9 @@
       // Create Highchart
       createChart: function(serieSpecies) {
 
+        // Translation not possible inside context of Highcharts. Doing hack?
+        window.i18n = this.$i18n;
+
         const hChart = Highcharts.chart('tamanyContainer', {
           chart: {
               type: 'area'
@@ -190,7 +187,7 @@
           },
           yAxis: {
               title: {
-                  text: 'Abundance (Number of individuals per km2)'//'Nuclear weapon states'
+                  text: this.$i18n.t('Abundance (Number of individuals per km2)')//'Nuclear weapon states'
               },
               labels: {
                   formatter: function () {
@@ -201,7 +198,8 @@
           tooltip: {
               //pointFormat: 'Hi ha {point.y} que fan {point.x} cm de l\'espècie {series.name}'//'{series.name} had stockpiled <b>{point.y:,.0f}</b><br/>warheads in {point.x}'
               formatter: function() {
-                return 'Abundance: ' + parseInt(this.y) + ' individuals of ' + this.x/10 + " cm per km2."//  + 'individus de ' + this.x + ' cm d\'un total de '  + ' ' + series.name;
+                // THIS FUNCTION FORCES window.i18n, as it is not possible to access this.$i18n
+                return window.i18n.t('Abundance') + ": " + parseInt(this.y) + window.i18n.t('individuals of') + this.x/10 + " cm " + window.i18n.t("per") +" km2."//  + 'individus de ' + this.x + ' cm d\'un total de '  + ' ' + series.name;
               }
           },
           loading: {

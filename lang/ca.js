@@ -97,5 +97,10 @@ export default ca = {
   "Hide chart": "Amagar gràfic",
   "Catch composition": "Composició de captura",
   "Length frequency": "Freqüència de talles",
-  "Sampling map": "Mapa de mostreig"
+  "Sampling map": "Mapa de mostreig",
+
+  "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km2)",
+  "Abundance": "Abundància",
+  "individuals of": " individus de ",
+  "per": "per"
 }

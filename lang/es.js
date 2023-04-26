@@ -99,5 +99,10 @@ export default es  = {
   "Hide chart": "Esconder gráfico",
   "Catch composition": "Composición de captura",
   "Length frequency": "Frecuencia de tallas",
-  "Sampling map": "Mapa de mostreo"
+  "Sampling map": "Mapa de mostreo",
+
+  "Abundance (Number of individuals per km2)": "Abundancia (Nº de individuos por km2)",
+  "Abundance": "Abundancia",
+  "individuals of": " individuos de ",
+  "per": "por"
 }
