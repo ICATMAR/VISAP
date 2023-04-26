@@ -29,3 +29,10 @@ button:hover {
   background-color: var(--lightBlue);
   transition: all 0.2s ease-in-out;
 }
+
+.highcharts-data-table {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
