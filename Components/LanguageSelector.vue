@@ -25,11 +25,11 @@ export default {
     // Check if there is a language in the url
     let langURL = window.location.getHashValue('lang');
     if (langURL != undefined){
-      this.$i18n.locale = langURL.substring(0,2); // WARNING: ARE THERE LANGUAGES WITH THREE LETTER CODES?
+      this.$i18n.locale = langURL;
     } 
     // Use default navigator language if available
     else if (navigator.language.includes('es') || navigator.language.includes('en') || navigator.language.includes('ca')){
-      this.$i18n.locale = navigator.language;
+      this.$i18n.locale = navigator.language.substring(0,2); // WARNING: ARE THERE LANGUAGES WITH THREE LETTER CODES?;
       window.location.setHashValue('lang', this.$i18n.locale);
     } 
     // Default is english
