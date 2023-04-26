@@ -85,6 +85,8 @@ export default es  = {
 
   "Catch per port": "Captura por puerto",
   "Catch per season": "Captura por estación",
+  "season": "estación",
+  "port": "puerto",
   "Biomass": "Biomasa",
   "Filter per species": "Filtrar por especies",
   "Select species": "Seleccionar especies",

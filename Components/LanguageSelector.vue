@@ -2,7 +2,9 @@
 
   <div class="dropdown">
     <div class="dropbtnBackground">
-      <button @click="dropdownClick" class="dropbtn" :style="{'background-image': 'url(./img/'+ $i18n.locale + '-200.png)'}"></button>
+      <!-- <button @click="dropdownClick" class="dropbtn" :style="{'background-image': 'url(./img/'+ $i18n.locale + '-200.png)'}"></button> -->
+      <button @click="dropdownClick" class="dropbtn">{{$i18n.locale}}</button>
+
     </div>
     <div id="myDropdown" class="dropdown-content">
       <div class="lgItem cat" value='ca' @click='changeLanguage' href="#">Català</div>
@@ -23,7 +25,7 @@ export default {
     // Check if there is a language in the url
     let langURL = window.location.getHashValue('lang');
     if (langURL != undefined){
-      this.$i18n.locale = langURL;
+      this.$i18n.locale = langURL.substring(0,2); // WARNING: ARE THERE LANGUAGES WITH THREE LETTER CODES?
     } 
     // Use default navigator language if available
     else if (navigator.language.includes('es') || navigator.language.includes('en') || navigator.language.includes('ca')){

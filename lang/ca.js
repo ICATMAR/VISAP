@@ -83,6 +83,8 @@ export default ca = {
 
   "Catch per port": "Captura per port",
   "Catch per season": "Captura per estació",
+  "season": "estació",
+  "port": "port",
   "Biomass": "Biomassa",
   "Filter per species": "Filtrar per espècies",
   "Select species": "Seleccionar espècies",
