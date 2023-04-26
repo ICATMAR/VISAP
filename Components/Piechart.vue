@@ -31,13 +31,14 @@ import FilterMenu from 'Components/FilterMenu.vue'
 export default {
   name: 'piechart', // Caps, no -
   props: {
-    title: String,
+    titleIn: String,
   },
   created() {
     
   },
   mounted() {
     this.piechart = new PieChart();
+    this.title = this.titleIn;
   },
   data (){
     return {
@@ -48,6 +49,9 @@ export default {
   methods: {
     //onclick: function(e){},
     setPieData: function(prepData, rawData){
+      // Remove existing graph
+      this.$refs.d3chart.innerHTML = '';
+
       // Store prep data
       this.prepData = prepData;
 
@@ -58,7 +62,7 @@ export default {
 
 
       // HTMLcontainer, data, d3, title, measure, unit
-      this.piechart.runApp(this.$refs.d3chart, prepData, d3, this.title, 'Biomass', 'kg / km2');
+      this.piechart.runApp(this.$refs.d3chart, prepData, d3, this.title, this.$i18n.t('Biomass'), 'kg / km2');
 
       // Fill filter menu with data
       this.$refs.filterMenu.setData(rawData);
@@ -71,7 +75,7 @@ export default {
       // }
       // Restart pie charts (TODO: instead of runApp function, update and transition of values)
       this.$refs.d3chart.innerHTML = "";
-      this.piechart.runApp(this.$refs.d3chart, inDataForD3, d3, this.title, 'Biomass', 'kg / km2');
+      this.piechart.runApp(this.$refs.d3chart, inDataForD3, d3, this.title, this.$i18n.t('Biomass'), 'kg / km2');
     },
 
 
@@ -155,6 +159,13 @@ export default {
       this.isFilterActive = false;
       this.$refs.filterMenu.deselectAll(e);
       this.updateTrawlingChart(this.prepData);
+    },
+
+
+    // PUBLIC
+    // For translations
+    setTitle: function(title){
+      this.title=title;
     },
   },
   components: {

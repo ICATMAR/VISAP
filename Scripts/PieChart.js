@@ -221,15 +221,21 @@ class PieChart {
 	  function mouseOnPath(event, p){
 	    if (p.current.y0 % 1 != 0) // During transition
 	      return;
+		// Visible text (dirty fix for using species in higher categories (port, season, etc.))
+		let visibleText = ''
+		if (p.data.children)
+			visibleText = p.data.translation || p.data.name || p.data.species;
+		else
+			visibleText = p.data.species || p.data.translation || p.data.name;
 	    // Show biomass
-			centerLabel
-				.select(".biomassText")
-				.style("visibility", null)
-				.text(format(p.value) +  " kg / km2");
+		centerLabel
+			.select(".biomassText")
+			.style("visibility", null)
+			.text(format(p.value) +  " kg / km2");
 	    centerLabel
 	      .select(".centerText")
 	      .style("visibility", null)
-	      .text(p.data.species || p.data.translation || p.data.name)
+	      .text(visibleText)
 
 	    // Get the ancestors of the current segment, minus the root
 	    const sequence = [];

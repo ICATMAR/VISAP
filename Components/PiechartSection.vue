@@ -33,9 +33,9 @@
     <div class="chartContainer" v-show="showPie">
       <div class="pieSection">
         <!-- Pie chart 1-->
-        <piechart ref='portPiechart' :title="$t('Catch per ' + type)"></piechart>
+        <piechart ref='portPiechart' :titleIn="$t('Catch per ' + type)"></piechart>
         <!-- Pie chart 2-->
-        <piechart ref='comparePortPiechart' :title="$t('Catch per ' + type)" v-show="showComparison"></piechart>
+        <piechart ref='comparePortPiechart' :titleIn="$t('Catch per ' + type)" v-show="showComparison"></piechart>
       </div>
       <!-- Compare button-->
       <div class="compareButtons">
@@ -76,16 +76,16 @@ export default {
       .then(r => r.json())
       .then(data => {
         this.rawData = data;
-        let procData = undefined;
-        if (this.type == 'port')
-          procData = PieChart.prepDataPortBiomass(data);
-        else if (this.type == 'season')
-          procData = PieChart.prepDataYearBiomass(data);
-        // Set data to pie chart
-        this.$refs.portPiechart.setPieData(procData, data);
-        this.$refs.comparePortPiechart.setPieData(procData, data);
+        this.updatePieChartData();
       })
-      .catch(e => console.error(e))
+      .catch(e => console.error(e));
+
+    
+    // EVENTS
+    window.eventBus.on('LanguageSelector_languageChange', () => {
+      // Set data to pie chart
+      this.updatePieChartData();
+    })
   },
   data (){
     return {
@@ -95,6 +95,30 @@ export default {
     }
   },
   methods: {
+    // INTERNAL FUNCTIONS
+    // Prepare data and update data on the pie charts
+    updatePieChartData: function(){
+      let data = this.rawData;
+
+      // Update titles
+      this.$refs.portPiechart.setTitle(this.$i18n.t('Catch per ' + this.type));
+      this.$refs.comparePortPiechart.setTitle(this.$i18n.t('Catch per ' + this.type));
+
+      // Update data
+      let procData = undefined;
+      if (this.type == 'port')
+        procData = PieChart.prepDataPortBiomass(data);
+      else if (this.type == 'season')
+        procData = PieChart.prepDataYearBiomass(data);
+      // Set data to pie chart
+      this.$refs.portPiechart.setPieData(procData, data);
+      this.$refs.comparePortPiechart.setPieData(procData, data);
+
+      
+
+    },
+
+    // USER EVENTS
     // Export data
     exportButtonClicked: function(e){
       this.showExportOptions = !this.showExportOptions;
