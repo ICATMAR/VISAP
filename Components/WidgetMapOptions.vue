@@ -9,7 +9,7 @@
         <!-- Other base layers -->
         <div class="otherBaseLayersContainer" v-show="isMouseOver">
           <div v-for="baseLayer, index in baseLayers">
-            <img class="icon-str icon-img" :src="baseLayer.img.src" @click="baseLayerClicked($event, index)">
+            <img class="icon-str icon-img" :src="baseLayer.img.src" @click="baseLayerClicked($event, index)" :title="baseLayer.name">
           </div>
         </div>
         <!-- Text -->
@@ -43,7 +43,6 @@
         for (let i = 0; i< values.length; i++){
           this.baseLayers.push(values[i].value);
         }
-        debugger;
       })
       
     },

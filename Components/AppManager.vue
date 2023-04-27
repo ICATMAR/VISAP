@@ -5,45 +5,14 @@
     <!-- Language selector -->
     <language-selector style='position:absolute; top:33px; right:3px;'></language-selector>
 
-      <!-- APP MAP -->
-      <!-- Map  container-->
-      <div v-show="app=='map'" class="mapContainer">
-        <ol-map id="ol-map" ref="map"
-          @onTrackClicked="trackClicked" 
-          @onFishingTracksLoad="fishingTracksLoad"
-        ></ol-map>
-        <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
-        
-        <!-- Side panel -->
-        <app-side-panel ref="sidePanel"
-          @selectedTrack='selectedTrack' 
-          @onTabClicked='sidePanelTabClicked' 
-          @onPanelTransitionEnd='sidePanelTabClicked'
-          @setEffortLayerOpacity='setEffortLayerOpacity'
-          @setEffortMap='setEffortMap'
-          @setBaseLayer='setBaseLayer'
-          @setLayerOpacity='setLayerOpacity'
-          @setClimaLayer='setClimaLayer'
-        ></app-side-panel>
+    <!-- APP MAP -->
+    <app-map v-show="app=='map'"></app-map>
 
-        <!-- Buttons to switch from app -->
-        <div class="switchPanels">
-          <!-- Buttons -->
-          <button @click="changeHash('overview')" >{{ $t('Catch composition') }}</button>
-          <button @click="changeHash('length-freq')">{{ $t('Length frequency') }}</button>
-          <button class="selected">{{ $t('Sampling map') }}</button>
-        </div>
-      </div>
+    <!-- APP OVERVIEW -->
+    <app-overview v-show="app=='overview'"></app-overview>
 
-
-      <!-- APP OVERVIEW -->
-      <app-overview v-show="app=='overview'"></app-overview>
-
-      <!-- APP LENGTH FREQ -->
-      <app-lengthfreq v-show="app=='length-freq'"></app-lengthfreq>
-
-      <!-- Menu left -->
-      <!-- <menu-left></menu-left> -->
+    <!-- APP LENGTH FREQ -->
+    <app-lengthfreq v-show="app=='length-freq'"></app-lengthfreq>
 
 
     <!-- <weather-widget></weather-widget> -->
@@ -57,36 +26,18 @@
 
 
 <script>
-/*
-APP STRUCTURE
 
-                                        APP MANAGER
-              /                             |                            \
-        OL-MAP                          APP-SIDE-PANEL                    LANGUAGE-SELECTOR
-        /                     /        |          |           \    
-    TIME-RANGE-BAR   HAUL-INFO   FISHING-EFFORT   LAYER-PANEL   ABOUT 
-      /                   |          
-  RANGE-SLIDER      WEATHER-WIDGET
-
-Right now the comunication is done via the paths shown before. It might be useful to create some kind of
-whiteboard or event manager. For example, one could send and event like (from, to who, funcion name, parameters)
-
-*/
 
 
 // Import components
-import Map from "Components/Map.vue";
-import AnimationCanvas from "Components/AnimationCanvas.vue";
-import AppSidePanel from "Components/AppSidePanel.vue"
+import AppOverview from "Components/AppOverview.vue";
+import AppLengthFreq from "Components/AppLengthFreq.vue";
+import AppMap from "Components/AppMap.vue";
 
-import AppOverview from "Components/AppOverview.vue"
-import AppLengthFreq from "./AppLengthFreq.vue";
 
-import MenuLeft from "Components/MenuLeft.vue";
+import WeatherWidget from "Components/WeatherWidget.vue";
 
-import WeatherWidget from "Components/WeatherWidget.vue"
-
-import LanguageSelector from "Components/LanguageSelector.vue"
+import LanguageSelector from "Components/LanguageSelector.vue";
 
 export default {
   name: "app-manager",
@@ -120,10 +71,6 @@ export default {
   },
   methods: {
     // INTERNAL EVENTS
-    // Change hash from application
-    changeHash: function(appType){
-      window.location.setHashValue('app', appType);
-    },
     // Event coming from side panel HaulInfo.vue
     selectedTrack: function(id){
       // Send this message to map
@@ -171,12 +118,9 @@ export default {
     },
   },
   components: {
-    "ol-map": Map,
-    "animation-canvas": AnimationCanvas,
-    "app-side-panel": AppSidePanel,
     "app-overview": AppOverview,
     "app-lengthfreq": AppLengthFreq,
-    "menu-left": MenuLeft,
+    "app-map": AppMap,
 
     "weather-widget": WeatherWidget,
 
@@ -206,47 +150,5 @@ export default {
   overflow: hidden;
 }
 
-
-#ol-map {
-  /* background: red; */
-  width: 100%; 
-  height: 100%;
-}
-
-#animationCanvas {
-  background: none;
-}
-
-.mapContainer {
-  width:100%;
-  height:100%;
-  position:fixed;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-
-.switchPanels {
-  position:absolute;
-  margin-top: 150px;
-  top: 0px;
-  
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items:start;
-
-  z-index:2;
-}
-
-.switchPanels>button {
-  font-size: 11px;
-  margin: 3px;
-}
-.selected {
-  background: var(--red);
-  pointer-events: none;
-  cursor:default;
-}
 
 </style>
