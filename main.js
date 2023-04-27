@@ -21,6 +21,13 @@ import {setHashValue, getHashValue} from './Scripts/utils.js';
 window.location.setHashValue = setHashValue;
 window.location.getHashValue = getHashValue;
 
+// Import file manager
+import FileManager from './Assets/Scripts/FileManager.js';
+window.FileManager = new FileManager();
+
+
+
+
 // Declare event emitter
 // https://github.com/developit/mitt
 window.eventBus = window.mitt();

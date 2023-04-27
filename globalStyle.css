@@ -36,3 +36,94 @@ button:hover {
   flex-direction: column;
   align-items: center;
 }
+
+
+
+
+span {
+  color: white;
+  text-shadow: 0px 0px 4px black;
+  font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+
+
+/* Limit SVG size */
+.icon-svg {
+  width: 45px;
+  height: 45px;
+}
+
+.icon-svg:hover {
+  border-width: 2px;
+  border-color: black;
+  border-style: solid;
+  border-radius: 50%;
+  background-color: rgb(176, 176, 176);
+}
+
+.roundButton {
+  border-style: none;
+  padding: 0;
+  margin-bottom: 10px;
+  border-radius: 50%;
+}
+
+.icon-str {
+  width: 25px;
+  height: 25px;
+  color: white;
+  text-shadow: 0px 0px 4px black;
+  font-weight: bold;
+
+  background: var(--lightBlue);
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px black;
+  margin-left: 3px;
+  margin-right: 3px;
+
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.icon-str:hover {
+  background-color: var(--blue);
+}
+/* Close icon */
+.icon-str-close {
+  /* background-color: var(--red); */
+  background-color: gray;
+}
+.icon-str-close::after {
+  content: "\2715";
+}
+.icon-str-close:hover{
+  background-color: lightgray;
+}
+/* Open icon */
+.icon-str-open {
+  background-color: var(--lightBlue);
+}
+.icon-str-open::after {
+  font-family: initial;
+  content: "\1F441";
+}
+.icon-str-open:hover{
+  background-color: green;
+}
+
+
+.icon-big{
+  width: 35px;
+  height: 35px;
+}
+
+.icon-img:hover {
+  border: 2px solid var(--lightBlue);
+  cursor:pointer;
+}

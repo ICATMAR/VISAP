@@ -76,7 +76,7 @@ export default {
       }),
       'Ocean': new ol.source.XYZ ({ // https://openlayers.org/en/latest/examples/canvas-tiles.html
         url: 'https://services.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}.png',
-        attributions: 'Esri, Garmin, GEBCO, NOAA NGDC, and other contributors',
+        attributions: '© Esri, Garmin, GEBCO, NOAA NGDC, and other contributors',
         cacheSize: 500,
         crossOrigin: 'anonymous',
       }),
@@ -258,6 +258,11 @@ export default {
   mounted () {
     this.initMap();
     this.$refs.OLMap.addEventListener('mousemove', this.onMouseMove);
+
+    // EVENTS
+    window.eventBus.on("WidgetMapOptions_BaseLayerClicked", baseLayerName => {
+      this.setBaseLayer(baseLayerName);
+    });
   },
   umounted () {
     this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);
