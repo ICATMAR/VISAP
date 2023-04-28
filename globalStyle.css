@@ -30,6 +30,15 @@ button:hover {
   transition: all 0.2s ease-in-out;
 }
 
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+.clickable:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
 .highcharts-data-table {
   color: white;
   display: flex;

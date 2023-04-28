@@ -27,6 +27,9 @@
         <onOffButton ref="weatherOnOffButton" :checked="false" :inSize="'14px'" @change="weatherLayerOnOff($event)"></onOffButton>
         <span @click="weatherLayerOnOff">Weather and sea conditions</span>
       </div>
+
+      <!-- Weather Layers -->
+      <widgetWeatherLayers></widgetWeatherLayers>
   
 
     </div>
@@ -36,6 +39,7 @@
   <script>
   
   // Import components
+  import WidgetWeatherLayers from "./WidgetWeatherLayers.vue";
   import OnOffButton from "./OnOffButton.vue";
 
   
@@ -85,6 +89,7 @@
     },
     components: {
       "onOffButton": OnOffButton,
+      "widgetWeatherLayers": WidgetWeatherLayers,
     }
   }
   </script>
@@ -136,13 +141,6 @@
     align-items: center;
   }
 
-  .clickable {
-    cursor: pointer;
-    user-select: none;
-  }
-  .clickable:hover {
-    transform: scale(1.05);
-    transition: all 0.2s ease-in-out;
-  }
+
   
   </style>
