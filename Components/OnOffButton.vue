@@ -4,7 +4,7 @@
   <div id='onoffButton' ref='onoffButton' @click="e => e.stopPropagation()">
     <!-- Rounded switch -->
     <label class="switch">
-      <input type="checkbox" :checked="checked" @mousedown="(e) => {e.stopPropagation(); e.preventDefault(); $emit('change', $event)}">
+      <input ref="inputEl" type="checkbox" :checked="checked" @mousedown="(e) => {e.stopPropagation(); e.preventDefault(); $emit('change', $event)}">
       <span class="slider round"></span>
     </label>
   </div>
@@ -35,6 +35,11 @@ export default {
   },
   methods: {
     //onclick: function(e){},
+    setChecked(boolOption){
+      if (this.$refs.inputEl.checked != boolOption){
+        this.$refs.inputEl.click();
+      }
+    }
   },
   components: {
     //'map': Map,

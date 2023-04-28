@@ -3,7 +3,7 @@
     <div id='widgetMapOptions' ref='widgetMapOptions'>
 
       <!-- Base layer selection -->
-      <div id="baseLayerSelection" v-show="baseLayers.length != 0" @mouseleave="isMouseOver = false">
+      <div id="baseLayerSelection" class="clickable" v-show="baseLayers.length != 0" @mouseleave="isMouseOver = false">
         <!-- Selected -->
         <img class="icon-str icon-img" :src="baseLayerIconSrc" @click="isMouseOver=true" v-show="!isMouseOver">
         <!-- Other base layers -->
@@ -13,13 +13,19 @@
           </div>
         </div>
         <!-- Text -->
-        <span>Base layer</span>
+        <span @click="isMouseOver=!isMouseOver">Base layer</span>
       </div>
 
       <!-- Iso bars -->
       <div id="isobathsContainer" v-show="false">
         <onOffButton :checked="false" :inSize="'18px'" @change="isoOnOffChange($event)"></onOffButton>
         <span>Isobaths</span>
+      </div>
+
+      <!-- Weather and sea -->
+      <div class=clickable>
+        <onOffButton ref="weatherOnOffButton" :checked="false" :inSize="'14px'" @change="weatherLayerOnOff($event)"></onOffButton>
+        <span @click="weatherLayerOnOff">Weather and sea conditions</span>
       </div>
   
 
@@ -52,6 +58,7 @@
         baseLayerIconSrc: './Assets/BaseLayer/Imagery.png',
         baseLayers: [],
         isMouseOver: false,
+        isWeatherMenuVisible: false,
       }
     },
     methods: {
@@ -62,6 +69,18 @@
         window.eventBus.emit("WidgetMapOptions_BaseLayerClicked", this.baseLayers[index].name);
       },
 
+      // Weather sea on off
+      weatherLayerOnOff: function(e){
+        // OnOff Button was clicked
+        if (e.target.value != undefined){ 
+          this.isWeatherMenuVisible = e.target.checked;
+        } 
+        // Text was clicked --> Invoke click on the element, which calls again this function
+        else {
+          this.$refs.weatherOnOffButton.setChecked(!this.isWeatherMenuVisible);
+        }
+        
+      }
   
     },
     components: {
@@ -76,9 +95,13 @@
   <style scoped>
   #widgetMapOptions {
     z-index: 11;
-    /* position: absolute;
-    top: 150px;
-    left: 2px; */
+    user-select: none;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding-left: 10px;
   }
 
   @media screen and (max-width: 770px) {
@@ -86,14 +109,15 @@
       top: 120px;
     }
   }
-  
-  #baseLayerSelection {
+
+  #widgetMapOptions > div {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 8px;
   }
+  
 
   .otherBaseLayersContainer{
     display: flex;
@@ -103,18 +127,22 @@
     align-items: center;
   }
   
-  #isobathsContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 8px;
-  }
+
   
   #buttonsWidget > div {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
+  }
+
+  .clickable {
+    cursor: pointer;
+    user-select: none;
+  }
+  .clickable:hover {
+    transform: scale(1.05);
+    transition: all 0.2s ease-in-out;
   }
   
   </style>

@@ -47,8 +47,6 @@
     position: absolute;
     background: red;
 
-    width: 200px;
-
     top: 300px;
     bottom: 130px;
 
