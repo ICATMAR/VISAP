@@ -13,7 +13,7 @@
           </div>
         </div>
         <!-- Text -->
-        <span @click="isMouseOver=!isMouseOver">Base layer</span>
+        <span @click="isMouseOver=!isMouseOver">{{$t('Base layer')}}</span>
       </div>
 
       <!-- Iso bars -->
@@ -25,7 +25,7 @@
       <!-- Weather and sea -->
       <div class=clickable>
         <onOffButton ref="weatherOnOffButton" :checked="false" :inSize="'14px'" @change="weatherLayerOnOff($event)"></onOffButton>
-        <span @click="weatherLayerOnOff">Weather and sea conditions</span>
+        <span @click="weatherLayerOnOff">{{$t('Weather and sea conditions')}}</span>
       </div>
 
       <!-- Weather Layers -->
