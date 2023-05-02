@@ -37,6 +37,15 @@ button:hover {
   text-underline-offset: 3px;
 }
 
+.button-active {
+  background-color: var(--red);
+  box-shadow: 0px 0px 4px black;
+  transition: all 0.2s ease-in-out;
+}
+.button-active:hover {
+  background-color: var(--red);
+}
+
 
 .clickable {
   cursor: pointer;

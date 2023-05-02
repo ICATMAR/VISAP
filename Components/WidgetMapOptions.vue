@@ -29,7 +29,9 @@
       </div>
 
       <!-- Weather Layers -->
-      <widgetWeatherLayers></widgetWeatherLayers>
+      <Transition>
+        <widgetWeatherLayers v-show="isWeatherMenuVisible"></widgetWeatherLayers>
+      </Transition>
   
 
     </div>
@@ -107,6 +109,9 @@
     flex-wrap: wrap;
     align-items: flex-start;
     padding-left: 10px;
+
+    background: #00000047;
+    border-radius: 10px;
   }
 
   @media screen and (max-width: 770px) {
@@ -143,6 +148,21 @@
 
   span {
     font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+  }
+
+
+  .v-enter-active {
+    transition: all 0.3s ease-out;
+  }
+
+  .v-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+
+  .v-enter-from,
+  .v-leave-to {
+    transform: translateX(20px);
+    opacity: 0;
   }
 
 

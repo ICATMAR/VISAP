@@ -3,11 +3,13 @@
   <div id='widgetWeatherLayers' ref='widgetWeatherLayers'>
 
     <div>
-      <div class="clickable cLayerContainer" :key="cLayer" v-for="cLayer in climaLayers">
-        <button :class="[selClimaLayer == cLayer ? 'btn-active' : '']"
-          @click='climaLayerClicked(cLayer)'>
+      <div class="clickable cLayerContainer" :key="cLayer" v-for="(cLayer, index) in climaLayers">
+        <button :class="[selClimaLayer == cLayer ? 'button-active' : 'clickable']"
+          @click='climaLayerClicked(cLayer)'
+          :title="$t(cLayer)">
+          <span class="fa" v-html="climaIcons[index]"></span>
         </button>
-        <span>{{$t(cLayer)}}</span>
+        <span @click='climaLayerClicked(cLayer)'>{{$t(cLayer)}}</span>
       </div>
     </div>
 
@@ -36,6 +38,8 @@
     data (){
       return {
         climaLayers: ['Sea Surface Temperature', 'Sea Temperature Anomaly', 'Sea Bottom Temperature', 'Chlorophyll', 'Salinity', 'Wind', 'Wave Significant Height', 'Current'],
+        // https://origin.fontawesome.com/search?o=r&m=free&f=classic
+        climaIcons: ['&#xf2c9;<sub>~</sub>', '&#x2206; &#xf2c9;', '&#xf2c9;<sup>~</sup>', 'C<sub>hl</sub>', '‰', '&#xf72e;', '&#xe515;', '&#xf773;'],
         selClimaLayer: 'Sea Surface Temperature',
         climaOpacity: 1,
 
