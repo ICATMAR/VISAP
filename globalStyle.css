@@ -9,26 +9,34 @@
   --redRGB: 255, 115, 105;
 }
 
+* {
+  font-family: "Poppins", "Sans-serif";
+}
+
 
 button {
-  font-family: "Poppins", Sans-serif;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-
-
-  padding: 10px 20px 10px 20px;
+  padding: 10px 10px 10px 10px;
   background-color: var(--darkBlue);
   color: white;
 
 
   border-radius: 50px;
   border: none;
+
+  display:flex;
+  align-items: center;
 }
 
 button:hover {
   background-color: var(--lightBlue);
   transition: all 0.2s ease-in-out;
 }
+
+.button-text {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 
 .clickable {
   cursor: pointer;
@@ -52,7 +60,6 @@ button:hover {
 span {
   color: white;
   text-shadow: 0px 0px 4px black;
-  font-size: clamp(0.6rem, 1.2vw, 0.8rem);
   padding-left: 3px;
   padding-right: 3px;
 }
@@ -135,4 +142,21 @@ span {
 .icon-img:hover {
   border: 2px solid var(--lightBlue);
   cursor:pointer;
+}
+
+
+/* font-awesome 
+  https://github.com/FortAwesome/Font-Awesome/blob/6.x/css/all.min.css 
+  https://origin.fontawesome.com/v6/docs/web/add-icons/pseudo-elements
+  https://origin.fontawesome.com/search?o=r&m=free&s=regular&f=classic
+*/
+.fa::before {
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font: var(--fa-font-regular);
+}
+
+.fa {
+  text-decoration: none;
 }

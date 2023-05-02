@@ -7,16 +7,22 @@
       <span class="h4">{{$t('Catch per ' + type)}}</span>
 
       <!-- Show / Hide button -->
-      <button @click="showPie = !showPie"> {{ showPie ? $t('Hide chart') : $t('Show chart') }}</button>
+      <button @click="showPie = !showPie"> 
+        <span class="fa">&#xf200; </span>
+        <span class="button-text">{{ showPie ? $t('Hide chart') : $t('Show chart') }}</span>
+      </button>
 
       
       <!-- Export data button -->
       <div>
-        <button @click="exportButtonClicked">&#x21E9; {{ $t('Export data') }}</button>
+        <button @click="exportButtonClicked">
+          <span class="fa">&#xf56d; </span>
+          <span class="button-text">{{ $t('Export data') }}</span>
+        </button>
         <!-- Export options buttons -->
         <div class="dropdown-content" v-show="showExportOptions">
-          <button @click="exportCSV">.CSV</button>
-          <button @click="exportJSON">.JSON</button>
+          <button @click="exportCSV">.csv</button>
+          <button @click="exportJSON">.json</button>
         </div>
       </div>
 
@@ -227,6 +233,14 @@ export default {
 
 button {
   max-height: -webkit-fill-available;
+  background: var(--blue);
+}
+button:hover{
+  background: var(--lightBlue);
+}
+
+span {
+  font-size: clamp(0.7rem, 1.4vw, 0.9rem);
 }
 
 .chartContainer {

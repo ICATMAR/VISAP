@@ -99,6 +99,10 @@
     align-items: center;
     padding: 4px;
   }
+
+  span {
+    font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+  }
   
   
   </style>

@@ -64,14 +64,14 @@ export default {
     selectItem: function(e){
       e.stopPropagation();
       //console.log(e.srcElement.innerText.split("■ ")[1]);
-      let speciesName = e.currentTarget.innerText.split("■ ")[1];
+      let speciesName = this.extractSpeciesName(e.currentTarget.innerText);
       this.switchFromList(speciesName, this.speciesList, this.selSpeciesList, this.deselectItem);
     },
 
     // Deselect item
     deselectItem: function(e){
       e.stopPropagation();
-      let speciesName = e.currentTarget.innerText.split("■ ")[1];
+      let speciesName = this.extractSpeciesName(e.currentTarget.innerText);
       this.switchFromList(speciesName, this.selSpeciesList, this.speciesList, this.selectItem);
     },
 
@@ -94,6 +94,11 @@ export default {
     // Close filter menu
     closeGUI: function(e){
       this.$emit('onclose', this.selSpeciesList.toJSON());
+    },
+
+    // Separate icon from species name
+    extractSpeciesName: function(text){
+      return text.split("■\n")[1];
     },
 
 
@@ -268,6 +273,10 @@ input {
   padding: 10px;
   text-align: center;
   font-size: small;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .listSel {

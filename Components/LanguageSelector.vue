@@ -110,6 +110,9 @@ export default {
   background-position: center;
   background-origin: content-box;
 
+  display: flex;
+  justify-content: center;
+
 }
 
 .dropbtnBackground{

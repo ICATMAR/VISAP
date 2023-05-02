@@ -141,6 +141,10 @@
     align-items: center;
   }
 
+  span {
+    font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+  }
+
 
   
   </style>

@@ -24,9 +24,18 @@
       <!-- Buttons to switch from app -->
       <div class="switchPanels">
         <!-- Buttons -->
-        <button @click="changeHash('overview')" >{{ $t('Catch composition') }}</button>
-        <button @click="changeHash('length-freq')">{{ $t('Length frequency') }}</button>
-        <button class="selected">{{ $t('Sampling map') }}</button>
+        <button @click="changeHash('overview')" >
+          <span class="fa">&#xf13d; </span>
+          <span class="button-text">{{ $t('Catch composition') }}</span>
+        </button>
+        <button @click="changeHash('length-freq')">
+          <span class="fa">&#xe0e3; </span>
+          <span class="button-text">{{ $t('Length frequency') }}</span>
+        </button>
+        <button class="selected">
+          <span class="fa">&#xf276; </span>
+          <span class="button-text">{{ $t('Sampling map') }}</span>
+        </button>
       </div>
     </div>
 
@@ -135,5 +144,6 @@
   pointer-events: none;
   cursor:default;
 }
+
 
   </style>

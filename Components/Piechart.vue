@@ -10,7 +10,10 @@
     <!-- Buttons -->
     <div class="centered-rows">
       <!-- Filter per species button -->
-      <button @click="isFilterMenuVisible = true">&#x25BD; {{ $t('Filter per species') }}</button>
+      <button @click="isFilterMenuVisible = true">
+        <span class="fa">&#xf0b0; </span>
+        <span class="button-text">{{ $t('Filter per species') }}</span>
+      </button>
       <!-- Deactivate filter -->
       <button v-show="isFilterActive" @click="deactivateFilter($event)"> <span style="color:red"> ✖ </span> {{ $t('Deactivate filter') }}</button>
     </div>
