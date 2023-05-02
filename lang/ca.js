@@ -65,6 +65,7 @@ export default ca = {
   "West": "Oest",
 
 
+  "Weather and sea conditions": "Condicions meteo-oceanogràfiques",
   "Sea habitats": "Hàbitats marins",
   "Base layer": "Capa base",
   "Climatological layer": "Climatologia",

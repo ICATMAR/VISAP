@@ -66,7 +66,7 @@ export default en = {
   "West": "West",
 
 
-
+  "Weather and sea conditions": "Weather and sea conditions",
   "Sea habitats": "Sea habitats",
   "Base layer": "Base layer",
   "Climatological layer": "Climatological layer",
