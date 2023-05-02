@@ -74,6 +74,14 @@ span {
 }
 
 
+a {
+  color: #ffffff;
+}
+a:hover {
+  color: var(--lightBlue);
+}
+
+
 
 /* Limit SVG size */
 .icon-svg {

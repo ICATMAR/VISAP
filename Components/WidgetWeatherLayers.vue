@@ -13,6 +13,10 @@
       </div>
     </div>
 
+    <span>{{$t('Data from')}}: <a title="Weather data source" :href="sourceDoi" target="_blank">E.U.
+            Copernicus Marine Service Information</a></span>
+    <span>{{$t('Date')}}: {{ currentDate }}</span>
+
 
   </div>
   </template>
@@ -83,6 +87,11 @@
 
     padding-top: 0px !important;
     margin-top: -8px !important;
+
+    display: flex;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+
   }
 
   @media screen and (max-width: 770px) {
