@@ -30,7 +30,7 @@
 
       <!-- Weather Layers -->
       <Transition>
-        <widgetWeatherLayers v-show="isWeatherMenuVisible"></widgetWeatherLayers>
+        <widgetWeatherLayers ref="widgetWeatherLayers" v-show="isWeatherMenuVisible"></widgetWeatherLayers>
       </Transition>
   
 
@@ -85,7 +85,11 @@
         else {
           this.$refs.weatherOnOffButton.setChecked(!this.isWeatherMenuVisible);
         }
-        
+        // Activate weather layer
+        if (this.isWeatherMenuVisible)
+          this.$refs.widgetWeatherLayers.climaLayerClicked('Sea Surface Temperature');
+        else
+          this.$refs.widgetWeatherLayers.climaLayerClicked('');
       }
   
     },

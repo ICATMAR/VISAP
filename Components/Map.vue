@@ -260,8 +260,13 @@ export default {
     this.$refs.OLMap.addEventListener('mousemove', this.onMouseMove);
 
     // EVENTS
+    // Base layer
     window.eventBus.on("WidgetMapOptions_BaseLayerClicked", baseLayerName => {
       this.setBaseLayer(baseLayerName);
+    });
+    // Clima layer
+    window.eventBus.on('WidgetWeatherLayers_climaLayerChange', source => {
+      this.setClimaLayer(source);
     });
   },
   umounted () {

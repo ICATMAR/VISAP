@@ -36,7 +36,7 @@
       // EVENTS
       window.eventBus.on('fishingTrackSelected', id => {
         this.updateClimaLayer();
-      })
+      });
       
     },
     data (){
@@ -44,8 +44,11 @@
         climaLayers: ['Sea Surface Temperature', 'Sea Temperature Anomaly', 'Sea Bottom Temperature', 'Chlorophyll', 'Salinity', 'Wind', 'Wave Significant Height', 'Current'],
         // https://origin.fontawesome.com/search?o=r&m=free&f=classic
         climaIcons: ['&#xf2c9;<sub>~</sub>', '&#x2206; &#xf2c9;', '&#xf2c9;<sup>~</sup>', 'C<sub>hl</sub>', '‰', '&#xf72e;', '&#xe515;', '&#xf773;'],
-        selClimaLayer: 'Sea Surface Temperature',
+        selClimaLayer: '',
         climaOpacity: 1,
+        // Defaults
+        sourceDoi: '',
+        currentDate: '',
 
       }
     },
