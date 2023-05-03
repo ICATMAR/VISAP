@@ -227,6 +227,7 @@ export default {
 
     // PRIVATE METHODS
     getData: function(lat, long){
+      return;
       // Get data
       this.dataRows.forEach((rr, rIndex) => {
         this.dates.forEach((date, dIndex) => {

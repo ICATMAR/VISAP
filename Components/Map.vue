@@ -23,8 +23,8 @@
       </div>
 
       <!-- Progress bar load WMS tiles -->
-      <div v-show="!wmsProgress.isLoaded" class="position-absolute m-0 btn-dark" style="background: blue; width: 100%; height: 5px; opacity: 0.8; top:0px" :style="{'max-width': wmsProgress.progressPercent + '%'}">
-        <div class="spinner-border text-dark" style="position: relative; margin-top: 20px; margin-left: 20px" role="status">
+      <div v-show="!wmsProgress.isLoaded" class="position-absolute m-0 btn-dark" style="background: var(--blue); width: 100%; height: 5px; opacity: 0.8; top:0px" :style="{'max-width': wmsProgress.progressPercent + '%'}">
+        <div class="spinner-border" style="position: relative; margin-top: 20px; margin-left: 40px; color:var(--blue)" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
@@ -505,19 +505,34 @@ export default {
     },
 
     // Update the data pixels
+    // This function can be called consecutively and as it is async, it can happen that all the layers are hidden.
+    // To solve it, we need to keep the state when it is being rendered.
     updateSourceData: async function(){
+      
+      let map = this.map;
+
+      // Reset array if it was rendered and store visible layers
+      if (!this.isRendering){
+        this.isRendering = true;
+
+        this.visibilityArray = [];
+        // Store visible layers state
+        map.getLayers().forEach(ll => {
+          this.visibilityArray.push(ll.getVisible());
+        });
+      }
 
       // Wait 200 ms
       await new Promise(res => setTimeout(res, 200));
 
+      this.isRendering = true;
+
       // Hide all layers but the data layer
-      let map = this.map;
-      let visibilityArray = [];
       map.getLayers().forEach(ll => {
-        visibilityArray.push(ll.getVisible());
-        if (ll.C.name != "data")
-          ll.setVisible(false);
-      });
+          if (ll.C.name != "data")
+            ll.setVisible(false);
+        });
+      
       // Force map render
       map.renderSync();
 
@@ -533,9 +548,11 @@ export default {
 
       // Restore map
       map.getLayers().forEach((ll, i) => {
-        ll.setVisible(visibilityArray[i]);
+        ll.setVisible(this.visibilityArray[i]);
       });
       map.renderSync();
+      
+      this.isRendering = false;
 
     },
 

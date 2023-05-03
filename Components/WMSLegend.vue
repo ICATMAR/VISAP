@@ -270,7 +270,7 @@ export default {
         legendTooltipEl.style.transform = "translate(-"+ canvas.width*1.2 +"px, "+ (event.offsetY-6) +"px)";
       // Horizontal legend
       else 
-        legendTooltipEl.style.transform = "translate("+ (event.offsetX-canvas.width) +"px, "+ canvas.height*1.2 +"px)";
+        legendTooltipEl.style.transform = "translate("+ (event.offsetX - canvas.width + 40) +"px, "+ canvas.height*1.2 +"px)";
 
       this.draw(canvas);
     },
@@ -309,7 +309,7 @@ export default {
         legendTooltipEl.style.transform = "translate(-"+ canvas.width +"px, "+ ((normValue*-1+1)*canvas.height - 12) +"px)";
       // Horizontal legend
       else
-        legendTooltipEl.style.transform = "translate("+ (normValue*canvas.width - canvas.width) +"px, "+ canvas.height*1.2 +"px)";
+        legendTooltipEl.style.transform = "translate("+ (normValue*canvas.width - canvas.width + 40) +"px, "+ canvas.height*1.2 +"px)";
 
       this.draw(canvas);
     },
@@ -427,10 +427,10 @@ export default {
 .tooltip {
   /* transition: all 0.05s ease-in-out; */
   user-select: none;
-  width: 90px;
 }
 
 .tipText {
+  max-width: 130px;
   font-family: "Poppins", "Sans-serif";
   font-size: clamp(0.6rem, 1.2vw, 0.8rem);
 
