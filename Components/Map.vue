@@ -22,6 +22,13 @@
         </div>
       </div>
 
+      <!-- Progress bar load WMS tiles -->
+      <div v-show="!wmsProgress.isLoaded" class="position-absolute m-0 btn-dark" style="background: blue; width: 100%; height: 5px; opacity: 0.8; top:0px" :style="{'max-width': wmsProgress.progressPercent + '%'}">
+        <div class="spinner-border text-dark" style="position: relative; margin-top: 20px; margin-left: 20px" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
       <!-- Tracks on the timeline -->
       <tracks-timeline ref="tracksTimeLine" @clickTrackMark="setSelectedTrack" style="bottom: 120px; position: relative; z-index: 2"></tracks-timeline>
 
@@ -285,6 +292,12 @@ export default {
         loaded: 1
       },
       isLayerDataReady: false,
+      // WMS Data layer
+      wmsProgress: {
+        loading: 0,
+        loaded: 1,
+        isLoaded: true,
+      },
       WMSLegendURL: '',
     }
   },
@@ -380,10 +393,7 @@ export default {
         let blSource = this.baseLayerSources[key];
         this.registerLoadTilesEvents(blSource);
       });
-      // this.registerLoadTilesEvents(this.layers.bathymetry.getSource());
-      // this.registerLoadTilesEvents(this.layers.osm.getSource());
-      // this.registerLoadTilesEvents(this.layers.esriOcean.getSource());
-      // this.registerLoadTilesEvents(this.layers.esriImagery.getSource());
+      // Tile load for sea habitats
       this.registerLoadTilesEvents(this.layers.seaHabitats);
     },
 
@@ -432,12 +442,11 @@ export default {
       // Emit
       this.$emit('mouseMove', coord);
       // Change legend tooltip value
-      if (this.$refs.legendWMS){
-        if (this.isLayerDataReady){
-          let color = this.getDataAtPixel(event.clientX, event.clientY);
-          this.$refs.legendWMS.showValueAtColor(color);
-        }
+      if (this.isLayerDataReady){
+        let color = this.getDataAtPixel(event.clientX, event.clientY);
+        window.eventBus.emit('Map_MouseOnData_WMSColor', color);
       }
+      
     },
 
     // Map moves
@@ -454,23 +463,23 @@ export default {
 
 
     // Declare loading tile events
-    registerLoadTilesEvents: function(source){
+    registerLoadTilesEvents: function(source, progress){
       // Source is a ol.source
-      let progress = this.progress;
+      progress = progress || this.progress;
       progress.loading = 0;
       progress.loaded = 0;
       progress.isLoaded = false;
       progress.progressPercent = 0;
-      this.isLayerDataReady = false;
+
       source.on('tileloadstart',() => {
         progress.loading += 1;
         progress.isLoaded = false;
       });
-      source.on('tileloadend', () => {
+      source.on('tileloadend', (s) => {
         progress.loaded += 1;
         progress.progressPercent = 100*progress.loaded/progress.loading;
         if (progress.loading == progress.loaded){
-          this.onTilesLoaded(); // TODO: could reference the isLayerDataReady to source, so we control if a source is ready
+          this.onTilesLoaded(s); // TODO: could reference the isLayerDataReady to source, so we control if a source is ready
           progress.isLoaded = true;
         }
       });
@@ -486,9 +495,11 @@ export default {
 
 
     // Store pixel information once tiles are loaded
-    onTilesLoaded: function(){   
-      //this.isLayerDataReady = true;
-      //this.updateSourceData();
+    onTilesLoaded: function(e){
+      if (e.target.name == 'wmsSource'){
+        this.isLayerDataReady = true;
+        this.updateSourceData();
+      }
     },
 
     // Update the data pixels
@@ -497,6 +508,8 @@ export default {
       let layer = this.getMapLayer('data');
       // Get canvas
       let tmpCnv = layer.getRenderer().getImage();
+      document.body.innerHTML = '';
+      document.body.append(tmpCnv);
       // Get data
       this.layerData = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height);
       // Store width to access pixels
@@ -561,9 +574,11 @@ export default {
 
       // Create OL source from ForecastBar.vue object
       let source = new ol.source.TileWMS(infoWMS);
+      source.name="wmsSource";
       this.getMapLayer('data').setSource(source);
       // Tracking the load progress
-      this.registerLoadTilesEvents(source);
+      this.isLayerDataReady = false;
+      this.registerLoadTilesEvents(source, this.wmsProgress);
       
       // Update legend
       // if (this.$refs.legendWMS)

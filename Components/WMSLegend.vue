@@ -56,6 +56,8 @@ export default {
   },
   mounted () {
     //this.setWMSLegend('');
+    // EVENTS
+    window.eventBus.on('Map_MouseOnData_WMSColor', this.showValueAtColor);
   },
   data () {
     return {
@@ -180,37 +182,46 @@ export default {
       }
       ctx.stroke();
 
-      if (this.mouseIsOver){
+
+
+      // Show line at value
+      if (this.showValueMap || this.mouseIsOver){
+        let value = this.legendValue;
+        let normValue = (value - this.range[0]) / (this.range[1] - this.range[0]);
+        
         ctx.strokeStyle = 'rgba(0,0,0,255)';
         ctx.lineWidth = 4;
         ctx.beginPath();
+        // Vertical legend
         if (!this.horizontal){
-          ctx.moveTo(0, this.mousePosition.mouseY);
-          ctx.lineTo(canvas.width, this.mousePosition.mouseY);
+          ctx.moveTo(0, normValue*canvas.height);
+          ctx.lineTo(canvas.width, normValue*canvas.height);
         }
         // Horizontal legend
         else {
-          ctx.moveTo(this.mousePosition.mouseX, 0);
-          ctx.lineTo(this.mousePosition.mouseX, canvas.height);
+          ctx.moveTo(normValue*canvas.width, 0);
+          ctx.lineTo(normValue*canvas.width, canvas.height);
         }
         ctx.stroke();
         ctx.strokeStyle = 'rgba(255,255,255,255)';
         ctx.lineWidth = 2;
         ctx.beginPath();
+        // Vertical legend
         if (!this.horizontal){
-          ctx.moveTo(0, this.mousePosition.mouseY);
-          ctx.lineTo(canvas.width, this.mousePosition.mouseY);
-          ctx.lineTo(0, this.mousePosition.mouseY);
-          ctx.lineTo(canvas.width, this.mousePosition.mouseY);
+          ctx.moveTo(0, normValue*canvas.height);
+          ctx.lineTo(canvas.width, normValue*canvas.height);
+          ctx.lineTo(0, normValue*canvas.height);
+          ctx.lineTo(canvas.width, normValue*canvas.height);
         }
         // Horizontal legend
         else {
-          ctx.moveTo(this.mousePosition.mouseX, 0);
-          ctx.lineTo(this.mousePosition.mouseX, canvas.height);
-          ctx.lineTo(this.mousePosition.mouseX, 0);
-          ctx.lineTo(this.mousePosition.mouseX, canvas.height);
+          ctx.moveTo(normValue*canvas.width, 0);
+          ctx.lineTo(normValue*canvas.width, canvas.height);
+          ctx.lineTo(normValue*canvas.width, 0);
+          ctx.lineTo(normValue*canvas.width, canvas.height);
         }
         ctx.stroke();
+
       }
 
     },
@@ -258,6 +269,8 @@ export default {
     // TODO:
     // Receives a color value (RGB) and maps it in the legend.
     showValueAtColor: function(color){
+      console.log(color);
+      
       // If outside the land (alpha = 0), do not show
       this.showValueMap = true;
       if (color[3] == 0 || this.mouseIsOver){
@@ -276,8 +289,16 @@ export default {
       if (legendTooltipEl == null){
         return;
       }
-      let cnv = this.$refs.wmsLegendCanvas;
-      legendTooltipEl.style.transform = "translate(-"+ cnv.width +"px, "+ ((normValue*-1+1)*cnv.height - 12) +"px)";
+      let canvas = this.$refs.wmsLegendCanvas;
+
+      // Vertical legend
+      if (!this.horizontal)
+        legendTooltipEl.style.transform = "translate(-"+ canvas.width +"px, "+ ((normValue*-1+1)*canvas.height - 12) +"px)";
+      // Horizontal legend
+      else
+        legendTooltipEl.style.transform = "translate("+ (normValue*canvas.width - canvas.width) +"px, "+ canvas.height*1.2 +"px)";
+
+      this.draw(canvas);
     },
 
     // Get value from color
