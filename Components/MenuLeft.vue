@@ -45,7 +45,6 @@
   <style scoped>
   #menuLeft {
     position: absolute;
-    background: red;
 
     top: 300px;
     bottom: 130px;

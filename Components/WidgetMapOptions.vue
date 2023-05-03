@@ -16,7 +16,7 @@
         <span @click="isMouseOver=!isMouseOver">{{$t('Base layer')}}</span>
       </div>
 
-      <!-- Iso bars -->
+      <!-- Iso bars TODO -->
       <div id="isobathsContainer" v-show="false">
         <onOffButton :checked="false" :inSize="'18px'" @change="isoOnOffChange($event)"></onOffButton>
         <span>Isobaths</span>
@@ -118,8 +118,8 @@
     align-items: flex-start;
     padding-left: 10px;
 
-    background: #00000047;
-    border-radius: 10px;
+    background: #00000042;
+    border-radius: 0px 10px 10px 0px;
   }
 
   @media screen and (max-width: 770px) {
