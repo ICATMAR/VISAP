@@ -80,6 +80,18 @@
         window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', infoWMS);
         // Set legend
         this.$refs.wmsLegend.setWMSLegend(infoWMS);
+      },
+
+
+      // PUBLIC METHODS
+      setVisible: function(isVisible){
+        if (isVisible){
+          // Default clima layer if not defined
+          this.selClimaLayer = this.selClimaLayer == '' ? 'Sea Surface Temperature' : this.selClimaLayer;
+          this.updateClimaLayer();
+        } else {
+          window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', undefined);
+        }
       }
   
     },

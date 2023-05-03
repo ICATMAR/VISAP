@@ -82,10 +82,7 @@
         if (e.target.value != undefined){ 
           this.isWeatherMenuVisible = e.target.checked;
           // Activate weather layer
-          if (this.isWeatherMenuVisible)
-            this.$refs.widgetWeatherLayers.climaLayerClicked('Sea Surface Temperature');
-          else
-            this.$refs.widgetWeatherLayers.climaLayerClicked('');
+          this.$refs.widgetWeatherLayers.setVisible(this.isWeatherMenuVisible);
         } 
 
 

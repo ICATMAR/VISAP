@@ -131,7 +131,7 @@ export default {
                 if (ss.querySelector("Name").innerHTML.includes("boxfill")) // Only boxfill styles
                   this.styles.push(ss.querySelector("Name").innerHTML)
               });
-              console.log(this.styles);
+              // console.log(this.styles);
             }
           })
         })
@@ -350,6 +350,8 @@ export default {
 
     // PUBLIC METHODS
     setWMSLegend: function(infoWMS){
+      if (infoWMS == undefined)
+        return;
       // Define Legend WMS URL
       let wmsURL = this.baseWMSLegendURL.replace('{SOURCEURL}', infoWMS.url);
       wmsURL = wmsURL.replace('{LAYER}', infoWMS.params.LAYERS);
@@ -376,7 +378,6 @@ export default {
       let canvas = this.$refs.wmsLegendCanvas;
       let ctx = canvas.getContext("2d");
       this.imgEl = document.createElement("img");
-      console.log(wmsURL);
       this.imgEl.src = 'Assets/LegendsWMS/'+ style +'.png';//wmsURL;
       this.imgEl.crossOrigin = "Anonymous";
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
