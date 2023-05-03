@@ -61,7 +61,6 @@
     methods: {
       // USER INTERACTION
       climaLayerClicked: function(cLayer){
-        debugger;
         this.selClimaLayer = cLayer;
         // Update clima layer
         this.updateClimaLayer();

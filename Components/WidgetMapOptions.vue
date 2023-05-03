@@ -51,11 +51,12 @@
   
     },
     mounted() {
+      // Load base layer icons
       window.FileManager.loadBaseLayerIcons().then((values) => {
         for (let i = 0; i< values.length; i++){
           this.baseLayers.push(values[i].value);
         }
-      })
+      });
       
     },
     data (){

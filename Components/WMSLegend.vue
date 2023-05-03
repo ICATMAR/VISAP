@@ -3,19 +3,19 @@
   <div id="wms-legend" @click.prevent="legendClicked($event)">
 
       <!-- Canvas with legend and interactivity -->
-      <canvas @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @mousemove="updateMousePosition($event)" width="30" height="250" 
+      <canvas @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @mousemove="updateMousePosition($event)" :width="canvasWidth" :height="canvasHeight" 
           id="wmsLegendCanvas" ref="wmsLegendCanvas" class="img-fluid rounded" title="Click to change the colormap"></canvas>
       <!-- Tooltip -->
       <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" id="legendTooltip"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-30px, 125px);">
-        <div class="tooltip-arrow" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
+        <div class="tooltip-arrow" v-show="!horizontal" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
         <div class="tooltip-inner">{{legendValue}} {{legendUnits}}</div>
       </div>
 
       <!-- Tooltip mouse moving on map -->
       <div v-else-if=showValueMap class="tooltip fade show bs-tooltip-start" id="legendTooltipMapValue"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; opacity: 0.7; transform: translate(-30px, 125px);">
-        <div class="tooltip-arrow" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
+        <div class="tooltip-arrow" v-show="!horizontal" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
         <div class="tooltip-inner">{{legendValue}} {{legendUnits}}</div>
       </div>
 
@@ -46,6 +46,12 @@
 export default {
   name: "wms-legend",
   created(){
+    // Switch canvas size if horizontal
+    if (this.horizontal){
+      let prevWidth = this.canvasWidth;
+      this.canvasWidth = this.canvasHeight;
+      this.canvasHeight = prevWidth;
+    }
 
   },
   mounted () {
@@ -66,6 +72,10 @@ export default {
       currentURL: "",
       legendColorRef: undefined,
       showValueMap: false,
+      // Horizontal legend
+      horizontal: true,
+      canvasWidth: 30,
+      canvasHeight: 250,
     }
   },
   methods: {
@@ -80,7 +90,6 @@ export default {
       // Replace in url
       this.currentURL = WMSDataRetriever.setWMSParameter(this.currentURL, 'PALETTE', this.styles[0].split('/')[1]);
       this.imgEl.src = 'Assets/LegendsWMS/' + this.styles[0].split('/')[1] + '.png';//this.currentURL;
-      console.log(this.currentURL);
 
       // Emit for changing styles
       //this.$emit('legendClicked', this.styles[0])
@@ -129,38 +138,81 @@ export default {
       // Global composite
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
       ctx.globalCompositeOperation = "source-destination";
+      
+      if (!this.horizontal){
       // Top-left: 5 height, 2 width
       // Bottom-rigth: 257 height, 25
       // Size: 24x253
-      ctx.drawImage(this.imgEl, 2, 5, 24, 253, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(this.imgEl, 2, 5, 24, 253, 0, 0, canvas.width, canvas.height);
+      } else {
+        // Draw rotated image
+        // For testing use https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_canvas_drawimage2 and
+        // https://my.cmems-du.eu/thredds/wms/med-cmcc-tem-rean-d?REQUEST=GetLegendGraphic&LAYER=thetao&PALETTE=occam&COLORSCALERANGE=1,40
+        ctx.setTransform(1, 0, 0, 1, 2, 253); // scale, 0, 0, scale, originX, originY
+        ctx.rotate(90*Math.PI/180);
+        ctx.translate(-this.imgEl.height,-canvas.width);
+        ctx.drawImage(this.imgEl, 5, 5, 20, 257, // crop
+                          0, 0, canvas.height*10, canvas.width*1.1); // position and resize
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+      }
+      
+      
       // 25%, 50%, 75% lines
       ctx.strokeStyle = 'rgba(0,0,0,255)';
       ctx.lineWidth = 0.5;
       ctx.beginPath();
-      ctx.moveTo(0, canvas.height*0.25);
-      ctx.lineTo(canvas.width, canvas.height*0.25);
-      ctx.moveTo(0, canvas.height*0.5);
-      ctx.lineTo(canvas.width, canvas.height*0.5);
-      ctx.moveTo(0, canvas.height*0.75);
-      ctx.lineTo(canvas.width, canvas.height*0.75);
+      if (!this.horizontal){
+        ctx.moveTo(0, canvas.height*0.25);
+        ctx.lineTo(canvas.width, canvas.height*0.25);
+        ctx.moveTo(0, canvas.height*0.5);
+        ctx.lineTo(canvas.width, canvas.height*0.5);
+        ctx.moveTo(0, canvas.height*0.75);
+        ctx.lineTo(canvas.width, canvas.height*0.75);
+      } 
+      // Horizontal
+      else {
+        ctx.moveTo(canvas.width*0.25, 0);
+        ctx.lineTo(canvas.width*0.25, canvas.height);
+        ctx.moveTo(canvas.width*0.5, 0);
+        ctx.lineTo(canvas.width*0.5, canvas.height);
+        ctx.moveTo(canvas.width*0.75, 0);
+        ctx.lineTo(canvas.width*0.75, canvas.height);
+      }
       ctx.stroke();
 
       if (this.mouseIsOver){
         ctx.strokeStyle = 'rgba(0,0,0,255)';
         ctx.lineWidth = 4;
         ctx.beginPath();
-        ctx.moveTo(0, this.mousePosition.mouseY);
-        ctx.lineTo(canvas.width, this.mousePosition.mouseY);
+        if (!this.horizontal){
+          ctx.moveTo(0, this.mousePosition.mouseY);
+          ctx.lineTo(canvas.width, this.mousePosition.mouseY);
+        }
+        // Horizontal legend
+        else {
+          ctx.moveTo(this.mousePosition.mouseX, 0);
+          ctx.lineTo(this.mousePosition.mouseX, canvas.height);
+        }
         ctx.stroke();
         ctx.strokeStyle = 'rgba(255,255,255,255)';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(0, this.mousePosition.mouseY);
-        ctx.lineTo(canvas.width, this.mousePosition.mouseY);
-        ctx.lineTo(0, this.mousePosition.mouseY);
-        ctx.lineTo(canvas.width, this.mousePosition.mouseY);
+        if (!this.horizontal){
+          ctx.moveTo(0, this.mousePosition.mouseY);
+          ctx.lineTo(canvas.width, this.mousePosition.mouseY);
+          ctx.lineTo(0, this.mousePosition.mouseY);
+          ctx.lineTo(canvas.width, this.mousePosition.mouseY);
+        }
+        // Horizontal legend
+        else {
+          ctx.moveTo(this.mousePosition.mouseX, 0);
+          ctx.lineTo(this.mousePosition.mouseX, canvas.height);
+          ctx.lineTo(this.mousePosition.mouseX, 0);
+          ctx.lineTo(this.mousePosition.mouseX, canvas.height);
+        }
         ctx.stroke();
       }
+
     },
 
     // Draw for transforming img into pixel data
@@ -185,11 +237,20 @@ export default {
 
       let canvas = this.$refs.wmsLegendCanvas;
       // Calculate legend value
-      let normValue = (canvas.height - event.offsetY)/canvas.height;
+      let normValue;
+      if (!this.horizontal) // Vertical legend
+        normValue = (canvas.height - event.offsetY)/canvas.height;
+      else // Horizontal legend
+        normValue = 1 - (canvas.width - event.offsetX)/canvas.width;
       this.legendValue = (normValue * (this.range[1] - this.range[0]) + this.range[0]).toFixed(2);
 
       let legendTooltipEl = document.getElementById("legendTooltip");
-      legendTooltipEl.style.transform = "translate(-"+ canvas.width*1.2 +"px, "+ (event.offsetY-6) +"px)";
+      // Vertical legend
+      if (!this.horizontal)
+        legendTooltipEl.style.transform = "translate(-"+ canvas.width*1.2 +"px, "+ (event.offsetY-6) +"px)";
+      // Horizontal legend
+      else 
+        legendTooltipEl.style.transform = "translate("+ (event.offsetX-canvas.width) +"px, "+ canvas.height*1.2 +"px)";
 
       this.draw(canvas);
     },
@@ -270,6 +331,8 @@ export default {
       let style = infoWMS.params.STYLES.split('/')[1];
 
       // Get styles from WMS service
+      // TODO: SHOULD BE ALREADY LOADED IN WMSDATATYPES.JS
+      this.styles = [];
       this.getWMSStyles(infoWMS);
 
       // Create image element to paint the legend graphic
@@ -277,7 +340,6 @@ export default {
       let ctx = canvas.getContext("2d");
       this.imgEl = document.createElement("img");
       console.log(wmsURL);
-      debugger;
       this.imgEl.src = 'Assets/LegendsWMS/'+ style +'.png';//wmsURL;
       this.imgEl.crossOrigin = "Anonymous";
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
@@ -310,6 +372,12 @@ export default {
 
 #wms-legend {
   position: relative;
+  display: flex;
+  justify-content: center;
+  
+  width: 100%;
+
+  margin-bottom: 40px;
 }
 
 
@@ -321,6 +389,7 @@ export default {
 .tooltip {
   transition: all 0.05s ease-in-out;
   user-select: none;
+  width: 90px;
 }
 
 </style>
