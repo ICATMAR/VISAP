@@ -338,10 +338,10 @@ class PieChart {
 		// Iterate over all rows
 		for (let i = 0; i<inData.length; i++){
 			let item = inData[i];
-			let nomEspecie = item.NomEspecie;
-			let nomComu = item.NomCatala || item.NomComu || item.NomEspecie;
-			let classCaptura = item.ClassificacioCaptura;
-			let biomass = item.Biomassa_Kg_Km2 || item.Biomassa;
+			let nomEspecie = item.ScientificName;
+			let nomComu = item.EnglishName || item.ScientificName;
+			let classCaptura = item.Classification;
+			let biomass = item.Biomass_Kg_Km2;
 
 			if (biomass < 0.01) // Do not display items with little biomass
 				continue;
