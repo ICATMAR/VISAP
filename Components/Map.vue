@@ -265,8 +265,12 @@ export default {
       this.setBaseLayer(baseLayerName);
     });
     // Clima layer
-    window.eventBus.on('WidgetWeatherLayers_climaLayerChange', source => {
-      this.setClimaLayer(source);
+    window.eventBus.on('WidgetWeatherLayers_ClimaLayerChange', infoWMS => {
+      this.setClimaLayer(infoWMS);
+    });
+    // Change clima layer style
+    window.eventBus.on('WMSLegend_LegendClicked', style => {
+      this.changeStyle(style);
     });
   },
   umounted () {
@@ -562,16 +566,18 @@ export default {
       this.registerLoadTilesEvents(source);
       
       // Update legend
-      if (this.$refs.legendWMS)
-        this.$refs.legendWMS.setWMSLegend(infoWMS);
-      if (this.WMSLegendURL != undefined){
-        let url = source.getLegendUrl(this.map.getView().getResolution()) + '&TRANSPARENT=TRUE';
-        url += '&PALETTE=' + infoWMS.params.STYLES.split('/')[1];
-        url += '&COLORSCALERANGE=' + infoWMS.params.COLORSCALERANGE;
-        this.WMSLegendURL = url;
+      // if (this.$refs.legendWMS)
+      //   this.$refs.legendWMS.setWMSLegend(infoWMS);
+      // if (this.WMSLegendURL != undefined){
+      //   let url = source.getLegendUrl(this.map.getView().getResolution()) + '&TRANSPARENT=TRUE';
+      //   url += '&PALETTE=' + infoWMS.params.STYLES.split('/')[1];
+      //   url += '&COLORSCALERANGE=' + infoWMS.params.COLORSCALERANGE;
+      //   this.WMSLegendURL = url;
 
-        //https://nrt.cmems-du.eu/thredds/wms/med-cmcc-sal-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&LAYER=so&SCALE=2544411.053285503&TRANSPARENT=TRUE
-      }
+        
+
+      //   //https://nrt.cmems-du.eu/thredds/wms/med-cmcc-sal-an-fc-d?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&LAYER=so&SCALE=2544411.053285503&TRANSPARENT=TRUE
+      // }
     },
 
     

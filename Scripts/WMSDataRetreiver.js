@@ -485,6 +485,7 @@ dataTypes = {
       'LOGSCALE': 'false',
       'TRANSPARENT': 'true',
       'STYLES': dataType.style,
+      'UNITS': dataType.units,
       //'WIDTH': 1,
       //'HEIGHT': 1,
     }

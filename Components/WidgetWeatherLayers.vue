@@ -2,7 +2,7 @@
   <!-- Container -->
   <div id='widgetWeatherLayers' ref='widgetWeatherLayers'>
 
-    <div>
+    <div class="vertical-container">
       <div class="clickable cLayerContainer" :key="cLayer" v-for="(cLayer, index) in climaLayers">
         <button :class="[selClimaLayer == cLayer ? 'button-active' : 'clickable']"
           @click='climaLayerClicked(cLayer)'
@@ -12,6 +12,10 @@
         <span @click='climaLayerClicked(cLayer)'>{{$t(cLayer)}}</span>
       </div>
     </div>
+
+    <!-- WMS graphic legend -->
+    <!-- <img v-if="WMSLegendURL != ''" id='wmsLegend' :src="WMSLegendURL"> -->
+    <wms-legend ref="wmsLegend"></wms-legend>
 
     <span>{{$t('Data from')}}: <a title="Weather data source" :href="sourceDoi" target="_blank">E.U.
             Copernicus Marine Service Information</a></span>
@@ -25,6 +29,7 @@
   <script>
   
   // Import components
+  import WMSLegend from './WMSLegend.vue';
 
   export default {
     name: 'widgetWeatherLayers', // Caps, no -
@@ -34,10 +39,10 @@
     },
     mounted() {
       // EVENTS
+      // Fishing track clicked
       window.eventBus.on('fishingTrackSelected', id => {
         this.updateClimaLayer();
       });
-      
     },
     data (){
       return {
@@ -47,6 +52,7 @@
         selClimaLayer: '',
         climaOpacity: 1,
         // Defaults
+        WMSLegendURL: '',
         sourceDoi: '',
         currentDate: '',
 
@@ -68,14 +74,17 @@
         this.currentDate = ff.properties.info.Data;
         let date = ff.properties.info.Data + 'T12:00:00.000Z';
         // Get clima URL
-        let source = this.dataRetriever.getDataTypeURL(this.selClimaLayer, date, 'd');
-        this.sourceDoi = source == undefined ? 'https://resources.marine.copernicus.eu/products' : source.doi;
+        let infoWMS = this.dataRetriever.getDataTypeURL(this.selClimaLayer, date, 'd');
+        this.sourceDoi = infoWMS == undefined ? 'https://resources.marine.copernicus.eu/products' : infoWMS.doi;
         // If source is not found, it will send undefined
-        window.eventBus.emit('WidgetWeatherLayers_climaLayerChange', source);
+        window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', infoWMS);
+        // Set legend
+        this.$refs.wmsLegend.setWMSLegend(infoWMS);
       }
   
     },
     components: {
+      'wms-legend': WMSLegend,
     }
   }
   </script>
@@ -101,13 +110,15 @@
     /* TODO: ELEMENTS IN A ROW, AS IN WINDY */
   }
 
-  #widgetWeatherLayers > div {
+
+  .vertical-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     padding: 8px;
   }
+
 
   .cLayerContainer {
     display: flex;
