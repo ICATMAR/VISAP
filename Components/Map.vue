@@ -505,7 +505,11 @@ export default {
     },
 
     // Update the data pixels
-    updateSourceData: function(){
+    updateSourceData: async function(){
+
+      // Wait 200 ms
+      await new Promise(res => setTimeout(res, 200));
+
       // Hide all layers but the data layer
       let map = this.map;
       let visibilityArray = [];
