@@ -79,7 +79,7 @@ export default {
       this.styles.push(this.styles.shift(1));
       // Replace in url
       this.currentURL = WMSDataRetriever.setWMSParameter(this.currentURL, 'PALETTE', this.styles[0].split('/')[1]);
-      this.imgEl.src = this.currentURL;
+      this.imgEl.src = 'Assets/LegendsWMS/' + this.styles[0].split('/')[1] + '.png';//this.currentURL;
       console.log(this.currentURL);
 
       // Emit for changing styles
@@ -266,6 +266,9 @@ export default {
       // Define units
       this.legendUnits = infoWMS.params.UNITS;
 
+      // Style
+      let style = infoWMS.params.STYLES.split('/')[1];
+
       // Get styles from WMS service
       this.getWMSStyles(infoWMS);
 
@@ -274,7 +277,8 @@ export default {
       let ctx = canvas.getContext("2d");
       this.imgEl = document.createElement("img");
       console.log(wmsURL);
-      this.imgEl.src = 'Assets/LegendsWMS/med-cmcc-tem-rean-d.png';//wmsURL;
+      debugger;
+      this.imgEl.src = 'Assets/LegendsWMS/'+ style +'.png';//wmsURL;
       this.imgEl.crossOrigin = "Anonymous";
       // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
       this.imgEl.onload = () =>{

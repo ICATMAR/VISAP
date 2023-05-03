@@ -80,16 +80,19 @@
         // OnOff Button was clicked
         if (e.target.value != undefined){ 
           this.isWeatherMenuVisible = e.target.checked;
+          // Activate weather layer
+          if (this.isWeatherMenuVisible)
+            this.$refs.widgetWeatherLayers.climaLayerClicked('Sea Surface Temperature');
+          else
+            this.$refs.widgetWeatherLayers.climaLayerClicked('');
         } 
+
+
         // Text was clicked --> Invoke click on the element, which calls again this function
         else {
           this.$refs.weatherOnOffButton.setChecked(!this.isWeatherMenuVisible);
         }
-        // Activate weather layer
-        if (this.isWeatherMenuVisible)
-          this.$refs.widgetWeatherLayers.climaLayerClicked('Sea Surface Temperature');
-        else
-          this.$refs.widgetWeatherLayers.climaLayerClicked('');
+        
       }
   
     },
