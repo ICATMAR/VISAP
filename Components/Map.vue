@@ -451,11 +451,13 @@ export default {
 
     // Map moves
     onMapMoveEnd: function(){
-      this.isMapMoving = false;
       // If data is loaded, update the pixel information once the map move finishes
-      // TODO: this could be optimized --> get a canvas with all data and relate lat-long to that canvas
-      if (this.isLayerDataReady)
+      // TODO: this could be optimized --> get a canvas with all data and relate lat-long to that canvas 
+      if (this.isLayerDataReady && this.isMapMoving){
+        this.isMapMoving = false;
         this.updateSourceData();
+      }
+      this.isMapMoving = false;
     },
     onMapMoveStart: function(){
       this.isMapMoving = true;
@@ -504,16 +506,33 @@ export default {
 
     // Update the data pixels
     updateSourceData: function(){
+      // Hide all layers but the data layer
+      let map = this.map;
+      let visibilityArray = [];
+      map.getLayers().forEach(ll => {
+        visibilityArray.push(ll.getVisible());
+        if (ll.C.name != "data")
+          ll.setVisible(false);
+      });
+      // Force map render
+      map.renderSync();
+
       // Get ol layer
       let layer = this.getMapLayer('data');
       // Get canvas
       let tmpCnv = layer.getRenderer().getImage();
-      document.body.innerHTML = '';
-      document.body.append(tmpCnv);
+      
       // Get data
       this.layerData = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height);
       // Store width to access pixels
       this.layerDataWidth = tmpCnv.width;
+
+      // Restore map
+      map.getLayers().forEach((ll, i) => {
+        ll.setVisible(visibilityArray[i]);
+      });
+      map.renderSync();
+
     },
 
 

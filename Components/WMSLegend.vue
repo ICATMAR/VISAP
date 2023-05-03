@@ -1,6 +1,6 @@
 <template>
   <!-- Div container with mouse events -->
-  <div id="wms-legend" @click.prevent="legendClicked($event)">
+  <div id="wms-legend" @click.prevent="legendClicked($event)" @contextmenu="legendClicked($event)">
 
       <!-- Canvas with legend and interactivity -->
       <canvas @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @mousemove="updateMousePosition($event)" :width="canvasWidth" :height="canvasHeight" 
@@ -9,14 +9,14 @@
       <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" id="legendTooltip"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-30px, 125px);">
         <div class="tooltip-arrow" v-show="!horizontal" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
-        <div class="tooltip-inner">{{legendValue}} {{legendUnits}}</div>
+        <div class="tipText tooltip-inner">{{legendValue}} {{legendUnits}}</div>
       </div>
 
       <!-- Tooltip mouse moving on map -->
       <div v-else-if=showValueMap class="tooltip fade show bs-tooltip-start" id="legendTooltipMapValue"
-          style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; opacity: 0.7; transform: translate(-30px, 125px);">
-        <div class="tooltip-arrow" v-show="!horizontal" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
-        <div class="tooltip-inner">{{legendValue}} {{legendUnits}}</div>
+          style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-120px, 30px);">
+        <!-- <div class="tooltip-arrow" v-show="!horizontal" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div> -->
+        <div class="tipText tooltip-inner">{{legendValue}} {{legendUnits}}</div>
       </div>
 
   </div>
@@ -77,7 +77,7 @@ export default {
       // Horizontal legend
       horizontal: true,
       canvasWidth: 30,
-      canvasHeight: 250,
+      canvasHeight: 200,
     }
   },
   methods: {
@@ -85,10 +85,18 @@ export default {
     // USER HTML ACTIONS
     // Legend clicked --> change style
     legendClicked: function(event){
+      event.preventDefault();
+      event.stopPropagation();
       if (this.styles.length == 0)
         return;
       // Circular shift
-      this.styles.push(this.styles.shift(1));
+      if (event.type == 'contextMenu'){ // Right click
+        this.styles.unshift(this.styles[this.styles.length-1]);
+        this.styles.pop()
+      } // Shift to the other direction
+      else
+        this.styles.push(this.styles.shift(1));
+
       // Replace in url
       this.currentURL = WMSDataRetriever.setWMSParameter(this.currentURL, 'PALETTE', this.styles[0].split('/')[1]);
       this.imgEl.src = 'Assets/LegendsWMS/' + this.styles[0].split('/')[1] + '.png';//this.currentURL;
@@ -105,6 +113,7 @@ export default {
     // Get WMS styles
     getWMSStyles: function(infoWMS){
       let capabilitiesURL = this.baseGetCapabilitiesURL.replace('{SOURCEURL}', infoWMS.url);
+      this.styles = [];
       // fetch
       fetch(capabilitiesURL).then(response => response.text())
         .then(data => {
@@ -119,7 +128,7 @@ export default {
               let layerStyles = ll.querySelectorAll("Style");
               // Store style names
               layerStyles.forEach(ss => {
-                //if (ss.querySelector("Name").innerHTML.includes("boxfill")) // Only boxfill styles
+                if (ss.querySelector("Name").innerHTML.includes("boxfill")) // Only boxfill styles
                   this.styles.push(ss.querySelector("Name").innerHTML)
               });
               console.log(this.styles);
@@ -269,7 +278,6 @@ export default {
     // TODO:
     // Receives a color value (RGB) and maps it in the legend.
     showValueAtColor: function(color){
-      console.log(color);
       
       // If outside the land (alpha = 0), do not show
       this.showValueMap = true;
@@ -280,6 +288,11 @@ export default {
 
       // Find the value that corresponds to a color
       let normValue = this.getValueFromColor(color);
+      if (normValue == undefined){
+        this.showValueMap = false;
+        return;
+      }
+
       // Calculate value according to index
       let value = normValue * (this.range[1] - this.range[0]) + this.range[0];
       // Show in legend
@@ -304,8 +317,8 @@ export default {
     // Get value from color
     getValueFromColor: function(color){
       // Find the color that is more similar to the legend color reference
-      let normValue = 0;
-      let minDiff = 100;
+      let normValue = undefined;
+      let minDiff = 10;
       // Iterate over legend reference
       for (let i = 0; i < this.legendColorRef.length/4; i++){
         let el1 = color[0]-this.legendColorRef[i*4];
@@ -319,7 +332,10 @@ export default {
           normValue = i / (this.legendColorRef.length/4); // normValue goes from 0 to 1
         }
       }
-      return normValue*-1 + 1;
+      if (normValue == undefined)
+        return undefined
+      else
+        return normValue*-1 + 1;
     },
 
     // When the mouse is moving on the map, the legend should show the value.
@@ -408,9 +424,16 @@ export default {
 }
 
 .tooltip {
-  transition: all 0.05s ease-in-out;
+  /* transition: all 0.05s ease-in-out; */
   user-select: none;
   width: 90px;
+}
+
+.tipText {
+  font-family: "Poppins", "Sans-serif";
+  font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+
+  background: var(--darkBlue);
 }
 
 </style>

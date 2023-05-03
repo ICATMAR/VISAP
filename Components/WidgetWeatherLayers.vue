@@ -17,7 +17,7 @@
     <!-- <img v-if="WMSLegendURL != ''" id='wmsLegend' :src="WMSLegendURL"> -->
     <wms-legend ref="wmsLegend"></wms-legend>
 
-    <span>{{$t('Data from')}}: <a title="Weather data source" :href="sourceDoi" target="_blank">E.U.
+    <span class="wrapText">{{$t('Data from')}}: <a title="Weather data source" :href="sourceDoi" target="_blank">E.U.
             Copernicus Marine Service Information</a></span>
     <span>{{$t('Date')}}: {{ currentDate }}</span>
 
@@ -129,6 +129,11 @@
 
   span {
     font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+  }
+
+  .wrapText {
+    inline-size: 190px;
+    overflow-wrap: break-word;
   }
   
   
