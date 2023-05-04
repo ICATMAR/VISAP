@@ -30,7 +30,7 @@
       </div>
 
       <!-- Tracks on the timeline -->
-      <tracks-timeline ref="tracksTimeLine" @clickTrackMark="setSelectedTrack" style="bottom: 120px; position: relative; z-index: 2"></tracks-timeline>
+      <tracks-timeline ref="tracksTimeLine" style="bottom: 120px; position: relative; z-index: 2"></tracks-timeline>
 
       <!-- Track info panel -->
       <!--track-panel></track-panel-->
@@ -278,6 +278,8 @@ export default {
     window.eventBus.on('WMSLegend_LegendClicked', style => {
       this.changeStyle(style);
     });
+    // Click on track
+    window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedTrack);
   },
   umounted () {
     this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);
@@ -354,7 +356,10 @@ export default {
           return false;
         // Track line is cliked
         if (e.selected[0].getProperties().featType == "trackLine"){
-          this.setSelectedTrack(e.selected[0].getProperties().id);
+          let id = e.selected[0].getProperties().id;
+          this.setSelectedTrack(id);
+          // Emit event
+          window.eventBus.emit('Map_trackClicked', id);
         }
         // Port is clicked
         // else if (e.selected[0].getProperties().featType == "port") {
@@ -427,7 +432,7 @@ export default {
       // Source needs to reload
       this.isLayerDataReady = false;
       // Update ForecastBar if it exists
-      this.$emit('changeWMSStyle', newStyle);
+      // this.$emit('changeWMSStyle', newStyle);
     },
 
     // Mouse move on map
@@ -702,11 +707,6 @@ export default {
       // Update map style
       FishingTracks.setSelectedTrack(id);
       this.fishingTracks.updateStyle();
-
-      
-
-      // Emit to open side panel fishing tracks and to udate WMS date in layers panel
-      this.$emit('onTrackClicked', id);
       
     },
 

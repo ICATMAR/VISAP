@@ -44,9 +44,9 @@
     mounted() {
       // EVENTS
       // Fishing track clicked
-      window.eventBus.on('fishingTrackSelected', id => {
-        this.updateClimaLayer();
-      });
+      window.eventBus.on('TracksTimeLine_trackClicked', this.updateClimaLayer);
+      window.eventBus.on('Map_trackClicked', this.updateClimaLayer);
+      
     },
     data (){
       return {

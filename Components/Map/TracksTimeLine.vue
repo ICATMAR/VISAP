@@ -97,8 +97,7 @@ export default {
 
     onTrackClicked: function(event){
       let id = event.target.id;
-      //this.showSelectedTrack(id); // It is already called from Map.vue
-      this.$emit('clickTrackMark', id);
+      window.eventBus.emit('TracksTimeLine_trackClicked', id);
     },
 
     // PUBLIC METHODS

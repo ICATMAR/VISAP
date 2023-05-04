@@ -3,15 +3,15 @@
 
     <!-- Map  container-->
     <div class="mapContainer">
-      <ol-map id="ol-map" ref="map"
-        @onTrackClicked="trackClicked" 
+      <ol-map id="ol-map" ref="map"></ol-map>
+        <!-- @onTrackClicked="trackClicked" 
         @onFishingTracksLoad="fishingTracksLoad"
-      ></ol-map>
+      ></ol-map> -->
       <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
       
       <!-- Side panel -->
-      <app-side-panel ref="sidePanel"
-        @selectedTrack='selectedTrack' 
+      <app-side-panel ref="sidePanel"></app-side-panel>
+        <!-- @selectedTrack='selectedTrack' 
         @onTabClicked='sidePanelTabClicked' 
         @onPanelTransitionEnd='sidePanelTabClicked'
         @setEffortLayerOpacity='setEffortLayerOpacity'
@@ -19,7 +19,7 @@
         @setBaseLayer='setBaseLayer'
         @setLayerOpacity='setLayerOpacity'
         @setClimaLayer='setClimaLayer'
-      ></app-side-panel>
+      ></app-side-panel> -->
 
       <!-- Buttons to switch from app -->
       <div class="switchPanels">
