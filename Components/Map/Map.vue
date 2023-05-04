@@ -542,6 +542,16 @@ export default {
 
       // Get ol layer
       let layer = this.getMapLayer('data');
+      // If layer was hidden in the process
+      if (layer == undefined){
+        this.isRendering = false;
+        this.isLayerDataReady = false;
+        // Restore map
+        map.getLayers().forEach((ll, i) => {
+          ll.setVisible(this.visibilityArray[i]);
+        });
+        return;
+      }
       // Get canvas
       let tmpCnv = layer.getRenderer().getImage();
       
