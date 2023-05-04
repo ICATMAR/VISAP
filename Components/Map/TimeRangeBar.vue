@@ -47,7 +47,7 @@
 
 <script>
 // Import components
-import RangeSlider from 'Components/RangeSlider.vue'
+import RangeSlider from 'Components/Map/RangeSlider.vue'
 
 export default {
     name: "app-timebar",

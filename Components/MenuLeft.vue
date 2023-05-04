@@ -11,7 +11,7 @@
   
   
   <script>
-  import WidgetMapOptions from "Components/WidgetMapOptions.vue"
+  import WidgetMapOptions from "Components/Map/WidgetMapOptions.vue"
 
   export default {
     name: "menuLeft",

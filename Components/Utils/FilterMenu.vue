@@ -40,7 +40,6 @@
 <script>
 
 // Import components
-//import Map from 'Components/Map.vue'
 // palette.js is required
 
 export default {

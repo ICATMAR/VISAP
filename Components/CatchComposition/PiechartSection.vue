@@ -56,7 +56,7 @@
 <script>
 
 // Import components
-import Piechart from 'Components/Piechart.vue'
+import Piechart from 'Components/CatchComposition/Piechart.vue'
 
 export default {
   name: 'piechartSection', // Caps, no -

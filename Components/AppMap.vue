@@ -55,8 +55,8 @@
   <script>
 
   // Import scripts
-  import Map from "Components/Map.vue";
-  import AnimationCanvas from "Components/AnimationCanvas.vue";
+  import Map from "Components/Map/Map.vue";
+  import AnimationCanvas from "Components/Map/AnimationCanvas.vue";
   import AppSidePanel from "Components/AppSidePanel.vue"
   import MenuLeft from "Components/MenuLeft.vue"
 

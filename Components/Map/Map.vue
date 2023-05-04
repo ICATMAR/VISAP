@@ -55,9 +55,8 @@
 
 
 <script>
-import TimeRangeBar from "Components/TimeRangeBar.vue";
-import TracksTimeLine from "Components/TracksTimeLine.vue";
-//import WMSLegend from "WMSLegend.vue";
+import TimeRangeBar from "Components/Map/TimeRangeBar.vue";
+import TracksTimeLine from "Components/Map/TracksTimeLine.vue";
 
 export default {
   name: 'app-map',

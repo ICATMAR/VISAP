@@ -17,9 +17,13 @@
     <!-- <img v-if="WMSLegendURL != ''" id='wmsLegend' :src="WMSLegendURL"> -->
     <wms-legend ref="wmsLegend"></wms-legend>
 
+    <!-- Current date -->
+    <span>{{$t('Date')}}: {{ currentDate }}</span>
+
+    <!-- Data source attribution -->
     <span class="wrapText">{{$t('Data from')}}: <a title="Weather data source" :href="sourceDoi" target="_blank">E.U.
             Copernicus Marine Service Information</a></span>
-    <span>{{$t('Date')}}: {{ currentDate }}</span>
+    
 
 
   </div>

@@ -14,7 +14,6 @@
 <script>
 
 // Import components
-//import Map from 'Components/Map.vue'
 
 export default {
   name: 'onoffButton', // Caps, no -

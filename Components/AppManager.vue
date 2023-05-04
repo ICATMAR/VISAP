@@ -37,7 +37,7 @@ import AppMap from "Components/AppMap.vue";
 
 import WeatherWidget from "Components/WeatherWidget.vue";
 
-import LanguageSelector from "Components/LanguageSelector.vue";
+import LanguageSelector from "Components/Utils/LanguageSelector.vue";
 
 export default {
   name: "app-manager",

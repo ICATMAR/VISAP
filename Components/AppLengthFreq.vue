@@ -30,9 +30,8 @@
   <script>
   
   // Import components
-  //import Map from 'Components/Map.vue'
   import TitleHeader from 'Components/TitleHeader.vue'
-  import FilterMenu from './FilterMenu.vue'
+  import FilterMenu from 'Components/Utils/FilterMenu.vue'
   
   export default {
     name: 'appLengthFreq', // Caps, no -
