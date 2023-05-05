@@ -6,12 +6,12 @@
       <!-- Fishing effort -->
       <div class="clickable menuElement">
         <onOffButton ref="onOffButton" :checked="true" :inSize="'14px'" @change="effortLayerOnOff($event)"></onOffButton>
-        <span class="hiddenInMobile" @click="effortLayerOnOff">{{$t('Fishing effort')}}</span>
+        <span @click="effortLayerOnOff">{{$t('Fishing effort')}}</span>
       </div>
       <!-- Fishing effort options -->
       <Transition>
         
-      <div v-show="areOptionsVisible" style="min-width:100%">
+      <div v-show="areOptionsVisible">
         <!-- kg, euros, hours -->
         <div class="row-container">
           <span>{{ $t('Units') }}: </span>
@@ -32,6 +32,14 @@
         </div>
 
         <!-- Legend -->
+        <div class="legendContainer">
+          <effortLegend ref="effortLegend"></effortLegend>
+        </div>
+
+        <!-- Data source attribution -->
+        <span class="wrapText">{{$t('Data from')}}: <a title="ICATMAR" href="https://www.icatmar.cat" target="_blank" rel="noreferrer noopener">
+          ICATMAR (Institut Català de Recerca per la Governança del Mar)</a></span>
+
       </div>
 
       </Transition>
@@ -46,6 +54,7 @@
 
 // Import components
 import OnOffButton from "Components/Utils/OnOffButton.vue";
+import EffortLegend from "./EffortLegend.vue";
 
 
 export default {
@@ -54,13 +63,14 @@ export default {
 
   },
   mounted() {
-    
+    this.effortParamsChange();
   },
   data (){
     return {
       areOptionsVisible: true,
       selUnit: 'kg',
       selYear: 2020,
+      selGear: 'bottomtrawling',
       units: ['kg','euros', 'hours'],
       unitIcons: {
         'kg': '&#xf5cd;',
@@ -85,16 +95,35 @@ export default {
       }
     },
     
-    // Effort unit type
-    effortUnitClicked: function(type){
-      this.selUnit = type;
-      // More   
+    // Effort unit change
+    effortUnitClicked: function(unit){
+      this.selUnit = unit;
+      this.effortParamsChange();
+      
+    },
+
+
+
+    // PRIVATE METHODS
+    effortParamsChange: function(){
+      let selGear = this.selGear.toLowerCase();
+      selGear = selGear.replace(' ', '');
+      //let outUrl = 'data/fishingEffort/fishingEffort_' + this.selUnit + '_' +  this.selYear + '_' + selGear + '.png';
+      //this.$refs['effortImg'].src = outUrl;
+      //this.$emit('effortParamsChange', outUrl);
+
+      // Effort legend
+      this.$refs.effortLegend.setEffortLegend(this.selUnit);
+
+      // TODO
+      window.eventBus.emit('FishingEffort_UnitChanged', this.selUnit);
     },
 
 
   },
   components: {
     "onOffButton": OnOffButton,
+    "effortLegend": EffortLegend,
   }
 }
 </script>
@@ -124,17 +153,12 @@ export default {
   flex-direction: column;
   flex-wrap: wrap;
   align-items: flex-start;
-  padding-left: 10px;
+  padding-right: 10px;
 
   /* background: #00000042; */
   border-radius: 0px 10px 10px 0px;
 }
 
-@media screen and (max-width: 770px) {
-  #fishingEffort {
-    top: 120px;
-  }
-}
 
 .menuElement {
   display: flex;
@@ -152,8 +176,6 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-
-  min-width:100%;
 
   background: #0000003d;
   border-radius: 30px;
@@ -176,6 +198,20 @@ export default {
   width: 100%;
   border-radius: 24px;
   margin:0px;
+}
+
+.wrapText {
+    display: block;
+    inline-size: 260px;
+    overflow-wrap: break-word;
+  }
+
+.legendContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 
