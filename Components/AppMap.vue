@@ -139,6 +139,13 @@
   font-size: 11px;
   margin: 3px;
 }
+@media screen and  (max-width: 770px) {
+  .switchPanels>button{
+    width: 35px;
+    height: 35px;
+  }
+  
+}
 .selected {
   background: var(--red);
   pointer-events: none;
