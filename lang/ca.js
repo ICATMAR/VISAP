@@ -28,6 +28,7 @@ export default ca = {
   },
   "Layer visibility": "Visibilitat de la capa",
   "Data from": "Dades de",
+  "Units": "Unitats",
 
 
   "TrackFeatures": {

@@ -45,6 +45,9 @@
     <!-- Menu left -->
     <menu-left></menu-left>
 
+    <!-- Fishing effort map -->
+    <fishing-effort></fishing-effort>
+
   </div>
 </template>
   
@@ -59,6 +62,7 @@
   import AnimationCanvas from "Components/Map/AnimationCanvas.vue";
   import AppSidePanel from "Components/AppSidePanel.vue"
   import MenuLeft from "Components/MenuLeft.vue"
+  import FishingEffort from "Components/Map/FishingEffort.vue";
 
   export default {
     name: "appMap",
@@ -88,7 +92,8 @@
       "ol-map": Map,
       "animation-canvas": AnimationCanvas,
       "app-side-panel": AppSidePanel,
-      "menuLeft": MenuLeft
+      "menuLeft": MenuLeft,
+      "fishing-effort": FishingEffort,
     },
     computed: {
   

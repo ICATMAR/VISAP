@@ -30,6 +30,7 @@ export default en = {
   },
   "Layer visibility": "Layer Visibility",
   "Data from": "Data from",
+  "Units": "Units",
 
 
   "TrackFeatures": {
