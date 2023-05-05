@@ -140,7 +140,10 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 4px;
+    margin: 2px;
+    background: #0000003b;
+    padding-right: 4px;
+    border-radius: 30px;
   }
 
   span {

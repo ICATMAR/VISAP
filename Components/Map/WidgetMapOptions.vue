@@ -145,7 +145,7 @@
     align-items: flex-start;
     padding-left: 10px;
 
-    background: #00000042;
+    /* background: #00000042; */
     border-radius: 0px 10px 10px 0px;
   }
 
@@ -160,7 +160,10 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 8px;
+    margin: 4px;
+    padding: 4px;
+    background: #00000040;
+    border-radius: 40px;
   }
   
 
