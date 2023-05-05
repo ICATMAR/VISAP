@@ -178,3 +178,22 @@ a:hover {
 .fa {
   text-decoration: none;
 }
+
+
+
+
+@media screen and (max-width: 770px) {
+  .hiddenInMobile {
+    display: none
+  }
+
+  .visibleInMobile {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 770px) {
+  .visibleInMobile {
+    display: none;
+  }
+}

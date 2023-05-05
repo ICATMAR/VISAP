@@ -26,15 +26,15 @@
         <!-- Buttons -->
         <button @click="changeHash('overview')" >
           <span class="fa">&#xf13d; </span>
-          <span class="button-text">{{ $t('Catch composition') }}</span>
+          <span class="button-text hiddenInMobile">{{ $t('Catch composition') }}</span>
         </button>
         <button @click="changeHash('length-freq')">
           <span class="fa">&#xe0e3; </span>
-          <span class="button-text">{{ $t('Length frequency') }}</span>
+          <span class="button-text hiddenInMobile">{{ $t('Length frequency') }}</span>
         </button>
         <button class="selected">
           <span class="fa">&#xf276; </span>
-          <span class="button-text">{{ $t('Sampling map') }}</span>
+          <span class="button-text hiddenInMobile">{{ $t('Sampling map') }}</span>
         </button>
       </div>
     </div>

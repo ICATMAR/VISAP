@@ -25,7 +25,8 @@
       <!-- Weather and sea -->
       <div class="clickable menuElement">
         <onOffButton ref="weatherOnOffButton" :checked="false" :inSize="'14px'" @change="weatherLayerOnOff($event)"></onOffButton>
-        <span @click="weatherLayerOnOff">{{$t('Weather and sea conditions')}}</span>
+        <span class="visibleInMobile fa" :title="$t('Weather and sea conditions')">&#xf2c9;, C<sub>hl</sub>, ‰, &#xf72e;, &#xf773;</span>
+        <span class="hiddenInMobile" @click="weatherLayerOnOff">{{$t('Weather and sea conditions')}}</span>
       </div>
       <!-- Weather Layers -->
       <Transition>
