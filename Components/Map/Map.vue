@@ -280,6 +280,8 @@ export default {
     });
     // Click on track
     window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedTrack);
+    // Layer visibility
+    window.eventBus.on('WidgetMapOptions_setLayerVisible', this.setLayerOpacity)
   },
   umounted () {
     this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);
@@ -748,7 +750,7 @@ export default {
     },
     setLayerOpacity: function(params){
       let layerName = params[0];
-      let opacity = params[1];
+      let opacity = params[1] * 1; // (* 1 turns boolean into a number)
       // Get layer
       let layer = this.getMapLayer(layerName);
       if (layer == undefined){

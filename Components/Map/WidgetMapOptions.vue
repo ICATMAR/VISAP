@@ -3,7 +3,7 @@
     <div id='widgetMapOptions' ref='widgetMapOptions'>
 
       <!-- Base layer selection -->
-      <div id="baseLayerSelection" class="clickable" v-show="baseLayers.length != 0" @mouseleave="isMouseOver = false">
+      <div id="baseLayerSelection" class="clickable menuElement" v-show="baseLayers.length != 0" @mouseleave="isMouseOver = false">
         <!-- Selected -->
         <img class="icon-str icon-img" :src="baseLayerIconSrc" @click="isMouseOver=true" v-show="!isMouseOver">
         <!-- Other base layers -->
@@ -23,14 +23,24 @@
       </div>
 
       <!-- Weather and sea -->
-      <div class=clickable>
+      <div class="clickable menuElement">
         <onOffButton ref="weatherOnOffButton" :checked="false" :inSize="'14px'" @change="weatherLayerOnOff($event)"></onOffButton>
         <span @click="weatherLayerOnOff">{{$t('Weather and sea conditions')}}</span>
       </div>
-
       <!-- Weather Layers -->
       <Transition>
         <widgetWeatherLayers ref="widgetWeatherLayers" v-show="isWeatherMenuVisible"></widgetWeatherLayers>
+      </Transition>
+
+
+      <!-- Sea habitats button -->
+      <div class="clickable menuElement">
+        <onOffButton ref="habitatsOnOffButton" :checked="false" :inSize="'14px'" @change="habitatsLayerOnOff($event)"></onOffButton>
+        <span @click="habitatsLayerOnOff">{{$t('Sea habitats')}}</span>
+      </div>
+      <!-- Sea habitats legend -->
+      <Transition>
+        <sea-habitats ref="seaHabitats" v-show="isHabitatsVisible"></sea-habitats>
       </Transition>
   
 
@@ -42,6 +52,7 @@
   
   // Import components
   import WidgetWeatherLayers from "./WidgetWeatherLayers.vue";
+  import SeaHabitats from "./SeaHabitats.vue"
   import OnOffButton from "Components/Utils/OnOffButton.vue";
 
   
@@ -66,6 +77,7 @@
         baseLayers: [],
         isMouseOver: false,
         isWeatherMenuVisible: false,
+        isHabitatsVisible: false,
       }
     },
     methods: {
@@ -83,20 +95,37 @@
           this.isWeatherMenuVisible = e.target.checked;
           // Activate weather layer
           this.$refs.widgetWeatherLayers.setVisible(this.isWeatherMenuVisible);
+          // Hide other layer
+          if (this.isWeatherMenuVisible) this.$refs.habitatsOnOffButton.setChecked(false);
         } 
-
-
         // Text was clicked --> Invoke click on the element, which calls again this function
         else {
           this.$refs.weatherOnOffButton.setChecked(!this.isWeatherMenuVisible);
         }
-        
+      },
+
+      // Sea habitats on off
+      // TODO: merge weather and habitats into a single function?
+      habitatsLayerOnOff: function(e){
+        // OnOff Button was clicked
+        if (e.target.value != undefined){ 
+          this.isHabitatsVisible = e.target.checked;
+          // Activate/Deactivate layer
+          window.eventBus.emit('WidgetMapOptions_setLayerVisible', ['seaHabitats', this.isHabitatsVisible]);
+          // Hide other layer
+          if (this.isHabitatsVisible) this.$refs.weatherOnOffButton.setChecked(false);
+        }
+        // Text was clicked --> Invoke click on the element, which calls again this function
+        else {
+          this.$refs.habitatsOnOffButton.setChecked(!this.isHabitatsVisible);
+        }
       }
   
     },
     components: {
       "onOffButton": OnOffButton,
       "widgetWeatherLayers": WidgetWeatherLayers,
+      "sea-habitats": SeaHabitats,
     }
   }
   </script>
@@ -125,7 +154,7 @@
     }
   }
 
-  #widgetMapOptions > div {
+.menuElement {
     display: flex;
     flex-direction: row;
     justify-content: center;
