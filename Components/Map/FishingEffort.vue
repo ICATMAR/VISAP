@@ -64,6 +64,8 @@ export default {
   },
   mounted() {
     this.effortParamsChange();
+    // EVENTS
+    window.eventBus.on('Map_mouseMove', this.showValueAtCoord);
   },
   data (){
     return {
@@ -78,6 +80,11 @@ export default {
         'hours': '&#xf017;'
       },
       years: [2019, 2020, 2021, 2022],
+
+      // Mouse over in Map makes the legend react
+      bbox: [-1, 39, 6, 44], // HARDCODED-> DEPENDS ON THE FISHING EFFORT IMAGE
+      dataResolution: 500, // Image is around 4kx4k pixels
+      imageData: [],
     }
   },
   methods: {
@@ -88,7 +95,7 @@ export default {
       if (e.target.value != undefined){ 
         this.areOptionsVisible = e.target.checked;
         // Activate layer
-        window.eventBus.emit('fishingEffort_setLayerVisible', ['fishingEffort', this.areOptionsVisible]);      } 
+        window.eventBus.emit('FishingEffort_setLayerVisible', ['fishingEffort', this.areOptionsVisible]);      } 
       // Text was clicked --> Invoke click on the element, which calls again this function
       else {
         this.$refs.onOffButton.setChecked(!this.areOptionsVisible);
@@ -99,7 +106,11 @@ export default {
     effortUnitClicked: function(unit){
       this.selUnit = unit;
       this.effortParamsChange();
-      
+    },
+    // Year change
+    yearClicked: function(year){
+      this.selYear = year;
+      this.effortParamsChange();
     },
 
 
@@ -108,15 +119,73 @@ export default {
     effortParamsChange: function(){
       let selGear = this.selGear.toLowerCase();
       selGear = selGear.replace(' ', '');
-      //let outUrl = 'data/fishingEffort/fishingEffort_' + this.selUnit + '_' +  this.selYear + '_' + selGear + '.png';
-      //this.$refs['effortImg'].src = outUrl;
-      //this.$emit('effortParamsChange', outUrl);
+      let outUrl = 'data/fishingEffort/fishingEffort_' + this.selUnit + '_' +  this.selYear + '_' + selGear + '.png';
+      
+      
 
       // Effort legend
       this.$refs.effortLegend.setEffortLegend(this.selUnit);
 
-      // TODO
-      window.eventBus.emit('FishingEffort_UnitChanged', this.selUnit);
+      // Event received in Map
+      window.eventBus.emit('FishingEffort_EffortChanged', outUrl);
+      // Store image data for showing the value in the legend
+      this.storeImageData(outUrl);
+    },
+
+
+
+    storeImageData: function(url){
+      // Create image
+      let img = new Image();
+      img.src = url;
+      this.imageData = [];
+
+      img.onload = () => {
+        // Create canvas
+        let tmpCnv = document.createElement('canvas');
+        tmpCnv.width=this.dataResolution;
+        tmpCnv.height=this.dataResolution;
+        // Paint image to canvas
+        let ctx = tmpCnv.getContext("2d");
+        ctx.globalCompositeOperation = "source-destination";
+
+        ctx.drawImage(img, 0, 0, tmpCnv.width, tmpCnv.height);
+        // Get image data
+        this.imageData = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height).data;
+      }
+
+
+    },
+    // Show value at coord
+    showValueAtCoord: function(coord){
+      // Normalize coord
+      let lon = coord[0];
+      let lat = coord[1];
+
+      let normX = (lon - this.bbox[0]) / (this.bbox[2] - this.bbox[0]);
+      let normY = (lat - this.bbox[1]) / (this.bbox[3] - this.bbox[1]);
+      // Flip normY
+      normY = 1-normY;
+
+      let insideBbox = normX > 0 && normX < 1 && normY > 0 && normY < 1;
+      if (!insideBbox)
+        return; // TODO
+
+      // Get color
+      let row = Math.round(normY * this.dataResolution);
+      let col = Math.round(normX * this.dataResolution);
+      let index = row*this.dataResolution + col;
+
+      this.color = [];
+      this.color[0] = this.imageData[index*4];
+      this.color[1] = this.imageData[index*4 + 1];
+      this.color[2] = this.imageData[index*4 + 2];
+      this.color[3] = this.imageData[index*4 + 3];
+
+      // if (this.color[3] != 0) This is done in effortLegend
+      this.$refs.effortLegend.showValueAtColor(this.color);
+      
+      
     },
 
 

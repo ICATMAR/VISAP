@@ -280,8 +280,11 @@ export default {
     });
     // Click on track
     window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedTrack);
+    // Set fishing effort map
+    window.eventBus.on('FishingEffort_EffortChanged', this.setEffortMap);
     // Layer visibility
-    window.eventBus.on('WidgetMapOptions_setLayerVisible', this.setLayerOpacity)
+    window.eventBus.on('WidgetMapOptions_setLayerVisible', this.setLayerOpacity);
+    window.eventBus.on('FishingEffort_setLayerVisible', this.setLayerOpacity);
   },
   umounted () {
     this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);
@@ -446,7 +449,7 @@ export default {
       let coord = this.map.getCoordinateFromPixel([event.clientX, event.clientY]);
       coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
       // Emit
-      this.$emit('mouseMove', coord);
+      window.eventBus.emit('Map_mouseMove', coord);
       // Change legend tooltip value
       if (this.isLayerDataReady){
         let color = this.getDataAtPixel(event.clientX, event.clientY);

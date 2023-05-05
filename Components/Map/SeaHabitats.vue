@@ -67,6 +67,6 @@ span {
   overflow:auto;
   max-width: 350px;
   max-height: calc(100vh - 650px);
-  background: #ffffff47;
+  background: #ffffffbe;
 }
 </style>

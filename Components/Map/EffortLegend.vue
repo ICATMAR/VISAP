@@ -16,7 +16,7 @@
       <div v-else-if=showValueMap class="tooltip fade show bs-tooltip-start" id="legendTooltipMapValue"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-120px, 30px);">
         <!-- <div class="tooltip-arrow" v-show="!horizontal" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div> -->
-        <div class="tipText tooltip-inner">{{legendValue}} {{legendUnits}}</div>
+        <div class="tipText tooltip-inner" v-html="legendValue + ' ' + legendUnits"></div>
       </div>
 
   </div>
@@ -35,11 +35,11 @@ export default {
 
   },
   mounted () {
- 
+    
+
   },
   data () {
     return {
-
       mouseIsOver: false,
       mousePosition: {mouseX: 0, mouseY: 0},
       imgEl: undefined,
@@ -144,7 +144,7 @@ export default {
       // Create canvas
       let tmpCnv = document.createElement('canvas');
       tmpCnv.width=100;
-      tmpCnv.height=100; // Resolution
+      tmpCnv.height=1; // Resolution
       // Paint image to canvas
       let ctx = tmpCnv.getContext("2d");
       ctx.globalCompositeOperation = "source-destination";
@@ -165,10 +165,10 @@ export default {
       let normValue;
       // Horizontal legend
       normValue = 1 - (canvas.width - event.offsetX)/canvas.width;
-      this.legendValue = (normValue * (this.range[1] - this.range[0]) + this.range[0]).toFixed(2);
+      this.legendValue = (normValue * (this.range[1] - this.range[0]) + this.range[0]).toFixed(0);
 
       let legendTooltipEl = document.getElementById("legendTooltip");
-      // Vertical legend
+      // Horizontal legend
       legendTooltipEl.style.transform = "translate("+ (event.offsetX - canvas.width + 40) +"px, "+ canvas.height*1.2 +"px)";
 
       this.draw(canvas);
@@ -177,11 +177,15 @@ export default {
     // TODO:
     // Receives a color value (RGB) and maps it in the legend.
     showValueAtColor: function(color){
-      
+      if (!this.legendLoaded)
+        return;
+
       // If outside the land (alpha = 0), do not show
       this.showValueMap = true;
+
       if (color[3] == 0 || this.mouseIsOver){
         this.showValueMap = false;
+        this.draw(this.$refs.effortLegendCanvas);
         return;
       }
 
@@ -189,16 +193,18 @@ export default {
       let normValue = this.getValueFromColor(color);
       if (normValue == undefined){
         this.showValueMap = false;
+        this.draw(this.$refs.effortLegendCanvas);
         return;
       }
 
       // Calculate value according to index
       let value = normValue * (this.range[1] - this.range[0]) + this.range[0];
       // Show in legend
-      this.legendValue = value.toFixed(2);
+      this.legendValue = value.toFixed(0);
       // Position legend
       let legendTooltipEl = document.getElementById("legendTooltipMapValue");
       if (legendTooltipEl == null){
+        this.draw(this.$refs.effortLegendCanvas);
         return;
       }
       let canvas = this.$refs.effortLegendCanvas;
@@ -214,7 +220,7 @@ export default {
     getValueFromColor: function(color){
       // Find the color that is more similar to the legend color reference
       let normValue = undefined;
-      let minDiff = 10;
+      let minDiff = 30;
       // Iterate over legend reference
       for (let i = 0; i < this.legendColorRef.length/4; i++){
         let el1 = color[0]-this.legendColorRef[i*4];
@@ -231,7 +237,7 @@ export default {
       if (normValue == undefined)
         return undefined
       else
-        return normValue*-1 + 1;
+        return normValue;//*-1 + 1;
     },
 
     // When the mouse is moving on the map, the legend should show the value.
