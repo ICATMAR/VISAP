@@ -54,6 +54,14 @@
     align-items: flex-start;
     justify-content: flex-start;
 
+    pointer-events: none;
+
+  }
+
+  @media screen and  (max-width: 770px) {
+    #menuLeft {
+      top:200px;
+    }
   }
 
   </style>

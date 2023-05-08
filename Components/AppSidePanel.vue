@@ -26,20 +26,7 @@
         <haul-info @selectedTrack="selectedTrack" ref="haul-info" v-show="selTab == 'tracks'">
         </haul-info>
 
-        <!-- Fishing effort -->
-        <fishing-effort ref="fishing-effort" 
-          @effortParamsChange='setEffortMap' 
-          @effortLayerOpacityChange='setEffortLayerOpacity' 
-          v-show="selTab === 'effort'">
-        </fishing-effort>
 
-        <!-- Layers -->
-        <layer-panel ref="layers" 
-          @baseLayerChange='setBaseLayer' 
-          @layerOpacityChange='setLayerOpacity'
-          @climaLayerChange='setClimaLayer'
-          v-show="selTab === 'layers'">
-        </layer-panel>
 
         <about-panel ref="about"
           v-show="selTab === 'about'">
@@ -65,8 +52,6 @@
 <script>
 // Import components
 import HaulInfo from "Components/HaulInfo.vue"
-import FishingEffortPanel from "Components/FishingEffortPanel.vue"
-import LayerPanel from "Components/LayerPanel.vue"
 import AboutPanel from "Components/About.vue"
 
 
@@ -99,16 +84,6 @@ export default {
         "tracks": {
           id: "tracks",
           name: "Fishing tracks",
-          isSelected: false
-        },
-        "effort": {
-          id: "effort",
-          name: "Fishing effort",
-          isSelected: false
-        },
-        "layers": {
-          id: "layers",
-          name: "Layers",
           isSelected: false
         },
         "about": {
@@ -243,8 +218,6 @@ export default {
   },
   components: {
     "haul-info": HaulInfo,
-    "fishing-effort": FishingEffortPanel,
-    "layer-panel": LayerPanel,
     "about-panel": AboutPanel,
     //"ol-map": Map,
     //"animation-canvas": AnimationCanvas,

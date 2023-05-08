@@ -145,6 +145,9 @@
   margin: 3px;
 }
 @media screen and  (max-width: 770px) {
+  .switchPanels{
+    flex-direction: row;
+  }
   .switchPanels>button{
     width: 35px;
     height: 35px;
