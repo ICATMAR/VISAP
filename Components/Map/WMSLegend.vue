@@ -6,14 +6,14 @@
       <canvas @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @mousemove="updateMousePosition($event)" :width="canvasWidth" :height="canvasHeight" 
           id="wmsLegendCanvas" ref="wmsLegendCanvas" class="img-fluid rounded" title="Click to change the colormap"></canvas>
       <!-- Tooltip -->
-      <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" id="legendTooltip"
+      <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" ref="legendTooltip"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-30px, 125px);">
         <div class="tooltip-arrow" v-show="!horizontal" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div>
         <div class="tipText tooltip-inner">{{legendValue}} {{legendUnits}}</div>
       </div>
 
       <!-- Tooltip mouse moving on map -->
-      <div v-else-if=showValueMap class="tooltip fade show bs-tooltip-start" id="legendTooltipMapValue"
+      <div v-else-if=showValueMap class="tooltip fade show bs-tooltip-start" ref="legendTooltipMapValue"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-120px, 30px);">
         <!-- <div class="tooltip-arrow" v-show="!horizontal" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div> -->
         <div class="tipText tooltip-inner">{{legendValue}} {{legendUnits}}</div>
@@ -76,7 +76,7 @@ export default {
       showValueMap: false,
       // Horizontal legend
       horizontal: true,
-      canvasWidth: 30,
+      canvasWidth: 15,
       canvasHeight: 200,
     }
   },
@@ -90,7 +90,7 @@ export default {
       if (this.styles.length == 0)
         return;
       // Circular shift
-      if (event.type == 'contextMenu'){ // Right click
+      if (event.type == 'contextmenu'){ // Right 
         this.styles.unshift(this.styles[this.styles.length-1]);
         this.styles.pop()
       } // Shift to the other direction
@@ -264,13 +264,13 @@ export default {
         normValue = 1 - (canvas.width - event.offsetX)/canvas.width;
       this.legendValue = (normValue * (this.range[1] - this.range[0]) + this.range[0]).toFixed(2);
 
-      let legendTooltipEl = document.getElementById("legendTooltip");
+      let legendTooltipEl = this.$refs.legendTooltip;
       // Vertical legend
       if (!this.horizontal)
         legendTooltipEl.style.transform = "translate(-"+ canvas.width*1.2 +"px, "+ (event.offsetY-6) +"px)";
       // Horizontal legend
       else 
-        legendTooltipEl.style.transform = "translate("+ (event.offsetX - canvas.width + 40) +"px, "+ canvas.height*1.2 +"px)";
+        legendTooltipEl.style.transform = "translate("+ (event.offsetX - canvas.width) +"px, "+ (canvas.height + 10) +"px)";
 
       this.draw(canvas);
     },
@@ -298,7 +298,7 @@ export default {
       // Show in legend
       this.legendValue = value.toFixed(2);
       // Position legend
-      let legendTooltipEl = document.getElementById("legendTooltipMapValue");
+      let legendTooltipEl = this.$refs.legendTooltipMapValue;
       if (legendTooltipEl == null){
         return;
       }
@@ -309,7 +309,7 @@ export default {
         legendTooltipEl.style.transform = "translate(-"+ canvas.width +"px, "+ ((normValue*-1+1)*canvas.height - 12) +"px)";
       // Horizontal legend
       else
-        legendTooltipEl.style.transform = "translate("+ (normValue*canvas.width - canvas.width + 40) +"px, "+ canvas.height*1.2 +"px)";
+        legendTooltipEl.style.transform = "translate("+ (normValue*canvas.width - canvas.width) +"px, "+ (canvas.height + 5) +"px)";
 
       this.draw(canvas);
     },
@@ -414,14 +414,13 @@ export default {
   justify-content: center;
   
   width: 100%;
-
-  margin-bottom: 40px;
+  margin-bottom: 10px;
 }
 
 
 #wmsLegendCanvas:hover {
   border: 1px solid #000000!important;
-  cursor: pointer
+  cursor: pointer;
 }
 
 .tooltip {

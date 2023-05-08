@@ -6,14 +6,14 @@
       <canvas @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @mousemove="updateMousePosition($event)" :width="canvasWidth" :height="canvasHeight" 
           id="effortLegendCanvas" ref="effortLegendCanvas" class="img-fluid rounded"></canvas>
       <!-- Tooltip -->
-      <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" id="legendTooltip"
+      <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" ref="legendTooltip"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-30px, 125px);">
         <div class="tipText tooltip-inner" v-html="legendValue + ' ' + legendUnits"></div>
       </div>
 
       <!-- TODO -->
       <!-- Tooltip mouse moving on map -->
-      <div v-else-if=showValueMap class="tooltip fade show bs-tooltip-start" id="legendTooltipMapValue"
+      <div v-else-if=showValueMap class="tooltip fade show bs-tooltip-start" ref="legendTooltipMapValue"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-120px, 30px);">
         <!-- <div class="tooltip-arrow" v-show="!horizontal" style="position: absolute; top: 0px; transform: translate(0px, 8px); white-space: nowrap;"></div> -->
         <div class="tipText tooltip-inner" v-html="legendValue + ' ' + legendUnits"></div>
@@ -52,7 +52,7 @@ export default {
       showValueMap: false,
 
       canvasWidth: 200,
-      canvasHeight: 30,
+      canvasHeight: 15,
 
       // Units
       unitsInfo: {
@@ -167,7 +167,7 @@ export default {
       normValue = 1 - (canvas.width - event.offsetX)/canvas.width;
       this.legendValue = (normValue * (this.range[1] - this.range[0]) + this.range[0]).toFixed(0);
 
-      let legendTooltipEl = document.getElementById("legendTooltip");
+      let legendTooltipEl = this.$refs.legendTooltip;
       // Horizontal legend
       legendTooltipEl.style.transform = "translate("+ (event.offsetX - canvas.width + 40) +"px, "+ canvas.height*1.2 +"px)";
 
@@ -202,7 +202,7 @@ export default {
       // Show in legend
       this.legendValue = value.toFixed(0);
       // Position legend
-      let legendTooltipEl = document.getElementById("legendTooltipMapValue");
+      let legendTooltipEl = this.$refs.legendTooltipMapValue;
       if (legendTooltipEl == null){
         this.draw(this.$refs.effortLegendCanvas);
         return;
@@ -211,7 +211,7 @@ export default {
 
 
       // Horizontal legend
-      legendTooltipEl.style.transform = "translate("+ (normValue*canvas.width - canvas.width + 40) +"px, "+ canvas.height*1.2 +"px)";
+      legendTooltipEl.style.transform = "translate("+ (normValue*canvas.width - canvas.width + 20) +"px, "+ canvas.height*1.2 +"px)";
 
       this.draw(canvas);
     },
@@ -300,13 +300,13 @@ export default {
   
   width: 100%;
 
-  margin-bottom: 40px;
+  margin-bottom: 0px;
 }
 
 
 #effortLegendCanvas:hover {
   border: 1px solid #000000!important;
-  cursor: pointer
+  cursor:none;
 }
 
 .tooltip {
