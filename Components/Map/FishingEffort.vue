@@ -293,7 +293,7 @@ export default {
 
 .wrapText {
     display: block;
-    inline-size: 260px;
+    inline-size: clamp(140px,40vw,260px);
     overflow-wrap: break-word;
   }
 
