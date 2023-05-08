@@ -285,6 +285,9 @@ export default {
     // Layer visibility
     window.eventBus.on('WidgetMapOptions_setLayerVisible', this.setLayerOpacity);
     window.eventBus.on('FishingEffort_setLayerVisible', this.setLayerOpacity);
+    // Layer opacity
+    window.eventBus.on('FishingEffort_setLayerOpacity', this.setEffortLayerOpacity);
+    window.eventBus.on('WidgetMapOptions_setLayerOpacity', this.setLayerOpacity);
   },
   umounted () {
     this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);

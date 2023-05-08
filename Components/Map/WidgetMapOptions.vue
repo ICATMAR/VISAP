@@ -23,10 +23,14 @@
       </div>
 
       <!-- Weather and sea -->
-      <div class="clickable menuElement">
-        <onOffButton ref="weatherOnOffButton" :checked="false" :inSize="'14px'" @change="weatherLayerOnOff($event)"></onOffButton>
-        <span class="visibleInMobile fa" :title="$t('Weather and sea conditions')">&#xf2c9;, C<sub>hl</sub>, ‰, &#xf72e;, &#xf773;</span>
-        <span class="hiddenInMobile" @click="weatherLayerOnOff">{{$t('Weather and sea conditions')}}</span>
+      <div class="titleContainer">
+        <div class="clickable menuElement">
+          <onOffButton ref="weatherOnOffButton" :checked="false" :inSize="'14px'" @change="weatherLayerOnOff($event)"></onOffButton>
+          <span class="visibleInMobile fa" :title="$t('Weather and sea conditions')">&#xf2c9;, C<sub>hl</sub>, ‰, &#xf72e;, &#xf773;</span>
+          <span class="hiddenInMobile" @click="weatherLayerOnOff">{{$t('Weather and sea conditions')}}</span>
+        </div>
+        <!-- Opacity knob -->
+        <opacity-knob size="25px" v-show="isWeatherMenuVisible" @change="changeWeatherLayerOpacity"></opacity-knob>
       </div>
       <!-- Weather Layers -->
       <Transition>
@@ -55,6 +59,7 @@
   import WidgetWeatherLayers from "./WidgetWeatherLayers.vue";
   import SeaHabitats from "./SeaHabitats.vue"
   import OnOffButton from "Components/Utils/OnOffButton.vue";
+  import OpacityKnob from "Components/Utils/OpacityKnob.vue";
 
   
   export default {
@@ -105,6 +110,11 @@
         }
       },
 
+      // Change opacity
+      changeWeatherLayerOpacity: function(opacity){
+        window.eventBus.emit('WidgetMapOptions_setLayerOpacity', ['data', opacity])
+      },
+
       // Sea habitats on off
       // TODO: merge weather and habitats into a single function?
       habitatsLayerOnOff: function(e){
@@ -125,6 +135,7 @@
     },
     components: {
       "onOffButton": OnOffButton,
+      "opacity-knob": OpacityKnob,
       "widgetWeatherLayers": WidgetWeatherLayers,
       "sea-habitats": SeaHabitats,
     }
@@ -164,6 +175,12 @@
     padding: 4px;
     background: #00000040;
     border-radius: 40px;
+  }
+
+  .titleContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
   
 

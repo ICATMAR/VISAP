@@ -4,10 +4,16 @@
 
     <div id="fishingEffort-container">
       <!-- Fishing effort -->
+    <div class="titleContainer">
+      <!-- Opacity -->
+      <opacity-knob size="25px" v-show="areOptionsVisible" @change="changeOpacity"></opacity-knob>
+      <!-- Title -->
       <div class="clickable menuElement">
         <onOffButton ref="onOffButton" :checked="true" :inSize="'14px'" @change="effortLayerOnOff($event)"></onOffButton>
         <span @click="effortLayerOnOff">{{$t('Fishing effort')}}</span>
       </div>
+    </div>
+      
       <!-- Fishing effort options -->
       <Transition>
         
@@ -55,6 +61,7 @@
 // Import components
 import OnOffButton from "Components/Utils/OnOffButton.vue";
 import EffortLegend from "./EffortLegend.vue";
+import OpacityKnob from "Components/Utils/OpacityKnob.vue";
 
 
 export default {
@@ -100,6 +107,11 @@ export default {
       else {
         this.$refs.onOffButton.setChecked(!this.areOptionsVisible);
       }
+    },
+
+    // Layer opacity changed
+    changeOpacity: function(opacity){
+      window.eventBus.emit('FishingEffort_setLayerOpacity', opacity);
     },
     
     // Effort unit change
@@ -193,6 +205,7 @@ export default {
   components: {
     "onOffButton": OnOffButton,
     "effortLegend": EffortLegend,
+    "opacity-knob": OpacityKnob,
   }
 }
 </script>
@@ -226,6 +239,15 @@ export default {
 
   /* background: #00000042; */
   border-radius: 0px 10px 10px 0px;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  width: 100%;
+  justify-content: flex-end;
 }
 
 

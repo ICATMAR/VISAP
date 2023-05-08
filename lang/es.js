@@ -31,6 +31,7 @@ export default es  = {
   "Layer visibility": "Visibilidad de la capa",
   "Data from": "Datos de",
   "Units": "Unidades",
+  "Opacity": "Opacidad",
 
 
   "TrackFeatures": {
