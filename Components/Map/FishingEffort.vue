@@ -2,17 +2,30 @@
   <!-- Container -->
   <div id='fishingEffort' ref='fishingEffort'>
 
-    <div id="fishingEffort-container">
-      <!-- Fishing effort -->
-    <div class="titleContainer">
-      <!-- Opacity -->
-      <opacity-knob size="25px" v-show="areOptionsVisible" @change="changeOpacity"></opacity-knob>
-      <!-- Title -->
+    <!-- Fishing tracks  TODO: THIS SHOULD GO ON A HIGHER LEVEL VUE (MENU-BOTTOM-RIGHT?)-->
+    <div class="titleContainer" style="padding-right: 10px">
       <div class="clickable menuElement">
-        <onOffButton ref="onOffButton" :checked="true" :inSize="'14px'" @change="effortLayerOnOff($event)"></onOffButton>
-        <span @click="effortLayerOnOff">{{$t('Fishing effort')}}</span>
+        
+        <span @click="tracksLayerOnOff">{{$t('Fishing tracks')}}</span>
+        <onOffButton ref="onOffTracksButton" :checked="true" :inSize="'14px'" @change="tracksLayerOnOff($event)"></onOffButton>
       </div>
     </div>
+
+
+
+
+    <div id="fishingEffort-container">
+      <!-- Fishing effort -->
+      <div class="titleContainer">
+        <!-- Opacity -->
+        <opacity-knob size="25px" v-show="areOptionsVisible" @change="changeOpacity"></opacity-knob>
+        <!-- Title -->
+        <div class="clickable menuElement">
+          
+          <span @click="effortLayerOnOff">{{$t('Fishing effort')}}</span>
+          <onOffButton ref="onOffButton" :checked="true" :inSize="'14px'" @change="effortLayerOnOff($event)"></onOffButton>
+        </div>
+      </div>
       
       <!-- Fishing effort options -->
       <Transition>
@@ -76,6 +89,7 @@ export default {
   },
   data (){
     return {
+      areTracksVisible: true,
       areOptionsVisible: true,
       selUnit: 'kg',
       selYear: 2020,
@@ -97,6 +111,19 @@ export default {
   methods: {
     // USER INTERACTION
     // Layer on off
+    tracksLayerOnOff: function(e){
+      // OnOff Button was clicked
+      if (e.target.value != undefined){ 
+        this.areTracksVisible = e.target.checked;
+        // Activate layer
+        window.eventBus.emit('FishingEffort_setTracksVisible', ['fishingTracks', this.areTracksVisible]);      } 
+      // Text was clicked --> Invoke click on the element, which calls again this function
+      else {
+        this.$refs.onOffTracksButton.setChecked(!this.areTracksVisible);
+      }
+    },
+
+    
     effortLayerOnOff: function(e){
       // OnOff Button was clicked
       if (e.target.value != undefined){ 
@@ -236,6 +263,8 @@ export default {
   flex-wrap: wrap;
   align-items: flex-start;
   padding-right: 10px;
+
+  width: 100%;
 
   /* background: #00000042; */
   border-radius: 0px 10px 10px 0px;
