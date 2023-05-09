@@ -30,7 +30,8 @@
         </div>
       </div>
 
-
+      <!-- Resize button -->
+      <div class="icon-str fa" style="position: absolute; top: 10px; left: 40px" @click="maximizeMap" v-show="isMinimized">&#xf065;</div>
 
 
     </div>
@@ -602,7 +603,11 @@ export default {
         this.$refs.tracksTimeLine.setStartEndDates(dates[0], dates[1]);
     },
     
-
+    // Maximize map (only when map is minimized)
+    maximizeMap: function(e){
+      this.isMinimized = false;
+      window.eventBus.emit('Map_CloseSidePanel');
+    },
 
 
 

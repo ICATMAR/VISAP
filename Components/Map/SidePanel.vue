@@ -70,6 +70,8 @@ export default {
     window.eventBus.on('TracksTimeLine_trackClicked', this.openFishingTab);
     // Tracks loaded
     window.eventBus.on('Map_TracksLoaded', this.setFishingTracks);
+    // Close side panel
+    window.eventBus.on('Map_CloseSidePanel', this.closePanel);
 
 
 
