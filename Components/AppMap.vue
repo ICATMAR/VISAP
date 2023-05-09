@@ -4,12 +4,12 @@
     <!-- Map  container-->
     <div class="appContainer">
 
-      <div class="mapContainer">
+      <div ref="mapContainer" class="mapContainer" :class="isMapMinimized ? 'miniMap' : ''">
         <ol-map id="ol-map" ref="map"></ol-map>
         <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
         
         <!-- Buttons to switch from app -->
-        <div class="switchPanels">
+        <div class="switchPanels" v-show="!isMapMinimized">
           <!-- Buttons -->
           <button @click="changeHash('overview')" >
             <span class="fa">&#xf13d; </span>
@@ -26,14 +26,14 @@
         </div>
 
         <!-- Menu left -->
-        <menu-left></menu-left>
+        <menu-left v-show="!isMapMinimized"></menu-left>
 
         <!-- (Menu right bottom) Fishing effort map -->
-        <fishing-effort></fishing-effort>
+        <fishing-effort v-show="!isMapMinimized"></fishing-effort>
 
         <!-- Menu right top -->
         <!-- Buttons -->
-        <div class="menuTopRight">
+        <div class="menuTopRight" v-show="!isMapMinimized">
           <!-- Fishing tracks -->
           <div class="menuElement clickable" @click="tracksMenuClicked">
             <!-- Text -->
@@ -49,7 +49,9 @@
 
 
       <!-- Side panel -->
-      <side-panel ref="sidePanel"></side-panel>
+      <Transition>
+        <side-panel ref="sidePanel" v-show="isSidePanelOpen"></side-panel>
+      </Transition>
     </div>
 
 
@@ -64,7 +66,7 @@
 
   
   
-  <script>
+<script>
 
   // Import scripts
   import Map from "Components/Map/Map.vue";
@@ -79,14 +81,36 @@
 
     },
     mounted(){
+      // Resize map event
+      window.onresize = () => {
+        
+        let ww = this.$refs.mapContainer.offsetWidth;
+        let windowWidth = window.innerWidth;
+        // Window resize and open/close panel
+        if (ww < 400 && this.isSidePanelOpen) // If side panel is open minimize map
+          this.isMapMinimized = true;
+        else
+          this.isMapMinimized = false;
+        // Window resize
+        if (this.isSidePanelOpen && windowWidth > 1000)
+          this.isMapMinimized = false;
+        
+        window.eventBus.emit('AppMap_isMapMinimized', this.isMapMinimized);
 
+        
+      }
+      // Event
+      window.eventBus.on('SidePanel_isPanelOpen', (isOpen)=> {
+        this.isSidePanelOpen = isOpen;
+      });
     },
     unmounted(){
   
     },
     data(){
       return {
-
+        isMapMinimized: false,
+        isSidePanelOpen: false,
       }
     },
     methods: {
@@ -113,16 +137,16 @@
   
     }
   }
-  </script>
+</script>
   
-  <style scoped>
-  #appMap {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-  }
+<style scoped>
+#appMap {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+}
 
-  #ol-map {
+#ol-map {
   /* background: red; */
   width: 100%; 
   height: 100%;
@@ -146,6 +170,16 @@
   height: 100%;
   position: relative;
 }
+
+/* Small screen makes side panel complete */
+.miniMap {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
 
 .switchPanels {
   position:absolute;

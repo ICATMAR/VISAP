@@ -18,7 +18,7 @@
       <!-- Info container -->
       <div class="side-panel-content g-0">
         <!-- Haul info -->
-        <haul-info @selectedTrack="selectedTrack" ref="haul-info" v-show="selTab == 'tracks'">
+        <haul-info ref="haul-info" v-show="selTab == 'tracks'">
         </haul-info>
 
 
@@ -66,7 +66,8 @@ export default {
         this.openFishingTab();
     });
     // Track clicked
-    
+    window.eventBus.on('Map_trackClicked', this.openFishingTab);
+    window.eventBus.on('TracksTimeLine_trackClicked', this.openFishingTab);
 
 
 
@@ -125,6 +126,8 @@ export default {
       for (let i = 10; i<500; i+=10){
         setTimeout(() => window.dispatchEvent(new Event('resize')), i);
       }
+
+      window.eventBus.emit('SidePanel_isPanelOpen', this.isPanelOpen);
     },
     closePanel: function(){
       this.isPanelOpen = false;
@@ -137,12 +140,8 @@ export default {
         setTimeout(() => window.dispatchEvent(new Event('resize')), i);
       }
       //setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
-    },
 
-    // Event coming from HaulInfo.vue, when a track is clicked in the dropdown list.
-    selectedTrack: function(id){
-      // Emit
-      window.eventBus.emit('SidePanel_FishingTrackSelected', id);
+      window.eventBus.emit('SidePanel_isPanelOpen', this.isPanelOpen);
     },
 
 
@@ -154,11 +153,6 @@ export default {
     // OPTION 2- We consider FishingTracks class as singleton and we call it directly from HaulInfo.vue. We can make this call
     // iteratively until fishing tracks exist. Not so clean, as the tab Fishing Tracks should only exist once the fishing tracks
     // have been loaded. If there is an error with loading the fishing tracks, the tab should not exist?
-
-    // Fishing track clicked
-    fishingTrackClicked: function(id){
-      this.openFishingTab(id);
-    },
 
     // Opens the fishing tracks tab with the corresponding track id selected
     openFishingTab: function(id){
@@ -249,14 +243,20 @@ export default {
 }
 
 .collapse.show {
-  width: 40vw; 
-  min-width: 500px;
+  width: clamp(600px, 40vw, 900px); 
 }
 .collapse:not(.show){
   width: 0;
   min-width: 0;
   height: initial;
   display: block;
+}
+
+/* Small screen makes side panel complete */
+@media screen and (max-width: 1000px) {
+  .collapse.show {
+    width: 100vw;
+  }
 }
 
 

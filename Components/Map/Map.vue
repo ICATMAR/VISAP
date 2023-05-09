@@ -2,16 +2,17 @@
     <div id="app-map">
       <!-- LAYOUT -->
       <!-- OL map -->
-      <div id="map" ref="OLMap"></div>
+      <div id="map" ref="OLMap" :class="isMinimized ? 'miniMap' : ''"></div>
 
       <!-- Time Range Bar -->
-      <time-range-bar ref="timeRangeBar" id="time-range-bar" 
+      <time-range-bar v-show="!isMinimized" ref="timeRangeBar" id="time-range-bar" 
         @changeSelDates="onTimeRangeChange($event)" 
         @changeLimits="onTimeRangeChangeLimits($event)">
       </time-range-bar>
       
 
-      
+      <!-- Tracks on the timeline -->
+      <tracks-timeline v-show="!isMinimized" ref="tracksTimeLine" style="bottom: 120px; position: relative; z-index: 2"></tracks-timeline>
 
 
       <!-- OVERLAYS -->
@@ -29,17 +30,8 @@
         </div>
       </div>
 
-      <!-- Tracks on the timeline -->
-      <tracks-timeline ref="tracksTimeLine" style="bottom: 120px; position: relative; z-index: 2"></tracks-timeline>
 
-      <!-- Track info panel -->
-      <!--track-panel></track-panel-->
 
-      <!-- Legend -->
-      <!--wms-legend @legendClicked="changeStyle($event)" ref="legendWMS" class="position-absolute top-0 end-0 d-sm-flex me-2 mt-5"></wms-legend-->
-      
-      <!-- WMS graphic legend -->
-      <img v-if="WMSLegendURL != ''" id='wmsLegend' :src="WMSLegendURL">
 
     </div>
 </template>
@@ -289,6 +281,10 @@ export default {
     // Layer opacity
     window.eventBus.on('FishingEffort_setLayerOpacity', this.setEffortLayerOpacity);
     window.eventBus.on('WidgetMapOptions_setLayerOpacity', this.setLayerOpacity);
+    // Reactive interface. Map is shown on a corner
+    window.eventBus.on('AppMap_isMapMinimized', (isMinimized) => {
+      this.isMinimized = isMinimized;
+    });
   },
   umounted () {
     this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);
@@ -309,6 +305,7 @@ export default {
         isLoaded: true,
       },
       WMSLegendURL: '',
+      isMinimized: false,
     }
   },
   methods: {
@@ -857,6 +854,11 @@ export default {
   height: -webkit-calc(100% - 90px); 
   height:    -moz-calc(100% - 90px); 
   height:      -o-calc(100% - 90px);
+}
+
+.miniMap {
+  width: 100%;
+  height: 100% !important;
 }
 
 
