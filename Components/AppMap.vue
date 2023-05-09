@@ -2,51 +2,60 @@
   <div id="appMap" class="appMap">
 
     <!-- Map  container-->
-    <div class="mapContainer">
-      <ol-map id="ol-map" ref="map"></ol-map>
-        <!-- @onTrackClicked="trackClicked" 
-        @onFishingTracksLoad="fishingTracksLoad"
-      ></ol-map> -->
-      <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
-      
-      <!-- Side panel -->
-      <app-side-panel ref="sidePanel"></app-side-panel>
-        <!-- @selectedTrack='selectedTrack' 
-        @onTabClicked='sidePanelTabClicked' 
-        @onPanelTransitionEnd='sidePanelTabClicked'
-        @setEffortLayerOpacity='setEffortLayerOpacity'
-        @setEffortMap='setEffortMap'
-        @setBaseLayer='setBaseLayer'
-        @setLayerOpacity='setLayerOpacity'
-        @setClimaLayer='setClimaLayer'
-      ></app-side-panel> -->
+    <div class="appContainer">
 
-      <!-- Buttons to switch from app -->
-      <div class="switchPanels">
+      <div class="mapContainer">
+        <ol-map id="ol-map" ref="map"></ol-map>
+        <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
+        
+        <!-- Buttons to switch from app -->
+        <div class="switchPanels">
+          <!-- Buttons -->
+          <button @click="changeHash('overview')" >
+            <span class="fa">&#xf13d; </span>
+            <span class="button-text hiddenInMobile">{{ $t('Catch composition') }}</span>
+          </button>
+          <button @click="changeHash('length-freq')">
+            <span class="fa">&#xe0e3; </span>
+            <span class="button-text hiddenInMobile">{{ $t('Length frequency') }}</span>
+          </button>
+          <button class="selected">
+            <span class="fa">&#xf276; </span>
+            <span class="button-text hiddenInMobile">{{ $t('Sampling map') }}</span>
+          </button>
+        </div>
+
+        <!-- Menu left -->
+        <menu-left></menu-left>
+
+        <!-- (Menu right bottom) Fishing effort map -->
+        <fishing-effort></fishing-effort>
+
+        <!-- Menu right top -->
         <!-- Buttons -->
-        <button @click="changeHash('overview')" >
-          <span class="fa">&#xf13d; </span>
-          <span class="button-text hiddenInMobile">{{ $t('Catch composition') }}</span>
-        </button>
-        <button @click="changeHash('length-freq')">
-          <span class="fa">&#xe0e3; </span>
-          <span class="button-text hiddenInMobile">{{ $t('Length frequency') }}</span>
-        </button>
-        <button class="selected">
-          <span class="fa">&#xf276; </span>
-          <span class="button-text hiddenInMobile">{{ $t('Sampling map') }}</span>
-        </button>
+        <div class="menuTopRight">
+          <!-- Fishing tracks -->
+          <div class="menuElement clickable" @click="tracksMenuClicked">
+            <!-- Text -->
+            <span class="tracksTitle">{{ $t('Fishing tracks') }}</span>
+            <!-- Icon -->
+            <img class="icon-str tracksIcon" src="Assets/TracksIcon.png">
+            
+          </div>
+
+          <!-- Info ¿?-->
+        </div>
       </div>
+
+
+      <!-- Side panel -->
+      <side-panel ref="sidePanel"></side-panel>
     </div>
 
 
 
 
-    <!-- Menu left -->
-    <menu-left></menu-left>
-
-    <!-- Fishing effort map -->
-    <fishing-effort></fishing-effort>
+    
 
   </div>
 </template>
@@ -60,7 +69,7 @@
   // Import scripts
   import Map from "Components/Map/Map.vue";
   import AnimationCanvas from "Components/Map/AnimationCanvas.vue";
-  import AppSidePanel from "Components/AppSidePanel.vue"
+  import SidePanel from "Components/Map/SidePanel.vue"
   import MenuLeft from "Components/MenuLeft.vue"
   import FishingEffort from "Components/Map/FishingEffort.vue";
 
@@ -87,11 +96,16 @@
         window.location.setHashValue('app', appType);
       },
 
+      // USER ACTIONS
+      tracksMenuClicked: function(e){
+        window.eventBus.emit('AppMap_tracksOptionClicked');
+      }
+
     },
     components: {
       "ol-map": Map,
       "animation-canvas": AnimationCanvas,
-      "app-side-panel": AppSidePanel,
+      "side-panel": SidePanel,
       "menuLeft": MenuLeft,
       "fishing-effort": FishingEffort,
     },
@@ -118,13 +132,19 @@
   background: none;
 }
 
-.mapContainer {
+.appContainer {
   width:100%;
   height:100%;
   position:fixed;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+}
+
+.mapContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .switchPanels {
@@ -160,5 +180,36 @@
   cursor:default;
 }
 
+
+.menuTopRight {
+  position: absolute;
+  top: 80px;
+  right: 0px;
+}
+
+.menuElement {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  height: 50px;
+  
+  padding: 4px;
+  background: #00000040;
+  border-radius: 20px 0px 0px 20px;
+}
+
+.tracksIcon {
+  width: 60px;
+  height: 60px;
+}
+
+.tracksTitle {
+  display: inline-block;
+  width: 10em;
+  text-align: center;
+  font-size: clamp(0.8rem, 1.4vw, 1rem);
+}
 
   </style>

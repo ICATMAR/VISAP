@@ -1,16 +1,16 @@
 <template>
-  <div id="app-side" style="display:flex; height: 100%">
+  <div id="side-panel" style="display:flex; height: 100%">
 
     
 
     <!-- Tabs -->
-    <div class="position-relative" ref="buttonGroup" style="margin-top:50px; display:flex; flex-direction:column; height: fit-content;">
+    <div class="position-relative" ref="buttonGroup" style="margin-top:50px; display:flex; flex-direction:column; height: fit-content;" v-show="false">
       <div  class="btn tab vertical-button" :class="{active: tab.isSelected}" type="button" :title="tab.name" :id="tab.id" @click="onTabClicked" :key="tab.name" v-for="tab in tabs">
-       <!--{{tab.name}}-->
        {{ $t(tab.name)}}
       </div>
     </div>
 
+    
 
     <!-- Panel -->
     <div class="collapse width" ref="panel" :class="{show: isPanelOpen}">
@@ -57,23 +57,25 @@ import AboutPanel from "Components/About.vue"
 
 
 export default {
-  name: "app-side",
+  name: "side-panel",
   created(){
 
   },
   mounted () {
-    // Move tab buttons to be inside the window
-    // this.$refs.buttonGroup.style['margin-left'] = -this.$refs.buttonGroup.offsetHeight + 'px';
-    let tabButtonGroup = this.$refs.buttonGroup;
-    //tabButtonGroup.style['margin-left'] = - Math.max(this.$refs.buttonGroup.offsetWidth, 28) + 'px';
-    tabButtonGroup.style['margin-left'] = - this.$refs.buttonGroup.offsetWidth + 'px';
+    // EVENTS
+    // Open/close fishing tab
+    window.eventBus.on('AppMap_tracksOptionClicked', () => {
+      if (this.selTab == "tracks")
+        this.closePanel();
+      else
+        this.openFishingTab();
+    });
+    // Track clicked
+    
 
-    // When side panel is fully opened or closed, repeats the event onTabClicked
-    this.$refs.panel.addEventListener("webkitTransitionEnd", () => this.$emit('onPanelTransitionEnd')); // Code for Chrome, Safari and Opera
-    this.$refs.panel.addEventListener("transitionend", () => this.$emit('onPanelTransitionEnd')); // Standard syntax
 
 
-    // HACK Fix Force openlayers canvas to fill window -> In the previous coude I am modifing the position of the tab buttons and the canvas does not
+    // HACK Fix Force openlayers canvas to fill window -> In the previous code I am modifing the position of the tab buttons and the canvas does not
     // cover the whole window. Openlayers reacts to window resize events, therefore we can trigger the window event so that the
     // canvas fills the whole window.
     window.dispatchEvent(new Event('resize'));
@@ -150,33 +152,7 @@ export default {
       // Emit
       this.$emit('selectedTrack', id);
     },
-    // Effort panel
-    setEffortLayerOpacity: function(opacity){
-      if (this.selTab == 'effort'){ // Only when the tab is open can send events
-        this.$emit('setEffortLayerOpacity', opacity);
-        // Connect with layers panel
-        this.$refs['layers'].setFEffortOpacity(opacity);
-      }
-    },
-    setEffortMap: function(inUrl){
-      this.$emit('setEffortMap', inUrl);
-    },
-    // Layer panel
-    setBaseLayer: function(baseLayerName){
-      this.$emit('setBaseLayer', baseLayerName);
-    },
-    setLayerOpacity: function(params){
-      if (this.selTab == 'layers'){ // Only when the tab is open can send events
-        this.$emit('setLayerOpacity', params);
-        // If the layer is fishing effort, connect with tab Fishing effort
-        if (params[0] == 'fishingEffort'){
-          this.$refs['fishing-effort'].setLayerOpacity(params[1]);
-        }
-      }
-    },
-    setClimaLayer: function(urlParams){
-      this.$emit('setClimaLayer', urlParams);
-    },
+
 
     // PUBLIC METHODS
     // Set fishing tracks once loaded
@@ -198,6 +174,8 @@ export default {
 
     // Opens the fishing tracks tab with the corresponding track id selected
     openFishingTab: function(id){
+      if (id == undefined)
+        id = FishingTracks.getSelectedTrack();
       // Select tab
       // Unselect all first
       Object.keys(this.tabs).forEach(kk => this.tabs[kk].isSelected = false);
