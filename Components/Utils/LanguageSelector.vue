@@ -29,8 +29,8 @@ export default {
     } 
     // Use default navigator language if available
     else if (navigator.language.includes('es') || navigator.language.includes('en') || navigator.language.includes('ca')){
-      this.$i18n.locale = navigator.language;
-      window.location.setHashValue('lang', this.$i18n.locale.substring(0,2));
+      this.$i18n.locale = navigator.language.substring(0,2);
+      window.location.setHashValue('lang', this.$i18n.locale);
     } 
     // Default is english
     else {
