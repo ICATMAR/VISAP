@@ -68,6 +68,8 @@ export default {
     // Track clicked
     window.eventBus.on('Map_trackClicked', this.openFishingTab);
     window.eventBus.on('TracksTimeLine_trackClicked', this.openFishingTab);
+    // Tracks loaded
+    window.eventBus.on('Map_TracksLoaded', this.setFishingTracks);
 
 
 
@@ -122,7 +124,6 @@ export default {
     openPanel: function(){
       this.isPanelOpen = true;
       // HACK Fix Force openlayers canvas to fill window after 0.5 s
-      //setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
       for (let i = 10; i<500; i+=10){
         setTimeout(() => window.dispatchEvent(new Event('resize')), i);
       }
@@ -139,7 +140,6 @@ export default {
       for (let i = 10; i<500; i+=10){
         setTimeout(() => window.dispatchEvent(new Event('resize')), i);
       }
-      //setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
 
       window.eventBus.emit('SidePanel_isPanelOpen', this.isPanelOpen);
     },

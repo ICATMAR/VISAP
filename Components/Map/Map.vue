@@ -814,7 +814,7 @@ export default {
       }
 
       // Emit geojson loaded
-      this.$emit('onFishingTracksLoad', gjson);
+      window.eventBus.emit('Map_TracksLoaded', gjson);
       
       // OPTIONS:
       // PAINT IN A CANVAS -> TRANSFORM TO IMAGE -> MAKE IMAGE AS BACKGROUND OF TIMERANGE

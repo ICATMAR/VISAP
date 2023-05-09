@@ -1,9 +1,10 @@
 <template>
   <div id="appMap" class="appMap">
 
-    <!-- Map  container-->
+    <!-- App container (map and side panel)-->
     <div class="appContainer">
-
+     
+      <!-- Map container-->
       <div ref="mapContainer" class="mapContainer" :class="isMapMinimized ? 'miniMap' : ''">
         <ol-map id="ol-map" ref="map"></ol-map>
         <!-- <animation-canvas ref="animcanvas"></animation-canvas> SHOULD BE ON MAP-->
@@ -36,6 +37,8 @@
         <div class="menuTopRight" v-show="!isMapMinimized">
           <!-- Fishing tracks -->
           <div class="menuElement clickable" @click="tracksMenuClicked">
+            <!-- FA icon -->
+            <span class="fa">&#xf200;</span>
             <!-- Text -->
             <span class="tracksTitle">{{ $t('Fishing tracks') }}</span>
             <!-- Icon -->
@@ -46,7 +49,6 @@
           <!-- Info ¿?-->
         </div>
       </div>
-
 
       <!-- Side panel -->
       <Transition>
@@ -217,7 +219,7 @@
 
 .menuTopRight {
   position: absolute;
-  top: 80px;
+  top: 90px;
   right: 0px;
 }
 
@@ -245,5 +247,21 @@
   text-align: center;
   font-size: clamp(0.8rem, 1.4vw, 1rem);
 }
+
+
+
+
+.v-enter-active {
+  transition: all 0.3s ease-out;
+}
+.v-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.v-enter-from,
+.v-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
 
   </style>
