@@ -4,7 +4,7 @@
 
       <!-- Canvas with legend and interactivity -->
       <canvas @mouseover="mouseIsOver = true" @mouseleave="mouseLeftLegend()" @mousemove="updateMousePosition($event)" :width="canvasWidth" :height="canvasHeight" 
-          id="wmsLegendCanvas" ref="wmsLegendCanvas" class="img-fluid rounded" title="Click to change the colormap"></canvas>
+          id="wmsLegendCanvas" ref="wmsLegendCanvas" class="img-fluid rounded legendCanvas" title="Click to change the colormap"></canvas>
       <!-- Tooltip -->
       <div v-if=mouseIsOver class="tooltip fade show bs-tooltip-start" ref="legendTooltip"
           style="position: absolute; white-space: nowrap; inset: 0px 0px auto auto; margin: 0px; transform: translate(-30px, 125px);">
@@ -421,6 +421,10 @@ export default {
 #wmsLegendCanvas:hover {
   border: 1px solid #000000!important;
   cursor: pointer;
+}
+
+.legendCanvas {
+  pointer-events: all;
 }
 
 .tooltip {
