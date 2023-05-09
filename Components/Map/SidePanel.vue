@@ -1,23 +1,18 @@
 <template>
-  <div id="side-panel" style="display:flex; height: 100%">
-
-    
-
-    <!-- Tabs -->
-    <div class="position-relative" ref="buttonGroup" style="margin-top:50px; display:flex; flex-direction:column; height: fit-content;" v-show="false">
-      <div  class="btn tab vertical-button" :class="{active: tab.isSelected}" type="button" :title="tab.name" :id="tab.id" @click="onTabClicked" :key="tab.name" v-for="tab in tabs">
-       {{ $t(tab.name)}}
-      </div>
-    </div>
+  <div id="side-panel">
 
     
 
     <!-- Panel -->
     <div class="collapse width" ref="panel" :class="{show: isPanelOpen}">
 
-      <!-- Closing button -->
-      <div class='row m-0' style='position: relative'>
-        <button type="button" class="btn-close p-0" aria-label="Close" @click='closePanel' style='position: absolute; top: 16px; right: 16px'></button>
+      <!-- Fixed closing button and top-right menu background -->
+      <div class="bannerContainer">
+        <!-- Button -->
+        <button class="closeButton icon-str" type="button" @click='closePanel'>X</button>
+        <!--Banner -->
+        <div class="topBanner"></div>
+
       </div>
 
       <!-- Info container -->
@@ -100,27 +95,27 @@ export default {
   },
   methods: {
     // USER HTML ACTIONS
-    onTabClicked: function(event){
-      // Use id to get tab
-      let id = event.target.id;
-      let tab = this.tabs[id];
-      // If tab is selected and panel is open, close panel
-      if (tab.isSelected){
-        this.closePanel();
-      }
-      // If tab is not selected, open panel
-      else {
-        // Unselect all first
-        Object.keys(this.tabs).forEach(kk => this.tabs[kk].isSelected = false);
-        // Select tab and open panel
-        tab.isSelected = true;
-        this.selTab = id;
-        this.openPanel();
-      }
+    // onTabClicked: function(event){
+    //   // Use id to get tab
+    //   let id = event.target.id;
+    //   let tab = this.tabs[id];
+    //   // If tab is selected and panel is open, close panel
+    //   if (tab.isSelected){
+    //     this.closePanel();
+    //   }
+    //   // If tab is not selected, open panel
+    //   else {
+    //     // Unselect all first
+    //     Object.keys(this.tabs).forEach(kk => this.tabs[kk].isSelected = false);
+    //     // Select tab and open panel
+    //     tab.isSelected = true;
+    //     this.selTab = id;
+    //     this.openPanel();
+    //   }
 
-      // Emit that the panel open or closes, so that the month names in TimeRangeBar.vue can be updated
-      this.$emit('onTabClicked');
-    },
+    //   // Emit that the panel open or closes, so that the month names in TimeRangeBar.vue can be updated
+    //   this.$emit('onTabClicked');
+    // },
 
     // INTERNAL EVENTS
     openPanel: function(){
@@ -143,14 +138,11 @@ export default {
       }
       //setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
     },
+
     // Event coming from HaulInfo.vue, when a track is clicked in the dropdown list.
     selectedTrack: function(id){
-      // Change the date on the WMS Layer panel
-      if (this.$refs.layers)
-        if (this.$refs.layers.fishingTrackSelected)
-          this.$refs.layers.fishingTrackSelected(id);
       // Emit
-      this.$emit('selectedTrack', id);
+      window.eventBus.emit('SidePanel_FishingTrackSelected', id);
     },
 
 
@@ -166,10 +158,6 @@ export default {
     // Fishing track clicked
     fishingTrackClicked: function(id){
       this.openFishingTab(id);
-      // Send event to layers panel
-      if (this.$refs.layers)
-        if (this.$refs.layers.fishingTrackSelected)
-          this.$refs.layers.fishingTrackSelected(id);
     },
 
     // Opens the fishing tracks tab with the corresponding track id selected
@@ -197,8 +185,6 @@ export default {
   components: {
     "haul-info": HaulInfo,
     "about-panel": AboutPanel,
-    //"ol-map": Map,
-    //"animation-canvas": AnimationCanvas,
   },
   computed: {
   
@@ -213,22 +199,49 @@ export default {
 
 
 <style scoped>
-.vertical-button {
-  -webkit-transform: scale(-1);
-  -moz-transform: scale(-1);
-  -ms-transform: scale(-1);
-  -o-transform: scale(-1);
-  transform: scale(-1); 
-  writing-mode: vertical-lr;
-  text-orientation: sideways;
-  padding: 8px 4px 8px 4px ;
-  font-size: 12px;
-  margin-top: 2px;
-  
 
-  border-radius: 0px 12px 12px 0px;
+#side-panel {
+  display:flex;
+  height: 100%;
+  /* width: 100%; */
 }
 
+.bannerContainer {
+  position: fixed;
+  width: -webkit-fill-available;
+  top: 30px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  
+
+}
+
+.closeButton {
+  background-color: var(--darkBlue);
+  box-shadow: 0px 0px 4px 0px black;
+  border-radius: 50%;
+  color: white;
+  width: 36px;
+  height: 36px;
+  text-decoration: none;
+  padding: 4px;
+  margin-left: 10px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+.closeButton:hover{
+  background-color: var(--blue);
+}
+
+.topBanner {
+  background-image: url('Assets/BannerBackground.png');
+  height: 50px;
+  width: 150px;
+  background-size: cover;
+}
 
 .collapse {
   overflow: auto; 
@@ -244,21 +257,6 @@ export default {
   min-width: 0;
   height: initial;
   display: block;
-}
-
-.tab {
-  color: rgb(0, 0, 0);
-  background-color: #a0d7f2;
-  border-color: #72b0cf;
-  min-width: 18px;
-  max-width: 30px;
-  box-shadow: 1px 0px 2px #0a3142;
-}
-.tab.active {
-  color: rgb(0, 0, 0);
-  background-color: #7dc8e8;
-  border-color: #569ab8;
-  box-shadow: 2px 0px 5px #0a3142;
 }
 
 
