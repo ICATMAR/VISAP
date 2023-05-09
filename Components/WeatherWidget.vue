@@ -418,16 +418,4 @@ img {
   height: 32px;
   background-repeat: no-repeat;
 }
-
-/* unvisited link */
-a:link { color: #808080; }
-
-/* visited link */
-a:visited { color: #808080; }
-
-/* mouse over link */
-a:hover { color: #424242; }
-
-/* selected link */
-a:active { color: #000000; }
 </style>

@@ -101,10 +101,6 @@ export default {
               // Remove style
               html = html.replaceAll(html.substring(html.indexOf('<style'), html.indexOf('</style>') + 8), `
                 <style>
-                  a:link { color: #808080; }
-                  a:visited { color: #808080; }
-                  a:hover { color: #424242; }
-                  a:active { color: #000000; }
                 </style>
               `);
               // Change title style
