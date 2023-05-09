@@ -46,7 +46,7 @@
 
 <script>
 // Import components
-import HaulInfo from "Components/HaulInfo.vue"
+import HaulInfo from "Components/Map/HaulInfo.vue"
 import AboutPanel from "Components/About.vue"
 
 
