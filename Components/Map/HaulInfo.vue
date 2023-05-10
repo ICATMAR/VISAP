@@ -11,7 +11,7 @@
       <!-- TODO: This should be a modal with a table where you could sort by date and port. -->
       <select v-model="selTrack" @change="onSelectTrack">
         <option :id="option.Id" :key="option.Id" :value="option" v-for="option in options" >
-          {{ option.name }}
+          {{ option.Port + " - " + option.Date }}
         </option>
       </select>
     </div>
@@ -39,16 +39,15 @@
     </div>
     
     <!-- Row -->
-    <div class="rowEl p-2 g-0 darkBlue">
-      <ul>
-        <li style="list-style-position: inside;" :key="kk.Id" v-for="kk in Object.keys(selTrack)">
-          <!-- {{$tc("TrackFeatures." + kk)}}: {{selTrack[kk]}} -->
-          <!-- If is not a number -->
-          <span v-if="isNaN(selTrack[kk])">{{$tc("TrackFeatures." + kk)}}: {{$t(selTrack[kk])}}</span>
-          <!-- If it is a number -->
-          <span v-else>{{$tc("TrackFeatures." + kk, parseFloat(selTrack[kk]))}}</span>
-        </li>
-      </ul>
+    <div class="rowEl p-2 g-0 darkBlue" style="flex-wrap: wrap; justify-content:flex-start;">
+
+
+      <div style="width: 50%" :key="kk.Id" v-for="kk in Object.keys(selTrack)">
+        <!-- If is not a number -->
+        <span v-if="isNaN(selTrack[kk])">{{$tc("TrackFeatures." + kk)}}: {{$t(selTrack[kk])}}</span>
+        <!-- If it is a number -->
+        <span v-else>{{$tc("TrackFeatures." + kk, parseFloat(selTrack[kk]))}}</span>
+      </div>
     </div>
 
     <!-- Row -->
@@ -93,18 +92,18 @@ export default {
       selTrack: '',
       options: [
         { AvgDepth: "402.6",
-        Data: "2020-11-12",
-        Date: new Date("Thu Nov 12 2020 00:00:00 GMT-0800 (Pacific Standard Time)"),
+        // Data: "2020-11-12",
+        Date: "2020-11-12",//new Date("Thu Nov 12 2020 00:00:00 GMT-0800 (Pacific Standard Time)"),
         Distance: "15449.04",
         Duration: "128.17",
         Estacio: "Tardor",
-        FishingGroundName: "clot de valldepins",
         FishingGroundType: "TALÚS INFERIOR",
         Id: 15699,
-        MeshType: "Square",
+        // MeshType: "Square",
         Port: "L'Ametlla de Mar",
         ZonaPort: "Sud",
-        name: "L'Ametlla de Mar - 2020-11-12"},
+        // name: "L'Ametlla de Mar - 2020-11-12"
+      },
       ],
       showExportOptions: false,
 
@@ -217,12 +216,25 @@ export default {
       let features = gjsonData.features;
       features.forEach((ff, index) => {
         let info = ff.properties.info;
-        info.name = info.Port + " - " + info.Data;
-        this.options[index] = info;
+        //info.name = info.Port + " - " + info.Data;
+        // Select info to show
+        this.options[index] = {}
+        Object.keys(info).forEach( kk => {
+          if (kk != 'FishingGroundName' && kk!= 'MeshType')
+            this.options[index][kk] = info[kk];
+          if (kk == 'Date')
+            this.options[index][kk] = info[kk].toISOString().substring(0,10);
+        });
+        
       });
       // Order by date
       this.options.sort((a, b) => {
-          return a.Date - b.Date;
+          let dateDiff = new Date(a.Date) - new Date(b.Date);
+          
+          if (dateDiff == 0){
+            return a.Port.localeCompare(b.Port);
+          }else 
+            return dateDiff;
       });
     },
 
@@ -260,7 +272,7 @@ export default {
           this.translateData(preparedData);
         }
         
-        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Data, "Biomassa", "kg / km2");
+        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Date, "Biomassa", "kg / km2");
 
       }).catch(e => {
         if (staticFile !== undefined){ // Load static file
