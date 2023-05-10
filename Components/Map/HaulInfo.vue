@@ -71,12 +71,12 @@ export default {
   // REQUIRES FishingTracks.js
   name: "haul-info",
   created(){
+    // Default options
     this.selTrack = this.options[0];
     // Set selected fishing track
     FishingTracks.setSelectedTrack(this.selTrack.Id);
   },
-  mounted(){
-    //this.getFishingTracks();
+  mounted(){    
     this.getSelectedFishingTrack();
     // EVENTS
     // Tracks loaded
@@ -84,26 +84,22 @@ export default {
     // Track selected
     window.eventBus.on('Map_trackClicked', this.setSelectedFishingTrack);
     window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedFishingTrack);
-
   },
   data(){
     return {
       selTrack: '',
-      options: [
-        { AvgDepth: "402.6",
-        // Data: "2020-11-12",
-        Date: "2020-11-12",//new Date("Thu Nov 12 2020 00:00:00 GMT-0800 (Pacific Standard Time)"),
-        Distance: "15449.04",
-        Duration: "128.17",
-        Estacio: "Tardor",
-        FishingGroundType: "TALÚS INFERIOR",
-        Id: 15699,
-        // MeshType: "Square",
-        Port: "L'Ametlla de Mar",
-        ZonaPort: "Sud",
-        // name: "L'Ametlla de Mar - 2020-11-12"
-      },
-      ],
+      // Default options
+      options: [{
+        AvgDepth : "365.2",
+        Date : "2022-11-30",
+        Distance : "7360.59",
+        Duration : "89.68",
+        Estacio : "Autumn",
+        FishingGroundType : "Upper slope",
+        Id : 23288,
+        Port : "Barcelona",
+        ZonaPort : "Center",
+      },],
       showExportOptions: false,
 
     }
