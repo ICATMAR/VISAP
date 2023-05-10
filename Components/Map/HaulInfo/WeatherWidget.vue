@@ -2,8 +2,8 @@
   <!-- Container -->
   <div id="weather-widget" class="wcontainer p-1">
     <div>
-      <h6>Weather and sea conditions</h6>
-      Date: {{currentDate}}, Latitude: {{lat}} º, Longitude: {{long}} º
+      <h6>{{$t('Weather and sea conditions')}}</h6>
+      {{$t('Date')}}: {{currentDateHTML}}, {{$t('Latitude')}}: {{lat}} º, {{$t('Longitude')}}: {{long}} º
     </div>
     
     
@@ -14,8 +14,8 @@
         <tr>
           <td></td>
           <!-- Col for each day -->
-          <th class="wcol" style='min-width:40px' :key="dd" v-for="(dd, index) in daysString" :title="dates[index].toISOString()">
-            {{dd}}
+          <th class="wcol" style="min-width:40px" :key="dd" v-for="(dd, index) in daysString" :title="dates[index].toISOString()">
+            {{$t(dd.split(' ')[0]) + ' ' + dd.split(' ')[1]}}
           </th>
         </tr>
       </thead>
@@ -24,7 +24,7 @@
         <!-- Row -->
         <tr :key="dR.name" v-for="(dR, index) in dataRows">
           <!-- Row name -->
-          <th scope="row"><span v-show="dR.imgURL== undefined">{{dR.name}} ({{dR.units}})</span></th>
+          <th scope="row"><span v-if="dR.imgURL== undefined">{{$t(dR.name)}} ({{dR.units}})</span></th>
           <!-- Values -->
           <td class="wcol" :key="dd.key" v-for="dd in dataRows[index].data">
             <div v-if='dd.loading && !dR.imgURL' class="spinner-border text-light" style="width: 1rem; height: 1rem; position: relative;" role="status">
@@ -192,8 +192,8 @@ export default {
           color: '#6164ff'
         },
         {
-          name: "Sea temperature",
-          abbr: "Sea t",
+          name: "Sea surface temperature",
+          abbr: "SST",
           units: 'ºC',
           elevation: true, // TODO: ALLOWS 2D PLOT IF CLICKED ON THE VARIABLE NAME ▼?
           range: [10, 25],
@@ -209,7 +209,7 @@ export default {
       ],
       numDays: 7,
       daysString: [],
-      currentDate: '',
+      currentDateHTML: '',
       lat: '',
       long: '',
       selTrackId: undefined,
@@ -358,7 +358,9 @@ export default {
     updateTable: async function(inputDate, long, lat){
       this.lat = lat.toFixed(2);
       this.long = long.toFixed(2);
-      this.currentDate = inputDate.toString().substring(0,15);
+      let str = inputDate.toString().substring(0,15);
+      // Translate
+      this.currentDateHTML = this.$i18n.t(str.split(" ")[0]) + " " + this.$i18n.t(str.split(" ")[1]) + " " + str.split(" ")[2] + " " + str.split(" ")[3];
 
       // Cancel active requests
       this.dataRetriever.cancelActiveRequests();
@@ -416,6 +418,10 @@ export default {
   width: 100%;
   /* border:black;
   border-style: solid; */
+}
+
+table {
+  margin-bottom: 30px;
 }
 
 .wrow {

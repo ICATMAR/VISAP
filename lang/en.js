@@ -120,6 +120,7 @@ export default en = {
   "downloadSVG": "Download SVG vector image",
   "contextButtonTitle": "Chart context menu",
   "loading": "Loading...",
+  "Loading": "Loading",
   "downloadCSV": "Download CSV",
   "downloadXLS": "Download XLS",
   "viewData": "View data table",
