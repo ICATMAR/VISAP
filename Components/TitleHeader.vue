@@ -134,9 +134,10 @@ button {
 
 @media (max-width: 800px) {
   .h3 {
-    padding: 40px;
     font-size: max(4vw, 1rem);
-    padding-left: 40%;
+    margin-right: 85px;
+    margin-left: 141px;
+    margin-top: 40px;
   }
 
   button {

@@ -51,6 +51,29 @@ export default {
     // Store
     this.app = appType;
 
+
+    // HACK icatmar.cat WIDGETS
+    // Icon menu widget
+    let els = document.getElementsByClassName('elementor-icon');
+    if (els.length != 0){
+      let el = els[0];
+      el.style = `position: fixed; right: 45px; box-shadow: 0 0 4px black;`;
+    }
+    // ICATMAR and VISOR icons
+    els = document.getElementsByClassName('attachment-large size-large');
+    for(let i = 0; i < els.length; i++) {
+      let el = els[i];
+      el.style = `width: 70px;
+                  height: 70px;
+                  position: fixed;
+                  top: 10px;
+                  left: clamp(${30 + 40*i}px, ${5 + i*4}vw, ${50 + 50*i}px);
+                  padding: 0px;
+                  margin: 0px;`;
+    };
+    
+
+
     // EVENTS
     // Manual hash change
     window.onhashchange= (event) => {
@@ -103,6 +126,27 @@ export default {
   height: 100vh;
   position: absolute;
   overflow: hidden;
+}
+
+.icatmarIcons{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  top: 10px;
+  left: 50px;
+  background: red;
+  width: 140px;
+  height: 70px;
+}
+
+.topIcons {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  padding: 0px;
+  margin: 0px;
 }
 
 
