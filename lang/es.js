@@ -30,6 +30,8 @@ export default es  = {
   },
   "Layer visibility": "Visibilidad de la capa",
   "Data from": "Datos de",
+  "Units": "Unidades",
+  "Opacity": "Opacidad",
 
 
   "TrackFeatures": {
@@ -66,7 +68,53 @@ export default es  = {
   "West": "Oeste",
 
 
+  "Mo": "Lu",
+  "Tu": "Ma",
+  "We": "Mi",
+  "Th": "Ju",
+  "Fr": "Vi",
+  "Sa": "Sa",
+  "Su": "Do",
+  
+  "Mon": "Lu",
+  "Tue": "Ma",
+  "Wed": "Mi",
+  "Thu": "Ju",
+  "Fri": "Vi",
+  "Sat": "Sa",
+  "Sun": "Do",
 
+  "January": "Enero",
+  "February": "Febrero",
+  "March": "Marzo",
+  "April": "Abril",
+  "May": "Mayo",
+  "June": "Junio",
+  "July": "Julio",
+  "August": "Agosto",
+  "September": "Septiembre",
+  "October": "Octubre",
+  "November": "Noviembre",
+  "December": "Diciembre",
+  "Jan": "Ene",
+  // "Feb": ,
+  // "Mar": ,
+  "Apr": "Abr",
+  // "May": "May",
+  // "Jun": ,
+  // "Jul": ,
+  "Aug": "Ago",
+  // "Sep": "Sep",
+  // "Oct": ,
+  // "Nov": ,
+  "Dec": "Dic",
+
+
+  "Latitude": "Latitud",
+  "Longitude": "Longitud",
+
+
+  "Weather and sea conditions": "Condiciones meteo-oceanográficas",
   "Sea habitats": "Hábitats marinos",
   "Base layer": "Capa base",
   "Climatological layer": "Climatología",
@@ -83,12 +131,38 @@ export default es  = {
   "Current": "Corriente marino",
 
 
+  "Wave direction": "Dirección del oleaje",
+  "Wave period": "Periodo del oleaje",
+  "Sea current direction": "Dirección del corriente",
+  "Sea surface velocity": "Corriente marino",
+
+  "Waves": "Oleaje",
+  "Wave height": "Altura de oleaje",
+
+  "Swell direction": "Dirección del oleaje",
+  "Wave steepness": "Periodo",
+
+  "Wind speed": "Velocidad del viento",
+  "Wind direction": "Dirección del viento",
+  "Wave significant height": "Altura significante de oleaje",
+  "Air temperature": "Temperatura del aire",
+  "Atmospheric pressure": "Pressión atmosférica",
+  "Sea surface temperature": "Temperatura superficial del mar",
+  "Sea bottom temperature": "Temperatura del fondo del mar",
+  "Salinity": "Salinidad",
+
+
+
+
+
+
   "Catch per port": "Captura por puerto",
   "Catch per season": "Captura por estación",
   "season": "estación",
   "port": "puerto",
   "Biomass": "Biomasa",
   "Filter per species": "Filtrar por especies",
+  "Deactivate filter": "Desactivar filtro",
   "Select species": "Seleccionar especies",
   "Select all": "Seleccionar todas",
   "Deselect all": "Deseleccionar todas",
@@ -118,6 +192,7 @@ export default es  = {
   "downloadSVG": "Descargar vector SVG",
   "contextButtonTitle": "Menú del gráfico",
   "loading": "Cargando...",
+  "Loading": "Cargando",
   "downloadCSV": "Exportar datos (CSV)",
   "downloadXLS": "Exportar datos (XLS)",
   "viewData": "Mostrar tabla de datos",

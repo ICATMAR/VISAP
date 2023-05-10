@@ -28,6 +28,8 @@ export default ca = {
   },
   "Layer visibility": "Visibilitat de la capa",
   "Data from": "Dades de",
+  "Units": "Unitats",
+  "Opacity": "Opacitat",
 
 
   "TrackFeatures": {
@@ -65,6 +67,52 @@ export default ca = {
   "West": "Oest",
 
 
+  "Mo": "Dl",
+  "Tu": "Dt",
+  "We": "Dm",
+  "Th": "Dj",
+  "Fr": "Dv",
+  "Sa": "Ds",
+  "Su": "Dg",
+
+  "Mon": "Dl",
+  "Tue": "Dt",
+  "Wed": "Dm",
+  "Thu": "Dj",
+  "Fri": "Dv",
+  "Sat": "Ds",
+  "Sun": "Dg",
+
+  "January": "Gener",
+  "February": "Febrer",
+  "March": "Març",
+  "April": "Abril",
+  "May": "Maig",
+  "June": "Juny",
+  "July": "Juliol",
+  "August": "Agost",
+  "September": "Setembre",
+  "October": "Octubre",
+  "November": "Novembre",
+  "December": "Desembre",
+  "Jan": "Gen",
+  // "Feb": ,
+  // "Mar": ,
+  "Apr": "Abr",
+  "May": "Maig",
+  // "Jun": ,
+  // "Jul": ,
+  "Aug": "Ago",
+  "Sep": "Set",
+  // "Oct": ,
+  // "Nov": ,
+  "Dec": "Des",
+
+  "Latitude": "Latitud",
+  "Longitude": "Longitud",
+
+
+  "Weather and sea conditions": "Condicions meteo-oceanogràfiques",
   "Sea habitats": "Hàbitats marins",
   "Base layer": "Capa base",
   "Climatological layer": "Climatologia",
@@ -81,12 +129,35 @@ export default ca = {
   "Current": "Corrent marí",
 
 
+  "Wave direction": "Direcció de l'onatge",
+  "Wave period": "Període de l'onatge",
+  "Sea current direction": "Direcció del corrent",
+  "Sea surface velocity": "Corrient marí",
+
+
+  "Waves": "Onatge",
+  "Wave height": "Altura d'onatge",
+  "Swell direction": "Direcció de l'onatge",
+  "Wave steepness": "Període",
+
+  "Wind speed": "Velocitat del vent",
+  "Wind direction": "Direcció del vent",
+  "Wave significant height": "Altura significant d'onatge",
+  "Air temperature": "Temperatura de l'aire",
+  "Atmospheric pressure": "Pressió atmosfèrica",
+  "Sea surface temperature": "Temperatura superficial del mar",
+  "Sea bottom temperature": "Temperatura del fons del mar",
+  "Salinity": "Salinitat",
+
+
+
   "Catch per port": "Captura per port",
   "Catch per season": "Captura per estació",
   "season": "estació",
   "port": "port",
   "Biomass": "Biomassa",
   "Filter per species": "Filtrar per espècies",
+  "Deactivate filter": "Desactivar filtre",
   "Select species": "Seleccionar espècies",
   "Select all": "Seleccionar totes",
   "Deselect all": "Deseleccionar totes",
@@ -116,6 +187,7 @@ export default ca = {
   "downloadSVG": "Baixar vector SVG",
   "contextButtonTitle": "Menú del gràfic",
   "loading": "Carregant...",
+  "Loading": "Carregant",
   "downloadCSV": "Exportar dades (CSV)",
   "downloadXLS": "Exportar dades (XLS)",
   "viewData": "Mostrar taula de dades",

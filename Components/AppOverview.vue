@@ -19,8 +19,7 @@
 <script>
 
 // Import components
-//import Map from 'Components/Map.vue'
-import PiechartSection from 'Components/PiechartSection.vue'
+import PiechartSection from 'Components/CatchComposition/PiechartSection.vue'
 import TitleHeader from 'Components/TitleHeader.vue'
 
 export default {

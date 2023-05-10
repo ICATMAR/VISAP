@@ -11,7 +11,7 @@
   
   
   <script>
-  import WidgetMapOptions from "Components/WidgetMapOptions.vue"
+  import WidgetMapOptions from "Components/Map/WidgetMapOptions.vue"
 
   export default {
     name: "menuLeft",
@@ -45,9 +45,6 @@
   <style scoped>
   #menuLeft {
     position: absolute;
-    background: red;
-
-    width: 200px;
 
     top: 300px;
     bottom: 130px;
@@ -57,6 +54,14 @@
     align-items: flex-start;
     justify-content: flex-start;
 
+    pointer-events: none;
+
+  }
+
+  @media screen and  (max-width: 770px) {
+    #menuLeft {
+      top:200px;
+    }
   }
 
   </style>

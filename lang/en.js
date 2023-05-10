@@ -30,6 +30,8 @@ export default en = {
   },
   "Layer visibility": "Layer Visibility",
   "Data from": "Data from",
+  "Units": "Units",
+  "Opacity": "Opacity",
 
 
   "TrackFeatures": {
@@ -66,7 +68,7 @@ export default en = {
   "West": "West",
 
 
-
+  "Weather and sea conditions": "Weather and sea conditions",
   "Sea habitats": "Sea habitats",
   "Base layer": "Base layer",
   "Climatological layer": "Climatological layer",
@@ -118,6 +120,7 @@ export default en = {
   "downloadSVG": "Download SVG vector image",
   "contextButtonTitle": "Chart context menu",
   "loading": "Loading...",
+  "Loading": "Loading",
   "downloadCSV": "Download CSV",
   "downloadXLS": "Download XLS",
   "viewData": "View data table",

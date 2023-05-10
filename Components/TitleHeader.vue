@@ -10,9 +10,18 @@
         <!-- App buttons -->
         <div class="switchPanels">
             <!-- Buttons -->
-            <button :class="{selected: title=='Catch composition'}"  @click="changeHash('overview')">{{ $t('Catch composition') }}</button>
-            <button :class="{selected: title=='Length frequency'}" @click="changeHash('length-freq')">{{ $t('Length frequency') }}</button>
-            <button @click="changeHash('map')">{{ $t('Sampling map') }}</button>
+            <button :class="{selected: title=='Catch composition'}"  @click="changeHash('overview')">
+              <span class="fa">&#xf13d; </span>
+              <span class="button-text">{{ $t('Catch composition') }}</span>
+            </button>
+            <button :class="{selected: title=='Length frequency'}" @click="changeHash('length-freq')">
+              <span class="fa">&#xe0e3; </span>
+              <span class="button-text">{{ $t('Length frequency') }}</span>
+            </button>
+            <button @click="changeHash('map')">
+              <span class="fa">&#xf276; </span>
+              <span class="button-text">{{ $t('Sampling map') }}</span>
+            </button>
         </div>
 
         <!-- White background-->
