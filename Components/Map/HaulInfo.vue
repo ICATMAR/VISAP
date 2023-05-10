@@ -198,7 +198,7 @@ export default {
         // Select info to show
         this.options[index] = {}
         Object.keys(info).forEach( kk => {
-          if (kk != 'FishingGroundName' && kk!= 'MeshType')
+          if (kk != 'FishingGroundName' && kk!= 'MeshType' && kk!='Date' && kk!='Data')
             this.options[index][kk] = info[kk];
           if (kk == 'Date')
             this.options[index][kk] = info[kk].toISOString().substring(0,10);
