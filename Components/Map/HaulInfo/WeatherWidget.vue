@@ -336,7 +336,7 @@ export default {
         //'background': color + alpha.toString(16).split('.')[0],
         'background-image': 'url('+ dR.imgURL +')',
         'background-position': cssPosition + 'px 0',
-        transform: 'scale(1)',
+        // transform: 'scale(1)',
       }
     },
 

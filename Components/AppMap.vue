@@ -180,6 +180,7 @@
   position: absolute;
   bottom: 0px;
   right: 0px;
+  z-index: 1;
 }
 
 
