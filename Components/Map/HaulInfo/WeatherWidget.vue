@@ -27,7 +27,7 @@
           <th scope="row"><span v-show="dR.imgURL== undefined">{{dR.name}} ({{dR.units}})</span></th>
           <!-- Values -->
           <td class="wcol" :key="dd.key" v-for="dd in dataRows[index].data">
-            <div v-if='dd.loading' class="spinner-border text-dark" style="width: 1rem; height: 1rem; position: relative;" role="status">
+            <div v-if='dd.loading' class="spinner-border text-light" style="width: 1rem; height: 1rem; position: relative;" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
             <div v-else-if='dR.direction' :style="{'transform': 'rotate('+ (-dd.value - 90) +'deg)'}" :title="dd.value + 'º'">&#10140;</div>
@@ -76,14 +76,11 @@ export default {
       for (let i = 0; i < this.numDays; i++)
         dr.data[i] = {value: '', loading: true, key: dr.name ? dr.name + i : dr.key + i};
     });
- 
-    
-    // Update table
-    // this.updateTable(new Date(2020, 10, 12), 0.98, 40.78); // Preselected track
-    
-    
   },
   mounted(){
+    // EVENTS
+    // Panel open
+    window.eventBus.on('SidePanel_isPanelOpen', this.panelStateChanged)
   },
   unmounted(){
 
@@ -100,7 +97,6 @@ export default {
           source: 'Wind',
           signRange: [5,15],
           color: '#6164ff',
-          
         },
         { 
           name: "Wind direction",
@@ -216,6 +212,7 @@ export default {
       currentDate: '',
       lat: '',
       long: '',
+      selTrackId: undefined,
 
     }
   },
@@ -226,8 +223,16 @@ export default {
     },
 
     // PRIVATE METHODS
+    panelStateChanged: function(isPanelOpen){
+      if (isPanelOpen){
+        // Get selected track id
+        let selId = FishingTracks.getSelectedTrack();
+        this.requestDataUpdate(selId);
+      }
+    },
+
+
     getData: function(lat, long){
-      return;
       // Get data
       this.dataRows.forEach((rr, rIndex) => {
         this.dates.forEach((date, dIndex) => {
@@ -350,9 +355,6 @@ export default {
     },
 
 
-
-
-    // PUBLIC METHODS
     updateTable: function(inputDate, long, lat){
       this.lat = lat.toFixed(2);
       this.long = long.toFixed(2);
@@ -370,7 +372,27 @@ export default {
       this.dataRetriever.cancelActiveRequests();
       // Update data
       this.getData(lat, long);
-    }
+    },
+
+
+
+
+
+
+    // PUBLIC METHODS
+    requestDataUpdate(id){
+      // Is selected track different from previously loaded?
+      if (id != this.selTrackId){
+        // If so, load new data
+        this.selTrack = FishingTracks.getFeatureById(id);
+        this.selTrackId = id;
+        let coords = this.selTrack.geometry.coordinates;
+        let middleCoordinate = [...coords[Math.round(coords.length/2)]]; // copy
+        this.updateTable(this.selTrack.properties.info.Date, middleCoordinate[0], middleCoordinate[1]);
+      }
+    },
+
+    
     
 
   },

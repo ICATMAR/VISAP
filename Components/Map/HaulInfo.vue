@@ -278,6 +278,9 @@ export default {
     // Set the selected fishing track in the select html element
     // Vue automatically updates the HTML element
     setSelectedFishingTrack: function(id){
+      if (id == this.selTrack.id)
+        return;
+
       this.options.forEach(oo =>{
         if (id == oo.Id)
           this.selTrack = oo;
@@ -286,10 +289,11 @@ export default {
       this.setPieChart(id);
       // Update weather table
       if (this.$refs.weatherWidget){
+        this.$refs.weatherWidget.requestDataUpdate(id);
         // Get date, long, and lat
-        let coords = FishingTracks.getFeatureById(id).geometry.coordinates;
-        let middleCoordinate = [...coords[Math.round(coords.length/2)]]; // copy
-        this.$refs.weatherWidget.updateTable(new Date(this.selTrack.Date), middleCoordinate[0], middleCoordinate[1]);
+        // let coords = FishingTracks.getFeatureById(id).geometry.coordinates;
+        // let middleCoordinate = [...coords[Math.round(coords.length/2)]]; // copy
+        // this.$refs.weatherWidget.updateTable(new Date(this.selTrack.Date), middleCoordinate[0], middleCoordinate[1]);
       }
       // Update sea habitat table
       if (this.$refs.seaHabitat){

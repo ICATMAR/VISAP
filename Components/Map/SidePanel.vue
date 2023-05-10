@@ -97,28 +97,6 @@ export default {
     }
   },
   methods: {
-    // USER HTML ACTIONS
-    // onTabClicked: function(event){
-    //   // Use id to get tab
-    //   let id = event.target.id;
-    //   let tab = this.tabs[id];
-    //   // If tab is selected and panel is open, close panel
-    //   if (tab.isSelected){
-    //     this.closePanel();
-    //   }
-    //   // If tab is not selected, open panel
-    //   else {
-    //     // Unselect all first
-    //     Object.keys(this.tabs).forEach(kk => this.tabs[kk].isSelected = false);
-    //     // Select tab and open panel
-    //     tab.isSelected = true;
-    //     this.selTab = id;
-    //     this.openPanel();
-    //   }
-
-    //   // Emit that the panel open or closes, so that the month names in TimeRangeBar.vue can be updated
-    //   this.$emit('onTabClicked');
-    // },
 
     // INTERNAL EVENTS
     openPanel: function(){
@@ -198,11 +176,12 @@ export default {
 .bannerContainer {
   position: fixed;
   width: -webkit-fill-available;
-  top: 30px;
+  top: 25px;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   
 
 }
@@ -227,9 +206,10 @@ export default {
 
 .topBanner {
   background-image: url('Assets/BannerBackground.png');
-  height: 50px;
+  height: 61px;
   width: 150px;
-  background-size: cover;
+  background-size: auto;
+  background-repeat: round;
 }
 
 .collapse {
