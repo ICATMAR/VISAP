@@ -1,13 +1,13 @@
 <template>
-  <div id="haul-info" class="p-4 container-fluid">
+  <div id="haul-info" class="container-fluid">
     <!-- Empty space top -->
-    <div style="height: 90px;"></div>
+    <div class="lightBlue" style="height: 90px;"></div>
     <!-- Row -->
-    <div class="row p-3">
+    <div class="rowEl p-3 lightBlue">
       <h4>{{$t('Fishing tracks')}}</h4>
     </div>
     <!-- Row -->
-    <div class="row p-3 g-0">
+    <div class="rowEl p-3 g-0 lightBlue">
       <!-- TODO: This should be a modal with a table where you could sort by date and port. -->
       <select v-model="selTrack" @change="onSelectTrack">
         <option :id="option.Id" :key="option.Id" :value="option" v-for="option in options" >
@@ -16,7 +16,7 @@
       </select>
     </div>
     <!-- Row -->
-    <div class="row p-3">
+    <div class="rowEl p-3" style="background:white; justify-content: space-around !important;">
       <h4>{{$t('Catch composition')}}</h4>
       <!-- Export buttons -->
       <!-- Export data button -->
@@ -35,11 +35,11 @@
 
     </div>
     <!-- Row -->
-    <div class="row p-2 g-0" ref="pieChart">
+    <div class="rowEl p-2 g-0" style="background: white" ref="pieChart">
     </div>
     
     <!-- Row -->
-    <div class="row p-2 g-0">
+    <div class="rowEl p-2 g-0 darkBlue">
       <ul>
         <li style="list-style-position: inside;" :key="kk.Id" v-for="kk in Object.keys(selTrack)">
           <!-- {{$tc("TrackFeatures." + kk)}}: {{selTrack[kk]}} -->
@@ -52,12 +52,12 @@
     </div>
 
     <!-- Row -->
-    <div class="row p-2 g-0">
+    <div class="rowEl p-2 g-0">
       <weather-widget ref="weatherWidget"></weather-widget>
     </div>
 
     <!-- Row -->
-    <div class="row p-2 g-0">
+    <div class="rowEl p-2 g-0">
       <sea-habitat ref="seaHabitat"></sea-habitat>
     </div>
   </div>
@@ -134,7 +134,6 @@ export default {
     },
     // https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
     exportJSON: function(event){
-      
       this.showExportOptions = false;
       // Data not yet loaded
       if (this.rawData === undefined)
@@ -144,7 +143,8 @@ export default {
       let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
       let linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
-      linkElement.setAttribute('download', this.$i18n.t('Catch composition') + ' (' + this.$i18n.t(this.type) + ')_ICATMAR');
+      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.name.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '');
+      linkElement.setAttribute('download', trackFileName + '_ICATMAR');
       linkElement.click();
     },
 
@@ -179,7 +179,8 @@ export default {
       let dataUri = 'data:text/csv;charset=utf-8,'+ encodeURIComponent(csvStr);
       let linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
-      linkElement.setAttribute('download', this.$i18n.t('Catch composition') + ' (' + this.$i18n.t(this.type) + ')_ICATMAR');
+      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.name.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '');
+      linkElement.setAttribute('download', trackFileName + '_ICATMAR');
       linkElement.click();
     },
   
@@ -331,6 +332,26 @@ export default {
 <style scoped>
 #haul-info {
   font-size:12px;
+}
+
+#haul-info > div {
+  padding: 1.5rem !important;
+}
+
+.rowEl {
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.lightBlue {
+  background: var(--lightBlue);
+  color: white;
+  text-shadow: 0 0 4px black;
+}
+.darkBlue {
+  background: var(--darkBlue);
+  color: white;
+  text-shadow: 0 0 4px black;
 }
 
 select {
