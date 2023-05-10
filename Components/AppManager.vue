@@ -54,8 +54,8 @@ export default {
 
     // HACK icatmar.cat WIDGETS
     // Icon menu widget
-    window.onload(this.modifyICATMARsIcons);
     setTimeout(this.modifyICATMARsIcons, 1000);
+    setTimeout(this.modifyICATMARsIcons, 5000);
     
 
 
