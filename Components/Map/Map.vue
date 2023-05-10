@@ -273,6 +273,7 @@ export default {
     });
     // Click on track
     window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedTrack);
+    window.eventBus.on('HaulInfo_SelectedTrack', this.setSelectedTrack);
     // Set fishing effort map
     window.eventBus.on('FishingEffort_EffortChanged', this.setEffortMap);
     // Layer visibility

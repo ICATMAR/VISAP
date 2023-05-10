@@ -79,7 +79,7 @@ export default {
  
     
     // Update table
-    this.updateTable(new Date(2020, 10, 12), 40.78, 0.98); // Preselected track
+    // this.updateTable(new Date(2020, 10, 12), 0.98, 40.78); // Preselected track
     
     
   },
@@ -353,7 +353,7 @@ export default {
 
 
     // PUBLIC METHODS
-    updateTable: function(inputDate, lat, long){
+    updateTable: function(inputDate, long, lat){
       this.lat = lat.toFixed(2);
       this.long = long.toFixed(2);
       this.currentDate = inputDate.toString().substring(0,15);

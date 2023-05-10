@@ -2,11 +2,11 @@
   <div id="haul-info" class="container-fluid">
     <!-- Empty space top -->
     <div class="lightBlue" style="height: 90px;"></div>
-    <!-- Row -->
+    <!-- Title -->
     <div class="rowEl p-3 lightBlue">
       <h4>{{$t('Fishing tracks')}}</h4>
     </div>
-    <!-- Row -->
+    <!-- Drop down -->
     <div class="rowEl p-3 g-0 lightBlue">
       <!-- TODO: This should be a modal with a table where you could sort by date and port. -->
       <select v-model="selTrack" @change="onSelectTrack">
@@ -15,7 +15,7 @@
         </option>
       </select>
     </div>
-    <!-- Row -->
+    <!-- Catch composition title -->
     <div class="rowEl p-3" style="background:white; justify-content: space-around !important;">
       <h4>{{$t('Catch composition')}}</h4>
       <!-- Export buttons -->
@@ -34,14 +34,12 @@
 
 
     </div>
-    <!-- Row -->
+    <!-- Pie chart -->
     <div class="rowEl p-2 g-0" style="background: white" ref="pieChart">
     </div>
     
-    <!-- Row -->
+    <!-- Haul info -->
     <div class="rowEl p-2 g-0 darkBlue" style="flex-wrap: wrap; justify-content:flex-start;">
-
-
       <div style="width: 50%" :key="kk.Id" v-for="kk in Object.keys(selTrack)">
         <!-- If is not a number -->
         <span v-if="isNaN(selTrack[kk])">{{$tc("TrackFeatures." + kk)}}: {{$t(selTrack[kk])}}</span>
@@ -50,13 +48,13 @@
       </div>
     </div>
 
-    <!-- Row -->
-    <div class="rowEl p-2 g-0">
+    <!-- Weather widget -->
+    <div class="rowEl p-2 g-0" style="background: var(--lightBlue); color: white; text-shadow: 0 0 4px black;">
       <weather-widget ref="weatherWidget"></weather-widget>
     </div>
 
     <!-- Row -->
-    <div class="rowEl p-2 g-0">
+    <div class="rowEl p-2 g-0" style="background: var(--blue); color: white; text-shadow: 0 0 4px black;">
       <sea-habitat ref="seaHabitat"></sea-habitat>
     </div>
   </div>
@@ -66,8 +64,8 @@
 
 
 <script>
-import WeatherWidget from 'Components/WeatherWidget.vue';
-import SeaHabitat from 'Components/SeaHabitat.vue';
+import WeatherWidget from 'Components/Map/HaulInfo/WeatherWidget.vue';
+import SeaHabitat from 'Components/Map/HaulInfo/SeaHabitat.vue';
 
 export default {
   // REQUIRES FishingTracks.js
@@ -80,12 +78,13 @@ export default {
   mounted(){
     //this.getFishingTracks();
     this.getSelectedFishingTrack();
-  },
-  unmounted(){
-    // Deselect fishing track
-    FishingTracks.setSelectedTrack(undefined);
-    // Emit undefined id
-    this.$emit('selectedTrack', undefined);
+    // EVENTS
+    // Tracks loaded
+    window.eventBus.on('Map_TracksLoaded', this.setFishingTracks);
+    // Track selected
+    window.eventBus.on('Map_trackClicked', this.setSelectedFishingTrack);
+    window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedFishingTrack);
+
   },
   data(){
     return {
@@ -119,8 +118,11 @@ export default {
       // Set on FishingTracks 
       FishingTracks.setSelectedTrack(id);
 
+      // Update HaulInfo content
+      this.setSelectedFishingTrack(id);
+
       // Emit selected target
-      this.$emit('selectedTrack', id);
+      window.eventBus.emit('HaulInfo_SelectedTrack', id);
     },
     // Export data
     exportButtonClicked: function(e){
@@ -186,31 +188,7 @@ export default {
 
 
     // PRIVATE METHODS
-    // Get Fishing Tracks from FishingTracks.js
-    // getFishingTracks: function(){
-    //   // Get geojson from FishingTracks
-    //   let gjsonData= FishingTracks.getGeoJSON();
-    //   // If data is not loaded yet --> DIRTY HACK. THIS SHOULD BE A SET FROM CALLBACK INSIDE FISHING TRACKS?
-    //   if (gjsonData.features.length === 0){
-    //     // Set timeout and try again
-    //     setTimeout(this.getFishingTracks, 1000);
-    //   } else {
-    //     console.log("Fishing tracks loaded.");
-    //   }
-    //   // Process features to fit into select HTML
-    //   let features = gjsonData.features;
-    //   features.forEach((ff, index) => {
-    //     let info = ff.properties.info;
-    //     info.name = info.Port + " - " + info.Data;
-    //     this.options[index] = info;
-    //   });
-    //   // Order by date
-    //   this.options.sort((a, b) => {
-    //       return a.Date - b.Date;
-    //   });
-    // },
-
-    // Set Fishing tracks once they are loaded
+    // Set Fishing track menu once they are loaded
     setFishingTracks: function(gjsonData){
       // Process features to fit into select HTML
       let features = gjsonData.features;
@@ -250,11 +228,7 @@ export default {
     // Create and set pie chart
     setPieChart: function(id){
       // Load haul from server or from file
-      if (window.serverConnection)
-        this.getHaul("http://localhost:8080/haulSpecies?HaulId=" + id, 'data/hauls/' + id + '.json', this.selTrack);
-      else
-        this.getHaul('data/hauls/' + id + '.json', undefined, this.selTrack);
-      
+      this.getHaul('data/hauls/' + id + '.json', undefined, this.selTrack);
     },
 
 
@@ -312,10 +286,10 @@ export default {
       this.setPieChart(id);
       // Update weather table
       if (this.$refs.weatherWidget){
-        // Get date, lat, and long
+        // Get date, long, and lat
         let coords = FishingTracks.getFeatureById(id).geometry.coordinates;
         let middleCoordinate = [...coords[Math.round(coords.length/2)]]; // copy
-        this.$refs.weatherWidget.updateTable(new Date(this.selTrack.Date), middleCoordinate[1], middleCoordinate[0]);
+        this.$refs.weatherWidget.updateTable(new Date(this.selTrack.Date), middleCoordinate[0], middleCoordinate[1]);
       }
       // Update sea habitat table
       if (this.$refs.seaHabitat){
@@ -368,6 +342,9 @@ export default {
 
 select {
   border-radius: 10px;
+  width: 350px;
+  text-align: center;
+  font-size: 0.95rem;
 }
 
 .dropdown-content {

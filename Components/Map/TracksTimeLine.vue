@@ -37,7 +37,9 @@ export default {
 
   },
   mounted () {
-
+    // EVENTS
+    window.eventBus.on('HaulInfo_SelectedTrack', this.showSelectedTrack);
+    window.eventBus.on('Map_trackClicked', this.showSelectedTrack);
   },
   data () {
     return {

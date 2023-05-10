@@ -68,8 +68,6 @@ export default {
     // Track clicked
     window.eventBus.on('Map_trackClicked', this.openFishingTab);
     window.eventBus.on('TracksTimeLine_trackClicked', this.openFishingTab);
-    // Tracks loaded
-    window.eventBus.on('Map_TracksLoaded', this.setFishingTracks);
     // Close side panel
     window.eventBus.on('Map_CloseSidePanel', this.closePanel);
 
@@ -171,11 +169,6 @@ export default {
       // Open panel if it is not open already
       this.openPanel();
     },
-
-    // Set the fishing tracks once they are loaded. This event comes from Map.vue
-    setFishingTracks: function(geojson){
-      this.$refs["haul-info"].setFishingTracks(geojson);
-    }
 
   },
   components: {
