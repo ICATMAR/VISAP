@@ -74,7 +74,7 @@
   import Map from "Components/Map/Map.vue";
   import AnimationCanvas from "Components/Map/AnimationCanvas.vue";
   import SidePanel from "Components/Map/SidePanel.vue"
-  import MenuLeft from "Components/MenuLeft.vue"
+  import MenuLeft from "Components/Map/MenuLeft.vue"
   import FishingEffort from "Components/Map/FishingEffort.vue";
 
   export default {
@@ -186,7 +186,7 @@
 
 .switchPanels {
   position:absolute;
-  margin-top: 150px;
+  margin-top: 100px;
   top: 0px;
   
   display: flex;
