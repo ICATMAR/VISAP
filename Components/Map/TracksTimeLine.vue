@@ -23,7 +23,7 @@ export default {
   name: "tracks-timeline",
   created(){
     this.portOrder= {
-      "Sant Carles de la Ràpita": 9,
+      "La Ràpita": 9,
       "L'Ametlla de Mar": 8,
       "Tarragona": 7,
       "Vilanova i la Geltrú": 6,
