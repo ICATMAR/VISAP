@@ -549,7 +549,13 @@ dataTypes = {
 
     // Find data type with that name
     let dataType = undefined;
-    Object.keys(this.dataTypes).forEach(dKey => { if (dKey == dataName) dataType = this.dataTypes[dKey] });
+    Object.keys(this.dataTypes).forEach(dKey => {
+      this.dataTypes[dKey].altNames.forEach(altN => {
+        if (altN.toLowerCase() == dataName.toLowerCase())
+          dataType = this.dataTypes[dKey];
+      });
+       if (dKey.toLowerCase() == dataName.toLowerCase()) dataType = this.dataTypes[dKey];
+    });
     if (dataType == undefined){
       console.error("Data type does not exists: " + dataName);
       return;
