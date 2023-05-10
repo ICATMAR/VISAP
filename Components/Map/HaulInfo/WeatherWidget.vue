@@ -14,7 +14,7 @@
         <tr>
           <td></td>
           <!-- Col for each day -->
-          <th class="wcol" style='min-width: 40px' :key="dd" v-for="(dd, index) in daysString" :title="dates[index].toISOString()">
+          <th class="wcol" style='min-width:40px' :key="dd" v-for="(dd, index) in daysString" :title="dates[index].toISOString()">
             {{dd}}
           </th>
         </tr>
@@ -27,7 +27,7 @@
           <th scope="row"><span v-show="dR.imgURL== undefined">{{dR.name}} ({{dR.units}})</span></th>
           <!-- Values -->
           <td class="wcol" :key="dd.key" v-for="dd in dataRows[index].data">
-            <div v-if='dd.loading' class="spinner-border text-light" style="width: 1rem; height: 1rem; position: relative;" role="status">
+            <div v-if='dd.loading && !dR.imgURL' class="spinner-border text-light" style="width: 1rem; height: 1rem; position: relative;" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
             <div v-else-if='dR.direction' :style="{'transform': 'rotate('+ (-dd.value - 90) +'deg)'}" :title="dd.value + 'º'">&#10140;</div>
@@ -355,10 +355,15 @@ export default {
     },
 
 
-    updateTable: function(inputDate, long, lat){
+    updateTable: async function(inputDate, long, lat){
       this.lat = lat.toFixed(2);
       this.long = long.toFixed(2);
       this.currentDate = inputDate.toString().substring(0,15);
+
+      // Cancel active requests
+      this.dataRetriever.cancelActiveRequests();
+      // Pause execution so the requests are aborted and the img error events are triggered (img.src=''; img.onerror)
+      await new Promise((resolve) => setTimeout(resolve, 200));
       // Reset loading
       this.dataRows.forEach(dr => {
         for (let i = 0; i < this.numDays; i++){
@@ -368,8 +373,6 @@ export default {
       });
       // Create dates
       this.createDates(inputDate);
-      // Cancel active requests
-      this.dataRetriever.cancelActiveRequests();
       // Update data
       this.getData(lat, long);
     },
