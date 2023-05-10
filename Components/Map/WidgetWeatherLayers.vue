@@ -73,6 +73,8 @@
 
       // PRIVATE METHODS
       updateClimaLayer: function(){
+        if (this.selClimaLayer == undefined || this.selClimaLayer == '')
+          return
         // Get date
         let ff = FishingTracks.getFeatureById(FishingTracks.getSelectedTrack());
         this.currentDate = ff.properties.info.Data;
