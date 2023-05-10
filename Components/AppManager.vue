@@ -57,6 +57,12 @@ export default {
       // event.newURL, event.oldURL
       let appType = window.location.getHashValue('app');
       this.app = appType;
+      // When using the other apps, if the window is resized, map does not load. Force it here with a window resize event.
+      if (appType == 'map'){
+        // HACK Fix Force openlayers canvas to fill window after 0.5 s
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
+        
+      }
     }
 
   },
