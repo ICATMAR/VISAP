@@ -105,7 +105,7 @@
       createGraph: function(data){
         
         // Create search list
-        let species = this.getUnique(data, "NomEspecie"); // Useful to create species selector
+        let species = this.getUnique(data, "ScientificName"); // Useful to create species selector
 
 
         // Get data for a specific species for first chart
@@ -279,9 +279,9 @@
       // Prepares the data for the highchart (getDataForSpecieX was the name before)
       prepareDataForHighChart: function(inData, inSpecies) {
         // Select the data from a species
-        let dataSelSpecies = inData.filter((item) => item.NomEspecie == inSpecies);
+        let dataSelSpecies = inData.filter((item) => item.ScientificName == inSpecies);
         // Categories (sizes)
-        let categories = this.getUnique(dataSelSpecies, "Talla"); // Important to create X axis
+        let categories = this.getUnique(dataSelSpecies, "Size"); // Important to create X axis
         categories.forEach((cat, index) => categories[index] = parseFloat(cat)); // Transform into numbers
         categories.sort((a, b) => a - b); // Sort
         // Abundance per size
@@ -305,8 +305,8 @@
         let numInd = [];
         inData.forEach(item => {
           // Find the category index
-          let catIndex = categories.findIndex((catItem) => catItem == item.Talla);
-          numInd[catIndex] = numInd[catIndex] === undefined ? parseFloat(item.Abundancia_NIndividus_Km2) : numInd[catIndex] + parseFloat(item.Abundancia_NIndividus_Km2);
+          let catIndex = categories.findIndex((catItem) => catItem == item.Size);
+          numInd[catIndex] = numInd[catIndex] === undefined ? parseFloat(item.Abundance_NSpecimen_Km2) : numInd[catIndex] + parseFloat(item.Abundance_NSpecimen_Km2);
         })
         return numInd;
       },
