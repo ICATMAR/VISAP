@@ -57,7 +57,7 @@ export default {
 #seaHabitats {
   display:flex;
   flex-direction: column;
-
+  pointer-events: all;
 }
 
 span {
