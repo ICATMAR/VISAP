@@ -46,7 +46,7 @@
   #menuLeft {
     position: absolute;
 
-    top: 250px;
+    top: 300px;
     bottom: 130px;
 
     display: flex;
@@ -60,7 +60,7 @@
 
   @media screen and  (max-width: 770px) {
     #menuLeft {
-      top: 150px;
+      top: 200px;
     }
   }
 
