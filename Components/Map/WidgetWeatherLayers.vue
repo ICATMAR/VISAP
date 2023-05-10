@@ -155,6 +155,7 @@
   .wrapText {
     inline-size: 190px;
     overflow-wrap: break-word;
+    pointer-events: all;
   }
   
   
