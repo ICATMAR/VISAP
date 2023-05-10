@@ -134,26 +134,5 @@ export default {
   overflow: hidden;
 }
 
-.icatmarIcons{
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: center;
-  top: 10px;
-  left: 50px;
-  background: red;
-  width: 140px;
-  height: 70px;
-}
-
-.topIcons {
-  width: 70px;
-  height: 70px;
-  position: absolute;
-  padding: 0px;
-  margin: 0px;
-}
-
 
 </style>
