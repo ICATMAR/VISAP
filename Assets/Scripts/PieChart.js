@@ -145,13 +145,13 @@ class PieChart {
 	  function clicked(event, p) {
 
 			// Create pop-up with length frequency for specie
-			if (p.children === undefined){
-				if (p.depth < 3) // No depth (only commercial/rebuig/restes)
-					that.sizeChart.createGraphInterface(p.data.species, p.parent.parent.data.name, undefined, event); // Port or Season, Zona or Year
-				else
-					that.sizeChart.createGraphInterface(p.data.species, p.parent.parent.data.name, p.parent.parent.parent.data.name, event); // Port or Season, Zona or Year
-				return;
-			}
+			// if (p.children === undefined){
+			// 	if (p.depth < 3) // No depth (only commercial/rebuig/restes)
+			// 		that.sizeChart.createGraphInterface(p.data.species, p.parent.parent.data.name, undefined, event); // Port or Season, Zona or Year
+			// 	else
+			// 		that.sizeChart.createGraphInterface(p.data.species, p.parent.parent.data.name, p.parent.parent.parent.data.name, event); // Port or Season, Zona or Year
+			// 	return;
+			// }
 
 			parent.datum(p.parent || root);
 
