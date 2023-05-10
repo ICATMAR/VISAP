@@ -5,7 +5,7 @@
 
         <!-- One row containing two columns. Col1 is start-end info. Col2 is timeline-->
         <div class="row justify-content-start m-0" style="flex-wrap: nowrap">
-          <div class="col-sm-2 p-0" style="max-width: 130px; min-width: 130px">
+          <div class="col-sm-2 p-0 hiddenInMobile" style="max-width: 130px; min-width: 130px">
             <!-- Start and ending date -->
             <div class="infoStartEndDate p-2 h-100 notextselect">
               <div><b>Start:</b> {{startStr}}</div>
@@ -29,7 +29,7 @@
 
             <!-- Month calendar -->
             <div class="timeline" ref="monthTimeline">
-              <button v-for="mm in months" class="m-0 p-0" :class="[mm.ww == 0 ? 'hiddenClass' : 'monthButton']" @click="onMonthClicked($event)" :key="mm.key" :id="mm.key" :title="mm.title" :style="{width: mm.ww + '%'}">{{mm.name}}</button>
+              <button v-for="mm in months" class="m-0 p-0" :class="[mm.ww == 0 ? 'hiddenClass' : 'monthButton']" @click="onMonthClicked($event)" :key="mm.key" :id="mm.key" :title="mm.title" :style="{width: mm.ww + '%'}">{{$t(mm.name)}}</button>
             </div>
 
           </div>

@@ -164,6 +164,15 @@ export default {
   box-shadow: 0 -1px 2px rgba(160, 215, 242,0.8);
 }
 
+@media screen and (max-width: 770px) {
+  #tracks-timeline{
+    width: 100%;
+  }
+  .tracksContainer{
+    left: 0px;
+  }
+}
+
 .trackMark {
   position: absolute;
   font-size: 0.5rem;

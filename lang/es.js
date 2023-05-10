@@ -162,6 +162,7 @@ export default es  = {
   "port": "puerto",
   "Biomass": "Biomasa",
   "Filter per species": "Filtrar por especies",
+  "Deactivate filter": "Desactivar filtro",
   "Select species": "Seleccionar especies",
   "Select all": "Seleccionar todas",
   "Deselect all": "Deseleccionar todas",

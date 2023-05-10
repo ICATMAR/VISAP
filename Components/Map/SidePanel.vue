@@ -175,7 +175,7 @@ export default {
 
 .bannerContainer {
   position: fixed;
-  width: -webkit-fill-available;
+  width: inherit;
   top: 25px;
 
   display: flex;

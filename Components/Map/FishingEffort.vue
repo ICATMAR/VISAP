@@ -100,7 +100,7 @@ export default {
         'euros': '&#xf153;',//'€',
         'hours': '&#xf017;'
       },
-      years: [2019, 2020, 2021, 2022],
+      years: [2019, 2020, 2021],
 
       // Mouse over in Map makes the legend react
       bbox: [-1, 39, 6, 44], // HARDCODED-> DEPENDS ON THE FISHING EFFORT IMAGE

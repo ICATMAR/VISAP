@@ -157,6 +157,7 @@ export default ca = {
   "port": "port",
   "Biomass": "Biomassa",
   "Filter per species": "Filtrar per espècies",
+  "Deactivate filter": "Desactivar filtre",
   "Select species": "Seleccionar espècies",
   "Select all": "Seleccionar totes",
   "Deselect all": "Deseleccionar totes",
