@@ -864,6 +864,7 @@ export default {
 .miniMap {
   width: 100%;
   height: 100% !important;
+  box-shadow: 0px 0px 4px black;
 }
 
 
