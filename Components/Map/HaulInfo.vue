@@ -244,7 +244,7 @@ export default {
           this.translateData(preparedData);
         }
         
-        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Date, "Biomassa", "kg / km2");
+        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Date, this.$i18n.t("Biomass"), "kg / km2");
 
       }).catch(e => {
         if (staticFile !== undefined){ // Load static file
