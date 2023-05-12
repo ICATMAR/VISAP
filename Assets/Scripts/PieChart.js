@@ -23,7 +23,8 @@ class PieChart {
 
 		const root = partition(data);
 		var color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
-		var format = d3.format(",d");
+		//var format = d3.format(",d");
+		var format = d3.format(".1f");
 		var width = 600;
 		var radius = width / 6;
 
@@ -352,8 +353,28 @@ class PieChart {
 				outData.children.push({"name": classCaptura, "children": [], "species": classCaptura});
 
 			let classIndex = outData.children.findIndex(child => child.name === classCaptura)
+			
 			// Assign biomass value
-			outData.children[classIndex].children.push({"name": nomComu, "value": biomass, "species": nomEspecie});
+			//outData.children[classIndex].children.push({"name": nomComu, "value": biomass, "species": nomEspecie});
+			// If biomass is very small, put to others
+			if ((biomass < 2 && classCaptura == "Landed") || (biomass < 1 && classCaptura == "Discarded")){
+				let otherIndex =  outData.children[classIndex].children.findIndex(child => child.name === "Other");
+				// Define Other group
+				if (otherIndex == -1) {
+					outData.children[classIndex].children.push({"name": "Other", "children": [], "species": "Other"});
+					otherIndex = outData.children[classIndex].children.length - 1;
+				}
+				// Assign to Other
+				outData.children[classIndex].children[otherIndex].children.push({"name": nomComu, "value": biomass, "species": nomEspecie});
+			}
+			// Biomass is bigger
+			else {
+				// Assign biomass value
+				outData.children[classIndex].children.push({"name": nomComu, "value": biomass, "species": nomEspecie});
+			}
+
+
+			
 		}
 
 		this.originalData = outData;
