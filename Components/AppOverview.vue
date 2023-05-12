@@ -1,6 +1,6 @@
 <template>
   <!-- Container -->
-  <div id='appOverivew' ref='appOverivew'>
+  <div id='appOverview' ref='appOverview'>
 
     <!--Header -->
     <title-header title="Catch composition"></title-header>
@@ -23,12 +23,13 @@ import PiechartSection from 'Components/CatchComposition/PiechartSection.vue'
 import TitleHeader from 'Components/TitleHeader.vue'
 
 export default {
-  name: 'appOverivew', // Caps, no -
+  name: 'appOverview', // Caps, no -
   created() {
     
   },
   mounted() {
-    
+    // EVENTS
+    window.eventBus.on('PieChartSection_ShowPie', this.scrollToChart);
   },
   data (){
     return {
@@ -36,7 +37,12 @@ export default {
     }
   },
   methods: {
-    
+    scrollToChart: function(){
+      // Smooth scroll
+      for (let i = 0; i<500; i++) {
+        setTimeout(() => this.$refs.appOverview.scrollTop = (this.$refs.appOverview.scrollHeight)*i/500, i*2);
+      }
+    }
   },
   components: {
     piechartSection: PiechartSection,
@@ -49,7 +55,7 @@ export default {
 
 
 <style scoped>
-#appOverivew {
+#appOverview {
   font-family: "Poppins", Sans-serif;
   scroll-behavior: auto;
   overflow: auto;
@@ -59,9 +65,9 @@ export default {
 }
 
 @media (max-width: 800px) {
-  #appOverivew {
+  /* #appOverview {
     overflow-x:auto;
-  }
+  } */
 }
 
 

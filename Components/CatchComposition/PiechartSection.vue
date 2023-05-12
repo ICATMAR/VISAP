@@ -185,6 +185,12 @@ export default {
       linkElement.click();
     },
   },
+  watch: {
+    showPie(current, past){
+      if (current)
+        window.eventBus.emit('PieChartSection_ShowPie');
+    }
+  },
   components: {
     'piechart': Piechart,
   }
