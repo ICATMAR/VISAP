@@ -206,8 +206,8 @@ export default {
 
 .topBanner {
   background-image: url('Assets/BannerBackground.png');
-  height: 61px;
-  width: 150px;
+  height: 56px;
+  width: 125px;
   background-size: auto;
   background-repeat: round;
 }
