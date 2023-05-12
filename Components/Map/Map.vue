@@ -342,7 +342,7 @@ export default {
         //controls: ol.control.defaults({ attributionOptions: { collapsible: true } }),
         view: new ol.View({
           center: ol.proj.fromLonLat([3,41.5]),
-          zoom: 6,
+          zoom: 7.5,
           maxZoom: 22,
           extent: ol.proj.fromLonLat([-28,20]).concat(ol.proj.fromLonLat([40, 50]))
         }),
