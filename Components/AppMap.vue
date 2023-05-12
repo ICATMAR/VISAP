@@ -186,7 +186,7 @@
 
 .switchPanels {
   position:absolute;
-  margin-top: 150px;
+  margin-top: 100px;
   top: 0px;
   
   display: flex;

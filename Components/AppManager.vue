@@ -14,6 +14,14 @@
     <!-- APP LENGTH FREQ -->
     <app-lengthfreq v-show="app=='length-freq'"></app-lengthfreq>
 
+    <!-- ICONS -->
+    <a href="https://icatmar.cat/">
+      <img class="logo icatmar-logo" src="img/icatmar-mini-logo.svg">
+    </a>
+    <a href="https://icatmar.cat/visors/visor-pesquer/">
+      <img class="logo visap-logo" src="img/visor-pesquer-mini.svg">
+    </a>
+
   </div>
   
 </template>
@@ -134,5 +142,22 @@ export default {
   overflow: hidden;
 }
 
+
+.logo {
+  width: 70px;
+  height: 70px;
+  position: fixed;
+  top: 10px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.icatmar-logo {
+  left: 50px;
+}
+
+.visap-logo {
+  left: 100px;
+}
 
 </style>
