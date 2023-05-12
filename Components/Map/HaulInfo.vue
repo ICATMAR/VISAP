@@ -84,10 +84,12 @@ export default {
     // Track selected
     window.eventBus.on('Map_trackClicked', this.setSelectedFishingTrack);
     window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedFishingTrack);
+    // Language change
+    window.eventBus.on('LanguageSelector_languageChange', ()=> this.setPieChart(this.selTrack.Id));
   },
   data(){
     return {
-      selTrack: '',
+      selTrack: {},
       // Default options
       options: [{
         AvgDepth : "365.2",
@@ -236,7 +238,7 @@ export default {
         let pieChart = new PieChart();
         let preparedData = pieChart.processSample(r);
         this.$refs.pieChart.innerHTML = "";
-
+        
         // Translations
         if (this.$i18n){
           this.translateData(preparedData);
