@@ -16,10 +16,10 @@
 
     <!-- ICONS -->
     <a href="https://icatmar.cat/">
-      <img class="logo icatmar-logo" src="img/icatmar-mini-logo.svg">
+      <img class="logo clickable icatmar-logo" src="img/icatmar-mini-logo.svg">
     </a>
     <a href="https://icatmar.cat/visors/visor-pesquer/">
-      <img class="logo visap-logo" src="img/visor-pesquer-mini.svg">
+      <img class="logo clickable visap-logo" src="img/visor-pesquer-mini.svg">
     </a>
 
   </div>
@@ -150,6 +150,7 @@ export default {
   top: 10px;
   padding: 0px;
   margin: 0px;
+  z-index: 10;
 }
 
 .icatmar-logo {
