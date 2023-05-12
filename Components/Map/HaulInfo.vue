@@ -140,7 +140,7 @@ export default {
       let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
       let linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
-      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.name.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '');
+      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.Port.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '') + '_' + this.selTrack.Date;
       linkElement.setAttribute('download', trackFileName + '_ICATMAR');
       linkElement.click();
     },
@@ -176,7 +176,7 @@ export default {
       let dataUri = 'data:text/csv;charset=utf-8,'+ encodeURIComponent(csvStr);
       let linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
-      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.name.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '');
+      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.Port.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '') + '_' + this.selTrack.Date;
       linkElement.setAttribute('download', trackFileName + '_ICATMAR');
       linkElement.click();
     },
