@@ -534,8 +534,8 @@ export default {
         });
       }
 
-      // Wait 200 ms
-      await new Promise(res => setTimeout(res, 200));
+      // Wait 800 ms
+      await new Promise(res => setTimeout(res, 800));
 
       this.isRendering = true;
 
@@ -550,7 +550,7 @@ export default {
 
       // Get ol layer
       let layer = this.getMapLayer('data');
-      // If layer was hidden in the process
+      // If layer was hidden by the user during the delay
       if (layer == undefined){
         this.isRendering = false;
         this.isLayerDataReady = false;
@@ -562,6 +562,7 @@ export default {
       }
       // Get canvas
       let tmpCnv = layer.getRenderer().getImage();
+      // document.body.appendChild(tmpCnv); // Debug, Test the data
       
       // Get data
       this.layerData = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height);
