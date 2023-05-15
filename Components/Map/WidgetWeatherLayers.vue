@@ -77,6 +77,11 @@
           return
         // Get date
         let ff = FishingTracks.getFeatureById(FishingTracks.getSelectedTrack());
+        if (ff == undefined){
+          setTimeout(this.updateClimaLayer, 1000);
+          console.log("Fishing track not found. Trying again in 1s.");
+          return;
+        }
         this.currentDate = ff.properties.info.Data;
         let date = ff.properties.info.Data + 'T12:00:00.000Z';
         // Get clima URL
