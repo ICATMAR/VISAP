@@ -469,11 +469,15 @@ export default {
 
     // Map moves
     onMapMoveEnd: function(){
-      // If data is loaded, update the pixel information once the map move finishes
+      // If data is loaded, update the pixel information once the map move finishes      
       // TODO: this could be optimized --> get a canvas with all data and relate lat-long to that canvas 
       if (this.isLayerDataReady && this.isMapMoving){
         this.isMapMoving = false;
-        this.updateSourceData();
+        if (this.getMapLayer('data') == undefined)
+          return;
+        if (this.getMapLayer('data').getOpacity() != 0){          
+          this.updateSourceData();
+        }
       }
       this.isMapMoving = false;
     },
@@ -578,6 +582,8 @@ export default {
       // to provide this scaling factor.
       // Get the width of the map container
       let mapEl = map.getTargetElement();
+      if (this.layerData == undefined)
+        debugger;
       this.layerData.scaleFactorX = mapEl.offsetWidth / tmpCnv.width;
       this.layerData.scaleFactorY = mapEl.offsetHeight / tmpCnv.height;
 
