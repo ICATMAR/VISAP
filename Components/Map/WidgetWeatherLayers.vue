@@ -2,16 +2,44 @@
   <!-- Container -->
   <div id='widgetWeatherLayers' ref='widgetWeatherLayers'>
 
-    <div class="vertical-container">
-      <div class="clickable cLayerContainer" :key="cLayer" v-for="(cLayer, index) in climaLayers">
-        <button :class="[selClimaLayer == cLayer ? 'button-active' : 'clickable']"
-          @click='climaLayerClicked(cLayer)'
-          :title="$t(cLayer)">
-          <span class="fa" v-html="climaIcons[index]"></span>
-        </button>
-        <span @click='climaLayerClicked(cLayer)'>{{$t(cLayer)}}</span>
+    <!-- Desktop -->
+    <template class="isHiddenInMobile">
+      <div class="vertical-container">
+        <div class="clickable cLayerContainer" :key="cLayer" v-for="(cLayer, index) in climaLayers">
+          <button :class="[selClimaLayer == cLayer ? 'button-active' : 'clickable']"
+            @click='climaLayerClicked(cLayer)'
+            :title="$t(cLayer)">
+            <span class="fa" v-html="climaIcons[index]"></span>
+          </button>
+          <span @click='climaLayerClicked(cLayer)'>{{$t(cLayer)}}</span>
+        </div>
       </div>
-    </div>
+    </template>
+
+    <!-- Mobile -->
+    <template class="isShownInMobile">
+      <div class="vertical-container">
+        <!-- Selected clima layer -->
+        <div class="clickable cLayerContainer">
+          <button class='button-active'  @click='climaLayerClicked(selClimaLayer)'
+            :title="$t(selClimaLayer)">
+            <span class="fa" v-html="climaIcons[climaLayers.indexOf(selClimaLayer)]"></span>
+          </button>
+          <span>{{$t(selClimaLayer)}}</span>
+        </div>
+        <!-- Other clima layers-->
+        <div class="horizontal-container">
+          <div class="clickable cLayerContainer cLayerIconOnly" :key="cLayer" v-for="(cLayer, index) in climaLayers">
+            <button :class="[selClimaLayer == cLayer ? 'button-active' : 'clickable']"
+              @click='climaLayerClicked(cLayer)'
+              :title="$t(cLayer)">
+              <span class="fa" v-html="climaIcons[index]"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+    </template>
 
     <!-- WMS graphic legend -->
     <!-- <img v-if="WMSLegendURL != ''" id='wmsLegend' :src="WMSLegendURL"> -->
@@ -123,14 +151,11 @@
     padding-top: 0px !important;
     margin-top: -8px !important;
 
+    max-height: 100%;
+
     display: flex;
     flex-direction: column !important;
     align-items: flex-start !important;
-
-  }
-
-  @media screen and (max-width: 770px) {
-    /* TODO: ELEMENTS IN A ROW, AS IN WINDY */
   }
 
 
@@ -142,6 +167,13 @@
     padding: 8px;
   }
 
+  .isShownInMobile {
+    display: none;
+  }
+  .isHiddenInMobile {
+    display: block;
+  }
+
 
   .cLayerContainer {
     display: flex;
@@ -151,6 +183,8 @@
     background: #0000003b;
     padding-right: 4px;
     border-radius: 30px;
+
+    height: clamp(10px, 3vh, 30px);
   }
 
   span {
@@ -161,6 +195,34 @@
     inline-size: 190px;
     overflow-wrap: break-word;
     pointer-events: all;
+  }
+
+
+
+  @media screen and (max-width: 500px), screen and (max-height: 850px) {
+    /* TODO: ELEMENTS IN A ROW, AS IN WINDY */
+    .cLayerIconOnly {
+      background: none;
+      padding: 0px;
+      margin: 1px;
+    }
+
+    .horizontal-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 8px;
+    }
+
+    .isShownInMobile{
+      display: block;
+    }
+
+    .isHiddenInMobile {
+      display: none;
+    }
+    
   }
   
   

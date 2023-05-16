@@ -150,9 +150,11 @@
     z-index: 11;
     user-select: none;
 
+    max-height: 100%;
+
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: flex-start;
     padding-left: 10px;
 
@@ -165,6 +167,7 @@
       top: 120px;
     }
   }
+
 
 .menuElement {
     display: flex;

@@ -301,6 +301,8 @@ export default {
   width: 100%;
 
   margin-bottom: 0px;
+
+  pointer-events: all;
 }
 
 

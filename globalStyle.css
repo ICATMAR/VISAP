@@ -84,6 +84,7 @@ span {
 
 a {
   color: #ffffff;
+  pointer-events: all;
 }
 a:visited {
   color: #ffffff;

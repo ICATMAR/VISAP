@@ -65,8 +65,15 @@ span {
 }
 .legendContainer {
   overflow:auto;
-  max-width: 350px;
-  max-height: calc(100vh - 650px);
+  width: clamp(200px, 60vw, 600px);
+  max-height: calc(100vh - 520px);
   background: #ffffffbe;
+}
+
+@media screen and (max-width: 770px) {
+  .legendContainer {
+    max-height: calc(100vh - 410px);
+  }
+  
 }
 </style>
