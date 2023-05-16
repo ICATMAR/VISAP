@@ -20,8 +20,8 @@
     <template class="isShownInMobile">
       <div class="vertical-container">
         <!-- Selected clima layer -->
-        <div class="clickable cLayerContainer">
-          <button class='button-active'  @click='climaLayerClicked(selClimaLayer)'
+        <div class="cLayerContainer">
+          <button class='button-active'
             :title="$t(selClimaLayer)">
             <span class="fa" v-html="climaIcons[climaLayers.indexOf(selClimaLayer)]"></span>
           </button>
@@ -82,6 +82,7 @@
         // https://origin.fontawesome.com/search?o=r&m=free&f=classic
         climaIcons: ['&#xf2c9;<sub>~</sub>', '&#x2206; &#xf2c9;', '&#xf2c9;<sup>~</sup>', 'C<sub>hl</sub>', '‰', '&#xf72e;', '&#xe515;', '&#xf773;'],
         selClimaLayer: '',
+        isClimaLayerVisible: false,
         climaOpacity: 1,
         // Defaults
         WMSLegendURL: '',
@@ -102,6 +103,8 @@
       // PRIVATE METHODS
       updateClimaLayer: function(){
         if (this.selClimaLayer == undefined || this.selClimaLayer == '')
+          return
+        if (!this.isClimaLayerVisible)
           return
         // Get date
         let ff = FishingTracks.getFeatureById(FishingTracks.getSelectedTrack());
@@ -124,6 +127,7 @@
 
       // PUBLIC METHODS
       setVisible: function(isVisible){
+        this.isClimaLayerVisible = isVisible;
         if (isVisible){
           // Default clima layer if not defined
           this.selClimaLayer = this.selClimaLayer == '' ? 'Sea Surface Temperature' : this.selClimaLayer;
