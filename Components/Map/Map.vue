@@ -535,7 +535,7 @@ export default {
       }
 
       // Wait 800 ms
-      await new Promise(res => setTimeout(res, 800));
+      await new Promise(res => setTimeout(res, 200));
 
       this.isRendering = true;
 
@@ -562,12 +562,37 @@ export default {
       }
       // Get canvas
       let tmpCnv = layer.getRenderer().getImage();
-      // document.body.appendChild(tmpCnv); // Debug, Test the data
+      // Set to willReadFrequently, as suggested by a warning when doing readbacks.
+      let ctx = tmpCnv.getContext("2d", { willReadFrequently: true });
+  
       
       // Get data
-      this.layerData = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height);
-      // Store width to access pixels
-      this.layerDataWidth = tmpCnv.width;
+      this.layerData = ctx.getImageData(0,0,tmpCnv.width,tmpCnv.height);
+      // For mobile versions, the canvas is scaled through a style. Openlayers does not have build in function 
+      // to provide this scaling factor.
+      // Get the width of the map container
+      let mapEl = map.getTargetElement();
+      this.layerData.scaleFactorX = mapEl.offsetWidth / tmpCnv.width;
+      this.layerData.scaleFactorY = mapEl.offsetHeight / tmpCnv.height;
+
+      // Debug data layer for mobile
+      // for (let i = 0; i< this.layerData.width*this.layerData.height; i++ ){
+      //   let alpha = this.layerData.data[i*4 + 3];
+      //   if (alpha == 0){
+      //     this.layerData.data[i*4] = 0;
+      //     this.layerData.data[i*4 + 1] = 0;
+      //     this.layerData.data[i*4 + 2] = 0;
+      //     this.layerData.data[i*4 + 3] = 255;
+      //   } else {
+      //     this.layerData.data[i*4] = 255;
+      //     this.layerData.data[i*4 + 1] = 0;
+      //     this.layerData.data[i*4 + 2] = 0;
+      //     this.layerData.data[i*4 + 3] = 255;
+      //   }
+      // }
+      // ctx.putImageData(this.layerData, 0,0);
+      //document.body.appendChild(tmpCnv); // Debug, Test the data
+
 
       // Restore map
       map.getLayers().forEach((ll, i) => {
@@ -582,13 +607,18 @@ export default {
 
     // Get pixel data
     getDataAtPixel: function(x , y){
-      let imgArrayPos = (x + y * this.layerDataWidth) * 4; // + 1,2,3 if you want (R)GBA
+      // Scale the pixel position to the canvas scaling
+      x = Math.round(x / this.layerData.scaleFactorX);
+      y = Math.round(y / this.layerData.scaleFactorY);
+      let imgArrayPos = (x + y * this.layerData.width) * 4; // + 1,2,3 if you want (R)GBA
       let imgData = this.layerData.data;
       let color = this.pixelColor;
       color[0] = imgData[imgArrayPos]
       color[1] = imgData[imgArrayPos+1]
       color[2] = imgData[imgArrayPos+2]
       color[3] = imgData[imgArrayPos+3];
+      // console.log(color);
+      // console.log([x, y, this.layerData.width, this.layerData.height]);
       return color;
     },
 
