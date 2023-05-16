@@ -57,6 +57,10 @@
     <div class="rowEl p-2 g-0" style="background: var(--blue); color: white; text-shadow: 0 0 4px black;">
       <sea-habitat ref="seaHabitat"></sea-habitat>
     </div>
+
+    <!-- Empty space for mobile, as map falls on top of last element -->
+    <div class="rowEl isVisibleInMobile p-2 g-0" style="background: var(--darkBlue); height: 200px; color: white; text-shadow: 0 0 4px black;">
+    </div>
   </div>
   
 </template>
@@ -364,5 +368,15 @@ select {
   text-decoration: none;
   display: block;
   margin: 0px;
+}
+
+.isVisibleInMobile {
+  display: none;
+}
+
+@media screen and (max-width: 770px) {
+  .isVisibleInMobile {
+    display: block;
+  }
 }
 </style>
