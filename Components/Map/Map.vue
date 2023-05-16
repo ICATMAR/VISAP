@@ -362,7 +362,13 @@ export default {
         // Nothing clicked
         if (e.selected[0] === undefined)
           return false;
-        // Track line is cliked
+        // Check if tracks layer is visible
+        let ll = this.getMapLayer('fishingTracks');
+        if (ll == undefined)
+          return
+        if (ll.getOpacity() == 0)
+          return;
+        // Track line is clicked
         if (e.selected[0].getProperties().featType == "trackLine"){
           let id = e.selected[0].getProperties().id;
           this.setSelectedTrack(id);
