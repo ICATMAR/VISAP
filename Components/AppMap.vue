@@ -175,11 +175,11 @@
 
 /* Small screen makes side panel complete */
 .miniMap {
-  width: 300px;
-  height: 300px;
+  width: 180px;
+  height: 250px;
   position: absolute;
-  bottom: 0px;
-  right: 0px;
+  bottom: 25px;
+  right: 25px;
   z-index: 1;
 }
 
