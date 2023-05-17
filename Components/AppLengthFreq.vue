@@ -47,8 +47,11 @@
         // Translate menu options
         this.translateHighcharts();
         // Reset graph
-        if (this.rawData)
+        if (this.rawData){
+          // Fill filter menu with data
+          this.$refs.filterMenu.setData(this.rawData);
           this.createGraph(this.rawData);
+        }
       });
     },
     data (){
