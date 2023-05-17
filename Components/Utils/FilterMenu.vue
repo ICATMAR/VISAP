@@ -14,13 +14,13 @@
 
       <!-- Selected species -->
       <div ref="selSpecies" class="listSpeciesContainer selSpeciesContainer">
-        <input class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" v-show="showSearchBarSelSpecies"/>
+        <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" v-show="showSearchBarSelSpecies"/>
         <div class="list listSel"></div>
       </div>
 
       <!-- Species list -->
       <div ref="availableSpecies" class="listSpeciesContainer">
-        <input class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" />
+        <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" />
         <div class="list"></div>
       </div>
 
@@ -139,6 +139,15 @@ export default {
             <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.name}
           </button>
           `
+      }
+
+      // If list exists, reindex as HTML changed
+      if (this.speciesList != undefined) {
+        // Update list
+        this.speciesList.clear();
+        this.speciesList.update();
+        this.selSpeciesList.clear();
+        this.selSpeciesList.update();
       }
 
       // Create list      
