@@ -309,7 +309,7 @@ export default {
         legendTooltipEl.style.transform = "translate(-"+ canvas.width +"px, "+ ((normValue*-1+1)*canvas.height - 12) +"px)";
       // Horizontal legend
       else
-        legendTooltipEl.style.transform = "translate("+ (canvas.offsetLeft + normValue*canvas.width - canvas.width) +"px, "+ (canvas.height + 5) +"px)";
+        legendTooltipEl.style.transform = "translate("+ (normValue*canvas.width - canvas.width) +"px, "+ (canvas.height + 5) +"px)";
 
       this.draw(canvas);
     },
