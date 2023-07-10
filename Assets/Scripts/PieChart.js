@@ -93,7 +93,7 @@ class PieChart {
 		    .attr("dy", "3.5em")
 				.attr("font-size", "0.8em")
 				.attr("class", "biomassText")
-		    .text(format(root.value) + " " + (unit||"kg / km2"));
+		    .text(format(root.valueCorrected || root.value) + " " + (unit||"kg / km2"));
 
 
 
@@ -120,8 +120,8 @@ class PieChart {
 	  path.on("mouseenter", mouseOnPath)
 	      .on("mouseleave", mouseOffPath);
 
-	  path.append("title")
-	      .text(d => `${d.ancestors().map(d => d.data.species).reverse().join("/")}\n${format(d.value)}` + " kg/km2"); // TODO show label, modify label https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/#creating-a-tooltip-using-the-title-tag
+	  path.append("title") 
+	      .text(d => `${d.ancestors().map(d => (d.data.translation || d.data.species)).reverse().join("/")}\n${format(d.valueCorrected || d.value)}` + " kg/km2"); // TODO show label, modify label https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/#creating-a-tooltip-using-the-title-tag
 
 	  const label = g.append("g")
 	      .attr("pointer-events", "none")
@@ -168,7 +168,7 @@ class PieChart {
 			centerLabel
 				.select(".biomassText")
 				.style("visibility", null)
-				.text(format(p.value) +  " kg / km2");
+				.text(format(p.valueCorrected || p.value) +  " kg / km2");
 
 	    // Hide center mouse hover label
 	    centerLabel
@@ -222,17 +222,17 @@ class PieChart {
 	  function mouseOnPath(event, p){
 	    if (p.current.y0 % 1 != 0) // During transition
 	      return;
-		// Visible text (dirty fix for using species in higher categories (port, season, etc.))
-		let visibleText = ''
-		if (p.data.children)
-			visibleText = p.data.translation || p.data.name || p.data.species;
-		else
-			visibleText = p.data.species || p.data.translation || p.data.name;
-	    // Show biomass
-		centerLabel
-			.select(".biomassText")
-			.style("visibility", null)
-			.text(format(p.value) +  " kg / km2");
+      // Visible text (dirty fix for using species in higher categories (port, season, etc.))
+      let visibleText = ''
+      if (p.data.children)
+        visibleText = p.data.translation || p.data.name || p.data.species;
+      else
+        visibleText = p.data.species || p.data.translation || p.data.name;
+        // Show biomass
+      centerLabel
+        .select(".biomassText")
+        .style("visibility", null)
+        .text(format(p.valueCorrected || p.value) +  " kg / km2");
 	    centerLabel
 	      .select(".centerText")
 	      .style("visibility", null)
@@ -277,7 +277,7 @@ class PieChart {
 			centerLabel
 				.select(".biomassText")
 				.style("visibility", null)
-				.text(format(pCenter.value) +  " kg / km2");
+				.text(format(pCenter.valueCorrected || pCenter.value) +  " kg / km2");
 	    centerLabel
 	      .select(".centerText")
 	      .style("visibility", "hidden")
@@ -316,7 +316,24 @@ class PieChart {
 	    const root = d3.hierarchy(data)
 	        .sum(d => d.value) // Assing a value to each partition, based on the value of the smallest items
 	        .sort((a, b) => b.value - a.value) // Organize partitions (here from big to small)
-	  			.sort((a, b) => b.data.name == "Others" ? -1 : 1)
+	  			.sort((a, b) => b.data.name == "Other" ? -1 : 1) // Put category others at the end
+      
+      // Rectify higher levels where biomass needs to be averaged instead of agreggated
+      root.eachAfter(d => {
+        // Area (North, south, central) or Year (2019, 2020...)
+        if (d.height == 4){
+          // console.log(d.data.name)
+          // console.log(d.data.children.length)
+          // console.log(d.value + ", " + d.value/d.data.children.length)
+          d.valueCorrected = d.value/d.data.children.length
+        } else if (d.height == 5){
+          // Add and average children levels
+          let sumChildren = 0;
+          d.children.forEach(ch => sumChildren += ch.valueCorrected) // Add biomass
+          d.valueCorrected = sumChildren / d.children.length; // Average
+        } 
+      });
+
 	    return d3.partition()
 	        .size([2 * Math.PI, root.height + 1])
 	      (root);
