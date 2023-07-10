@@ -37,11 +37,9 @@ export default {
     }
   },
   methods: {
-    scrollToChart: function(){
+    scrollToChart: function(e){
       // Smooth scroll
-      for (let i = 0; i<500; i++) {
-        setTimeout(() => this.$refs.appOverview.scrollTop = (this.$refs.appOverview.scrollHeight)*i/500, i*2);
-      }
+      setTimeout(() => e.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" }), 10);
     }
   },
   components: {

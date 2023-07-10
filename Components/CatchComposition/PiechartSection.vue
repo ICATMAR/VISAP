@@ -188,7 +188,7 @@ export default {
   watch: {
     showPie(current, past){
       if (current)
-        window.eventBus.emit('PieChartSection_ShowPie');
+        window.eventBus.emit('PieChartSection_ShowPie', this.$refs.piechartSection);
     }
   },
   components: {
