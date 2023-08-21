@@ -344,11 +344,12 @@ export default {
     createDates: function(inputDate) {
       // If dates does not exists (initialization)
       this.dates = this.dates == undefined ? this.dates = [] : this.dates;
+      let tempDate = new Date(inputDate.getTime());
 
       for (let i = 0; i < this.numDays; i++){
-        this.daysString[this.numDays-1 - i] = inputDate.toDateString().substring(0,2) + ' ' + inputDate.getDate();
-        this.dates[this.numDays-1 - i] = new Date(inputDate.getTime());
-        inputDate.setDate(inputDate.getDate() - 1);
+        this.daysString[this.numDays-1 - i] = tempDate.toDateString().substring(0,2) + ' ' + tempDate.getDate();
+        this.dates[this.numDays-1 - i] = new Date(tempDate.getTime());
+        tempDate.setDate(tempDate.getDate() - 1);
       }
 
       
