@@ -6,6 +6,7 @@ class GAnalyticsManager {
     //https://developers.google.com/analytics/devguides/collection/ga4/events?client_type=gtag
     //https://developers.google.com/analytics/devguides/collection/ga4/event-parameters?client_type=gtag
     //https://support.google.com/analytics/answer/9267568#mark
+    // https://docs.google.com/document/d/1SKqwH7yr4IRHOrqa9qPUrqknYUPoXASAKtQWJR9bnu0/edit
 
     //gtag("event", "advanced_interface", {
       // "file_type": "csv",
@@ -13,16 +14,22 @@ class GAnalyticsManager {
       // "myCustomVariable": "gerard",
     //});
 
-    // If user clicks on advanced interface, send the event once per page load
-    // window.eventBus.on('AdvancedInterfaceOnOff', (state) => {
-    //   if (state){
-    //     if(this.eventAdvancedInterfaceOnce == undefined){
-    //       gtag("event", "advanced_interface", {});
-    //       this.eventAdvancedInterfaceOnce = true;
-    //     }
-    //   }
-    // });
 
+    window.eventBus.on("PieChartSection_Export", el => {
+      // Send a ga event every time data is exported clicked
+      //{fileExtension: "JSON", modality: "trawling", aggregationType: this.type} // type = season or port
+
+      console.log("Emitting GA event: download_data: " + JSON.stringify({
+        method: el.modality,
+        group_id: el.aggregationType,
+        currency: el.fileExtension,
+      }));
+      gtag("event", "download_data", {
+        method: el.modality,
+        group_id: el.aggregationType,
+        currency: el.fileExtension,
+      });
+    });
 
 
     

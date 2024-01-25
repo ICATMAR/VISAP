@@ -148,6 +148,9 @@ export default {
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', this.$i18n.t('Catch composition') + ' (' + this.$i18n.t(this.type) + ')_ICATMAR');
       linkElement.click();
+
+      // Event for GAnalytics
+      window.eventBus.emit("PieChartSection_Export", {fileExtension: "JSON", modality: "trawling", aggregationType: this.type});
     },
 
 
@@ -183,6 +186,9 @@ export default {
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', this.$i18n.t('Catch composition') + ' (' + this.$i18n.t(this.type) + ')_ICATMAR');
       linkElement.click();
+
+      // Event for GAnalytics
+      window.eventBus.emit("PieChartSection_Export", {fileExtension: "CSV", modality: "trawling", aggregationType: this.type});
     },
   },
   watch: {
