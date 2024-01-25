@@ -21,6 +21,12 @@ import {setHashValue, getHashValue} from './Assets/Scripts/utils.js';
 window.location.setHashValue = setHashValue;
 window.location.getHashValue = getHashValue;
 
+
+// Declare event emitter
+// https://github.com/developit/mitt
+window.eventBus = window.mitt();
+
+
 // Import scripts
 // Import file manager
 import FileManager from './Assets/Scripts/FileManager.js';
@@ -30,10 +36,6 @@ window.FileManager = new FileManager();
 let gaManager = new GAnalyticsManager();
 
 
-
-// Declare event emitter
-// https://github.com/developit/mitt
-window.eventBus = window.mitt();
 
 
 const i18n = VueI18n.createI18n();
