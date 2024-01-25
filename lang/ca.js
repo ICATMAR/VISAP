@@ -191,5 +191,12 @@ export default ca = {
   "downloadCSV": "Exportar dades (CSV)",
   "downloadXLS": "Exportar dades (XLS)",
   "viewData": "Mostrar taula de dades",
-  "hideData": "Amagar taula de dades"
+  "hideData": "Amagar taula de dades",
+
+  
+  "Cookies title": "Valorem la teva pivadesa",
+  "Cookies text": `Utilitzem tecnologia com ara galetes al nostre lloc per millorar l'experiència d'usuari i analitzar el nostre trànsit. Feu clic per consentir l'ús d'aquesta tecnologia al web. Podeu canviar 
+  d'opinió i canviar les vostres opcions de consentiment en qualsevol moment tornant a aquest lloc.`,
+  "Cookies accept": "Acceptar",
+  "Cookies deny": "Denegar",
 }

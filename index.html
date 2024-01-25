@@ -103,7 +103,22 @@
      window.dataLayer = window.dataLayer || [];
      function gtag(){dataLayer.push(arguments);}
      gtag('js', new Date());
-   
+      // Check if analyitic preferences were stored
+      let params = {};
+      if (localStorage.getItem('cookie-analytics')){
+         let paramsStr = localStorage.getItem('cookie-analytics');
+         params = JSON.parse(paramsStr);
+      } else {
+         params = {
+         ad_storage: 'denied',
+         ads_data_redaction: 'false',
+         ad_user_data: 'denied',
+         ad_personalization: 'denied',
+         analytics_storage: 'denied',
+         };   
+         localStorage.setItem('cookie-analytics', JSON.stringify(params));
+      }
+      gtag('consent', 'default', params);
      gtag('config', 'G-FJQW9S0ZKR');
    </script>
       
