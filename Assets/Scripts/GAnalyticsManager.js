@@ -39,7 +39,7 @@ class GAnalyticsManager {
       // Change keys to GA keys
       let gaEl = {
         method: el.modality,
-        value: trackId,
+        value: el.trackId,
         currencty: el.fileExtension
       }
 
