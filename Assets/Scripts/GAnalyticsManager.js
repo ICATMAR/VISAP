@@ -19,16 +19,34 @@ class GAnalyticsManager {
       // Send a ga event every time data is exported clicked
       //{fileExtension: "JSON", modality: "trawling", aggregationType: this.type} // type = season or port
 
-      console.log("Emitting GA event: download_data: " + JSON.stringify({
+      let gaEl = {
         method: el.modality,
         group_id: el.aggregationType,
         currency: el.fileExtension,
-      }));
-      gtag("event", "download_data", {
-        method: el.modality,
-        group_id: el.aggregationType,
+      };
+
+      let eventName = "visap_download_catch_data";
+      console.log("Emitting GA event: "+ eventName + ", " + JSON.stringify(gaEl));
+      gtag("event", eventName, gaEl);
+
+      // Test ecommerce analytics - array items
+      // https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type=gtag#implementation
+      // https://developers.google.com/analytics/devguides/collection/ga4/set-up-ecommerce
+      gtag("event", "purchase", {
+        value: 1,
         currency: el.fileExtension,
+        items : [{
+          item_id: "visap_catch_composition_" + el.modality + "_" + el.aggregationType + "_" + el.fileExtension,
+          item_name: "VISAP catch composition of "+  el.modality +" per " + el.aggregationType + " as " + el.fileExtension,
+          item_category: el.modality,
+          item_category2: "catch_composition",
+          item_category3: el.aggregationType,
+          item_variant: el.fileExtension,
+          price: 1,
+          quantity: 1,
+        }]
       });
+
     });
 
 
@@ -43,9 +61,31 @@ class GAnalyticsManager {
         currencty: el.fileExtension
       }
 
-      console.log("Emitting GA event: download_haul_data: " + JSON.stringify(gaEl));
-      gtag("event", "download_haul_data", gaEl);
+      let eventName = "visap_download_haul_data";
+
+      console.log("Emitting GA event: "+ eventName + ", " + JSON.stringify(gaEl));
+      gtag("event", eventName, gaEl);
+
+
+      // Test ecommerce analytics - array items
+      // https://developers.google.com/analytics/devguides/collection/ga4/ecommerce?client_type=gtag#implementation
+      // https://developers.google.com/analytics/devguides/collection/ga4/set-up-ecommerce
+      gtag("event", "purchase", {
+        value: 1,
+        currency: el.fileExtension,
+        items : [{
+          item_id: el.trackId,
+          item_name: "VISAP haul composition of "+  el.modality +", haul id " + el.trackId + " as " + el.fileExtension,
+          item_category: el.modality,
+          item_category2: "haul_composition",
+          item_variant: el.fileExtension,
+          price: 1,
+          quantity: 1,
+        }]
+      });
     });
+
+    
     
   }
 }
