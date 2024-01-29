@@ -32,6 +32,20 @@ class GAnalyticsManager {
     });
 
 
+
+    window.eventBus.on("HaulInfo_Export", el => {
+      // Send a ga event every time data is exported clicked
+      //{fileExtension: "JSON", modality: "trawling", trackId: <number such as 154357>}
+      // Change keys to GA keys
+      let gaEl = {
+        method: el.modality,
+        value: trackId,
+        currencty: el.fileExtension
+      }
+
+      console.log("Emitting GA event: download_haul_data: " + JSON.stringify(gaEl));
+      gtag("event", "download_haul_data", gaEl);
+    });
     
   }
 }
