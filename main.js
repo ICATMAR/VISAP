@@ -21,16 +21,21 @@ import {setHashValue, getHashValue} from './Assets/Scripts/utils.js';
 window.location.setHashValue = setHashValue;
 window.location.getHashValue = getHashValue;
 
-// Import file manager
-import FileManager from './Assets/Scripts/FileManager.js';
-window.FileManager = new FileManager();
-
-
-
 
 // Declare event emitter
 // https://github.com/developit/mitt
 window.eventBus = window.mitt();
+
+
+// Import scripts
+// Import file manager
+import FileManager from './Assets/Scripts/FileManager.js';
+import GAnalyticsManager from './Assets/Scripts/GAnalyticsManager.js';
+
+window.FileManager = new FileManager();
+let gaManager = new GAnalyticsManager();
+
+
 
 
 const i18n = VueI18n.createI18n();

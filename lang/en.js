@@ -124,5 +124,12 @@ export default en = {
   "downloadCSV": "Download CSV",
   "downloadXLS": "Download XLS",
   "viewData": "View data table",
-  "hideData": "Hide data table"
+  "hideData": "Hide data table",
+
+  "Cookies title": "We value your privacy",
+  "Cookies text": `We use technology such as cookies in our website to improve the user experience and analyze our traffic. 
+  Click on accept to give consent to the use of this technology. You can change this option anytime using the button on the
+  top-right of the screen.`,
+  "Cookies accept": "Accept",
+  "Cookies deny": "Deny",
 }

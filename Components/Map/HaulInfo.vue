@@ -149,6 +149,9 @@ export default {
       let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.Port.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '') + '_' + this.selTrack.Date;
       linkElement.setAttribute('download', trackFileName + '_ICATMAR');
       linkElement.click();
+
+      // Event for GAnalytics
+      window.eventBus.emit("HaulInfo_Export", {fileExtension: "JSON", modality: "trawling", trackId: this.selTrack.Id});
     },
 
 
@@ -185,6 +188,9 @@ export default {
       let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.Port.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '') + '_' + this.selTrack.Date;
       linkElement.setAttribute('download', trackFileName + '_ICATMAR');
       linkElement.click();
+
+      // Event for GAnalytics
+      window.eventBus.emit("HaulInfo_Export", {fileExtension: "CSV", modality: "trawling", trackId: this.selTrack.Id});
     },
   
 

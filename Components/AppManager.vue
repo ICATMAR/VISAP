@@ -28,6 +28,9 @@
       </svg>
     </a>
 
+    <!-- Cookie banner -->
+    <cookie-banner></cookie-banner>
+
   </div>
   
 </template>
@@ -45,7 +48,7 @@
 import AppOverview from "Components/AppOverview.vue";
 import AppLengthFreq from "Components/AppLengthFreq.vue";
 import AppMap from "Components/AppMap.vue";
-
+import CookieBanner from "Components/CookieBanner.vue";
 
 import LanguageSelector from "Components/Utils/LanguageSelector.vue";
 
@@ -92,7 +95,7 @@ export default {
     "app-overview": AppOverview,
     "app-lengthfreq": AppLengthFreq,
     "app-map": AppMap,
-
+    "cookie-banner": CookieBanner,
     "language-selector": LanguageSelector
     
   },
