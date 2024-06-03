@@ -116,17 +116,25 @@
         this.currentDate = ff.properties.info.Data;
         let date = ff.properties.info.Data + 'T12:00:00.000Z';
         // Get clima URL
-        debugger;
+        let id = this.dataRetriever.getDataSetIdFromDataName(this.selClimaLayer);
+        if (id == undefined){
+          console.log(this.selClimaLayer + " not found.");
+          // TODO: SHOW THAT IT IS NOT AVAILABLE
+          window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', undefined);
+          return;
+        }
+        let dataSet = this.dataRetriever.getDataSet(id, 'h', date);
+        // Attribution link
+        this.sourceDoi = dataSet.doi;
       
-        let infoWMS = {};//this.dataRetriever.getDataTypeURL(this.selClimaLayer, date, 'd');
-        //   url: url, 
-        // params: params,
-        // name: dataType.name, // not necessary?
-        // doi: dataType.doi,
-        // attributions: '© CMEMS', // TODO
-        this.sourceDoi = infoWMS == undefined ? 'https://resources.marine.copernicus.eu/products' : infoWMS.doi;
-        // If source is not found, it will send undefined
-        window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', infoWMS);
+        let wmtsParams = {
+          dataSet,
+          tmst: date,
+          // style TODO (range and style) https://help.marine.copernicus.eu/en/articles/6478168-how-to-use-wmts-to-visualize-data#h_1fab3939db
+        };
+        
+        window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', wmtsParams);
+        // TODO
         // Set legend
         //this.$refs.wmsLegend.setWMSLegend(infoWMS);
       },

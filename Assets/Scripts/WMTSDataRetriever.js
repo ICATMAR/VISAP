@@ -525,7 +525,7 @@ export class WMTSDataRetriever {
       else if (dataSet.id == dataName)
         return dataSet.id;
       else if (dataSet.altNames)
-        if (dataSet.altNames.includes(dataName))
+        if (dataSet.altNames.map(str => str.toLowerCase()).includes(dataName.toLowerCase()))
           return dataSet.id;
       else if (dataSet.name == dataName)
         return dataSet.id;
@@ -593,7 +593,7 @@ export class WMTSDataRetriever {
     if (animData.format == 'value_angle'){
       // Prepare url. Template uses the dataSet id in the layer info
       templateURL = templateURL.replace('/' + dataSet.id + '&', '/' + animData.layerNames[1] + '&');  //url = WMTSDataRetriever.setWMSParameter(url, 'LAYERS', animData.layerNames[1]);
-      templateURL = WMTSDataRetriever.setWMTSParameter(templateURL, 'style', 'range:0/360,cmap:gray'); // url = WMTSDataRetriever.setWMSParameter(url, 'COLORSCALERANGE', String([-360,360]));
+      templateURL = setWMTSParameter(templateURL, 'style', 'range:0/360,cmap:gray'); // url = WMTSDataRetriever.setWMSParameter(url, 'COLORSCALERANGE', String([-360,360]));
 
       // Get value from URL // WARN, could it happen that it has to go from -360 to 360?
       let value = await this.getValueAtPointFromURL(templateURL, [0, 360], long, lat, tileMatrix);//this.getPreciseValueFromURL(url, [-360, 360]);
@@ -644,7 +644,7 @@ export class WMTSDataRetriever {
     // Get precise value
     if (mustBePrecise){
       let quantStep = (range[1] - range[0]) / 255;
-      url = WMTSDataRetriever.setWMTSParameter(url, 'style', 'range:'+ (value - quantStep)+'/'+ (value + quantStep) +',cmap:gray');
+      url = setWMTSParameter(url, 'style', 'range:'+ (value - quantStep)+'/'+ (value + quantStep) +',cmap:gray');
       // Get image with very small range
       let imgPrec = await this.getTileFromURL(url);
       // Remove image from active requests
@@ -726,18 +726,18 @@ export class WMTSDataRetriever {
 
 
    // Set WMTS parameter
-   static setWMTSParameter(wmtsURL, paramName, paramContent) {
+   setWMTSParameter(wmtsURL, paramName, paramContent) {
     // If parameter does not exist
     if (wmtsURL.indexOf(paramName + "=") == -1) {
       //console.log("Parameter ", paramName, " does not exist in WMS URL");
       return wmtsURL + '&' + paramName + '=' + paramContent;
     }
-    let currentContent = WMTSDataRetriever.getWMTSParameter(wmtsURL, paramName);
+    let currentContent = getWMTSParameter(wmtsURL, paramName);
     return wmtsURL.replace(paramName + '=' + currentContent, paramName + '=' + paramContent);
   }
 
   // Get WMTS parameter
-  static getWMTSParameter(wmtsURL, paramName) {
+  getWMTSParameter(wmtsURL, paramName) {
     // If parameter does not exist
     if (wmtsURL.indexOf(paramName + "=") == -1) {
       console.log("Parameter ", paramName, " does not exist in WMS URL");
