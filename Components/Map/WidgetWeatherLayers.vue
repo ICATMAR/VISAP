@@ -67,7 +67,7 @@
     name: 'widgetWeatherLayers', // Caps, no -
     created() {
       // Create data retreiver
-      this.dataRetriever = new WMSDataRetriever();
+      this.dataRetriever = window.WMTSDataRetriever;
     },
     mounted() {
       // EVENTS
@@ -116,7 +116,14 @@
         this.currentDate = ff.properties.info.Data;
         let date = ff.properties.info.Data + 'T12:00:00.000Z';
         // Get clima URL
-        let infoWMS = this.dataRetriever.getDataTypeURL(this.selClimaLayer, date, 'd');
+        debugger;
+      
+        let infoWMS = {};//this.dataRetriever.getDataTypeURL(this.selClimaLayer, date, 'd');
+        //   url: url, 
+        // params: params,
+        // name: dataType.name, // not necessary?
+        // doi: dataType.doi,
+        // attributions: '© CMEMS', // TODO
         this.sourceDoi = infoWMS == undefined ? 'https://resources.marine.copernicus.eu/products' : infoWMS.doi;
         // If source is not found, it will send undefined
         window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', infoWMS);

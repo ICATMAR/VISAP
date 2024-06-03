@@ -661,20 +661,49 @@ export default {
 
     // PUBLIC METHODS
     // Update WMS data source. This function is called from AppManager.vue
-    updateSourceWMS: function (infoWMS){
+    updateSourceWMTS: function (infoWMS){
+      //  url: url, 
+      // params: params,
+      // name: dataType.name, // not necessary?
+      // doi: dataType.doi,
+      // attributions: '© CMEMS', // TODO
+      debugger;
+
+      fetch('https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_ANALYSISFORECAST_BGC_006_014?request=GetCapabilities').then(r => r.text())
+        .then(text => {
+          let parser = new ol.format.WMTSCapabilities();
+          let res = parser.read(text);
+          let options = ol.source.WMTS.optionsFromCapabilities( res, {
+            layer: 'MEDSEA_ANALYSISFORECAST_BGC_006_014/cmems_mod_med_bgc-nut_anfc_4.2km_P1D-m_202211/nh4',
+            matrixSet: 'EPSG:3857',
+          });
+          
+          let source = new ol.source.WMTS(options);
+          source.name="wmsSource";
+          this.getMapLayer('data').setSource(source);
+        });
+
+
+      return;
+
+
       // Create tile grid for faster rendering for low resolution WMS
       let extent = ol.proj.get('EPSG:3857').getExtent();
-      let tileSize = 512;
+      let tileSize = 256;
       let maxResolution = ol.extent.getWidth(extent) / tileSize;
       let resolutions = new Array(6);
+      let matrixIds = new Array(6);
       for (let i = 0; i < resolutions.length; i++){
         resolutions[i] = maxResolution / Math.pow(2,i);
+        matrixIds[i] = i;
       }
       // Assign to openlayers WMS tile source
-      infoWMS.tileGrid = new ol.tilegrid.TileGrid({
-        extent: extent,
+      infoWMS.tileGrid = new ol.tilegrid.WMTSTileGrid({
+        origin: ol.extent.getTopLeft(extent),
+        //extent: extent,
         resolutions: resolutions,
-        tileSize: tileSize
+        matrixIds: matrixIds,
+        //tileSize: tileSize
       });
       
       // Avoid cross origin problems when getting pixel data (The canvas has been tainted by cross-origin data.)
@@ -682,7 +711,7 @@ export default {
       infoWMS.cacheSize = 500;
 
       // Create OL source from ForecastBar.vue object
-      let source = new ol.source.TileWMS(infoWMS);
+      let source = new ol.source.WMTS(infoWMS);
       source.name="wmsSource";
       this.getMapLayer('data').setSource(source);
       // Tracking the load progress
@@ -828,7 +857,7 @@ export default {
       if (climaLayer == undefined)
         this.map.addLayer(this.layers.data);
       // Update parameters
-      this.updateSourceWMS(urlParams);
+      this.updateSourceWMTS(urlParams);
       
     },
 
