@@ -667,7 +667,7 @@ export default {
       // name: dataType.name, // not necessary?
       // doi: dataType.doi,
       // attributions: '© CMEMS', // TODO
-      debugger;
+      
 
       fetch('https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_ANALYSISFORECAST_BGC_006_014?request=GetCapabilities').then(r => r.text())
         .then(text => {
@@ -678,11 +678,51 @@ export default {
             matrixSet: 'EPSG:3857',
           });
           
-          let source = new ol.source.WMTS(options);
+          infoWMS;
+
+          // https://openlayers.org/en/latest/examples/wmts.html
+          let size = ol.extent.getWidth(ol.proj.get('EPSG:3857').getExtent())/256;
+          let resolutions = [];
+          let matrixIds = [];
+          for (let i = 0; i < 6; i++){
+            resolutions[i] = size / Math.pow(2, i);
+            matrixIds[i] = i;
+          }
+
+          let options2 = {
+            dimensions: {
+              elevation: "-1.0182366371154785", // REMOVE?
+              time: "2024-06-11T00:00:00Z", // FROM INPUT
+            },
+            //style: 'cmap:dense', // FROM INPUT
+            url: 'http://wmts.marine.copernicus.eu/teroWmts', // FROM INPUT
+            layer: "MEDSEA_ANALYSISFORECAST_BGC_006_014/cmems_mod_med_bgc-nut_anfc_4.2km_P1D-m_202211/nh4", // FROM INPUT
+            // TODO
+            tileGrid: //options.tileGrid,
+            new ol.tilegrid.WMTS ({
+              extent: ol.proj.get('EPSG:3857').getExtent(),
+              resolutions,
+              matrixIds,
+              //resolutions: options.tileGrid.getResolutions(),
+              //matrixIds: options.tileGrid.getMatrixIds(),
+              // https://openlayers.org/en/latest/apidoc/module-ol_tilegrid_WMTS-WMTSTileGrid.html
+              //minZoom: 0,
+              //sizes: [],
+              //tileSize: [256, 256]
+            }),
+
+            matrixSet: 'EPSG:3857',
+            projection: ol.proj.get('EPSG:3857'),
+            requestEncoding: 'KVP',
+            format: 'image/png',
+            crossOrigin: 'anonymous',
+            wrapX: false
+          }
+          
+          let source = new ol.source.WMTS(options2);
           source.name="wmsSource";
           this.getMapLayer('data').setSource(source);
         });
-
 
       return;
 

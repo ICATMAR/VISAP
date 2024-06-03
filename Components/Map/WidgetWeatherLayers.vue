@@ -128,7 +128,7 @@
         // If source is not found, it will send undefined
         window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', infoWMS);
         // Set legend
-        this.$refs.wmsLegend.setWMSLegend(infoWMS);
+        //this.$refs.wmsLegend.setWMSLegend(infoWMS);
       },
 
 
