@@ -42,18 +42,10 @@
     </table>
 
     <div>
-      <i>Generated using E.U. Copernicus Marine Service Information; </i>
-      <i><a href="https://doi.org/10.25423/CMCC/MEDSEA_ANALYSISFORECAST_PHY_006_013_EAS6" target="_blank" rel="noreferrer noopener">Sea Physics Analysis and Forecast; </a></i>
-      <i><a href="https://doi.org/10.25423/CMCC/MEDSEA_MULTIYEAR_PHY_006_004_E3R1" target="_blank" rel="noreferrer noopener">Sea Physics Reanalysis; </a></i>
-
-      <i><a href="https://doi.org/10.25423/cmcc/medsea_analysisforecast_wav_006_017_medwam3" target="_blank" rel="noreferrer noopener">Sea Waves Analysis and Forecast; </a></i>
-      <i><a href="https://doi.org/10.25423/cmcc/medsea_multiyear_wav_006_012" target="_blank" rel="noreferrer noopener">Sea Waves Reanalysis; </a></i>
-
-      <i><a href="https://doi.org/10.25423/cmcc/medsea_analysisforecast_bgc_006_014_medbfm3" target="_blank" rel="noreferrer noopener">Sea Biogeochemistry Analysis and Forecast; </a></i>
-      <i><a href="https://doi.org/10.25423/cmcc/medsea_multiyear_bgc_006_008_medbfm3" target="_blank" rel="noreferrer noopener">Sea Biogechemistry Reanalysis; </a></i>
-
-      <i><a href="https://doi.org/10.48670/moi-00184" target="_blank" rel="noreferrer noopener">Wind L4 Near real Time; </a></i>
-      <i><a href="https://doi.org/10.48670/moi-00185" target="_blank" rel="noreferrer noopener">Wind L4 Reprocessed; </a></i>
+      <i>Generated using E.U. Copernicus Marine Service Information: </i>
+      <i v-for="dPKey in Object.keys(dataProducts)">
+        <a :href=dataProducts[dPKey].doi target="_blank" rel="noreferrer noopener"> {{ dPKey }}; </a>
+      </i>
     </div>
 
   </div>
@@ -64,11 +56,11 @@
 
 <script>
 export default {
-  // REQUIRES WMSDataRetriever.js
+  // REQUIRES WMTSDataRetriever.js
   name: "weather-info",
   created(){
     // Create data retreiver
-    this.dataRetriever = new WMSDataRetriever();
+    this.dataRetriever = window.WMTSDataRetriever;
     
     // Create data array inside dataRows
     this.dataRows.forEach(dr => {
@@ -89,32 +81,35 @@ export default {
     return {
       // Check https://es.wisuki.com/spot/2617/barceloneta for inspiration
       dataRows: [
-        { // Wind icon
-          key: 'windicon',
-          imgURL: 'icons.png',
-          position: 0,
-          defURL: 'data/emptyPixel.png',
-          source: 'Wind',
-          signRange: [5,15],
-          color: '#6164ff',
-        },
-        { 
-          name: "Wind direction",
-          abbr: "Dir",
-          units: "º",
-          direction: true, 
-          layer: "Wind",
-        },
-        { 
-          name: "Wind",
-          abbr: "Wind",
-          icon: true,
-          units: "m/s", 
-          range: [0, 30],
-          signRange: [5,15],
-          color: '#6164ff',//'#71c3eb',
-          colorScale: 'boxfill/sst_36'
-        },
+        // TODO: no data product for wind? Work on WMTS
+        // https://data.marine.copernicus.eu/product/WIND_GLO_PHY_L4_MY_012_006/description
+        // https://data.marine.copernicus.eu/product/WIND_GLO_PHY_L4_NRT_012_004/description
+        // { // Wind icon
+        //   key: 'windicon',
+        //   imgURL: 'icons.png',
+        //   position: 0,
+        //   defURL: 'data/emptyPixel.png',
+        //   source: 'Wind',
+        //   signRange: [5,15],
+        //   color: '#6164ff',
+        // },
+        // { 
+        //   name: "Wind direction",
+        //   abbr: "Dir",
+        //   units: "º",
+        //   direction: true, 
+        //   layer: "Wind",
+        // },
+        // { 
+        //   name: "Wind",
+        //   abbr: "Wind",
+        //   icon: true,
+        //   units: "m/s", 
+        //   range: [0, 30],
+        //   signRange: [5,15],
+        //   color: '#6164ff',//'#71c3eb',
+        //   colorScale: 'boxfill/sst_36'
+        // },
         
         { // Wave icon
           key: 'waveicon',
@@ -150,31 +145,32 @@ export default {
           signRange: [6,15],
           color: '#6164ff' // TODO: color or colorScale. If color, go from transparent to the specified color.
         },
-        { // Current icon
-          key: 'currenticon',
-          imgURL: 'icons.png',
-          position: 2,
-          defURL: 'https://es.wisuki.com/images/px.png',
-          source: 'Sea surface velocity',
-          signRange: [0.25, 1],
-          color: '#6164ff',
-        },
-        {
-          name: "Sea current direction",
-          abbr: "Dir",
-          units: "m/s",
-          direction: true,
-          layer: "Sea surface velocity",
-          color: '#6164ff',//'#71c3eb',
-        },        {
-          name: "Sea surface velocity",
-          abbr: "Current",
-          icon: true,
-          units: "m/s",
-          range: [0, 3],
-          signRange: [0.25, 1],
-          color: '#6164ff',//'#71c3eb',
-        },
+        // TODO: wait until CMEMS has this data
+        // { // Current icon
+        //   key: 'currenticon',
+        //   imgURL: 'icons.png',
+        //   position: 2,
+        //   defURL: 'https://es.wisuki.com/images/px.png',
+        //   source: 'Sea surface velocity',
+        //   signRange: [0.25, 1],
+        //   color: '#6164ff',
+        // },
+        // {
+        //   name: "Sea current direction",
+        //   abbr: "Dir",
+        //   units: "m/s",
+        //   direction: true,
+        //   layer: "Sea surface velocity",
+        //   color: '#6164ff',//'#71c3eb',
+        // },        {
+        //   name: "Sea surface velocity",
+        //   abbr: "Current",
+        //   icon: true,
+        //   units: "m/s",
+        //   range: [0, 3],
+        //   signRange: [0.25, 1],
+        //   color: '#6164ff',//'#71c3eb',
+        // },
         {
           name: "Chlorophyll",
           abbr: "Chl",
@@ -207,6 +203,7 @@ export default {
           colorScale: 'boxfill/sst_36'
         },
       ],
+      dataProducts: {},
       numDays: 7,
       daysString: [],
       currentDateHTML: '',
@@ -233,6 +230,8 @@ export default {
 
 
     getData: function(lat, long){
+      // Reset used data products
+      this.dataProducts = {};
       // Get data
       this.dataRows.forEach((rr, rIndex) => {
         this.dates.forEach((date, dIndex) => {
@@ -248,6 +247,12 @@ export default {
                 }
                 rr.data[dIndex].value = value.toFixed(2);
                 rr.data[dIndex].loading = false;
+                // Get product
+                let id = this.dataRetriever.getDataSetIdFromDataName(layerName);
+                let dataSet = this.dataRetriever.getDataSet(id, 'd', date.toISOString());
+                if (this.dataProducts[dataSet.productName] == undefined){
+                  this.dataProducts[dataSet.productName] = {doi: dataSet.doi};
+                }
                 // Icon
                 if (rr.icon){
                   // Find dataRow with source

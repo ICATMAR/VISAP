@@ -27,6 +27,11 @@ window.location.getHashValue = getHashValue;
 window.eventBus = window.mitt();
 
 
+// Import WMTSDataRetriever
+import WMTSDataRetriever from './Assets/Scripts/WMTSDataRetriever.js';
+window.WMTSDataRetriever = new WMTSDataRetriever();
+
+
 // Import scripts
 // Import file manager
 import FileManager from './Assets/Scripts/FileManager.js';
