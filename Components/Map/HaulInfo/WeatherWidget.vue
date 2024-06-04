@@ -202,6 +202,14 @@ export default {
           range: [10, 25],
           colorScale: 'boxfill/sst_36'
         },
+        {
+          name: "Sea Temperature Anomaly",
+          abbr: 'SST anomaly',
+          units: 'ºC',
+          range: [-8, 8],
+          signRange: [0, 5],
+          color: '#FFAC63'
+        }
       ],
       dataProducts: {},
       numDays: 7,
