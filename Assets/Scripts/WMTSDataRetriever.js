@@ -1,11 +1,11 @@
-// import preLoadedDataTypes from "/CasablancaBuoy/Assets/Scripts/WMTSDataTypes.js";
-
 // Scripts that obtain data from the CMEMS WMTS API
 // https://help.marine.copernicus.eu/en/articles/6478168-how-to-use-wmts-to-visualize-data#h_2523403b15
 
 // Examples
 // https://wmts.marine.copernicus.eu/teroWmts/?service=WMTS&version=1.0.0&request=GetTile&tilematrixset=EPSG:4326&style=range:0/6,cmap:gray&tilematrix=5&tilerow=8&tilecol=32&layer=MEDSEA_MULTIYEAR_WAV_006_012/med-hcmr-wav-rean-h_202105/VHM0&time=2025-04-30T09:00:00.000Z
 // https://wmts.marine.copernicus.eu/teroWmts/?service=WMTS&version=1.0.0&request=GetTile&tilematrixset=EPSG:3857&style=range:0/6,cmap:gray&tilematrix=6&tilerow=23&tilecol=32&layer=MEDSEA_ANALYSISFORECAST_WAV_006_017/cmems_mod_med_wav_anfc_4.2km_PT1H-i_202311/VHM0&time=2024-04-30T09:00:00.000Z
+import WMTSProducts from './WMTSDataProducts.js';
+import WMTSCustomDefinitions from './WMTSCustomDefinitions.js';
 
 export class WMTSDataRetriever {
 
@@ -14,204 +14,12 @@ export class WMTSDataRetriever {
   // Store GetCapabilities XML per product
   productsXML = {};
 
-  products = {
-    "Mediterranean Sea Waves Reanalysis": {
-      /*
-        Available datasets
-        VPED, VTPK
-        VHM0, VHM0_SW1, VHM0_SW2, VHM0_WW
-        VMDR, VMDR_SW1, VMDR_SW2, VMDR_WW
-        VSDX, VSDY
-        VTM01_SW1, VTM01_SW2, VTM01_WW, VTM02
-        VTM10
-      */
-      wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_MULTIYEAR_WAV_006_012/med-hcmr-wav-rean-h_202105?request=GetCapabilities&service=WMS',
-      doi: "https://doi.org/10.25423/cmcc/medsea_multiyear_wav_006_012",
-      timeScales: ['h'],
-      dataSets: ['VHM0', 'VHM0_WW', 'VHM0_SW1', 'VHM0_SW2',
-                'VTM02', 'VTM01_WW', 'VTM01_SW1', 'VTM01_SW2',
-                'VMDR', 'VMDR_WW', 'VMDR_SW1', 'VMDR_SW2'],
-    },
-    "Mediterranean Sea Waves Analysis and Forecast": {
-      // https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_ANALYSISFORECAST_WAV_006_017?request=GetCapabilities&service=WMS
-      /*
-      Available datasets
-      VCMX, VMXL, VPED, VTPK
-      VHM0, VHM0_SW1, VHM0_SW2, VHM0_WW
-      VMDR, VMDR_SW1, VMDR_SW2, VMDR_WW
-      VSDX, VSDY
-      VTM01_SW1, VTM01_SW2 ,VTM01_WW ,VTM02
-      VTM10
-      */
-      wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_ANALYSISFORECAST_WAV_006_017?request=GetCapabilities&service=WMS',
-      doi: 'https://doi.org/10.25423/cmcc/medsea_analysisforecast_wav_006_017_medwam4',
-      timeScales: ['h'],
-      dataSets: ['VHM0', 'VHM0_WW', 'VHM0_SW1', 'VHM0_SW2',
-                'VTM02', 'VTM01_WW', 'VTM01_SW1', 'VTM01_SW2',
-                'VMDR', 'VMDR_WW', 'VMDR_SW1', 'VMDR_SW2'],
-    },
-    "Mediterranean Sea Physics Reanalysis": {
-      /*
-      Available datasets 
-        uo, vo, wo - Current
-        so, - Salinity
-        zos - Sea Surface Height
-        thetao, bottomT - Potential temperature
-      */
-      wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_MULTIYEAR_PHY_006_004?request=GetCapabilities&service=WMS',
-      doi: 'https://doi.org/10.25423/CMCC/MEDSEA_MULTIYEAR_PHY_006_004_E3R1I',
-      timeScales: ['h', 'd', 'm'],
-      dataSets: ['uo', 'vo', 'wo', 'so', 'thetao', 'bottomT']
-    },
-    "Mediterranean Sea Physics Analysis and Forecast": {
-      /*
-      Available datasets 
-        uo, vo, wo - Current
-        so, - Salinity
-        zos - Sea Surface Height
-        thetao, bottomT - Potential temperature
-      */
-      wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_ANALYSISFORECAST_PHY_006_013?request=GetCapabilities&service=WMS',
-      doi: 'https://doi.org/10.25423/CMCC/MEDSEA_ANALYSISFORECAST_PHY_006_013_EAS8',
-      timeScales: ['h', 'd', 'm'],
-      dataSets: ['uo', 'vo', 'wo', 'so', 'thetao', 'bottomT']
-    },
-    "Mediterranean Sea Biogechemistry Reanalysis": {
-      /*
-      Available datasets 
-        nppv, o2 - Primary Production and Oxygen
-        dissic, ph, talk - Dissolved Inorganic Carbon, pH and Alkalinity
-        fpco2, spco2 - Surface CO2 flux and Surface partial pressure of CO2
-        nh4, no3, po4 - Ammonium, Nitrate and Phosphate
-        chl, phyc - Phytoplankton Carbon Biomass and Chlorophyll
-      */
-      wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_MULTIYEAR_BGC_006_008?request=GetCapabilities&service=WMS',
-      doi: 'https://doi.org/10.25423/cmcc/medsea_multiyear_bgc_006_008_medbfm3',
-      timeScales: ['d', 'm'],
-      dataSets: ['chl']
-    },
-    "Mediterranean Sea Biogechemistry Analysis and Forecast": {
-      /*
-      Available datasets
-        diatoC, diatoChla - Diatoms Carbon Biomass and Diatoms Chlorophyll concentration
-        dinoC, dinoChla - Dinoflagellates Carbon Biomass and Dinoflagellates Chlorophyll concentration
-        nanoC, nanoChla - Nanophytoplankton Carbon Biomass  and Nanophytoplankton Chlorophyll concentration
-        nppv, o2 - Primary Production and Oxygen
-        dissic, ph, talk - Dissolved Inorganic Carbon, pH and Alkalinity
-        fpco2, spco2 - Surface CO2 flux and Surface partial pressure of CO2
-        nh4, no3, po4, si - Ammonium, Nitrate, Phosphate and Silicate
-        kd490 - Diffuse attenuation coefficient of the downwelling irradiance at 490 nm
-        picoC, picoChla - Picophytoplankton Carbon Biomass and Picophytoplankton Chlorophyll concentration
-        zooc - Zooplankton Carbon Biomass
-        phyc, chl - Phytoplankton Carbon Biomass,  and Chlorophyll
-      */
-      wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_ANALYSISFORECAST_BGC_006_014?request=GetCapabilities&service=WMS',
-      doi: 'https://doi.org/10.25423/cmcc/medsea_analysisforecast_bgc_006_014_medbfm4',
-      timeScales: ['d', 'm'],
-      dataSets: ['chl']
-    },
-  };
+  // From CMEMS Catalogue
+  products = WMTSProducts;
 
   // Custom dataType definitions
-  // One could use standard dictionaries / vocabularies?
   // These are useful for the interface, UI
-  customDefinitions = {
-    'VHM0': {
-      shortName: 'Wave height',
-      altNames: ['Hs', 'Hm0', 'Wave significant height', 'Spectral significant wave height (Hm0)'],
-      range: [0,12],
-      animation: {
-        layerNames: ['VHM0', 'VMDR'], // Intensity, Angle
-        format: 'value_angle',
-        type: 'wave'
-      },
-    },
-    'VTM02': {
-      shortName: 'Wave period',
-      range: [0, 18],
-    },
-    'VTM01_WW': {
-      shortName: 'Wave period',
-      range: [0, 18],
-    },
-    'VTM01_SW1': {
-      shortName: 'Wave period',
-      range: [0, 18],
-    },
-    'VTM01_SW2': {
-      shortName: 'Wave period',
-      range: [0, 18],
-    },
-    'VHM0_WW': {// Wind wave height
-      shortName: 'Wind wave height',
-      altNames: ['Wind wave significant height', "Spectral significant wind wave height", 'Wind waves', 'WWSH'],
-      range: [0,12],
-      animation: {
-        layerNames: ['VHM0_WW', 'VMDR_WW'], // Intensity, Angle
-        format: 'value_angle',
-        type: 'whiteWave'
-      },
-    },
-    'VMDR': {
-      shortName: 'Wave direction',
-      altNames: ['Mean wave direction', 'MDIR'],
-      unit: 'º',
-      range: [0, 360],
-    },
-
-    'VHM0_SW1': { // Swell 1 wave height
-      range: [0, 12],
-      altNames: ["Primary swell wave significant height"],
-      animation: {
-        layerNames: ['VHM0_SW1', 'VMDR_SW1'], // Intensity, Angle
-        format: 'value_angle',
-        type: 'wave'
-      },
-    },
-    'VHM0_SW2': { // Swell 2 wave height
-      range: [0, 12],
-      altNames: ["Secondary swell wave significant height"],
-      animation: {
-        layerNames: ['VHM0_SW2', 'VMDR_SW2'], // Intensity, Angle
-        format: 'value_angle',
-        type: 'wave'
-      },
-    },
-    'uo': {
-      range: [0, 2.5],
-      unit: 'm/s',
-    },
-    'vo': {
-      range: [0, 2.5],
-      unit: 'm/s',
-    },
-    'wo': {
-      range: [0, 1.5],
-      unit: 'm/s',
-    },
-    'thetao': {
-      shortName: 'Surface temperature',
-      altNames: ['Sea surface temperature'],
-      range: [2, 38],
-      unit: 'ºC',
-    },
-    'bottomT': {
-      range: [2, 38],
-      shortName: 'Bottom temperature',
-      altNames: ['Sea bottom temperature'],
-      unit: 'ºC'
-    },
-    'so': {
-      shortName: 'Salinity',
-      range: [32, 41],
-      unit: '‰',
-    },
-    'chl': {
-      shortName: 'Chlorophyll',
-      range: [0.01, 0.3],
-      unit: 'mg/m³',
-    }
-  }
+  customDefinitions = WMTSCustomDefinitions;
 
 
 
