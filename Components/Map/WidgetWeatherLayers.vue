@@ -49,8 +49,7 @@
     <span>{{$t('Date')}}: {{ currentDate }}</span>
 
     <!-- Data source attribution -->
-    <span class="wrapText">{{$t('Data from')}}: <a title="Weather data source" :href="sourceDoi" target="_blank">E.U.
-            Copernicus Marine Service Information</a></span>
+    <span class="wrapText">{{$t('Data from')}}: <a title="Weather data source" :href="sourceDoi" target="_blank">{{productName}}</a></span>
     
 
 
@@ -78,15 +77,34 @@
     },
     data (){
       return {
-        climaLayers: ['Sea Surface Temperature', 'Sea Temperature Anomaly', 'Sea Bottom Temperature', 'Chlorophyll', 'Salinity', 'Wind', 'Wave Significant Height', 'Current'],
+        climaLayers: [
+          'Sea Surface Temperature', 
+          'Sea Temperature Anomaly', 
+          'Sea Bottom Temperature', 
+          'Chlorophyll', 
+          'Salinity', 
+          //'Wind',
+          'Wave Significant Height', 
+          //'Current'
+        ],
         // https://origin.fontawesome.com/search?o=r&m=free&f=classic
-        climaIcons: ['&#xf2c9;<sub>~</sub>', '&#x2206; &#xf2c9;', '&#xf2c9;<sup>~</sup>', 'C<sub>hl</sub>', '‰', '&#xf72e;', '&#xe515;', '&#xf773;'],
+        climaIcons: [
+          '&#xf2c9;<sub>~</sub>',
+          '&#x2206; &#xf2c9;',
+          '&#xf2c9;<sup>~</sup>',
+          'C<sub>hl</sub>',
+          '‰',
+          //'&#xf72e;',
+          '&#xe515;',
+          //'&#xf773;'
+        ],
         selClimaLayer: '',
         isClimaLayerVisible: false,
         climaOpacity: 1,
         // Defaults
         WMSLegendURL: '',
         sourceDoi: '',
+        productName: '',
         currentDate: '',
 
       }
@@ -118,14 +136,23 @@
         // Get clima URL
         let id = this.dataRetriever.getDataSetIdFromDataName(this.selClimaLayer);
         if (id == undefined){
+          debugger;
+          // It should not be shown if this dataset does not exist or the name is not found
           console.log(this.selClimaLayer + " not found.");
-          // TODO: SHOW THAT IT IS NOT AVAILABLE
           window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', undefined);
           return;
         }
         let dataSet = this.dataRetriever.getDataSet(id, 'h', date);
+        if (dataSet == undefined){
+          // TODO: SHOW THAT IT IS NOT AVAILABLE
+          // --> Should I also check if the URLs work? maybe try a getValueAt? It doubles the requests, but it improves the UI. 
+          // Actually the best would be to catch the error of requesting a wmts tile. Can we get this from Openlayers? Otherwise, force getValueAt
+          // Maybe the WMTS always provides data, as the service now returns the closest timestamp.
+          debugger;
+        }
         // Attribution link
         this.sourceDoi = dataSet.doi;
+        this.productName = dataSet.productProvider + ' - ' + dataSet.productName;
       
         let wmtsParams = {
           dataSet,
