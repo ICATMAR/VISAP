@@ -683,7 +683,7 @@ export default {
           //elevation: "-1.0182366371154785", // REMOVE?
           time: wmtsParams.tmst,//"2024-06-11T00:00:00Z",
         },
-        //style: 'cmap:dense', // FROM INPUT
+        style: 'range:' + wmtsParams.dataSet.range[0] + '/' + wmtsParams.dataSet.range[1] + ',cmap:gray',  //'cmap:dense', // FROM INPUT
         url: baseURL,//'http://wmts.marine.copernicus.eu/teroWmts', // FROM INPUT
         layer: layerName,//"MEDSEA_ANALYSISFORECAST_BGC_006_014/cmems_mod_med_bgc-nut_anfc_4.2km_P1D-m_202211/nh4", 
         tileGrid: new ol.tilegrid.WMTS ({
@@ -712,6 +712,32 @@ export default {
       let source = new ol.source.WMTS(options);
       source.name="wmsSource";
       this.getMapLayer('data').setSource(source);
+
+
+      // ******************
+      // STYLE
+      // WebGLTile probably does not work well. Could try to update OpenLayers library, maybe it is fixed in more recent versions
+      // Alternatively use pixel transformations with canvas -> 
+      /* 
+      ol.source.WMTS.tileLoadFunction (imageTile, src){
+        // imageTile.getImage().src = src
+        const img = imageTile.getImage();
+        img.crossOrigin = 'anonymous'; // Ensure cross-origin access is allowed
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          context.drawImage(img, 0, 0);
+          const imageData = context.getImageData(0, 0, img.width, img.height);
+          const modifiedImageData = changeTileColors(imageData);
+          context.putImageData(modifiedImageData, 0, 0);
+          img.src = canvas.toDataURL();
+        };
+        img.src = src;
+      }
+      */
+      
 
       // Tracking the load progress
       this.isLayerDataReady = false;
