@@ -673,7 +673,6 @@ export default {
         matrixIds[i] = i;
       }
 
-      debugger;
       // URL parameters
       let templateURL = wmtsParams.dataSet.template;
       let baseURL = templateURL.split('/?')[0];
