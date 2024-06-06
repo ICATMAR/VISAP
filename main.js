@@ -28,8 +28,11 @@ window.eventBus = window.mitt();
 
 
 // Import WMTSDataRetriever
-import WMTSDataRetriever from './Assets/Scripts/WMTSDataRetriever.js';
-window.WMTSDataRetriever = new WMTSDataRetriever();
+import WMTSDataRetrieverClass from './Assets/Scripts/WMTSDataRetriever.js';
+window.WMTSDataRetriever = new WMTSDataRetrieverClass();
+// Import tile manager
+import WMTSTileManagerClass from './Assets/Scripts/WMTSTileManager.js'
+window.WMTSTileManager = new WMTSTileManagerClass();
 
 
 // Import scripts

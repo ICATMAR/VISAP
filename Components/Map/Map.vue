@@ -507,11 +507,12 @@ export default {
           progress.isLoaded = true;
         }
       });
-      source.on('tileloaderror', () => {
+      source.on('tileloaderror', (e) => {
         progress.loaded += 1;
         progress.progressPercent = 100*progress.loaded/progress.loading;
+        console.warn("Tile error loading");
         if (progress.loading == progress.loaded){
-          this.onTilesLoaded(); // TODO: could reference the isLayerDataReady to source, so we control if a source is ready
+          this.onTilesLoaded(e); // TODO: could reference the isLayerDataReady to source, so we control if a source is ready
           progress.isLoaded = true;
         }
       });
@@ -711,33 +712,14 @@ export default {
       // Create OL source
       let source = new ol.source.WMTS(options);
       source.name="wmsSource";
-      this.getMapLayer('data').setSource(source);
-
-
-      // ******************
-      // STYLE
-      // WebGLTile probably does not work well. Could try to update OpenLayers library, maybe it is fixed in more recent versions
-      // Alternatively use pixel transformations with canvas -> 
-      /* 
-      ol.source.WMTS.tileLoadFunction (imageTile, src){
-        // imageTile.getImage().src = src
-        const img = imageTile.getImage();
-        img.crossOrigin = 'anonymous'; // Ensure cross-origin access is allowed
-        img.onload = function () {
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          context.drawImage(img, 0, 0);
-          const imageData = context.getImageData(0, 0, img.width, img.height);
-          const modifiedImageData = changeTileColors(imageData);
-          context.putImageData(modifiedImageData, 0, 0);
-          img.src = canvas.toDataURL();
-        };
-        img.src = src;
-      }
-      */
       
+      // Tile style based on legends (TODO)
+      // Also smart storage and reuse of tiles
+      source.tileLoadFunction = (imageTile, src) => {
+        WMTSTileManager.loadProcessStoreTile(imageTile, src);
+      }
+      // Set the source to the layer
+      this.getMapLayer('data').setSource(source);
 
       // Tracking the load progress
       this.isLayerDataReady = false;
