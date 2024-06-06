@@ -509,9 +509,18 @@ export class WMTSDataRetriever {
   // HACK: errors are not catched when fetching image urls. If errors are catched, the data does not load
   getTileFromURL = function(url){
     return new Promise((resolve, reject) => {
+      // If tile was already loaded resolve
+      if (window.WMTSTileManager.loadedTiles[url] != undefined){
+        resolve(WMTSTileManager.loadedTiles[url].grayImage);
+      }
+      // Otherwise create and load tile
       const img = new Image();
       img.crossOrigin = "Anonymous";
-      img.addEventListener('load', () => resolve(img));
+      img.addEventListener('load', () => {
+        // Store tile in WMTSTileManager
+        WMTSTileManager.loadedTiles[url] = {'grayImage': img};
+        resolve(img);
+      });
       img.addEventListener('error', reject); // If reject(img), image does not load
       img.src = url;
       this.activeRequests.push(img);
