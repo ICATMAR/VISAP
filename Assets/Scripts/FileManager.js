@@ -10,23 +10,19 @@
 
 class FileManager {
 
-  LEGENDURLS = [
-    './Assets/Legends/GreenBlueWhiteOrangeRed.png',
-    './Assets/Legends/BlueWhiteRed.png',
-    './Assets/Legends/ModifiedOccam.png',
-    './Assets/Legends/absGrayScale.png',
-    './Assets/Legends/absGrayScaleReverse.png',
-    './Assets/Legends/DarkScaleColors.png',
-    './Assets/Legends/absModifiedOccam.png',
-    './Assets/Legends/absColdOccam.png',
+  legendsFilePath = './Assets/Legends/'
+
+  LEGENDNAMES = [
+    'GreenBlueWhiteOrangeRed',
+    'BlueWhiteRed',
+    'ModifiedOccam',
+    'absGrayScale',
+    'absGrayScaleReverse',
+    'DarkScaleColors',
+    'absModifiedOccam',
+    'absColdOccam',
   ];
 
-  BASELAYERURLS = [
-    './Assets/BaseLayer/Imagery.png',
-    './Assets/BaseLayer/Bathymetry.png',
-    './Assets/BaseLayer/Ocean.png',
-    './Assets/BaseLayer/OSM.png'
-  ];
 
   constructor(){
     
@@ -41,20 +37,20 @@ class FileManager {
     let promises = [];
     steps = steps || 50;
 
-    for (let i = 0; i < this.LEGENDURLS.length; i++){
-      promises.push(this.getLegend(this.LEGENDURLS[i], steps));
+    for (let i = 0; i < this.LEGENDNAMES.length; i++){
+      promises.push(this.getLegend(this.LEGENDNAMES[i], steps));
     }
 
     return new Promise(resolve => resolve(Promise.allSettled(promises)));
   }
 
   // Get legends
-  getLegend = function(url, steps){
+  getLegend = function(legendName, steps){
 
     return new Promise ((resolve, reject) => {
 
       let img = new Image();
-      img.src = url;
+      img.src = this.legendsFilePath + legendName + '.png';
       
 
       img.onload = () => {
@@ -92,10 +88,6 @@ class FileManager {
           colorsFloat32[i*3 + 2] = pixels[pixelPosition*4 + 2];
         }
 
-        // Legend name
-        let str = url.split('/');
-        let legendName = str[str.length-1];
-
         resolve({colorsStr, colorsRGB, colorsFloat32, img, legendName});
       }
       img.onerror = () => reject();
@@ -103,38 +95,6 @@ class FileManager {
     });
 
   }
-
-
-
-
-
-  // Base layer
-  loadBaseLayerIcons = function(){
-    let promises = [];
-
-    for (let i = 0; i < this.BASELAYERURLS.length; i++){
-      promises.push(this.loadImage(this.BASELAYERURLS[i]));
-    }
-
-    return new Promise(resolve => resolve(Promise.allSettled(promises)));
-  }
-  // Load image
-  loadImage = function(url){
-
-    return new Promise ((resolve, reject) => {
-      let img = new Image();
-      img.src = url;
-      let name = url.split('/').reverse()[0].replace('.png', '');
-        
-      img.onload = () => {
-        
-        resolve({name, img});
-      }
-      img.onerror = (e) => console.error(e);
-    });
-
-  }
-
 
 
 }
