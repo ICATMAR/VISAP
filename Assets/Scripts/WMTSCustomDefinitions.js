@@ -87,7 +87,7 @@ const customDefinitions = {
     unit: 'ºC'
   },
   'sst_anomaly': {
-    range: [-3, 3],
+    range: [-8, 8],
     shortName: 'Sea surface temperature anomaly',
     altNames: ['Sea temperature anomaly', 'Temperature anomaly'],
     unit: 'ºC'
