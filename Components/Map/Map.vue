@@ -267,6 +267,11 @@ export default {
     window.eventBus.on('WidgetWeatherLayers_ClimaLayerChange', wmtsParams => {
       this.setClimaLayer(wmtsParams);
     });
+    // Legend WMTS changed
+    // TODO
+    window.eventBus.on('LegendWMTS_StyleChange', wmtsParams => {
+      this.setClimaLayer(wmtsParamsadfaf
+    });
     // Change clima layer style
     window.eventBus.on('WMSLegend_LegendClicked', style => {
       this.changeStyle(style);
@@ -714,9 +719,10 @@ export default {
       source.name="wmsSource";
       
       // Tile style based on legends (TODO)
+      adsf
       // Also smart storage and reuse of tiles
       source.tileLoadFunction = (imageTile, src) => {
-        WMTSTileManager.loadProcessStoreTile(imageTile, src);
+        WMTSTileManager.loadProcessStoreTile(imageTile, src, legend);
       }
       // Set the source to the layer
       this.getMapLayer('data').setSource(source);

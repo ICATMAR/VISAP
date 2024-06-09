@@ -41,9 +41,8 @@
       
     </template>
 
-    <!-- WMS graphic legend -->
-    <!-- <img v-if="WMSLegendURL != ''" id='wmsLegend' :src="WMSLegendURL"> -->
-    <wms-legend ref="wmsLegend"></wms-legend>
+    <!-- WMTS graphic legend -->
+    <wmts-legend ref="wmtsLegend"></wmts-legend>
 
     <!-- Current date -->
     <span>{{$t('Date')}}: {{ currentDate }}</span>
@@ -60,7 +59,7 @@
   <script>
   
   // Import components
-  import WMSLegend from './WMSLegend.vue';
+  import WMTSLegend from './WMTSLegend.vue';
 
   export default {
     name: 'widgetWeatherLayers', // Caps, no -
@@ -102,7 +101,7 @@
         isClimaLayerVisible: false,
         climaOpacity: 1,
         // Defaults
-        WMSLegendURL: '',
+        WMTSLegendURL: '',ad
         sourceDoi: '',
         productName: '',
         currentDate: '',
@@ -163,6 +162,12 @@
         window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', wmtsParams);
         // TODO
         // Set legend
+        //'legendName': {default: 'absModifiedOccam', type: String},
+        //'legendRange':{default: [0, 100], type: Array},
+        //'defaultUnits': {default: 'cm/s', type: String},
+        //'selectedLegends': {default: ['absModifiedOccam.png', 'absColdOccam.png', 'white.png', 'black.png' ], type: Array},
+        asdfa=
+        
         //this.$refs.wmsLegend.setWMSLegend(infoWMS);
       },
 
@@ -181,7 +186,7 @@
   
     },
     components: {
-      'wms-legend': WMSLegend,
+      'wmts-legend': WMTSLegend,
     }
   }
   </script>

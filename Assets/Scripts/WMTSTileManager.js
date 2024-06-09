@@ -13,7 +13,7 @@ class WMTSTileManager {
 
 
   // Tile processing
-  loadProcessStoreTile = (imageTile, src) => {
+  loadProcessStoreTile = (imageTile, src, legend) => { legend=
     // Tile image that will be finally used by OpenLayers
     const tileImg = imageTile.getImage();
     tileImg.crossOrigin = 'anonymous';
