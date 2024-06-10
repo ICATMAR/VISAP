@@ -269,9 +269,8 @@ export default {
     });
     // Legend WMTS changed
     // TODO
-    window.eventBus.on('LegendWMTS_StyleChange', wmtsParams => {
-      this.setClimaLayer(wmtsParamsadfaf
-    });
+    debugger;
+    //************************************** */
     // Change clima layer style
     window.eventBus.on('WMSLegend_LegendClicked', style => {
       this.changeStyle(style);
@@ -718,11 +717,9 @@ export default {
       let source = new ol.source.WMTS(options);
       source.name="wmsSource";
       
-      // Tile style based on legends (TODO)
-      adsf
       // Also smart storage and reuse of tiles
       source.tileLoadFunction = (imageTile, src) => {
-        WMTSTileManager.loadProcessStoreTile(imageTile, src, legend);
+        WMTSTileManager.loadProcessStoreTile(imageTile, src, undefined); // Could define legend here, but legends are managed in WMTSLenged.vue
       }
       // Set the source to the layer
       this.getMapLayer('data').setSource(source);
@@ -845,6 +842,7 @@ export default {
         if (climaLayer != undefined)
           this.map.removeLayer(climaLayer);
         // Remove legend url
+        debugger;
         this.WMSLegendURL = ''; // TODO in WMTS
         
         return;

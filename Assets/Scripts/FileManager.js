@@ -13,15 +13,29 @@ class FileManager {
   legendsFilePath = './Assets/Legends/'
 
   LEGENDNAMES = [
-    'GreenBlueWhiteOrangeRed',
-    'BlueWhiteRed',
-    'ModifiedOccam',
-    'absGrayScale',
-    'absGrayScaleReverse',
-    'DarkScaleColors',
-    'absModifiedOccam',
-    'absColdOccam',
+    'Alg2',
+    'Green',
+    'Inferno',
+    'Occam',
+    'OccamCold',
+    'OccamPastel',
+    'TwoSidedBlueWhiteRed',
+    'TwoSidedDarkScaleColors',
+    'TwoSidedGreenBlueWhiteOrangeRed',
+    'TwoSidedOccam',
+    'Zebra'
   ];
+
+  BASELAYERURLS = [
+    './Assets/BaseLayer/Imagery.png',
+    './Assets/BaseLayer/Bathymetry.png',
+    // './Assets/BaseLayer/Ocean.png',
+    // './Assets/BaseLayer/OSM.png'
+  ];
+
+  requestedFiles = [];
+  loadedFilesLog = [];
+
 
 
   constructor(){
@@ -36,7 +50,7 @@ class FileManager {
   loadLegends = function(steps){
     let promises = [];
     steps = steps || 50;
-
+    
     for (let i = 0; i < this.LEGENDNAMES.length; i++){
       promises.push(this.getLegend(this.LEGENDNAMES[i], steps));
     }
@@ -87,15 +101,48 @@ class FileManager {
           colorsFloat32[i*3 + 1] = pixels[pixelPosition*4 + 1];
           colorsFloat32[i*3 + 2] = pixels[pixelPosition*4 + 2];
         }
-
+        debugger
         resolve({colorsStr, colorsRGB, colorsFloat32, img, legendName});
       }
-      img.onerror = () => reject();
+      img.onerror = () => {
+        console.error('Legend not found with url: ' + img.src);
+        reject()
+      };
       
     });
 
   }
 
+
+
+
+
+  // Base layer
+  loadBaseLayerIcons = function(){
+    let promises = [];
+
+    for (let i = 0; i < this.BASELAYERURLS.length; i++){
+      promises.push(this.loadImage(this.BASELAYERURLS[i]));
+    }
+
+    return new Promise(resolve => resolve(Promise.allSettled(promises)));
+  }
+  // Load image
+  loadImage = function(url){
+
+    return new Promise ((resolve, reject) => {
+      let img = new Image();
+      img.src = url;
+      let name = url.split('/').reverse()[0].replace('.png', '');
+        
+      img.onload = () => {
+        
+        resolve({name, img});
+      }
+      img.onerror = (e) => console.error(e);
+    });
+
+  }
 
 }
 

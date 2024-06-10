@@ -76,9 +76,18 @@ const customDefinitions = {
   },
   'thetao': {
     shortName: 'Surface temperature',
-    altNames: ['Sea surface temperature'],
+    altNames: ['Sea surface temperature', 'SST'],
     range: [2, 38],
     unit: 'ºC',
+    // Styles
+    // Legends from Assets/Legends
+    legends: ['Occam', 'Alg2', 'Inferno', 'OccamPastel', 'Zebra'],
+    legendRanges: [
+      [11, 30],
+      [17, 30],
+      [10, 20],
+      [2, 35],
+    ],
   },
   'bottomT': {
     range: [2, 38],

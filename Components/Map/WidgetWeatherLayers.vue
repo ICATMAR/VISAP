@@ -101,7 +101,7 @@
         isClimaLayerVisible: false,
         climaOpacity: 1,
         // Defaults
-        WMTSLegendURL: '',ad
+        WMTSLegendURL: '',
         sourceDoi: '',
         productName: '',
         currentDate: '',
@@ -161,12 +161,13 @@
         
         window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', wmtsParams);
         // TODO
+        debugger;
         // Set legend
         //'legendName': {default: 'absModifiedOccam', type: String},
         //'legendRange':{default: [0, 100], type: Array},
         //'defaultUnits': {default: 'cm/s', type: String},
         //'selectedLegends': {default: ['absModifiedOccam.png', 'absColdOccam.png', 'white.png', 'black.png' ], type: Array},
-        asdfa=
+        
         
         //this.$refs.wmsLegend.setWMSLegend(infoWMS);
       },

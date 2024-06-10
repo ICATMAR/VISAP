@@ -23,11 +23,11 @@
     </div>
 
     <!-- Drop-down with other legends -->
-    <span v-show="isMouseOver && isAdvancedInterfaceOnOff">
-      <div v-for="legend, index, in legends" >
-        <img v-if="selectedLegends.includes(legend.legendName)" :src="legend.img.src" @click="legendClicked($event, index)">
+    <!-- <span v-show="isMouseOver">
+      <div v-for="legend,index in dataSetLegends" >
+        <img :src="legend.img.src" @click="legendClicked($event, index)">
       </div>
-    </span>
+    </span> -->
   </div>
   
 </template>
@@ -42,70 +42,68 @@
 // This component changes the range of the legend according to? also the units should be shown here. Maybe define 3-4 different ranges for each dataType?
 
 
-
 // Import components
 //import Map from 'Components/Map.vue'
 
 export default {
   name: 'WMTSLegend', // Caps, no -
   props: {
-    'legendName': {default: 'absModifiedOccam', type: String},
-    'legendRange':{default: [0, 100], type: Array},
-    'defaultUnits': {default: 'cm/s', type: String},
-    'selectedLegends': {default: ['absModifiedOccam.png', 'absColdOccam.png', 'white.png', 'black.png' ], type: Array},
+    'dataSetName': {default: 'SST', type: String},
+  //   'legendName': {default: 'absModifiedOccam', type: String},
+  //   'legendRange':{default: [0, 100], type: Array},
+  //   'defaultUnits': {default: 'cm/s', type: String},
+  //   'selectedLegends': {default: ['absModifiedOccam.png', 'absColdOccam.png', 'white.png', 'black.png' ], type: Array},
   },
   created() {
-    this.units = this.defaultUnits;
+    //this.units = this.defaultUnits;
   },
   mounted() {
-    // When legends are loaded
-    // TODO: default legend index? shoud be set when data is loaded?
-    window.eventBus.on('AppManagerLegendsLoaded', (legends) => {
-      // Store legends when successfully loaded
-      this.legends = [];
-      legends.forEach(ll => {
+
+    // Load legends
+    let steps = 256;
+    FileManager.loadLegends(steps).then((loadedLegends) => {
+      this.availableLegends = [];
+      debugger;
+      loadedLegends.forEach(ll => {
         if (ll.status == 'fulfilled'){
-          this.legends.push(ll.value);
+          this.availableLegends.push(ll.value);
         }
       });
       this.legendsLoaded = true;
 
-
-      // Find index according to default legend name     
-      for (let i = 0; i < this.legends.length; i++){
-        if (this.legends[i].img.src.includes('/' + this.legendName)){
-          this.legendIndex = i;
-          i = this.legends.length; // Exit loop
-        }
-      }
-
-      this.legendSrc = this.legends[this.legendIndex].img.src;
-      this.emitLegendChanged(this.legends[this.legendIndex]);
+      // Get legends associated with dataSet from WMTSCustomDefintions.js
+      this.selectLegendsAssociatedWithDataSet(this.dataSetName);
     });
 
-    // When map deselects a data point
-    window.eventBus.on('DeselectedDataPoint', () => {
-      this.currentValue = '';
+
+    // EVENTS
+    window.eventBus.on('ClimaLayerChanged', () => {
+      //TODO
+      debugger;
     });
-
-    // Advanced interface
-    window.eventBus.on('AdvancedInterfaceOnOff', state => this.isAdvancedInterfaceOnOff = state);
-
+    
   },
   data (){
     return {
-      legends: [],
       legendsLoaded: false,
-      legendIndex: 6, // Is ovewritten by widget data type
+
+      availableLegends: [],
+      dataSetLegends: [],
+      customDef: {},
+      
+      legendIndex: 0, // Is ovewritten by widget data type
       legendSrc: '',
+
+      units: '',
+      legendRangeIndex: 0,
+      legendRange: [],
+
       isMouseOver: false,
       // Tooltip
-      //legendRange: [-100, 100], // Legend range is changed in AnimationCanvas.vue, when the animation is created
       currentValue: '',
       currentDirection: '',
       transformFunc: (value) => {return value},
 
-      isAdvancedInterfaceOnOff: false,
     }
   },
   methods: {
@@ -113,40 +111,54 @@ export default {
     // Legend clicked
     legendClicked: function(e, index){
       this.legendIndex = index;
-      this.legendSrc = this.legends[index].img.src;
-      this.legends[index].legendRange = this.legendRange; // TODO: CHANGE RANGE OPTION
+      this.legendSrc = this.dataSetLegends[index].img.src;
+      this.dataSetLegends[index].legendRange = this.legendRange; // TODO: CHANGE RANGE OPTION
       // Emit
-      this.emitLegendChanged(this.legends[index]);
+      // *****TODO:
+      debugger;
+      // Reprocess tile with WMTSTileManager
+      //this.emitLegendChanged(this.legends[index]);
     },
 
 
     unitsClicked: function(e){
-      this.$emit('unitsClicked');
+      // TODO Optional: write functions to change the units in custom definitions (WMTSCustomDefinitions.js)
+      debugger;
+      //this.$emit('unitsClicked');
     },
     rangeClicked: function(e){
-      this.$emit('rangeClicked');
+      // Range
+      this.legendRangeIndex = (this.legendRangeIndex + 1) % this.customDef.legendRanges.length;
+      this.legendRange = this.customDef.legendRanges[this.legendRangeIndex];
+
+      // *****TODO:
+      debugger;
+      // Reprocess tile with WMTSTileManager
+
+
+      //this.$emit('rangeClicked');
     },
 
 
 
     // EVENT EMITTER
-    emitLegendChanged(legend){
-      // TODO: FIX DATA STRUCTURE: legend contains colors and img, range is dependent on the data type
-      //window.eventBus.emit('WMTSLegend_legendChanged', {legend, "legendRange": this.legendRange});
-      // TODO: EMIT ON WIDGET, NOT ON LEGEND
-      let legendObj =  {legend, "legendRange": this.legendRange};
-      this.$emit('legendChanged', legendObj);
-    },
+    // emitLegendChanged(legend){
+    //   // TODO: FIX DATA STRUCTURE: legend contains colors and img, range is dependent on the data type
+    //   //window.eventBus.emit('WMTSLegend_legendChanged', {legend, "legendRange": this.legendRange});
+    //   // TODO: EMIT ON WIDGET, NOT ON LEGEND
+    //   let legendObj =  {legend, "legendRange": this.legendRange};
+    //   this.$emit('legendChanged', legendObj);
+    // },
 
 
     // PUBLIC FUNCTIONS
     // Set range
-    setRange: function(range){
-      this.legendRange[0] = range[0];
-      this.legendRange[1] = range[1];
+    // setRange: function(range){
+    //   this.legendRange[0] = range[0];
+    //   this.legendRange[1] = range[1];
       
-      this.emitLegendChanged(this.legends[this.legendIndex]);
-    },
+    //   this.emitLegendChanged(this.legends[this.legendIndex]);
+    // },
     // Set units and transformation function
     setUnits: function(units, transformFunc){
       this.units = units;
@@ -161,24 +173,61 @@ export default {
       this.$refs.tooltipLegendBar.style.left = (100 * (this.currentValue - this.legendRange[0]) / (this.legendRange[1] - this.legendRange[0])) + '%';
     },
     // Set legend color
-    setLegendColorScale: function(legendName){
-      let index = undefined;
-      // Find index according to default legend name     
-      for (let i = 0; i < this.legends.length; i++){
-        if (this.legends[i].img.src.includes('/' + legendName)){
-          index = i;
-          i = this.legends.length; // Exit loop
-        }
-      }
-      // Legend is found
-      if (index != undefined){
-        this.legendIndex = index;
-        this.legendSrc = this.legends[this.legendIndex].img.src;
-        this.emitLegendChanged(this.legends[this.legendIndex]);
-      }
+    // setLegendColorScale: function(legendName){
+    //   let index = undefined;
+    //   // Find index according to default legend name     
+    //   for (let i = 0; i < this.legends.length; i++){
+    //     if (this.legends[i].img.src.includes('/' + legendName)){
+    //       index = i;
+    //       i = this.legends.length; // Exit loop
+    //     }
+    //   }
+    //   // Legend is found
+    //   if (index != undefined){
+    //     this.legendIndex = index;
+    //     this.legendSrc = this.legends[this.legendIndex].img.src;
+    //     this.emitLegendChanged(this.legends[this.legendIndex]);
+    //   }
 
       
-    }
+    // },
+
+
+    // PRIVATE FUNCTIONS
+    // Selects the legends that are pre-defined for that dataSet
+    selectLegendsAssociatedWithDataSet: function(dataSetName){
+      // Legends
+      this.dataSetLegends = [];
+      let dataSetId = WMTSDataRetriever.getDataSetIdFromDataName(dataSetName);
+      let customDef = this.customDef = WMTSDataRetriever.customDefinitions[dataSetId];
+      let availableLegendKeys = Object.keys(this.availableLegends);
+      debugger;
+      customDef.legends.forEach( lKey => {
+        if (availableLegendKeys.includes(lKey)){
+          this.dataSetLegends.push(lKey);
+        }
+      });
+
+      if (this.dataSetLegends.length == 0){
+        debugger
+      };
+
+      this.legendIndex = 0;
+      this.legendSrc = this.dataSetLegends[this.legendIndex].img.src;
+      //this.emitLegendChanged(this.legends[this.legendIndex]);
+      // Define current legend in WMTSTileManager
+      WMTSTileManager.currentLegend = this.dataSetLegends[this.legendIndex];
+
+      // Units
+      this.units = customDef.unit;
+
+      // Range
+      this.legendRangeIndex = 0;
+      this.legendRange = customDef.legendRanges[this.legendRangeIndex];
+
+
+    },
+    
   },
   components: {
     //'map': Map,
