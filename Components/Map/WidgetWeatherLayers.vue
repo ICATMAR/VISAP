@@ -159,6 +159,9 @@
           // style TODO (range and style) https://help.marine.copernicus.eu/en/articles/6478168-how-to-use-wmts-to-visualize-data#h_1fab3939db
         };
         
+        // Update legend
+        debugger;
+        this.$refs.wmtsLegend.selectLegendsAssociatedWithDataSet(id);
         window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', wmtsParams);
         // TODO
         debugger;

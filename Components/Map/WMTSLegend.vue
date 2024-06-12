@@ -75,11 +75,7 @@ export default {
     });
 
 
-    // EVENTS
-    window.eventBus.on('ClimaLayerChanged', () => {
-      //TODO
-      debugger;
-    });
+    
     
   },
   data (){
@@ -129,11 +125,11 @@ export default {
       // Range
       this.legendRangeIndex = (this.legendRangeIndex + 1) % this.customDef.legendRanges.length;
       this.legendRange = this.customDef.legendRanges[this.legendRangeIndex];
+      // Set current range to WMTSRange
+      WMTSTileManager.currentRangeTransformFunc = this.calculateRangeTransformFunc(this.customDef.range, this.legendRange);
 
-      // *****TODO:
-      debugger;
-      // Reprocess tile with WMTSTileManager
-
+      // Forces refresh on openlayers wmts source and therefore TileManager processes new tile
+      window.eventBus.emit('WMTSLegend_LegendChange');
 
       //this.$emit('rangeClicked');
     },
@@ -192,15 +188,15 @@ export default {
     // },
 
 
-    // PRIVATE FUNCTIONS
     // Selects the legends that are pre-defined for that dataSet
+    // Also called from the widget weather layers when clima layer is changed
     selectLegendsAssociatedWithDataSet: function(dataSetName){
       // Legends
       this.dataSetLegends = [];
       let dataSetId = WMTSDataRetriever.getDataSetIdFromDataName(dataSetName);
       let customDef = this.customDef = WMTSDataRetriever.customDefinitions[dataSetId];
       let availableLegendKeys = Object.keys(this.availableLegends);
-      debugger;
+      
       customDef.legends.forEach( lKey => {
         if (availableLegendKeys.includes(lKey)){
           this.dataSetLegends.push(this.availableLegends[lKey]);
@@ -216,6 +212,7 @@ export default {
       //this.emitLegendChanged(this.legends[this.legendIndex]);
       // Define current legend in WMTSTileManager
       WMTSTileManager.currentLegend = this.dataSetLegends[this.legendIndex];
+      
 
       // Units
       this.units = customDef.unit;
@@ -223,14 +220,31 @@ export default {
       // Range
       this.legendRangeIndex = 0;
       this.legendRange = customDef.legendRanges[this.legendRangeIndex];
-
-      debugger;
-
+      // Define range transformation (range of tile is not the same as range of legend)
+      WMTSTileManager.currentRangeTransformFunc = this.calculateRangeTransformFunc(customDef.range, this.legendRange);
     },
+
+
+    // Calculates the transformation function of the range of the tile to the range of the legend
+    calculateRangeTransformFunc: function(tileRange, legendRange){
+      let transFunc = (value) => {
+        let tMin = tileRange[0];
+        let tMax = tileRange[1]
+        let lMin = legendRange[0];
+        let lMax = legendRange[1];
+        // Calculate
+        let value1 = value * (tMax-tMin) + tMin;
+        let value2 = (value1 - lMin) / (lMax - lMin);
+        // Clamp
+        let value3 = Math.min(Math.max(value2, 0), 1);
+        return value3;
+      }
+      return transFunc;
+    }
     
   },
   components: {
-    //'map': Map,
+    
   }
 }
 </script>

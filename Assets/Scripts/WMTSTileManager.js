@@ -12,6 +12,7 @@ class WMTSTileManager {
   // As loadProcessStoreTile is called from Map.vue when defining the wmts source, it is hard to make the 
   // data connection from Map.vue and WMTSLegend.vue so better store the information here
   currentLegend = {};
+  currentRangeTransformFunc = undefined;
 
   constructor(){
 
@@ -61,7 +62,8 @@ class WMTSTileManager {
     let data = imageData.data;
     debugger;
     for (let i = 0; i < data.length; i += 4) {
-      let colorIndex = Math.floor(data[i]/255 * (legend.colorsRGB.length-1));
+      let value = this.currentRangeTransformFunc(data[i]/255);
+      let colorIndex = Math.floor(value * (legend.colorsRGB.length-1));
       // Assing colors
       data[i] = legend.colorsRGB[colorIndex][0];
       data[i + 1] = legend.colorsRGB[colorIndex][1];

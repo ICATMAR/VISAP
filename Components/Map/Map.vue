@@ -268,6 +268,10 @@ export default {
       this.setClimaLayer(wmtsParams);
     });
     // Legend WMTS changed
+    window.eventBus.on('WMTSLegend_LegendChange', () => {
+      // Reload WMTS source
+      this.getMapLayer('data').getSource().refresh();
+    });
     // TODO
     debugger;
     //************************************** */
