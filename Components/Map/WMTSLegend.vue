@@ -62,11 +62,10 @@ export default {
     // Load legends
     let steps = 256;
     FileManager.loadLegends(steps).then((loadedLegends) => {
-      this.availableLegends = [];
-      debugger;
+      this.availableLegends = {};
       loadedLegends.forEach(ll => {
         if (ll.status == 'fulfilled'){
-          this.availableLegends.push(ll.value);
+          this.availableLegends[ll.value.legendName] = ll.value;
         }
       });
       this.legendsLoaded = true;
@@ -204,13 +203,13 @@ export default {
       debugger;
       customDef.legends.forEach( lKey => {
         if (availableLegendKeys.includes(lKey)){
-          this.dataSetLegends.push(lKey);
+          this.dataSetLegends.push(this.availableLegends[lKey]);
         }
       });
 
       if (this.dataSetLegends.length == 0){
         debugger
-      };
+      }
 
       this.legendIndex = 0;
       this.legendSrc = this.dataSetLegends[this.legendIndex].img.src;
@@ -225,6 +224,7 @@ export default {
       this.legendRangeIndex = 0;
       this.legendRange = customDef.legendRanges[this.legendRangeIndex];
 
+      debugger;
 
     },
     

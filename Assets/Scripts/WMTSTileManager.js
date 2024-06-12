@@ -61,10 +61,11 @@ class WMTSTileManager {
     let data = imageData.data;
     debugger;
     for (let i = 0; i < data.length; i += 4) {
-      // Example: red colors
-      data[i] = data[i];     // Red
-      data[i + 1] = 0; // Green
-      data[i + 2] = 0; // Blue
+      let colorIndex = Math.floor(data[i]/255 * (legend.colorsRGB.length-1));
+      // Assing colors
+      data[i] = legend.colorsRGB[colorIndex][0];
+      data[i + 1] = legend.colorsRGB[colorIndex][1];
+      data[i + 2] = legend.colorsRGB[colorIndex][2];
     }
     return imageData;
   }

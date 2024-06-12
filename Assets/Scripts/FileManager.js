@@ -101,7 +101,7 @@ class FileManager {
           colorsFloat32[i*3 + 1] = pixels[pixelPosition*4 + 1];
           colorsFloat32[i*3 + 2] = pixels[pixelPosition*4 + 2];
         }
-        debugger
+        
         resolve({colorsStr, colorsRGB, colorsFloat32, img, legendName});
       }
       img.onerror = () => {
