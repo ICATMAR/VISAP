@@ -2,7 +2,7 @@
   <!-- Container -->
   <div id='WMTSLegend' ref='WMTSLegend' @mouseleave="isMouseOver = false">
 
-    <div v-show="legendsLoaded">
+    <div v-show="legendsLoaded" :class="isMouseOver ? 'hidden': ''">
       <!-- Tooltip -->
       <div id="toolTipContainer" v-show="!isMouseOver && currentValue !=''">
         <div class="tooltipLegend" ref="tooltipLegend">
@@ -23,11 +23,11 @@
     </div>
 
     <!-- Drop-down with other legends -->
-    <!-- <span v-show="isMouseOver">
+    <span v-show="isMouseOver">
       <div v-for="legend,index in dataSetLegends" >
         <img :src="legend.img.src" @click="legendClicked($event, index)">
       </div>
-    </span> -->
+    </span>
   </div>
   
 </template>
@@ -107,12 +107,12 @@ export default {
     legendClicked: function(e, index){
       this.legendIndex = index;
       this.legendSrc = this.dataSetLegends[index].img.src;
-      this.dataSetLegends[index].legendRange = this.legendRange; // TODO: CHANGE RANGE OPTION
-      // Emit
-      // *****TODO:
-      debugger;
+      // Define current legend in WMTSTileManager
+      WMTSTileManager.currentLegend = this.dataSetLegends[this.legendIndex];
+
       // Reprocess tile with WMTSTileManager
-      //this.emitLegendChanged(this.legends[index]);
+      // Forces refresh on openlayers wmts source and therefore TileManager processes new tile
+      window.eventBus.emit('WMTSLegend_LegendChange');
     },
 
 
@@ -191,6 +191,12 @@ export default {
     // Selects the legends that are pre-defined for that dataSet
     // Also called from the widget weather layers when clima layer is changed
     selectLegendsAssociatedWithDataSet: function(dataSetName){
+      // If clima layer is clicked before legends are loaded, try again in 500ms
+      if (this.legendsLoaded == false){
+        setTimeout(() => this.selectLegendsAssociatedWithDataSet(dataSetName),
+        500);
+        return;
+      }
       // Legends
       this.dataSetLegends = [];
       let dataSetId = WMTSDataRetriever.getDataSetIdFromDataName(dataSetName);
@@ -265,6 +271,11 @@ export default {
   display: flex;
   flex-direction: column-reverse;
   
+}
+
+.hidden {
+  opacity: 0;
+  display: none;
 }
 
 img {

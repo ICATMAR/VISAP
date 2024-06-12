@@ -57,10 +57,11 @@ class WMTSTileManager {
   }
 
 
-  // TODO: Use legends
+  // uses legend colors and legend range to process tile
+  // This is defined in WMTSLegend.
   processTileColors = (imageData, legend) => {
     let data = imageData.data;
-    debugger;
+  
     for (let i = 0; i < data.length; i += 4) {
       let value = this.currentRangeTransformFunc(data[i]/255);
       let colorIndex = Math.floor(value * (legend.colorsRGB.length-1));

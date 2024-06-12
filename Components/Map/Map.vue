@@ -267,14 +267,11 @@ export default {
     window.eventBus.on('WidgetWeatherLayers_ClimaLayerChange', wmtsParams => {
       this.setClimaLayer(wmtsParams);
     });
-    // Legend WMTS changed
+    // Change clima layer stayle. Legend WMTS changed
     window.eventBus.on('WMTSLegend_LegendChange', () => {
       // Reload WMTS source
       this.getMapLayer('data').getSource().refresh();
     });
-    // TODO
-    debugger;
-    //************************************** */
     // Change clima layer style
     window.eventBus.on('WMSLegend_LegendClicked', style => {
       this.changeStyle(style);
