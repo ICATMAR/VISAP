@@ -264,8 +264,13 @@ export default {
       this.setBaseLayer(baseLayerName);
     });
     // Clima layer
-    window.eventBus.on('WidgetWeatherLayers_ClimaLayerChange', infoWMS => {
-      this.setClimaLayer(infoWMS);
+    window.eventBus.on('WidgetWeatherLayers_ClimaLayerChange', wmtsParams => {
+      this.setClimaLayer(wmtsParams);
+    });
+    // Change clima layer stayle. Legend WMTS changed
+    window.eventBus.on('WMTSLegend_LegendChange', () => {
+      // Reload WMTS source
+      this.getMapLayer('data').getSource().refresh();
     });
     // Change clima layer style
     window.eventBus.on('WMSLegend_LegendClicked', style => {
@@ -507,11 +512,12 @@ export default {
           progress.isLoaded = true;
         }
       });
-      source.on('tileloaderror', () => {
+      source.on('tileloaderror', (e) => {
         progress.loaded += 1;
         progress.progressPercent = 100*progress.loaded/progress.loading;
+        console.warn("Tile error loading");
         if (progress.loading == progress.loaded){
-          this.onTilesLoaded(); // TODO: could reference the isLayerDataReady to source, so we control if a source is ready
+          this.onTilesLoaded(e); // TODO: could reference the isLayerDataReady to source, so we control if a source is ready
           progress.isLoaded = true;
         }
       });
@@ -660,34 +666,77 @@ export default {
 
 
     // PUBLIC METHODS
-    // Update WMS data source. This function is called from AppManager.vue
-    updateSourceWMS: function (infoWMS){
-      // Create tile grid for faster rendering for low resolution WMS
-      let extent = ol.proj.get('EPSG:3857').getExtent();
-      let tileSize = 512;
-      let maxResolution = ol.extent.getWidth(extent) / tileSize;
-      let resolutions = new Array(6);
-      for (let i = 0; i < resolutions.length; i++){
-        resolutions[i] = maxResolution / Math.pow(2,i);
-      }
-      // Assign to openlayers WMS tile source
-      infoWMS.tileGrid = new ol.tilegrid.TileGrid({
-        extent: extent,
-        resolutions: resolutions,
-        tileSize: tileSize
-      });
-      
-      // Avoid cross origin problems when getting pixel data (The canvas has been tainted by cross-origin data.)
-      infoWMS.crossOrigin='anonymous';
-      infoWMS.cacheSize = 500;
+    // Update WMTS data source
+    updateSourceWMTS: function (wmtsParams){
 
-      // Create OL source from ForecastBar.vue object
-      let source = new ol.source.TileWMS(infoWMS);
+      // Create Tile Grid
+      // https://openlayers.org/en/latest/examples/wmts.html
+      let size = ol.extent.getWidth(ol.proj.get('EPSG:3857').getExtent())/256;
+      let resolutions = new Array(6);
+      let matrixIds = new Array(6);
+      for (let i = 0; i < resolutions.length; i++){
+        resolutions[i] = size / Math.pow(2, i);
+        matrixIds[i] = i;
+      }
+
+      // URL parameters
+      let templateURL = wmtsParams.dataSet.template;
+      let baseURL = templateURL.split('/?')[0];
+      let layerName = WMTSDataRetriever.getWMTSParameter(templateURL, 'layer');
+
+      let options = {
+        dimensions: {
+          //elevation: "-1.0182366371154785", // REMOVE?
+          time: wmtsParams.tmst,//"2024-06-11T00:00:00Z",
+        },
+        style: 'range:' + wmtsParams.dataSet.range[0] + '/' + wmtsParams.dataSet.range[1] + ',cmap:gray',  //'cmap:dense', // FROM INPUT
+        url: baseURL,//'http://wmts.marine.copernicus.eu/teroWmts', // FROM INPUT
+        layer: layerName,//"MEDSEA_ANALYSISFORECAST_BGC_006_014/cmems_mod_med_bgc-nut_anfc_4.2km_P1D-m_202211/nh4", 
+        tileGrid: new ol.tilegrid.WMTS ({
+          extent: ol.proj.get('EPSG:3857').getExtent(),
+          resolutions,
+          matrixIds,
+          // https://openlayers.org/en/latest/apidoc/module-ol_tilegrid_WMTS-WMTSTileGrid.html
+          //minZoom: 0,
+          //sizes: [],
+          //tileSize: [256, 256]
+        }),
+
+        matrixSet: 'EPSG:3857',
+        projection: ol.proj.get('EPSG:3857'),
+        requestEncoding: 'KVP',
+        format: 'image/png',
+        // Avoid cross origin problems when getting pixel data (The canvas has been tainted by cross-origin data.)
+        crossOrigin: 'anonymous',
+        cacheSize: 500,
+        wrapX: false,
+        attributions: '© <a style="color:black" href=' + wmtsParams.dataSet.doi + 
+          ' target="_blank">'+ wmtsParams.dataSet.productProvider +'</a>',
+      }
+
+      // Create OL source
+      let source = new ol.source.WMTS(options);
       source.name="wmsSource";
+      
+      // Also smart storage and reuse of tiles
+      source.tileLoadFunction = (imageTile, src) => {
+        WMTSTileManager.loadProcessStoreTile(imageTile, src, undefined); // Could define legend here, but legends are managed in WMTSLenged.vue
+      }
+      // Set the source to the layer
       this.getMapLayer('data').setSource(source);
+
       // Tracking the load progress
       this.isLayerDataReady = false;
       this.registerLoadTilesEvents(source, this.wmsProgress);
+
+
+      return;
+
+
+    
+      
+
+      
       
       // Update legend
       // if (this.$refs.legendWMS)
@@ -704,33 +753,7 @@ export default {
       // }
     },
 
-    
-    // HIDDEN BECAUSE: it is not as simple as updating the date. Each data type has two WMS services associated sometimes (reanalysis and forecast).
-    //                 Depending on the date one or the other service will be used. Additionally, the date in Layers panel need to change, thus the connection
-    //                  between Map.vue and LayerPanel.vue has to be made anyway.
-    // Update the date of the WMS source
-    // updateWMSDate: function(date){ // yyyy-mm-dd
-    //   // Get data layer
-    //   let dataLayer = this.getMapLayer('data');
-    //   if (dataLayer == undefined) // No data layer is present
-    //     return;
-        
-    //   let wmsSource = dataLayer.getSource();
-    //   if (wmsSource == null) // No source yet
-    //     return;
-    //   // Get parameters and modify them
-    //   debugger;
-    //   let params = wmsSource.getParams();
-    //   // TODO: We are adding yyyy-mm-dd with Thh:mm:ss:mmm. It can be that the hours/minutes change depending on the WMS service and the date. Be careful
-    //   params.TIME = date + params.TIME.substring(10);
-    //   // Use params.TIME to change from reanalysis to forecast and viceversa
-    //   let dataTypes = preLoadedDataTypes;
-    //   debugger;
-      
-    //   wmsSource.updateParams(params);
-    //   // TODO: not as simple as that, because it can switch from reanalysis to forecast.
 
-    // },
 
     
     // Get OL map object
@@ -813,14 +836,15 @@ export default {
       // Set opacity
       layer.setOpacity(parseFloat(opacity));
     },
-    setClimaLayer: function(urlParams){
+    setClimaLayer: function(wmtsParams){
       let climaLayer = this.getMapLayer('data');
-      if (urlParams == undefined){
+      if (wmtsParams == undefined){
         // Remove clima layer
         if (climaLayer != undefined)
           this.map.removeLayer(climaLayer);
         // Remove legend url
-        this.WMSLegendURL = '';
+        debugger;
+        this.WMSLegendURL = ''; // TODO in WMTS
         
         return;
       }
@@ -828,7 +852,7 @@ export default {
       if (climaLayer == undefined)
         this.map.addLayer(this.layers.data);
       // Update parameters
-      this.updateSourceWMS(urlParams);
+      this.updateSourceWMTS(wmtsParams);
       
     },
 

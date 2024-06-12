@@ -41,16 +41,14 @@
       
     </template>
 
-    <!-- WMS graphic legend -->
-    <!-- <img v-if="WMSLegendURL != ''" id='wmsLegend' :src="WMSLegendURL"> -->
-    <wms-legend ref="wmsLegend"></wms-legend>
+    <!-- WMTS graphic legend -->
+    <wmts-legend ref="wmtsLegend"></wmts-legend>
 
     <!-- Current date -->
     <span>{{$t('Date')}}: {{ currentDate }}</span>
 
     <!-- Data source attribution -->
-    <span class="wrapText">{{$t('Data from')}}: <a title="Weather data source" :href="sourceDoi" target="_blank">E.U.
-            Copernicus Marine Service Information</a></span>
+    <span class="wrapText">{{$t('Data from')}}: <a title="Weather data source" :href="sourceDoi" target="_blank">{{productName}}</a></span>
     
 
 
@@ -61,13 +59,13 @@
   <script>
   
   // Import components
-  import WMSLegend from './WMSLegend.vue';
+  import WMTSLegend from './WMTSLegend.vue';
 
   export default {
     name: 'widgetWeatherLayers', // Caps, no -
     created() {
       // Create data retreiver
-      this.dataRetriever = new WMSDataRetriever();
+      this.dataRetriever = window.WMTSDataRetriever;
     },
     mounted() {
       // EVENTS
@@ -78,15 +76,34 @@
     },
     data (){
       return {
-        climaLayers: ['Sea Surface Temperature', 'Sea Temperature Anomaly', 'Sea Bottom Temperature', 'Chlorophyll', 'Salinity', 'Wind', 'Wave Significant Height', 'Current'],
+        climaLayers: [
+          'Sea Surface Temperature', 
+          'Sea Temperature Anomaly', 
+          'Sea Bottom Temperature', 
+          'Chlorophyll', 
+          'Salinity', 
+          //'Wind',
+          'Wave Significant Height', 
+          //'Current'
+        ],
         // https://origin.fontawesome.com/search?o=r&m=free&f=classic
-        climaIcons: ['&#xf2c9;<sub>~</sub>', '&#x2206; &#xf2c9;', '&#xf2c9;<sup>~</sup>', 'C<sub>hl</sub>', '‰', '&#xf72e;', '&#xe515;', '&#xf773;'],
+        climaIcons: [
+          '&#xf2c9;<sub>~</sub>',
+          '&#x2206; &#xf2c9;',
+          '&#xf2c9;<sup>~</sup>',
+          'C<sub>hl</sub>',
+          '‰',
+          //'&#xf72e;',
+          '&#xe515;',
+          //'&#xf773;'
+        ],
         selClimaLayer: '',
         isClimaLayerVisible: false,
         climaOpacity: 1,
         // Defaults
-        WMSLegendURL: '',
+        WMTSLegendURL: '',
         sourceDoi: '',
+        productName: '',
         currentDate: '',
 
       }
@@ -116,12 +133,35 @@
         this.currentDate = ff.properties.info.Data;
         let date = ff.properties.info.Data + 'T12:00:00.000Z';
         // Get clima URL
-        let infoWMS = this.dataRetriever.getDataTypeURL(this.selClimaLayer, date, 'd');
-        this.sourceDoi = infoWMS == undefined ? 'https://resources.marine.copernicus.eu/products' : infoWMS.doi;
-        // If source is not found, it will send undefined
-        window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', infoWMS);
-        // Set legend
-        this.$refs.wmsLegend.setWMSLegend(infoWMS);
+        let id = this.dataRetriever.getDataSetIdFromDataName(this.selClimaLayer);
+        if (id == undefined){
+          debugger;
+          // It should not be shown if this dataset does not exist or the name is not found
+          console.log(this.selClimaLayer + " not found.");
+          window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', undefined);
+          return;
+        }
+        let dataSet = this.dataRetriever.getDataSet(id, 'h', date);
+        if (dataSet == undefined){
+          // TODO: SHOW THAT IT IS NOT AVAILABLE
+          // --> Should I also check if the URLs work? maybe try a getValueAt? It doubles the requests, but it improves the UI. 
+          // Actually the best would be to catch the error of requesting a wmts tile. Can we get this from Openlayers? Otherwise, force getValueAt
+          // Maybe the WMTS always provides data, as the service now returns the closest timestamp.
+          debugger;
+        }
+        // Attribution link
+        this.sourceDoi = dataSet.doi;
+        this.productName = dataSet.productProvider + ' - ' + dataSet.productName;
+      
+        let wmtsParams = {
+          dataSet,
+          tmst: date,
+          // style TODO (range and style) https://help.marine.copernicus.eu/en/articles/6478168-how-to-use-wmts-to-visualize-data#h_1fab3939db
+        };
+        
+        // Update legend
+        this.$refs.wmtsLegend.selectLegendsAssociatedWithDataSet(id);
+        window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', wmtsParams);
       },
 
 
@@ -139,7 +179,7 @@
   
     },
     components: {
-      'wms-legend': WMSLegend,
+      'wmts-legend': WMTSLegend,
     }
   }
   </script>

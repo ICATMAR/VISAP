@@ -27,6 +27,14 @@ window.location.getHashValue = getHashValue;
 window.eventBus = window.mitt();
 
 
+// Import WMTSDataRetriever
+import WMTSDataRetrieverClass from './Assets/Scripts/WMTSDataRetriever.js';
+window.WMTSDataRetriever = new WMTSDataRetrieverClass();
+// Import tile manager
+import WMTSTileManagerClass from './Assets/Scripts/WMTSTileManager.js'
+window.WMTSTileManager = new WMTSTileManagerClass();
+
+
 // Import scripts
 // Import file manager
 import FileManager from './Assets/Scripts/FileManager.js';

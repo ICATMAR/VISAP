@@ -18,7 +18,6 @@
 
 <script>
 export default {
-  // REQUIRES WMSDataRetriever.js
   // REQUIRES OL libraries
   name: "seaHabitat",
   created(){
