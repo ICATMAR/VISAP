@@ -164,8 +164,9 @@ export default {
       this.currentValue = magnitude;
       this.currentDirection = direction;
 
-      //this.$refs.tooltipLegend.style.left = (100 * (this.currentValue - this.legendRange[0]) / (this.legendRange[1] - this.legendRange[0])) + '%';
-      this.$refs.tooltipLegendBar.style.left = (100 * (this.currentValue - this.legendRange[0]) / (this.legendRange[1] - this.legendRange[0])) + '%';
+      // TODO: To test
+      debugger;
+      this.$refs.tooltipLegendBar.style.left = (100 * Math.min(Math.max((this.currentValue - this.legendRange[0]) / (this.legendRange[1] - this.legendRange[0])), 0), 100) + '%';
     },
     // Set legend color
     // setLegendColorScale: function(legendName){
