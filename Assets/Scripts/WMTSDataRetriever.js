@@ -216,12 +216,16 @@ export class WMTSDataRetriever {
       this.printLog("There are no dataSets with id: " + id);
       return;
     }
+
+    // Get dataSets with tmst inside
+    let withTmstDataSets = selDataSets.filter((dataSet) => new Date(dataSet.startTmst) < new Date(tmst)); // && new Date(dataSet.endTmst) > new Date(tmst)
+
     // Get dataSets in the timeScale
-    let tScaleDataSets = selDataSets.filter((dataSet) => dataSet.timeScale == timeScale);
+    let tScaleDataSets = withTmstDataSets.filter((dataSet) => dataSet.timeScale == timeScale);
     if (tScaleDataSets.length == 0){
       this.printLog("DataSet does not have the timeScale of " + timeScale);
       console.log("DataSet for "+ id + " does not have timeScale of " + timeScale + ". Using alternatives."); //return;
-      tScaleDataSets = selDataSets; // Take other timeScales?
+      tScaleDataSets = withTmstDataSets; // Take other timeScales?
     }
     // Select oldest first if possible (usually reanalysis)
     // Sort by date (oldest first)
