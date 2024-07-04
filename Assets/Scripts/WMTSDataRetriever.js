@@ -208,23 +208,30 @@ export class WMTSDataRetriever {
     // No data sets loaded
     if (this.dataSets.length == 0){
       this.printLog("*** --- No dataSets have been loaded");
+      console.error("No dataSets have been loaded")
       return;
     }
     // Get dataSets with the id
     let selDataSets = this.dataSets.filter((dataSet) => dataSet.id == id);
     if (selDataSets.length == 0){
       this.printLog("There are no dataSets with id: " + id);
+      console.error("There are no dataSets with id: " + id)
       return;
     }
 
     // Get dataSets with tmst inside
     let withTmstDataSets = selDataSets.filter((dataSet) => new Date(dataSet.startTmst) < new Date(tmst)); // && new Date(dataSet.endTmst) > new Date(tmst)
+    if (withTmstDataSets.length == 0){
+      this.printLog("No dataSet with id="+ id +" contains the selected timestamp: " + tmst);
+      console.error("No dataSet with id="+ id +" contains the selected timestamp: " + tmst);
+      return undefined;
+    }
 
     // Get dataSets in the timeScale
     let tScaleDataSets = withTmstDataSets.filter((dataSet) => dataSet.timeScale == timeScale);
     if (tScaleDataSets.length == 0){
       this.printLog("DataSet does not have the timeScale of " + timeScale);
-      console.log("DataSet for "+ id + " does not have timeScale of " + timeScale + ". Using alternatives."); //return;
+      console.warn("DataSet for "+ id + " does not have timeScale of " + timeScale + ". Using alternatives."); //return;
       tScaleDataSets = withTmstDataSets; // Take other timeScales?
     }
     // Select oldest first if possible (usually reanalysis)
@@ -246,6 +253,7 @@ export class WMTSDataRetriever {
     }
     if (selectedDataSet == undefined){
       this.printLog("No dataSet with id="+ id +" contains the selected timestamp: " + tmst + " at a timeScale of " + timeScale);
+      this.console.error("No dataSet with id="+ id +" contains the selected timestamp: " + tmst + " at a timeScale of " + timeScale);
     }
 
     return selectedDataSet;    
