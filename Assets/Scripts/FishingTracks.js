@@ -85,7 +85,7 @@ class FishingTracks {
             let year = parseInt(data[i].Data.split('-')[0]);
             let month = parseInt(data[i].Data.split('-')[1]);
             let day = parseInt(data[i].Data.split('-')[2]);
-            data[i].Date = new Date(year, month-1, day);
+            data[i].Date = new Date(year, month-1, day, 12);
 
             // Read geometry
             let wkbBuffer = new Buffer(data[i].geom, 'hex');
