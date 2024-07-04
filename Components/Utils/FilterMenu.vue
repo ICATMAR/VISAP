@@ -9,7 +9,8 @@
       <div class="center-buttons" ref="controlButtons">
         <button ref="selectAll" onclick="event.stopPropagation();">&#x25C6; {{$t('Select all')}} </button>
         <button ref="deselectAll" onclick="event.stopPropagation();">&#x25C7; {{$t('Deselect all')}} </button>
-        <button ref="closeGUI" onclick="event.stopPropagation();"><span style="color:red"> ✖ </span> {{$t('Close')}} </button>
+        <button ref="closeGUIApply" onclick="event.stopPropagation();"><span class="fa">&#xf0b0;</span> {{$t('Apply filter')}} </button>
+        <button ref="closeGUIClear" onclick="event.stopPropagation();"><span class="fa">&#xe17b;</span> {{$t('Clear filter')}} </button>
       </div>
 
       <!-- Selected species -->
@@ -159,7 +160,8 @@ export default {
       this.selSpeciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=> this.deselectItem(e)));
       this.$refs.selectAll.addEventListener("click", (e)=>this.selectAll(e));
       this.$refs.deselectAll.addEventListener("click", (e)=>this.deselectAll(e));
-      this.$refs.closeGUI.addEventListener("click", (e) => this.closeGUI(e));
+      this.$refs.closeGUIApply.addEventListener("click", (e) => this.closeGUI(e));
+      this.$refs.closeGUIClear.addEventListener("click", (e) => {this.deselectAll(e); this.closeGUI(e)});
   
     },
 

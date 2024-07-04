@@ -162,6 +162,8 @@ export default ca = {
   "Select all": "Seleccionar totes",
   "Deselect all": "Deseleccionar totes",
   "Close": "Tancar",
+  "Apply filter": "Aplica filtre",
+  "Clear filter": "Cancel·la filtre",
   "Search": "Buscar (e.g. gamba)",
   "Export data": "Exportar dades",
   "Compare": "Comparar",

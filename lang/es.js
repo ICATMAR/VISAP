@@ -167,6 +167,8 @@ export default es  = {
   "Select all": "Seleccionar todas",
   "Deselect all": "Deseleccionar todas",
   "Close": "Cerrar",
+  "Apply filter": "Aplicar filtro",
+  "Clear filter": "Cancelar filtro",
   "Search": "Buscar (e.g. gamba)",
   "Export data": "Exportar datos",
   "Compare": "Comparar",

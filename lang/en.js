@@ -95,6 +95,8 @@ export default en = {
   "Select all": "Select all",
   "Deselect all": "Deselect all",
   "Close": "Close",
+  "Apply filter": "Apply filter",
+  "Clear filter": "Clear filter",
   "Search": "Search (e.g. shrimp)",
   "Export data": "Export data",
   "Compare": "Compare",
