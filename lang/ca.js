@@ -194,7 +194,7 @@ export default ca = {
   "hideData": "Amagar taula de dades",
 
   
-  "Cookies title": "Valorem la teva pivadesa",
+  "Cookies title": "Valorem la teva privadesa",
   "Cookies text": `Utilitzem tecnologia com ara galetes al nostre lloc per millorar l'experiència d'usuari i analitzar el nostre trànsit. Feu clic per consentir l'ús d'aquesta tecnologia al web. Podeu canviar 
   d'opinió i canviar les vostres opcions de consentiment en qualsevol moment tornant a aquest lloc.`,
   "Cookies accept": "Acceptar",
