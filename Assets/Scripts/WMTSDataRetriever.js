@@ -401,7 +401,7 @@ export class WMTSDataRetriever {
 
 
     // If no direction is requested
-    if (direction == undefined){
+    if (direction == undefined || direction == false){
       // Get value from URL
       return await this.getValueAtPointFromURL(templateURL, dataSet.range, long, lat, tileMatrix);//this.getPreciseValueFromURL(templateURL, dataInfo.range);
     }
@@ -413,7 +413,7 @@ export class WMTSDataRetriever {
     if (animData.format == 'value_angle'){
       // Prepare url. Template uses the dataSet id in the layer info
       templateURL = templateURL.replace('/' + dataSet.id + '&', '/' + animData.layerNames[1] + '&');  //url = WMTSDataRetriever.setWMSParameter(url, 'LAYERS', animData.layerNames[1]);
-      templateURL = setWMTSParameter(templateURL, 'style', 'range:0/360,cmap:gray'); // url = WMTSDataRetriever.setWMSParameter(url, 'COLORSCALERANGE', String([-360,360]));
+      templateURL = this.setWMTSParameter(templateURL, 'style', 'range:0/360,cmap:gray'); // url = WMTSDataRetriever.setWMSParameter(url, 'COLORSCALERANGE', String([-360,360]));
 
       // Get value from URL // WARN, could it happen that it has to go from -360 to 360?
       let value = await this.getValueAtPointFromURL(templateURL, [0, 360], long, lat, tileMatrix);//this.getPreciseValueFromURL(url, [-360, 360]);
@@ -464,7 +464,7 @@ export class WMTSDataRetriever {
     // Get precise value
     if (mustBePrecise){
       let quantStep = (range[1] - range[0]) / 255;
-      url = setWMTSParameter(url, 'style', 'range:'+ (value - quantStep)+'/'+ (value + quantStep) +',cmap:gray');
+      url = this.setWMTSParameter(url, 'style', 'range:'+ (value - quantStep)+'/'+ (value + quantStep) +',cmap:gray');
       // Get image with very small range
       let imgPrec = await this.getTileFromURL(url);
       // Remove image from active requests
@@ -561,7 +561,7 @@ export class WMTSDataRetriever {
       //console.log("Parameter ", paramName, " does not exist in WMS URL");
       return wmtsURL + '&' + paramName + '=' + paramContent;
     }
-    let currentContent = getWMTSParameter(wmtsURL, paramName);
+    let currentContent = this.getWMTSParameter(wmtsURL, paramName);
     return wmtsURL.replace(paramName + '=' + currentContent, paramName + '=' + paramContent);
   }
 

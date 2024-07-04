@@ -272,7 +272,7 @@ export default {
       // Reload WMTS source
       this.getMapLayer('data').getSource().refresh();
     });
-    // Change clima layer style
+    // Change clima layer style // Deprecated, now we used grayscale images and custom legends
     window.eventBus.on('WMSLegend_LegendClicked', style => {
       this.changeStyle(style);
     });
@@ -311,7 +311,7 @@ export default {
         loaded: 1,
         isLoaded: true,
       },
-      WMSLegendURL: '',
+      //WMSLegendURL: '', // Deprecated, now we used grayscale images and custom legends
       isMinimized: false,
     }
   },
@@ -437,8 +437,9 @@ export default {
 
 
     // INTERNAL EVENTS
+    // Deprecated, now we used grayscale images and custom legends
     // Change the styles (WMSLegend.vue emit)
-    changeStyle: function(newStyle){
+    changeStyle: function(newStyle){ 
       // Get params
       let params = this.getMapLayer('data').getSource().getParams();
       // Check if the new style is the current
@@ -737,7 +738,7 @@ export default {
       
 
       
-      
+      // Deprecated, now we used grayscale images and custom legends
       // Update legend
       // if (this.$refs.legendWMS)
       //   this.$refs.legendWMS.setWMSLegend(infoWMS);
@@ -841,11 +842,7 @@ export default {
       if (wmtsParams == undefined){
         // Remove clima layer
         if (climaLayer != undefined)
-          this.map.removeLayer(climaLayer);
-        // Remove legend url
-        debugger;
-        this.WMSLegendURL = ''; // TODO in WMTS
-        
+          this.map.removeLayer(climaLayer); 
         return;
       }
       // Add layer if it is not included

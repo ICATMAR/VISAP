@@ -9,7 +9,8 @@ const customDefinitions = {
     animation: {
       layerNames: ['VHM0', 'VMDR'], // Intensity, Angle
       format: 'value_angle',
-      type: 'wave'
+      type: 'wave',
+      directionFrom: true,
     },
     // Styles
     // Legends from Assets/Legends

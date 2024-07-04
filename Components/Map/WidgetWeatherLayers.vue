@@ -72,7 +72,8 @@
       // Fishing track clicked
       window.eventBus.on('TracksTimeLine_trackClicked', this.updateClimaLayer);
       window.eventBus.on('Map_trackClicked', this.updateClimaLayer);
-      
+      // Map mouse move to update legend WMTS
+      window.eventBus.on('Map_mouseMove', coord => this.mapMouseMove(coord));
     },
     data (){
       return {
@@ -152,6 +153,11 @@
         // Attribution link
         this.sourceDoi = dataSet.doi;
         this.productName = dataSet.productProvider + ' - ' + dataSet.productName;
+        // Other properties for mapMouseMove event
+        this.timeScale = dataSet.timeScale;
+        this.currentTmst = date;
+        // Direction properties of dataSet (can be shown in legend WMTS)
+        this.dataSetAnimation = dataSet.animation;
       
         let wmtsParams = {
           dataSet,
@@ -162,6 +168,26 @@
         // Update legend
         this.$refs.wmtsLegend.selectLegendsAssociatedWithDataSet(id);
         window.eventBus.emit('WidgetWeatherLayers_ClimaLayerChange', wmtsParams);
+      },
+
+
+
+      // Map mouse move, related to WMTS legend to show the value
+      mapMouseMove: async function(coord){
+        if (!this.isClimaLayerVisible)
+          return;        
+        let value = await window.WMTSDataRetriever.getDataAtPoint(this.selClimaLayer, this.currentTmst, coord[1], coord[0], this.timeScale); // dataName, tmst, lat, long, timeScale, direction
+        if (this.dataSetAnimation){
+          let dir = await window.WMTSDataRetriever.getDataAtPoint(this.selClimaLayer, this.currentTmst, coord[1], coord[0], this.timeScale, true);
+          if (this.dataSetAnimation.directionFrom){ // Wave products show where the waves are coming from, not where they are going
+            dir += 180;
+          }
+          this.$refs.wmtsLegend.setCurrentValue(value, dir);
+        } else{
+          this.$refs.wmtsLegend.setCurrentValue(value);
+        }
+        
+        
       },
 
 

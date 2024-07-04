@@ -1,33 +1,36 @@
 <template>
   <!-- Container -->
   <div id='WMTSLegend' ref='WMTSLegend' @mouseleave="isMouseOver = false">
-
-    <div v-show="legendsLoaded" :class="isMouseOver ? 'hidden': ''">
-      <!-- Tooltip -->
-      <div id="toolTipContainer" v-show="!isMouseOver && currentValue !=''">
-        <div class="tooltipLegend" ref="tooltipLegend">
-          {{transformFunc(currentValue)}} {{units}}
-          <span class="fa" :style="{transform: 'rotate('+ (currentDirection-45) +'deg)' }" v-if="currentDirection != undefined">&#xf124;</span>
+    <!-- Sub container -->
+    <div class="legendContainer">
+      <div v-show="legendsLoaded" :class="isMouseOver ? 'hidden': ''">
+        <!-- Tooltip -->
+        <div id="toolTipContainer" v-show="!isMouseOver && currentValue !=''">
+          <div class="tooltipLegend" ref="tooltipLegend">
+            {{transformFunc(currentValue)}} {{units}}
+            <span class="fa" :style="{transform: 'rotate('+ (currentDirection-45) +'deg)' }" v-if="currentDirection != undefined">&#xf124;</span>
+          </div>
+          
+          <div class="tooltipLegendBar" ref="tooltipLegendBar">|</div>
         </div>
-        
-        <div class="tooltipLegendBar" ref="tooltipLegendBar">|</div>
+
+        <!-- Legend -->
+        <img class="selLegend" :src="legendSrc" @click="isMouseOver = true">
+        <div class="rangeValuesBox">
+          <div class="leftRange" @click=rangeClicked()>{{transformFunc(legendRange[0])}}</div>
+          <div class="middleRange" @click=unitsClicked()>{{ units }}</div>
+          <div class="rightRange" @click=rangeClicked()>{{transformFunc(legendRange[1])}}</div>
+        </div>
       </div>
 
-      <!-- Legend -->
-      <img class="selLegend" :src="legendSrc" @click="isMouseOver = true">
-      <div class="rangeValuesBox">
-        <div class="leftRange" @click=rangeClicked()>{{transformFunc(legendRange[0])}}</div>
-        <div class="middleRange" @click=unitsClicked()>{{ units }}</div>
-        <div class="rightRange" @click=rangeClicked()>{{transformFunc(legendRange[1])}}</div>
-      </div>
+      <!-- Drop-down with other legends -->
+      <span v-show="isMouseOver">
+        <div v-for="legend,index in dataSetLegends" >
+          <img :src="legend.img.src" @click="legendClicked($event, index)">
+        </div>
+      </span>
+
     </div>
-
-    <!-- Drop-down with other legends -->
-    <span v-show="isMouseOver">
-      <div v-for="legend,index in dataSetLegends" >
-        <img :src="legend.img.src" @click="legendClicked($event, index)">
-      </div>
-    </span>
   </div>
   
 </template>
@@ -161,12 +164,15 @@ export default {
     },
     // Show current value
     setCurrentValue: function(magnitude, direction){
-      this.currentValue = magnitude;
+      if (magnitude == undefined){
+        this.currentValue = '';
+        return;
+      }
+      this.currentValue = magnitude.toFixed(2);
       this.currentDirection = direction;
-
+      
       // TODO: To test
-      debugger;
-      this.$refs.tooltipLegendBar.style.left = (100 * Math.min(Math.max((this.currentValue - this.legendRange[0]) / (this.legendRange[1] - this.legendRange[0])), 0), 100) + '%';
+      this.$refs.tooltipLegendBar.style.left = (100 * Math.min(Math.max((magnitude - this.legendRange[0]) / (this.legendRange[1] - this.legendRange[0]), 0), 1)) + '%';
     },
     // Set legend color
     // setLegendColorScale: function(legendName){
@@ -263,8 +269,6 @@ export default {
 #WMTSLegend {
   /* position: absolute; */
   /* width: 80%; */
-  bottom: 90px;
-  right: 10%;
   z-index: 10;
   pointer-events: all;
 
@@ -273,6 +277,11 @@ export default {
   flex-direction: column-reverse;
   
 }
+
+.legendContainer {
+  position: relative;
+  left: 10%;
+ }
 
 .hidden {
   opacity: 0;
@@ -298,6 +307,11 @@ img {
   font-size: small;
   text-shadow: 0px 0px 4px black;
   white-space: nowrap;
+
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+  background: linear-gradient(to left, #00000000 0%, #0000003b 25%, #0000003b 75%, #00000000 100%);
 }
 .tooltipLegendBar {
   position:absolute;
@@ -337,7 +351,9 @@ img {
 .rangeValuesBox > * {
   padding-left: 10px;
   padding-right: 10px;
+  border-radius: 10px;
   cursor: pointer;
+  background: linear-gradient(to left, #00000000 0%, #00000020 25%, #00000020 75%, #00000000 100%);
 }
 
 .leftRange {
