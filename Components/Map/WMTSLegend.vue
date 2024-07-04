@@ -161,12 +161,15 @@ export default {
     },
     // Show current value
     setCurrentValue: function(magnitude, direction){
-      this.currentValue = magnitude;
+      if (magnitude == undefined){
+        this.currentValue = '';
+        return;
+      }
+      this.currentValue = magnitude.toFixed(2);
       this.currentDirection = direction;
-
+      
       // TODO: To test
-      debugger;
-      this.$refs.tooltipLegendBar.style.left = (100 * Math.min(Math.max((this.currentValue - this.legendRange[0]) / (this.legendRange[1] - this.legendRange[0])), 0), 100) + '%';
+      this.$refs.tooltipLegendBar.style.left = (100 * Math.min(Math.max((magnitude - this.legendRange[0]) / (this.legendRange[1] - this.legendRange[0]), 0), 1)) + '%';
     },
     // Set legend color
     // setLegendColorScale: function(legendName){
