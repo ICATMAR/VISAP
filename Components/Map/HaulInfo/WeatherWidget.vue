@@ -30,7 +30,7 @@
             <div v-if='dd.loading && !dR.imgURL' class="spinner-border text-light" style="width: 1rem; height: 1rem; position: relative;" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
-            <div v-else-if='dR.direction' :style="{'transform': 'rotate('+ (-dd.value - 90) +'deg)'}" :title="dd.value + 'º'">&#10140;</div>
+            <div v-else-if='dR.direction' :style="{'transform': 'rotate('+ (dd.value - 90) +'deg)'}" :title="dd.value + 'º'">&#10140;</div>
             <div v-else-if='dR.imgURL'><img :src=dR.defURL :alt=dR.source :style="getImageStyle(dR, dd)"></div>
 
             <div v-else-if='!dd.loading' :style="getStyle(dR, dd)">{{dd.value}}</div>
@@ -124,7 +124,8 @@ export default {
           name: "Wave direction",
           abbr: "Dir",
           units: "º", 
-          direction: true, 
+          direction: true,
+          fromDirection: true,
           layer: "Wave significant height",
         },
         {
@@ -253,6 +254,8 @@ export default {
                   rr.data[dIndex].loading = false;
                   return;
                 }
+                if (rr.direction && rr.fromDirection) // Wave direction data is not showing where they go but where they come from
+                  value = (180 + value) % 360;
                 rr.data[dIndex].value = value.toFixed(2);
                 rr.data[dIndex].loading = false;
                 // Get product
