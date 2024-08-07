@@ -6,7 +6,7 @@
   <!-- Dropdown section -->
   <div class="dropdown-container">
 
-    <button @click="dropdownClick" class="dropbtn" 
+    <button @click="dropdownClick" class="dropbtn clickable" id="modalitySelectorButton"
       :class="[selectedModality == 'Trawling' ? 'bkg1' : selectedModality == 'Purse seine' ? 'bkg2' : 'bkg3']"
       :title="[$t(selectedModality + 'Info')]"
       >
@@ -47,8 +47,11 @@ export default {
 
   
     // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function(event) {
-      this.isDropDownVisible = false;
+    document.onclick = (event) => {
+      if (event.target.id == "modalitySelectorButton")
+        return;
+      if (this.isDropDownVisible)
+        this.isDropDownVisible = false;
     }
   },
   mounted () {
