@@ -1,0 +1,228 @@
+:root {
+  --blue: rgb(20, 120, 167);
+  --blueRGB: 20, 120, 167;
+  --darkBlue: rgb(15, 48, 98);
+  --darkBlueRGB: 15, 48, 98;
+  --lightBlue: rgb(82, 181, 217);
+  --lightBlueRGB: 82, 181, 217;
+  --red: rgb(255, 115, 105);
+  --redRGB: 255, 115, 105;
+}
+
+* {
+  font-family: "Poppins", "Sans-serif";
+}
+
+body {
+  min-height: 100vh;
+}
+
+#app {
+  /* max-width: 1280px; */
+  margin: 0 auto;
+  /* padding: 2rem;
+  font-weight: normal; */
+}
+
+
+button {
+  padding: 10px 10px 10px 10px;
+  background-color: var(--darkBlue);
+  color: white;
+
+
+  border-radius: 50px;
+  border: none;
+
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover {
+  background-color: var(--lightBlue);
+  transition: all 0.2s ease-in-out;
+}
+
+.button-text {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.button-active {
+  background-color: var(--red);
+  box-shadow: 0px 0px 4px black;
+  transition: all 0.2s ease-in-out;
+}
+.button-active:hover {
+  background-color: var(--red);
+}
+
+@media screen and (max-width: 770px) {
+  button {
+    padding: 4px;
+  }
+}
+
+
+.clickable {
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+}
+.clickable:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.highcharts-data-table {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+
+
+span {
+  color: white;
+  text-shadow: 0px 0px 4px black;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+
+a {
+  color: #ffffff;
+  pointer-events: all;
+}
+a:visited {
+  color: #ffffff;
+}
+a:hover {
+  color: var(--lightBlue);
+}
+
+
+
+/* Limit SVG size */
+.icon-svg {
+  width: 45px;
+  height: 45px;
+}
+
+.icon-svg:hover {
+  border-width: 2px;
+  border-color: black;
+  border-style: solid;
+  border-radius: 50%;
+  background-color: rgb(176, 176, 176);
+}
+
+.roundButton {
+  border-style: none;
+  padding: 0;
+  margin-bottom: 10px;
+  border-radius: 50%;
+}
+
+.icon-str {
+  width: 25px;
+  height: 25px;
+  color: white;
+  text-shadow: 0px 0px 4px black;
+  font-weight: bold;
+
+  background: var(--lightBlue);
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px black;
+  margin-left: 3px;
+  margin-right: 3px;
+
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.icon-str:hover {
+  background-color: var(--blue);
+}
+/* Close icon */
+.icon-str-close {
+  /* background-color: var(--red); */
+  background-color: gray;
+}
+.icon-str-close::after {
+  content: "\2715";
+}
+.icon-str-close:hover{
+  background-color: lightgray;
+}
+/* Open icon */
+.icon-str-open {
+  background-color: var(--lightBlue);
+}
+.icon-str-open::after {
+  font-family: initial;
+  content: "\1F441";
+}
+.icon-str-open:hover{
+  background-color: green;
+}
+
+@media screen and (max-width: 770px) {
+  .icon-str{
+    width:18px;
+    height:18px;
+  }
+}
+
+
+.icon-big{
+  width: 35px;
+  height: 35px;
+}
+
+.icon-img:hover {
+  border: 2px solid var(--lightBlue);
+  cursor:pointer;
+}
+
+
+/* font-awesome 
+  https://github.com/FortAwesome/Font-Awesome/blob/6.x/css/all.min.css 
+  https://origin.fontawesome.com/v6/docs/web/add-icons/pseudo-elements
+  https://origin.fontawesome.com/search?o=r&m=free&s=regular&f=classic
+*/
+.fa::before {
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font: var(--fa-font-regular);
+}
+
+.fa {
+  text-decoration: none;
+}
+
+
+
+
+@media screen and (max-width: 770px) {
+  .hiddenInMobile {
+    display: none
+  }
+
+  .visibleInMobile {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 770px) {
+  .visibleInMobile {
+    display: none;
+  }
+}

@@ -11,9 +11,20 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@fontsource/poppins": "^5.0.14",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/vue-fontawesome": "^3.0.8",
+    "d3": "^7.9.0",
+    "font-awesome": "^4.7.0",
+    "highcharts": "^11.4.6",
+    "list.js": "^2.3.1",
     "mitt": "^3.0.1",
+    "ol": "^10.0.0",
     "vue": "^3.4.29",
-    "vue-i18n": "^9.13.1"
+    "vue-i18n": "^9.13.1",
+    "vue-router": "^4.4.3",
+    "wkx": "^0.5.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",

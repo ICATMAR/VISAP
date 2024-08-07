@@ -33,3 +33,21 @@ npm run build
 ```sh
 npm run lint
 ```
+
+
+https://github.com/openlayers/openlayers
+https://vue-i18n.intlify.dev/guide/installation.html
+https://www.npmjs.com/package/highcharts
+https://www.npmjs.com/package/mitt#install
+https://docs.fontawesome.com/web/use-with/vue/
+https://docs.fontawesome.com/apis/javascript/get-started/
+https://www.npmjs.com/package/@fontsource/poppins
+https://github.com/cschwarz/wkx
+https://www.npmjs.com/package/d3
+https://github.com/javve/list.js
+https://router.vuejs.org/guide/
+
+
+Deploy to github
+git subtree push --prefix dist origin gh-pages
+https://learnvue.co/articles/deploy-vue-to-github-pages
