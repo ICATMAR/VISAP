@@ -2,6 +2,9 @@
 <!-- Container -->
   <div id="app-manager">
 
+    <!-- Modality selector -->
+     <modality-selector></modality-selector>
+
     <!-- Language selector -->
     <language-selector style='position:absolute; top:33px; right:3px;'></language-selector>
 
@@ -51,6 +54,7 @@ import AppMap from "Components/AppMap.vue";
 import CookieBanner from "Components/CookieBanner.vue";
 
 import LanguageSelector from "Components/Utils/LanguageSelector.vue";
+import ModalitySelector from "./ModalitySelector.vue";
 
 export default {
   name: "app-manager",
@@ -96,7 +100,8 @@ export default {
     "app-lengthfreq": AppLengthFreq,
     "app-map": AppMap,
     "cookie-banner": CookieBanner,
-    "language-selector": LanguageSelector
+    "language-selector": LanguageSelector,
+    "modality-selector": ModalitySelector,
     
   },
   computed: {
@@ -116,6 +121,7 @@ export default {
 #app-manager {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   width: 100vw;
   height: 100vh;
   position: absolute;
