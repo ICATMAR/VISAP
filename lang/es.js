@@ -4,6 +4,13 @@ export default es  = {
   "Fishing effort": "Esfuerzo pesquero",
   "Layers": "Capas",
 
+  "Trawling": "Arrastre",
+  "TrawlingInfo": "Pesca de arrastre",
+  "Purse seine": "Cerco",
+  "Purse seineInfo": "Pesca de cerco",
+  "Recreational": "Recreo",
+  "RecreationalInfo": "Pesca desde costa, desde embarcación y submarina",
+
 
   "About": "Acerca de nosotros",
   "About ICATMAR": "Acerca de ICATMAR",

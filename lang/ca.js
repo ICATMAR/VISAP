@@ -4,6 +4,13 @@ export default ca = {
   "Fishing effort": "Esforç pesquer",
   "Layers": "Capes",
 
+  "Trawling": "Arrossegament",
+  "TrawlingInfo": "Pesca d'arrossegament",
+  "Purse seine": "Encerclament",
+  "Purse seineInfo": "Pesca d'encerclament",
+  "Recreational": "Recreativa",
+  "RecreationalInfo": "Pesca des de costa, des d'embarcació i submarina",
+
   "About": "Sobre nosaltres",
   "About ICATMAR": "Sobre ICATMAR",
   "Contact": "Contacte",

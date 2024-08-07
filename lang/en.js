@@ -4,6 +4,13 @@ export default en = {
   "Fishing effort": "Fishing effort",
   "Layers": "Layers",
 
+  "Trawling": "Trawling",
+  "TrawlingInfo": "Bottom trawling",
+  "Purse seine": "Purse seine",
+  "Purse seineInfo": "Purse seine",
+  "Recreational": "Recreational",
+  "RecreationalInfo": "Shore angling, boat angling and spearfishing",
+
 
   "About": "About us",
   "About ICATMAR": "About ICATMAR",

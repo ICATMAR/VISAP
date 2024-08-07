@@ -19,10 +19,10 @@
 
     <!-- ICONS -->
     <a href="https://icatmar.cat/">
-      <img class="logo clickable icatmar-logo" src="img/icatmar-mini-logo.svg">
+      <img class="logo logo-big clickable icatmar-logo" src="img/icatmar-mini-logo.svg">
     </a>
     <a href="https://icatmar.cat/visors/visor-pesquer/">
-      <img class="logo clickable visap-logo" src="img/visor-pesquer-mini.svg">
+      <img class="logo logo-big clickable visap-logo" src="img/visor-pesquer-mini.svg">
     </a>
     <!-- Repository -->
     <a href="https://github.com/ICATMAR/VISAP" target="_blank">
@@ -128,17 +128,17 @@ export default {
   overflow: hidden;
 }
 
-
 .logo {
-  width: 70px;
-  height: 70px;
   position: fixed;
   top: 10px;
   padding: 0px;
   margin: 0px;
   z-index: 10;
 }
-
+.logo-big {
+  width: 70px;
+  height: 70px;
+}
 .icatmar-logo {
   left: 50px;
 }
@@ -158,6 +158,20 @@ export default {
 
   right: 35px;
   top: 6px;
+}
+
+
+@media screen and (max-width: 770px) {
+  .logo-big {
+    width: 35px;
+    height: 35px;
+  }
+  .icatmar-logo {
+    left: 30px;
+  }
+  .visap-logo {
+    left: 60px;
+  }
 }
 
 </style>

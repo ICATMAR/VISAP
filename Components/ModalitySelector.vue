@@ -6,7 +6,10 @@
   <!-- Dropdown section -->
   <div class="dropdown-container">
 
-    <button @click="dropdownClick" class="dropbtn" :class="[selectedModality == 'Trawling' ? 'bkg1' : selectedModality == 'Purse seine' ? 'bkg2' : 'bkg3']">
+    <button @click="dropdownClick" class="dropbtn" 
+      :class="[selectedModality == 'Trawling' ? 'bkg1' : selectedModality == 'Purse seine' ? 'bkg2' : 'bkg3']"
+      :title="[$t(selectedModality + 'Info')]"
+      >
       <img class="icon-big icon-str" :src="[selectedModality == 'Trawling' ? 'img/trawling.svg' : selectedModality == 'Purse seine' ? 'img/purseseine.svg' : 'img/recreational.svg']">
       <span>{{$t(selectedModality)}}</span>
       <span class="fa" :class="[isDropDownVisible ? 'rotate0' : 'rotate180']">&#xf106;</span>
@@ -14,15 +17,21 @@
       
     <Transition>
     <div id="modalitySelectorDropdown" class="dropdown-content" v-show="isDropDownVisible">
-      <div class="item" value="Trawling" @click="changeModality">
-        <div class="dot bkg1"></div>
+      <div class="item" value="Trawling" @click="changeModality" :title="[$t('TrawlingInfo')]">
+        <!-- <div class="dot bkg1"></div> -->
+        <img class="icon-str" src="img/trawling.svg"></img>
         {{$t("Trawling")}}
       </div>
-      <div class="item" value="Purse seine" @click="changeModality">
-        <div class="dot bkg2"></div>
+      <div class="item" value="Purse seine" @click="changeModality" :title="[$t('Purse seineInfo')]">
+        <!-- <div class="dot bkg2"></div> -->
+        <img class="icon-str" src="img/purseseine.svg"></img>
         {{$t("Purse seine")}}
       </div>
-      <div class="item" value="Recreational" @click="changeModality"> <div class="dot bkg3"></div> {{$t("Recreational")}}</div>
+      <div class="item" value="Recreational" @click="changeModality" :title="[$t('RecreationalInfo')]">
+        <!-- <div class="dot bkg3"></div> -->
+        <img class="icon-str" src="img/recreational.svg"></img>
+        {{$t("Recreational")}}
+      </div>
     </div>
     </Transition>
   </div>
@@ -125,15 +134,19 @@ export default {
 
   box-shadow: 0px 0px 4px 0px black;
   border-radius: 0px 0px 20px 20px;
+  border: solid white 2px;
 
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  transition: all 0.2s ease-in-out;
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.0);
 }
 
 /* Dropdown button on hover & focus */
 .dropbtn:hover {
-  background-color: rgb(168, 0, 0);
+  box-shadow: inset 0 0 100px 100px rgba(0, 0, 0, 0.2);
 }
 
 .dropbtn > * {
@@ -161,7 +174,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 /* Links inside the dropdown */
