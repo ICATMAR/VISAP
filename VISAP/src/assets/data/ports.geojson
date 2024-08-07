@@ -1,0 +1,131 @@
+{
+   "type":"FeatureCollection",
+   "features":[
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Roses",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               3.181194,
+               42.257079
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Palamós",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               3.127977,
+               41.845045
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Blanes",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               2.7992,
+               41.675284
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Arenys de Mar",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               2.559814,
+               41.579594
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Barcelona",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               2.180703,
+               41.37552
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Vilanova i la Geltrú",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               1.729578,
+               41.214885
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Tarragona",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               1.22237,
+               41.104385
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"L'Ametlla de Mar",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               0.801746,
+               40.881106
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"La Ràpita",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               0.595773,
+               40.617699
+            ]
+         }
+      }
+   ]
+}
