@@ -93,7 +93,7 @@ export default {
       areOptionsVisible: true,
       selUnit: 'kg',
       selYear: 2020,
-      selGear: 'bottomtrawling',
+      selGear: 'trawling',
       units: ['kg','euros', 'hours'],
       unitIcons: {
         'kg': '&#xf5cd;',

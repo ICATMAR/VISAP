@@ -252,7 +252,7 @@ export default {
 
     // PUBLIC METHODS
     setEffortLegend: function(unit){
-      let selGear = 'bottomtrawling';
+      let selGear = 'trawling';
       let url = 'Assets/LegendsFishingEffort/' + unit + '_' + selGear + '.png';
 
       // Change range and legend units

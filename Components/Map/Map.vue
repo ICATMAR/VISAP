@@ -161,7 +161,7 @@ export default {
         // Ports
         portsLayer: new ol.layer.Vector({
           source: new ol.source.Vector({
-            url: 'data/trawling/trawling_ports.geojson',
+            url: 'data/trawlingData/trawling_ports.geojson',
             format: new ol.format.GeoJSON()
           }),
           minZoom: 3,
