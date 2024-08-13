@@ -4,6 +4,7 @@ class GUIManager {
   currentModality = 'trawling';
   currentSection = 'map';
   currentLanguage = 'en';
+  currentHaul = 23288;
 
   // CONSTRUCTOR
   constructor() {
