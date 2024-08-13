@@ -4,9 +4,9 @@ export default es  = {
   "Fishing effort": "Esfuerzo pesquero",
   "Layers": "Capas",
 
-  "Trawling": "Arrastre",
+  "trawling": "Arrastre",
   "TrawlingInfo": "Pesca de arrastre",
-  "Purse seine": "Cerco",
+  "purse-seine": "Cerco",
   "Purse seineInfo": "Pesca de cerco",
   "Recreational": "Recreo",
   "RecreationalInfo": "Pesca desde costa, desde embarcación y submarina",

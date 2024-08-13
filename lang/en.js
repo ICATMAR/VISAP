@@ -4,9 +4,9 @@ export default en = {
   "Fishing effort": "Fishing effort",
   "Layers": "Layers",
 
-  "Trawling": "Trawling",
+  "trawling": "Trawling",
   "TrawlingInfo": "Bottom trawling",
-  "Purse seine": "Purse seine",
+  "purse-seine": "Purse seine",
   "Purse seineInfo": "Purse seine",
   "Recreational": "Recreational",
   "RecreationalInfo": "Shore angling, boat angling and spearfishing",

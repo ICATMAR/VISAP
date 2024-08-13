@@ -4,9 +4,9 @@ export default ca = {
   "Fishing effort": "Esforç pesquer",
   "Layers": "Capes",
 
-  "Trawling": "Arrossegament",
+  "trawling": "Arrossegament",
   "TrawlingInfo": "Pesca d'arrossegament",
-  "Purse seine": "Encerclament",
+  "purse-seine": "Encerclament",
   "Purse seineInfo": "Pesca d'encerclament",
   "Recreational": "Recreativa",
   "RecreationalInfo": "Pesca des de costa, des d'embarcació i submarina",

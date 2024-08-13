@@ -1,33 +1,33 @@
 <template>
 
   <!-- Create line on top -->
-  <div class="top-line" :class="[selectedModality == 'Trawling' ? 'bkg1' : selectedModality == 'Purse seine' ? 'bkg2' : 'bkg3']"></div>
+  <div class="top-line" :class="[selectedModality == 'trawling' ? 'bkg1' : selectedModality == 'purse-seine' ? 'bkg2' : 'bkg3']"></div>
 
   <!-- Dropdown section -->
   <div class="dropdown-container">
 
     <button @click="dropdownClick" class="dropbtn clickable" id="modalitySelectorButton"
-      :class="[selectedModality == 'Trawling' ? 'bkg1' : selectedModality == 'Purse seine' ? 'bkg2' : 'bkg3']"
+      :class="[selectedModality == 'trawling' ? 'bkg1' : selectedModality == 'purse-seine' ? 'bkg2' : 'bkg3']"
       :title="[$t(selectedModality + 'Info')]"
       >
-      <img class="icon-big icon-str" :src="[selectedModality == 'Trawling' ? 'img/trawling.svg' : selectedModality == 'Purse seine' ? 'img/purseseine.svg' : 'img/recreational.svg']">
+      <img class="icon-big icon-str" :src="[selectedModality == 'trawling' ? 'img/trawling.svg' : selectedModality == 'purse-seine' ? 'img/purseseine.svg' : 'img/recreational.svg']">
       <span>{{$t(selectedModality)}}</span>
       <span class="fa" :class="[isDropDownVisible ? 'rotate0' : 'rotate180']">&#xf106;</span>
     </button>
       
     <Transition>
     <div id="modalitySelectorDropdown" class="dropdown-content" v-show="isDropDownVisible">
-      <div class="item" value="Trawling" @click="changeModality" :title="[$t('TrawlingInfo')]">
+      <div class="item" value="trawling" @click="changeModality" :title="[$t('TrawlingInfo')]">
         <!-- <div class="dot bkg1"></div> -->
         <img class="icon-str" src="img/trawling.svg"></img>
-        {{$t("Trawling")}}
+        {{$t("trawling")}}
       </div>
-      <div class="item" value="Purse seine" @click="changeModality" :title="[$t('Purse seineInfo')]">
+      <div class="item" value="purse-seine" @click="changeModality" :title="[$t('Purse seineInfo')]">
         <!-- <div class="dot bkg2"></div> -->
         <img class="icon-str" src="img/purseseine.svg"></img>
-        {{$t("Purse seine")}}
+        {{$t("purse-seine")}}
       </div>
-      <div class="item" value="Recreational" @click="changeModality" :title="[$t('RecreationalInfo')]">
+      <div class="item no-select" value="Recreational" @click="changeModality" :title="[$t('RecreationalInfo')]">
         <!-- <div class="dot bkg3"></div> -->
         <img class="icon-str" src="img/recreational.svg"></img>
         {{$t("Recreational")}}
@@ -45,7 +45,6 @@ export default {
   name: "modality-selector",
   created(){
 
-  
     // Close the dropdown menu if the user clicks outside of it
     document.onclick = (event) => {
       if (event.target.id == "modalitySelectorButton")
@@ -59,7 +58,7 @@ export default {
   },
   data () {
     return {
-      selectedModality: 'Trawling',
+      selectedModality: 'trawling',
       isDropDownVisible: false,
     }
   },
@@ -75,7 +74,7 @@ export default {
       this.selectedModality = modality;
       this.isDropDownVisible = false;
       // Emit
-      window.eventBus.emit('ModalitySelector_changedModality', modality);
+      window.eventBus.emit('ModalitySelector_ChangedModality', modality);
     },
 
   },
@@ -178,6 +177,10 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+}
+.no-select {
+  background-color: gray;
+  pointer-events: none;
 }
 
 /* Links inside the dropdown */
