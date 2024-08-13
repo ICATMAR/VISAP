@@ -43,16 +43,9 @@
 
       // EVENTS
       // When language changes, update language of the highchart
-      window.eventBus.on('LanguageSelector_languageChange', (e) => {
-        // Translate menu options
-        this.translateHighcharts();
-        // Reset graph
-        if (this.rawData){
-          // Fill filter menu with data
-          this.$refs.filterMenu.setData(this.rawData);
-          this.createGraph(this.rawData);
-        }
-      });
+      window.eventBus.on('LanguageSelector_LanguageChanged', this.languageChanged);
+      window.eventBus.on('GUIManager_LanguageChanged', this.languageChanged);
+
     },
     data (){
       return {
@@ -247,6 +240,18 @@
         });
 
         return hChart;
+      },
+
+
+      languageChanged: function(){
+        // Translate menu options
+        this.translateHighcharts();
+        // Reset graph
+        if (this.rawData){
+          // Fill filter menu with data
+          this.$refs.filterMenu.setData(this.rawData);
+          this.createGraph(this.rawData);
+        }
       },
 
       // Translate high charts options

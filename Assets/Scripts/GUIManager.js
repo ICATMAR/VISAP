@@ -3,16 +3,13 @@ class GUIManager {
   currentFishingTrack = '';
   currentModality = 'trawling';
   currentSection = 'map';
+  currentLanguage = 'en';
 
+  // CONSTRUCTOR
   constructor() {
     window.location.isInternalChange = false;
 
-    // Set section if undefined
-    let section = window.location.getHashValue('SECTION');
-    if (section == undefined){
-      this.setSection(this.currentSection);
-    }
-
+    this.setDefaults();
 
     // EVENTS
     // Hash changes
@@ -23,17 +20,33 @@ class GUIManager {
         window.location.isInternalChange = false;
       // User changed hash
       else {
+        // Section
         // Get app from window location hash
         let section = window.location.getHashValue('SECTION');
         // Set default
         if (section == undefined){
-          section = this.currentSection;
-          window.location.setHashValue('SECTION', section);
+          window.location.setHashValue('SECTION', this.currentSection);
         }
         // Check if section changed
         else if (section.toLowerCase() != this.currentSection) {
           this.setSection(section.toLowerCase());
           window.eventBus.emit('GUIManager_SectionChanged', this.currentSection);
+        }
+        // Modality
+        let mod = window.location.getHashValue('MOD');
+        if (mod == undefined)
+          window.location.setHashValue('MOD', this.currentModality);
+        else if (mod.toLowerCase() != this.currentModality){
+          this.setModality(mod.toLowerCase());
+          window.eventBus.emit('GUIManager_ModalityChanged', this.currentModality);
+        }
+        // Language
+        let lang = window.location.getHashValue('LANG');
+        if (lang == undefined)
+          window.location.setHashValue('LANG', this.currentLanguage);
+        else if (lang.toLowerCase() != this.currentLanguage){
+          this.setLanguage(lang.toLowerCase());
+          window.eventBus.emit('GUIManager_LanguageChanged', this.currentLanguage);
         }
       }
 
@@ -46,11 +59,42 @@ class GUIManager {
     window.eventBus.on('AppMap_ChangedSection', (section) => this.setSection(section));
     window.eventBus.on('TitleHeader_ChangedSection', (section) => this.setSection(section));
     // Modality changes
-    window.eventBus.on('ModalitySelector_ChangedModality', this.setModality);
+    window.eventBus.on('ModalitySelector_ChangedModality', (mod) => this.setModality(mod));
+    // Language changes
+    window.eventBus.on('LanguageSelector_LanguageChanged', lang => this.setLanguage(lang));
   }
 
 
 
+
+  // FUNCTIONS
+  // Set defaults
+  setDefaults(){
+    // Set default section if undefined
+    let section = window.location.getHashValue('SECTION');
+    if (section == undefined){
+      this.setSection(this.currentSection);
+    }
+    // Set default modality if undefined
+    let mod = window.location.getHashValue('MOD');
+    if (mod == undefined){
+      this.setModality(this.currentModality);
+    }
+    // Set language
+    // Check if there is a language in the url
+    let langURL = window.location.getHashValue('LANG');
+    if (langURL != undefined){
+      this.currentLanguage = langURL.substring(0,2);
+    } 
+    // Use default navigator language if available
+    else if (navigator.language.includes('es') || navigator.language.includes('en') || navigator.language.includes('ca')){
+      this.setLanguage(navigator.language.substring(0,2));
+    } 
+    // Default is english
+    else {
+      this.setLanguage('en');
+    }
+  }
 
 
   // Section
@@ -60,6 +104,8 @@ class GUIManager {
       section = 'map'
     this.currentSection = section;
     window.location.setHashValue('SECTION', section);
+    if (!isValid)
+      console.warn('Wrong hash introduced in the URL');
   }
   // Modality
   setModality(mod){
@@ -68,6 +114,18 @@ class GUIManager {
       mod = 'trawling';
     this.currentModality = mod;
     window.location.setHashValue('MOD', this.currentModality);
+    if (!isValid)
+      console.warn('Wrong hash introduced in the URL');
+  }
+  // Language
+  setLanguage(lang){
+    let isValid = lang == 'ca' || lang == 'es' || lang == 'en';
+    if (!isValid)
+      lang = 'en'
+    this.currentLanguage = lang;
+    window.location.setHashValue('LANG', this.currentLanguage);
+    if (!isValid)
+      console.warn('Wrong hash introduced in the URL');
   }
 
 }

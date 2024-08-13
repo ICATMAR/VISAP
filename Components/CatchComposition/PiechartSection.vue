@@ -88,10 +88,9 @@ export default {
 
     
     // EVENTS
-    window.eventBus.on('LanguageSelector_languageChange', () => {
-      // Set data to pie chart
-      this.updatePieChartData();
-    })
+    // Set data to pie chart
+    window.eventBus.on('LanguageSelector_LanguageChanged', this.updatePieChartData);
+    window.eventBus.on('GUIManager_LanguageChanged', this.updatePieChartData);
   },
   data (){
     return {
