@@ -10,7 +10,13 @@ class GUIManager {
   constructor() {
     window.location.isInternalChange = false;
 
+    // Set defaults if undefined
     this.setDefaults();
+
+    // Load necessary files for that specific menu
+    // TODO / WARN: should this be here? Vue loads all the sections at once, because v-show and not v-if
+    // Maybe this should be controlled from vue? I don't know
+    window.eventBus.emit('GUIManager_HashChanged', window.location.hash);
 
     // EVENTS
     // Hash changes

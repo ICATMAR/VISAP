@@ -37,11 +37,85 @@ class FileManager {
   loadedFilesLog = [];
 
 
+  // Estimated files:
+  // hauls (29 purse-seine and 522 trawling in 2024), ~10KB each
+  // sizes ~13MB
+  // biomass port/year ~2MB
+  // tracks geometry ~2MB
+  // effort
 
   constructor(){
     
+    
+
   }
 
+
+
+
+
+  // Load map files
+  loadMapFiles = function(mod){
+    // Effort maps
+    // Tracks
+    // Current haul
+    let promises = [];
+    let urls = [];
+
+    let modURL = mod == 'trawling' ? 'trawlingData' : mod == 'purse-seine' ? 'purseSeineData' : 'recreational';
+    let modCode = mod == 'trawling' ? 'trawling' : mod == 'purse-seine' ? 'ps' : 'rec';
+    let baseURL = '/data/' + modURL + '/';
+
+    // Effort maps and legends
+    // All is not shown in the app, as we separate between fishing modalities
+    let effortUnits = ['euros', 'hours', 'kg'];
+    let effortYears = ['2019', '2020', '2021', '2022', '2023', '2024'];
+
+    effortUnits.forEach(eUnit => {
+      effortYears.forEach(eYear => {
+        urls.push(baseURL + 'effort/fishingEffort_' + eUnit + '_' + eYear + '_' + modCode + '.png');
+      });
+      url.push(baseURL + 'effort/fishingEffort_' + eUnit + '_' + modCode + '_legend.png');
+    });
+    
+
+    for (let i = 0; i < urls.length; i++){
+      // Check if this file was already requested
+      let fileWasRequested = this.requestedFiles.indexOf(urls[i]) != -1;
+
+      // Keep track of requested files. Skip if already requested
+      if (fileWasRequested)
+        continue;
+      else
+        this.requestedFiles.push(urls[i]);
+
+      // Check file extension
+      let extension = urls[i].split('.').pop();
+      promises.push(
+        fetch(urls[i])
+        .then( r => {
+          // Image
+          if (extension == 'png')
+            return r.blob();
+          // JSON
+          else if (extension == 'json' || extension == 'geojson')
+            return r.json();
+        })
+        .then(res => {
+          // Image
+          if (extension == 'png'){
+            let img = document.createElement('img');
+            img.src = URL.createObjectURL(res);
+            this.loadedFilesLog.push({'url': urls[i], 'content': img});
+          }// JSON
+          else if (extension == 'json' || extension == 'geojson')
+            this.loadedFilesLog.push({'url': urls[i], 'content': res});
+        })
+      )
+    }
+
+    return Promise.allSettled(promises)
+  }
 
 
 
