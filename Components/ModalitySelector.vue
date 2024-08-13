@@ -131,7 +131,7 @@ export default {
 .dropbtn {
   color: white;
   text-decoration: none;
-  font-size: 16px;
+  font-size: clamp(0.8rem, 3vw, 1.2rem);
   border: none;
   cursor: pointer;
 
