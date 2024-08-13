@@ -158,7 +158,7 @@ export default {
     effortParamsChange: function(){
       let selGear = this.selGear.toLowerCase();
       selGear = selGear.replace(' ', '');
-      let outUrl = 'data/fishingEffort/fishingEffort_' + this.selUnit + '_' +  this.selYear + '_' + selGear + '.png';
+      let outUrl = 'data/trawlingData/effort/fishingEffort_' + this.selUnit + '_' +  this.selYear + '_' + selGear + '.png';
       
       
 

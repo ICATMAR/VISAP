@@ -39,7 +39,7 @@
       
     },
     mounted() {
-      this.getDataFile('data/sizes.json');
+      this.getDataFile('data/trawlingData/trawling_sizes.json');
 
       // EVENTS
       // When language changes, update language of the highchart

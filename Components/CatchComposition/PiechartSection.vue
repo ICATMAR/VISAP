@@ -72,11 +72,11 @@ export default {
     
     // TEST, ORGANIZE BETTER
     // Load test data
-    let url = 'data/';
+    let url = 'data/trawlingData/';
     if (this.type == 'port')
-      url += 'pesca_arrossegament_port_biomassa.json';
+      url += 'trawling_port_biomass.json';
     else if (this.type == 'season')
-      url += 'pesca_arrossegament_any_biomassa.json';
+      url += 'trawling_year_biomass.json';
     // Fetch
     fetch(url)
       .then(r => r.json())

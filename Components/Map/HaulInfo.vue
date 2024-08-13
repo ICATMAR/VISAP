@@ -236,7 +236,7 @@ export default {
     // Create and set pie chart
     setPieChart: function(id){
       // Load haul from server or from file
-      this.getHaul('data/hauls/' + id + '.json', undefined, this.selTrack);
+      this.getHaul('data/trawlingData/hauls/' + id + '.json', undefined, this.selTrack);
     },
 
 

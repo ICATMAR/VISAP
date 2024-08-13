@@ -211,7 +211,7 @@ export default {
         fishingEffort: new ol.layer.Image({
           name: 'fishingEffort',
           source: new ol.source.ImageStatic({
-            url: 'data/fishingEffort/fishingEffortExample_m1_39_6_44.png',
+            url: 'data/trawlingData/effort/fishingEffortExample_m1_39_6_44.png',
             imageExtent: [-1, 39, 6, 44],
             projection: 'EPSG:4326'
           }),
@@ -252,7 +252,7 @@ export default {
     // if (window.serverConnection)
     // getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
     // getTrackLines('data/trackLines.json', undefined);
-    this.fishingTracks = new FishingTracks('data/trackLines.json', undefined, this.onLoadTracks);//new TrackLines(address, staticFile, onLoadTracks)
+    this.fishingTracks = new FishingTracks('data/trawlingData/trawling_track_lines.json', undefined, this.onLoadTracks);//new TrackLines(address, staticFile, onLoadTracks)
   },
   mounted () {
     this.initMap();
