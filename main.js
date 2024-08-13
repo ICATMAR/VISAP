@@ -43,6 +43,10 @@ import GAnalyticsManager from './Assets/Scripts/GAnalyticsManager.js';
 window.FileManager = new FileManager();
 let gaManager = new GAnalyticsManager();
 
+// GUI Manager
+import GUIManager from '../VISAP/Assets/Scripts/GUIManager.js';
+window.GUIManager = new GUIManager();
+
 
 
 

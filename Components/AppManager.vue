@@ -9,13 +9,13 @@
     <language-selector style='position:absolute; top:33px; right:3px;'></language-selector>
 
     <!-- APP MAP -->
-    <app-map v-show="app=='map'"></app-map>
+    <app-map v-show="section=='map'"></app-map>
 
     <!-- APP OVERVIEW -->
-    <app-overview v-show="app=='overview'"></app-overview>
+    <app-overview v-show="section=='overview'"></app-overview>
 
     <!-- APP LENGTH FREQ -->
-    <app-lengthfreq v-show="app=='length-freq'"></app-lengthfreq>
+    <app-lengthfreq v-show="section=='length-dist'"></app-lengthfreq>
 
     <!-- ICONS -->
     <a href="https://icatmar.cat/">
@@ -62,38 +62,30 @@ export default {
     
   },
   mounted () {
-    // Get app from window location hash
-    let appType = window.location.getHashValue('app');
-    // Set default
-    if (appType == undefined){
-      appType = 'map';
-      window.location.setHashValue('app', appType);
-    }
-    // Store
-    this.app = appType;
 
+    // Initial section
+    this.section = window.GUIManager.currentSection;
 
     // EVENTS
-    // Manual hash change
-    window.onhashchange= (event) => {
-      // event.newURL, event.oldURL
-      let appType = window.location.getHashValue('app');
-      this.app = appType;
-      // When using the other apps, if the window is resized, map does not load. Force it here with a window resize event.
-      if (appType == 'map'){
-        // HACK Fix Force openlayers canvas to fill window after 0.5 s
-        setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
-        
-      }
-    }
+    window.eventBus.on('AppMap_ChangedSection', this.setSection);
+    window.eventBus.on('TitleHeader_ChangedSection', this.setSection);
+    window.eventBus.on('GUIManager_SectionChanged', this.setSection);
 
   },
   data () {
     return {
-      app: 'map'
+      section: 'map'
     }
   },
   methods: {
+    setSection: function(section){
+      this.section = section;
+      // HACK When using the other apps, if the window is resized, map does not load. Force it here with a window resize event.
+      if (section == 'map'){
+        // Fix Force openlayers canvas to fill window after 0.5 s
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
+      }
+    }
   },
   components: {
     "app-overview": AppOverview,

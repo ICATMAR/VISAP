@@ -12,11 +12,11 @@
         <!-- Buttons to switch from app -->
         <div class="switchPanels" v-show="!isMapMinimized">
           <!-- Buttons -->
-          <button @click="changeHash('overview')" >
+          <button @click="changeSection('overview')" >
             <span class="fa">&#xf13d; </span>
             <span class="button-text hiddenInMobile">{{ $t('Catch composition') }}</span>
           </button>
-          <button @click="changeHash('length-freq')">
+          <button @click="changeSection('length-dist')">
             <span class="fa">&#xe0e3; </span>
             <span class="button-text hiddenInMobile">{{ $t('Length frequency') }}</span>
           </button>
@@ -117,9 +117,9 @@
     },
     methods: {
       // INTERNAL EVENTS
-      // Change hash from application
-      changeHash: function(appType){
-        window.location.setHashValue('app', appType);
+      // Change section from application
+      changeSection: function(section){
+        window.eventBus.emit('AppMap_ChangedSection', section)
       },
 
       // USER ACTIONS

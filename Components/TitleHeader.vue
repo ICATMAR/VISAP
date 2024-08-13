@@ -10,15 +10,15 @@
         <!-- App buttons -->
         <div class="switchPanels">
             <!-- Buttons -->
-            <button :class="{selected: title=='Catch composition'}"  @click="changeHash('overview')">
+            <button :class="{selected: title=='Catch composition'}"  @click="changeSection('overview')">
               <span class="fa">&#xf13d; </span>
               <span class="button-text">{{ $t('Catch composition') }}</span>
             </button>
-            <button :class="{selected: title=='Length frequency'}" @click="changeHash('length-freq')">
+            <button :class="{selected: title=='Length frequency'}" @click="changeSection('length-dist')">
               <span class="fa">&#xe0e3; </span>
               <span class="button-text">{{ $t('Length frequency') }}</span>
             </button>
-            <button @click="changeHash('map')">
+            <button @click="changeSection('map')">
               <span class="fa">&#xf276; </span>
               <span class="button-text">{{ $t('Sampling map') }}</span>
             </button>
@@ -55,8 +55,8 @@ export default {
     }
   },
   methods: {
-    changeHash: function(appType){
-      window.location.setHashValue('app', appType);
+    changeSection: function(section){
+      window.eventBus.emit('TitleHeader_ChangedSection', section)
     }
   },
   components: {
