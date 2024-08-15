@@ -211,7 +211,7 @@ export default {
         fishingEffort: new ol.layer.Image({
           name: 'fishingEffort',
           source: new ol.source.ImageStatic({
-            url: 'data/trawlingData/effort/fishingEffortExample_m1_39_6_44.png',
+            url: '',//'data/trawlingData/effort/fishingEffortExample_m1_39_6_44.png',
             imageExtent: [-1, 39, 6, 44],
             projection: 'EPSG:4326'
           }),
