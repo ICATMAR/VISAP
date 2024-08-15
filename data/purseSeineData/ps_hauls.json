@@ -1,1 +1,263 @@
-[{"Id":18292,"AvgDepth":"70.2","geom":"0101000020E61000004AD05FE811E3FA3FEAE74D452A904440","Estacio":"Winter","Data":"2022-02-18","ZonaPort":"Center","Port":"Vilanova i la Geltrú"},{"Id":18292,"AvgDepth":"70.2","geom":"0101000020E610000078D0ECBAB7E2FA3F1938A0A52B904440","Estacio":"Winter","Data":"2022-02-18","ZonaPort":"Center","Port":"Vilanova i la Geltrú"},{"Id":18293,"AvgDepth":"69.1","geom":"0101000020E6100000C93846B247E8FA3FFBAF73D366904440","Estacio":"Winter","Data":"2022-02-18","ZonaPort":"Center","Port":"Vilanova i la Geltrú"},{"Id":16597,"AvgDepth":"80.3","geom":"0101000020E6100000581D39D219F809402A745E6397024540","Estacio":"Winter","Data":"2022-01-27","ZonaPort":"North","Port":"L'Escala"},{"Id":22009,"AvgDepth":"84.7","geom":"0101000020E610000058C9C7EE02E5094052D2C3D0EA084540","Estacio":"Autumn","Data":"2022-10-21","ZonaPort":"North","Port":"L'Escala"},{"Id":21901,"AvgDepth":"36.6","geom":"0101000020E61000009B5434D6FE6E0940AF44A0FA07114540","Estacio":"Autumn","Data":"2022-10-21","ZonaPort":"North","Port":"L'Escala"},{"Id":18290,"AvgDepth":"73.2","geom":"0101000020E610000083A3E4D539C6094044BE4BA94B144540","Estacio":"Winter","Data":"2022-02-04","ZonaPort":"North","Port":"L'Escala"},{"Id":18289,"AvgDepth":"73.2","geom":"0101000020E61000000A2C802903C7094055698B6B7C144540","Estacio":"Winter","Data":"2022-02-04","ZonaPort":"North","Port":"L'Escala"},{"Id":18413,"AvgDepth":"61.1","geom":"0101000020E6100000E3361AC05BC00940A7936C75391D4540","Estacio":"Spring","Data":"2022-05-13","ZonaPort":"North","Port":"L'Escala"},{"Id":18374,"AvgDepth":"51.2","geom":"0101000020E6100000B5503239B5930940F01307D0EF1B4540","Estacio":"Spring","Data":"2022-05-13","ZonaPort":"North","Port":"L'Escala"},{"Id":18313,"AvgDepth":"44.4","geom":"0101000020E610000054724EECA17D09405D5320B3B3124540","Estacio":"Winter","Data":"2022-03-03","ZonaPort":"North","Port":"L'Escala"},{"Id":18312,"AvgDepth":"42.6","geom":"0101000020E61000005DC2A1B7787809402EE7525C55124540","Estacio":"Winter","Data":"2022-03-03","ZonaPort":"North","Port":"L'Escala"},{"Id":18386,"AvgDepth":"64.0","geom":"0101000020E61000001F0F7D772BAB09408BC1C3B46F124540","Estacio":"Spring","Data":"2022-06-03","ZonaPort":"North","Port":"L'Escala"},{"Id":18434,"AvgDepth":"94.2","geom":"0101000020E6100000CA1B60E63B380A40DC4944F8171B4540","Estacio":"Summer","Data":"2022-07-13","ZonaPort":"North","Port":"L'Escala"},{"Id":18346,"AvgDepth":"56.7","geom":"0101000020E6100000E84CDA54DDA3EE3F59315C1D007B4440","Estacio":"Spring","Data":"2022-04-26","ZonaPort":"Center","Port":"Tarragona"},{"Id":22010,"AvgDepth":"127.0","geom":"0101000020E6100000E4688EACFC72F53F91F0BDBF415B4440","Estacio":"Autumn","Data":"2022-10-26","ZonaPort":"Center","Port":"Tarragona"},{"Id":22011,"AvgDepth":"125.0","geom":"0101000020E6100000FB07910C3976F53F03249A40115B4440","Estacio":"Autumn","Data":"2022-10-26","ZonaPort":"Center","Port":"Tarragona"},{"Id":23669,"AvgDepth":"83.2","geom":"0101000020E61000000BD5CDC5DFF609405708ABB184054540","Estacio":"Autumn","Data":"2022-11-03","ZonaPort":"North","Port":"L'Escala"},{"Id":22020,"AvgDepth":"71.3","geom":"0101000020E61000008693347F4CEB094073A087DA36024540","Estacio":"Autumn","Data":"2022-11-03","ZonaPort":"North","Port":"L'Escala"},{"Id":21733,"AvgDepth":"50.1","geom":"0101000020E6100000420A9E42AED4094071E2AB1DC5014540","Estacio":"Summer","Data":"2022-08-09","ZonaPort":"North","Port":"L'Escala"},{"Id":21257,"AvgDepth":"98.9","geom":"0101000020E610000006D7DCD1FF120A40D12346CF2D004540","Estacio":"Summer","Data":"2022-08-09","ZonaPort":"North","Port":"L'Escala"},{"Id":21198,"AvgDepth":"80.0","geom":"0101000020E61000005A0F5F268A50F43F75E789E76C7F4440","Estacio":"Summer","Data":"2022-08-05","ZonaPort":"Center","Port":"Tarragona"},{"Id":21199,"AvgDepth":"80.0","geom":"0101000020E61000002176A6D0794DF43F40321D3A3D7F4440","Estacio":"Summer","Data":"2022-08-05","ZonaPort":"Center","Port":"Tarragona"},{"Id":18419,"AvgDepth":"42.6","geom":"0101000020E6100000DFA815A6EF75F63F658D7A88468F4440","Estacio":"Spring","Data":"2022-06-30","ZonaPort":"Center","Port":"Vilanova i la Geltrú"},{"Id":18418,"AvgDepth":"164.6","geom":"0101000020E61000008DD0CFD4EBD6F53F00C80913467F4440","Estacio":"Spring","Data":"2022-06-30","ZonaPort":"Center","Port":"Vilanova i la Geltrú"},{"Id":22012,"AvgDepth":"37.1","geom":"0101000020E6100000FC1873D712920340A43330F2B2BE4440","Estacio":"Autumn","Data":"2022-11-03","ZonaPort":"North","Port":"Arenys de Mar"},{"Id":21197,"AvgDepth":"95.6","geom":"0101000020E610000021CB82893F4A07405D1ABFF04ACC4440","Estacio":"Summer","Data":"2022-07-26","ZonaPort":"North","Port":"Arenys de Mar"},{"Id":18300,"AvgDepth":"74.0","geom":"0101000020E6100000EFAEB321FFEC034009FCE1E7BFB94440","Estacio":"Winter","Data":"2022-03-09","ZonaPort":"North","Port":"Blanes"},{"Id":18299,"AvgDepth":"67.0","geom":"0101000020E61000006422A5D93CCE034094F59B89E9BA4440","Estacio":"Winter","Data":"2022-03-09","ZonaPort":"North","Port":"Blanes"},{"Id":21716,"AvgDepth":"72.0","geom":"0101000020E61000006EA296E656880740BA8784EFFDCF4440","Estacio":"Summer","Data":"2022-09-09","ZonaPort":"North","Port":"Blanes"}]
+[
+  {
+    "Id": 18292,
+    "AvgDepth": "70.2",
+    "geom": "0101000020E610000078D0ECBAB7E2FA3F1938A0A52B904440",
+    "Estacio": "Winter",
+    "Data": "2022-02-18",
+    "ZonaPort": "Center",
+    "Port": "Vilanova i la Geltrú"
+  },
+  {
+    "Id": 18293,
+    "AvgDepth": "69.1",
+    "geom": "0101000020E6100000C93846B247E8FA3FFBAF73D366904440",
+    "Estacio": "Winter",
+    "Data": "2022-02-18",
+    "ZonaPort": "Center",
+    "Port": "Vilanova i la Geltrú"
+  },
+  {
+    "Id": 16597,
+    "AvgDepth": "80.3",
+    "geom": "0101000020E6100000581D39D219F809402A745E6397024540",
+    "Estacio": "Winter",
+    "Data": "2022-01-27",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 22009,
+    "AvgDepth": "84.7",
+    "geom": "0101000020E610000058C9C7EE02E5094052D2C3D0EA084540",
+    "Estacio": "Autumn",
+    "Data": "2022-10-21",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 21901,
+    "AvgDepth": "36.6",
+    "geom": "0101000020E61000009B5434D6FE6E0940AF44A0FA07114540",
+    "Estacio": "Autumn",
+    "Data": "2022-10-21",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 18290,
+    "AvgDepth": "73.2",
+    "geom": "0101000020E610000083A3E4D539C6094044BE4BA94B144540",
+    "Estacio": "Winter",
+    "Data": "2022-02-04",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 18289,
+    "AvgDepth": "73.2",
+    "geom": "0101000020E61000000A2C802903C7094055698B6B7C144540",
+    "Estacio": "Winter",
+    "Data": "2022-02-04",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 18413,
+    "AvgDepth": "61.1",
+    "geom": "0101000020E6100000E3361AC05BC00940A7936C75391D4540",
+    "Estacio": "Spring",
+    "Data": "2022-05-13",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 18374,
+    "AvgDepth": "51.2",
+    "geom": "0101000020E6100000B5503239B5930940F01307D0EF1B4540",
+    "Estacio": "Spring",
+    "Data": "2022-05-13",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 18313,
+    "AvgDepth": "44.4",
+    "geom": "0101000020E610000054724EECA17D09405D5320B3B3124540",
+    "Estacio": "Winter",
+    "Data": "2022-03-03",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 18312,
+    "AvgDepth": "42.6",
+    "geom": "0101000020E61000005DC2A1B7787809402EE7525C55124540",
+    "Estacio": "Winter",
+    "Data": "2022-03-03",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 18386,
+    "AvgDepth": "64.0",
+    "geom": "0101000020E61000001F0F7D772BAB09408BC1C3B46F124540",
+    "Estacio": "Spring",
+    "Data": "2022-06-03",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 18434,
+    "AvgDepth": "94.2",
+    "geom": "0101000020E6100000CA1B60E63B380A40DC4944F8171B4540",
+    "Estacio": "Summer",
+    "Data": "2022-07-13",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 18346,
+    "AvgDepth": "56.7",
+    "geom": "0101000020E6100000E84CDA54DDA3EE3F59315C1D007B4440",
+    "Estacio": "Spring",
+    "Data": "2022-04-26",
+    "ZonaPort": "Center",
+    "Port": "Tarragona"
+  },
+  {
+    "Id": 22010,
+    "AvgDepth": "127.0",
+    "geom": "0101000020E6100000E4688EACFC72F53F91F0BDBF415B4440",
+    "Estacio": "Autumn",
+    "Data": "2022-10-26",
+    "ZonaPort": "Center",
+    "Port": "Tarragona"
+  },
+  {
+    "Id": 22011,
+    "AvgDepth": "125.0",
+    "geom": "0101000020E6100000FB07910C3976F53F03249A40115B4440",
+    "Estacio": "Autumn",
+    "Data": "2022-10-26",
+    "ZonaPort": "Center",
+    "Port": "Tarragona"
+  },
+  {
+    "Id": 23669,
+    "AvgDepth": "83.2",
+    "geom": "0101000020E61000000BD5CDC5DFF609405708ABB184054540",
+    "Estacio": "Autumn",
+    "Data": "2022-11-03",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 22020,
+    "AvgDepth": "71.3",
+    "geom": "0101000020E61000008693347F4CEB094073A087DA36024540",
+    "Estacio": "Autumn",
+    "Data": "2022-11-03",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 21733,
+    "AvgDepth": "50.1",
+    "geom": "0101000020E6100000420A9E42AED4094071E2AB1DC5014540",
+    "Estacio": "Summer",
+    "Data": "2022-08-09",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 21257,
+    "AvgDepth": "98.9",
+    "geom": "0101000020E610000006D7DCD1FF120A40D12346CF2D004540",
+    "Estacio": "Summer",
+    "Data": "2022-08-09",
+    "ZonaPort": "North",
+    "Port": "L'Escala"
+  },
+  {
+    "Id": 21198,
+    "AvgDepth": "80.0",
+    "geom": "0101000020E61000005A0F5F268A50F43F75E789E76C7F4440",
+    "Estacio": "Summer",
+    "Data": "2022-08-05",
+    "ZonaPort": "Center",
+    "Port": "Tarragona"
+  },
+  {
+    "Id": 21199,
+    "AvgDepth": "80.0",
+    "geom": "0101000020E61000002176A6D0794DF43F40321D3A3D7F4440",
+    "Estacio": "Summer",
+    "Data": "2022-08-05",
+    "ZonaPort": "Center",
+    "Port": "Tarragona"
+  },
+  {
+    "Id": 18419,
+    "AvgDepth": "42.6",
+    "geom": "0101000020E6100000DFA815A6EF75F63F658D7A88468F4440",
+    "Estacio": "Spring",
+    "Data": "2022-06-30",
+    "ZonaPort": "Center",
+    "Port": "Vilanova i la Geltrú"
+  },
+  {
+    "Id": 18418,
+    "AvgDepth": "164.6",
+    "geom": "0101000020E61000008DD0CFD4EBD6F53F00C80913467F4440",
+    "Estacio": "Spring",
+    "Data": "2022-06-30",
+    "ZonaPort": "Center",
+    "Port": "Vilanova i la Geltrú"
+  },
+  {
+    "Id": 22012,
+    "AvgDepth": "37.1",
+    "geom": "0101000020E6100000FC1873D712920340A43330F2B2BE4440",
+    "Estacio": "Autumn",
+    "Data": "2022-11-03",
+    "ZonaPort": "North",
+    "Port": "Arenys de Mar"
+  },
+  {
+    "Id": 21197,
+    "AvgDepth": "95.6",
+    "geom": "0101000020E610000021CB82893F4A07405D1ABFF04ACC4440",
+    "Estacio": "Summer",
+    "Data": "2022-07-26",
+    "ZonaPort": "North",
+    "Port": "Arenys de Mar"
+  },
+  {
+    "Id": 18300,
+    "AvgDepth": "74.0",
+    "geom": "0101000020E6100000EFAEB321FFEC034009FCE1E7BFB94440",
+    "Estacio": "Winter",
+    "Data": "2022-03-09",
+    "ZonaPort": "North",
+    "Port": "Blanes"
+  },
+  {
+    "Id": 18299,
+    "AvgDepth": "67.0",
+    "geom": "0101000020E61000006422A5D93CCE034094F59B89E9BA4440",
+    "Estacio": "Winter",
+    "Data": "2022-03-09",
+    "ZonaPort": "North",
+    "Port": "Blanes"
+  },
+  {
+    "Id": 21716,
+    "AvgDepth": "72.0",
+    "geom": "0101000020E61000006EA296E656880740BA8784EFFDCF4440",
+    "Estacio": "Summer",
+    "Data": "2022-09-09",
+    "ZonaPort": "North",
+    "Port": "Blanes"
+  }
+]
