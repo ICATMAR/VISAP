@@ -5,9 +5,10 @@
     <!-- Fishing tracks  TODO: THIS SHOULD GO ON A HIGHER LEVEL VUE (MENU-BOTTOM-RIGHT?)-->
     <div class="titleContainer" style="padding-right: 10px">
       <div class="clickable menuElement">
-        
-        <span @click="tracksLayerOnOff">{{$t('Fishing tracks')}}</span>
-        <onOffButton ref="onOffTracksButton" :checked="true" :inSize="'14px'" @change="tracksLayerOnOff($event)"></onOffButton>
+
+        <span @click="tracksLayerOnOff">{{ $t('Fishing tracks') }}</span>
+        <onOffButton ref="onOffTracksButton" :checked="true" :inSize="'14px'" @change="tracksLayerOnOff($event)">
+        </onOffButton>
       </div>
     </div>
 
@@ -21,45 +22,43 @@
         <opacity-knob size="25px" v-show="areOptionsVisible" @change="changeOpacity"></opacity-knob>
         <!-- Title -->
         <div class="clickable menuElement">
-          
-          <span @click="effortLayerOnOff">{{$t('Fishing effort')}}</span>
-          <onOffButton ref="onOffButton" :checked="true" :inSize="'14px'" @change="effortLayerOnOff($event)"></onOffButton>
+
+          <span @click="effortLayerOnOff">{{ $t('Fishing effort') }}</span>
+          <onOffButton ref="onOffButton" :checked="true" :inSize="'14px'" @change="effortLayerOnOff($event)">
+          </onOffButton>
         </div>
       </div>
-      
+
       <!-- Fishing effort options -->
       <Transition>
-        
-      <div v-show="areOptionsVisible">
-        <!-- kg, euros, hours -->
-        <div class="row-container">
-          <span>{{ $t('Units') }}: </span>
-          <button v-for="unit in units" class="clickable icon-str fa " 
-            :class="selUnit==unit ? 'selected' : ''" 
-            @click="effortUnitClicked(unit)" 
-            :title="$t('effortTypes.' + unit)"
-            v-html="unitIcons[unit]">
-          </button>
-        </div>
-        <!-- Years -->
-        <div class="row-container">
-          <button v-for="yy in years" class="clickable yearButton icon-str" 
-            :class="selYear==yy ? 'selected' : ''" 
-            @click="yearClicked(yy)" >
-            {{ yy }}
-          </button>
-        </div>
 
-        <!-- Legend -->
-        <div class="legendContainer">
-          <effortLegend ref="effortLegend"></effortLegend>
+        <div v-show="areOptionsVisible">
+          <!-- kg, euros, hours -->
+          <div class="row-container">
+            <span>{{ $t('Units') }}: </span>
+            <button v-for="unit in units" class="clickable icon-str fa " :class="selUnit == unit ? 'selected' : ''"
+              @click="effortUnitClicked(unit)" :title="$t('effortTypes.' + unit)" v-html="unitIcons[unit]">
+            </button>
+          </div>
+          <!-- Years -->
+          <div class="row-container">
+            <button v-for="yy in years" class="clickable yearButton icon-str" :class="selYear == yy ? 'selected' : ''"
+              @click="yearClicked(yy)">
+              {{ yy }}
+            </button>
+          </div>
+
+          <!-- Legend -->
+          <div class="legendContainer">
+            <effortLegend ref="effortLegend"></effortLegend>
+          </div>
+
+          <!-- Data source attribution -->
+          <span class="wrapText">{{ $t('Data from') }}: <a title="ICATMAR" href="https://www.icatmar.cat" target="_blank"
+              rel="noreferrer noopener">
+              ICATMAR (Institut Català de Recerca per la Governança del Mar)</a></span>
+
         </div>
-
-        <!-- Data source attribution -->
-        <span class="wrapText">{{$t('Data from')}}: <a title="ICATMAR" href="https://www.icatmar.cat" target="_blank" rel="noreferrer noopener">
-          ICATMAR (Institut Català de Recerca per la Governança del Mar)</a></span>
-
-      </div>
 
       </Transition>
 
@@ -83,53 +82,54 @@ export default {
 
   },
   mounted() {
-    this.effortParamsChange();
+    this.updateEffortParams();
     // EVENTS
     window.eventBus.on('Map_mouseMove', this.showValueAtCoord);
+    window.eventBus.on('AppMap_ChangedSection', this.updateEffortParams);
+    window.eventBus.on('TitleHeader_ChangedSection', this.updateEffortParams);
+    window.eventBus.on('ModalitySelector_ChangedModality', this.updateEffortParams);
+
   },
-  data (){
+  data() {
     return {
       areTracksVisible: true,
       areOptionsVisible: true,
       selUnit: 'kg',
       selYear: 2020,
-      selGear: 'trawling',
-      units: ['kg','euros', 'hours'],
+      units: ['kg', 'euros', 'hours'],
       unitIcons: {
         'kg': '&#xf5cd;',
         'euros': '&#xf153;',//'€',
         'hours': '&#xf017;'
       },
       years: [2019, 2020, 2021],
-
-      // Mouse over in Map makes the legend react
-      bbox: [-1, 39, 6, 44], // HARDCODED-> DEPENDS ON THE FISHING EFFORT IMAGE
-      dataResolution: 500, // Image is around 4kx4k pixels
       imageData: [],
     }
   },
   methods: {
     // USER INTERACTION
     // Layer on off
-    tracksLayerOnOff: function(e){
+    tracksLayerOnOff: function (e) {
       // OnOff Button was clicked
-      if (e.target.value != undefined){ 
+      if (e.target.value != undefined) {
         this.areTracksVisible = e.target.checked;
         // Activate layer
-        window.eventBus.emit('FishingEffort_setTracksVisible', ['fishingTracks', this.areTracksVisible]);      } 
+        window.eventBus.emit('FishingEffort_setTracksVisible', ['fishingTracks', this.areTracksVisible]);
+      }
       // Text was clicked --> Invoke click on the element, which calls again this function
       else {
         this.$refs.onOffTracksButton.setChecked(!this.areTracksVisible);
       }
     },
 
-    
-    effortLayerOnOff: function(e){
+
+    effortLayerOnOff: function (e) {
       // OnOff Button was clicked
-      if (e.target.value != undefined){ 
+      if (e.target.value != undefined) {
         this.areOptionsVisible = e.target.checked;
         // Activate layer
-        window.eventBus.emit('FishingEffort_setLayerVisible', ['fishingEffort', this.areOptionsVisible]);      } 
+        window.eventBus.emit('FishingEffort_setLayerVisible', ['fishingEffort', this.areOptionsVisible]);
+      }
       // Text was clicked --> Invoke click on the element, which calls again this function
       else {
         this.$refs.onOffButton.setChecked(!this.areOptionsVisible);
@@ -137,94 +137,73 @@ export default {
     },
 
     // Layer opacity changed
-    changeOpacity: function(opacity){
+    changeOpacity: function (opacity) {
       window.eventBus.emit('FishingEffort_setLayerOpacity', opacity);
     },
-    
+
     // Effort unit change
-    effortUnitClicked: function(unit){
+    effortUnitClicked: function (unit) {
       this.selUnit = unit;
-      this.effortParamsChange();
+      window.GUIManager.map.currentEffortUnit = unit;
+      this.effortChanged();
+
+      let fdManager = window.DataManager.getFishingDataManager();
+      // Update available years
+      this.years = Object.keys(fdManager.effortMaps.kg).filter(key => key.match(/\d+/g));
+      // Event received in Map
+      window.eventBus.emit('FishingEffort_EffortChanged', fdManager.getEffortURI());
     },
     // Year change
-    yearClicked: function(year){
+    yearClicked: function (year) {
       this.selYear = year;
-      this.effortParamsChange();
+      window.GUIManager.map.currentEffortYear = year;
+      this.effortChanged();
+      // Event received in Map
+      let fdManager = window.DataManager.getFishingDataManager();
+      window.eventBus.emit('FishingEffort_EffortChanged', fdManager.getEffortURI());
     },
 
 
 
     // PRIVATE METHODS
-    effortParamsChange: function(){
-      let selGear = this.selGear.toLowerCase();
-      selGear = selGear.replace(' ', '');
-      let outUrl = 'data/trawlingData/effort/fishingEffort_' + this.selUnit + '_' +  this.selYear + '_' + selGear + '.png';
-      
-      
+    // Update effort map parameters
+    updateEffortParams: function () {
+      // Load map data
+      if (window.GUIManager.currentSection == 'map') {
+        window.DataManager.loadNecessaryFiles('map', window.GUIManager.currentModality)
+          .then(() => {
+            console.log("Promise resolved in FishingEffort.vue");
+            this.selUnit = window.GUIManager.map.currentEffortUnit;
+            this.selYear = window.GUIManager.map.currentEffortYear;
+            // Define available years
+            let fdManager = window.DataManager.getFishingDataManager();
+            this.years = Object.keys(fdManager.effortMaps.kg).filter(key => key.match(/\d+/g));
+            this.selYear = window.GUIManager.map.currentEffortYear;
+            this.effortChanged();
+          });
+      }
+    },
 
+    effortChanged: function () {
       // Effort legend
       this.$refs.effortLegend.setEffortLegend(this.selUnit);
-
-      // Event received in Map
-      window.eventBus.emit('FishingEffort_EffortChanged', outUrl);
       // Store image data for showing the value in the legend
-      this.storeImageData(outUrl);
+      let fdManager = window.DataManager.getFishingDataManager();
+      let img = fdManager.getEffortImg();
+      this.imageData = img.imageData;
     },
 
 
 
-    storeImageData: function(url){
-      // Create image
-      let img = new Image();
-      img.src = url;
-      this.imageData = [];
 
-      img.onload = () => {
-        // Create canvas
-        let tmpCnv = document.createElement('canvas');
-        tmpCnv.width=this.dataResolution;
-        tmpCnv.height=this.dataResolution;
-        // Paint image to canvas
-        let ctx = tmpCnv.getContext("2d");
-        ctx.globalCompositeOperation = "source-destination";
-
-        ctx.drawImage(img, 0, 0, tmpCnv.width, tmpCnv.height);
-        // Get image data
-        this.imageData = tmpCnv.getContext("2d").getImageData(0,0,tmpCnv.width,tmpCnv.height).data;
-      }
-
-
-    },
     // Show value at coord
-    showValueAtCoord: function(coord){
-      // Normalize coord
-      let lon = coord[0];
-      let lat = coord[1];
+    showValueAtCoord: function (coord) {
 
-      let normX = (lon - this.bbox[0]) / (this.bbox[2] - this.bbox[0]);
-      let normY = (lat - this.bbox[1]) / (this.bbox[3] - this.bbox[1]);
-      // Flip normY
-      normY = 1-normY;
-
-      let insideBbox = normX > 0 && normX < 1 && normY > 0 && normY < 1;
-      if (!insideBbox)
-        return; // TODO
-
-      // Get color
-      let row = Math.round(normY * this.dataResolution);
-      let col = Math.round(normX * this.dataResolution);
-      let index = row*this.dataResolution + col;
-
-      this.color = [];
-      this.color[0] = this.imageData[index*4];
-      this.color[1] = this.imageData[index*4 + 1];
-      this.color[2] = this.imageData[index*4 + 2];
-      this.color[3] = this.imageData[index*4 + 3];
+      let fdManager = window.DataManager.getFishingDataManager();
+      let color = fdManager.getEffortPixelColorAtCoord(coord, this.imageData);
 
       // if (this.color[3] != 0) This is done in effortLegend
-      this.$refs.effortLegend.showValueAtColor(this.color);
-      
-      
+      this.$refs.effortLegend.showValueAtColor(color);
     },
 
 
@@ -241,7 +220,7 @@ export default {
 
 
 <style scoped>
-#fishingEffort{
+#fishingEffort {
   position: absolute;
 
   bottom: 130px;
@@ -251,7 +230,7 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  
+
   pointer-events: none;
 }
 
@@ -292,8 +271,8 @@ export default {
   border-radius: 40px;
 }
 
-.row-container{
-  display:flex;
+.row-container {
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -312,20 +291,20 @@ export default {
 .selected {
   background: var(--red);
   pointer-events: none;
-  cursor:default;
+  cursor: default;
 }
 
 .yearButton {
   width: 100%;
   border-radius: 24px;
-  margin:0px;
+  margin: 0px;
 }
 
 .wrapText {
-    display: block;
-    inline-size: clamp(140px,40vw,260px);
-    overflow-wrap: break-word;
-  }
+  display: block;
+  inline-size: clamp(140px, 40vw, 260px);
+  overflow-wrap: break-word;
+}
 
 .legendContainer {
   position: relative;
@@ -337,7 +316,7 @@ export default {
 
 
 
-.otherBaseLayersContainer{
+.otherBaseLayersContainer {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -347,7 +326,7 @@ export default {
 
 
 
-#buttonsWidget > div {
+#buttonsWidget>div {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -372,7 +351,4 @@ span {
   transform: translateX(20px);
   opacity: 0;
 }
-
-
-
 </style>

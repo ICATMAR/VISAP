@@ -13,6 +13,10 @@ class FishingData {
   haulsLayer;
   effortMaps = {};
 
+  effortDataResolution = 500; // Image is around 4kx4k pixels
+  effortBbox = [-1, 39, 6, 44]; // HARDCODED-> DEPENDS ON THE FISHING EFFORT IMAGE
+  effortTmpColor = [];
+
   loadingPromise = null;
   isLoading = false;
   mapFilesLoaded = false;
@@ -29,8 +33,7 @@ class FishingData {
 
     // Is in the process of being loaded
     if (this.isLoading) {
-      debugger;
-      return this.loadingPromise; // Is there a way to return the current promise?
+      return this.loadingPromise; // Returns the current promise
     }
     // If already loaded
     if (this.mapFilesLoaded)
@@ -58,9 +61,10 @@ class FishingData {
           }
           if (this.effortMaps[unit] == undefined)
             this.effortMaps[unit] = {};
-          // Is legend
+          // Legend
           if (fileName.includes('legend'))
             this.effortMaps[unit].legend = res.value.content;
+          // Effort map
           else {
             // Get year
             let numbers = fileName.match(/\d+/g); // Regex expression to get numbers in string
@@ -71,7 +75,8 @@ class FishingData {
             if (filtNum.length != 1) {
               debugger;
             }
-            this.effortMaps[unit][filtNum[0]] = res.value.content;
+            let img = res.value.content;
+            this.effortMaps[unit][filtNum[0]] = img;
           }
         }
         // Hauls
@@ -82,6 +87,7 @@ class FishingData {
 
       // Status
       this.isLoading = false;
+      this.loadingPromise = null;
       this.mapFilesLoaded = true;
       console.log("Files for section Map and modality " + this.mod + " loaded.")
     });
@@ -207,18 +213,82 @@ class FishingData {
 
 
   // Get effort map URI
-  getEffortURI() {
-    let unit = window.GUIManager.map.currentEffortUnit;
-    let year = window.GUIManager.map.currentEffortYear;
+  getEffortURI(unit, year) {
+    let img = this.getEffortImg(unit, year);
+    return img.src;
+  }
+
+  // Get effort image data
+  getEffortImageData(inImg) {
+    let img = inImg || this.getEffortImg();
+    // Check if already processed
+    if (img.imageData != undefined)
+      return img.imageData;
+    // Create canvas
+    let tmpCnv = document.createElement('canvas');
+    tmpCnv.width = this.effortDataResolution;
+    tmpCnv.height = this.effortDataResolution;
+    // Paint image to canvas
+    let ctx = tmpCnv.getContext("2d");
+    ctx.globalCompositeOperation = "source-destination";
+
+    ctx.drawImage(img, 0, 0, tmpCnv.width, tmpCnv.height);
+    // Get image data
+    let imageData = tmpCnv.getContext("2d").getImageData(0, 0, tmpCnv.width, tmpCnv.height).data;
+
+    // Add image data to img element
+    img.imageData = imageData;
+    return imageData;
+  }
+
+  // Get effort image
+  getEffortImg(unit, year) {
+    unit = unit || window.GUIManager.map.currentEffortUnit;
+    year = year || window.GUIManager.map.currentEffortYear;
     let eMapsUnit = this.effortMaps[unit];
     if (!eMapsUnit[year]) {
       year = Object.keys(eMapsUnit).shift();
       window.GUIManager.map.currentEffortYear = year; // WARN: should this be an event? Or is the vue effort widget reactive? This only happens once
+      console.warn('Requested year does not exists for this modality and unit');
     }
-    let uri = this.effortMaps[unit][year].src;
-
-    return uri
+    return this.effortMaps[unit][year]
   }
+
+  // Get the pixel color at given coordinates
+  getEffortPixelColorAtCoord(coord, inImageData) {
+    // Use input img or find the current one
+    let imageData = inImageData || this.getEffortImageData();
+    // Normalize coord
+    let lon = coord[0];
+    let lat = coord[1];
+
+    let normX = (lon - this.effortBbox[0]) / (this.effortBbox[2] - this.effortBbox[0]);
+    let normY = (lat - this.effortBbox[1]) / (this.effortBbox[3] - this.effortBbox[1]);
+    // Flip normY
+    normY = 1 - normY;
+
+    let insideBbox = normX > 0 && normX < 1 && normY > 0 && normY < 1;
+    if (!insideBbox) {
+      this.effortTmpColor[3] = 0; // Force transparent pixel
+      return this.effortTmpColor;
+    }
+
+    // Get color
+    let row = Math.round(normY * this.effortDataResolution);
+    let col = Math.round(normX * this.effortDataResolution);
+    let index = row * this.effortDataResolution + col;
+
+    this.effortTmpColor[0] = imageData[index * 4];
+    this.effortTmpColor[1] = imageData[index * 4 + 1];
+    this.effortTmpColor[2] = imageData[index * 4 + 2];
+    this.effortTmpColor[3] = imageData[index * 4 + 3];
+
+    return this.effortTmpColor;
+  }
+
+
+
+
 
   // Get haul feature by id
   getHaulById(id) {
