@@ -350,6 +350,47 @@ class PurseSeineData extends FishingData {
   constructor() {
     super('purse-seine');
   }
+
+
+  // Overwritte Reactive style
+  haulsLayerStyle(feature) {
+    // If it is not visible
+    let featDate = new Date(feature.C.info.Date);
+    let visible = featDate > window.GUIManager.map.selStartDate && featDate < window.GUIManager.map.selEndDate;
+    if (!visible) {
+      return new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'rgba(0,0,0,0.0)',
+          width: 0,
+        })
+      })
+    }
+
+    let port = feature.C.info.Port;
+    let colorPort = palette[port].color;
+
+    // Check if this is the selected haul
+    let isSelected = false;
+    if (feature.C.info.Id * 1 == window.GUIManager.map.currentHaul)
+      isSelected = true;
+
+    let portStyle = new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: isSelected ? 9 : 5,
+        fill: new ol.style.Fill({
+          color: 'rgba(' + colorPort + ', 1)',
+        }),
+        stroke: new ol.style.Stroke({
+          color: 'rgba(0,0,0, 0.8)',
+          width: isSelected ? 6 : 2,
+        })
+      }),
+      zIndex: isSelected ? 100 : 1,
+    })
+
+
+    return portStyle
+  }
 }
 
 
