@@ -252,7 +252,7 @@ export default {
     // if (window.serverConnection)
     // getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
     // getTrackLines('data/trackLines.json', undefined);
-    this.fishingTracks = new FishingTracks('data/trawlingData/trawling_track_lines.json', undefined, this.onLoadTracks);//new TrackLines(address, staticFile, onLoadTracks)
+    this.fishingTracks = new FishingTracks('data/trawlingData/trawling_hauls.json', undefined, this.onLoadTracks);//new TrackLines(address, staticFile, onLoadTracks)
   },
   mounted () {
     this.initMap();
