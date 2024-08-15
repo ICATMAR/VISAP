@@ -15,45 +15,44 @@ class DataManager {
 
     // EVENTS
     // Initial page load
-    window.eventBus.on('GUIManager_InitialLoad', (GUIManager) => {
-      let section = GUIManager.currentSection;
-      let mod = GUIManager.currentModality;
+    // window.eventBus.on('GUIManager_InitialLoad', (GUIManager) => {
+    //   let section = GUIManager.currentSection;
+    //   let mod = GUIManager.currentModality;
 
-      this.loadNecessaryFiles(section, mod)
-    });
+    //   //this.loadNecessaryFiles(section, mod)
+    // });
     // Section changes
-    window.eventBus.on('AppMap_ChangedSection', (section) => {this.sectionChanged(section)});
-    window.eventBus.on('TitleHeader_ChangedSection', (section) => this.sectionChanged(section));
+    //window.eventBus.on('AppMap_ChangedSection', (section) => { this.sectionChanged(section) });
+    //window.eventBus.on('TitleHeader_ChangedSection', (section) => this.sectionChanged(section));
     // Modality changes
-    window.eventBus.on('ModalitySelector_ChangedModality', (mod) => this.modalityChanged(mod));
+    //window.eventBus.on('ModalitySelector_ChangedModality', (mod) => this.modalityChanged(mod));
 
   }
 
-  sectionChanged(section) {
-    let mod = window.GUIManager.currentModality;
-    this.loadNecessaryFiles(section, mod);
-  }
-  modalityChanged(mod){
-    let section = window.GUIManager.currentSection;
-    this.loadNecessaryFiles(section, mod);
+
+
+  // PUBLIC
+  // Get FishingDataManager according to modality
+  getFishingDataManager(mod) {
+    if (mod == undefined)
+      mod = window.GUIManager.currentModality;
+    if (mod == 'trawling')
+      return this.TrawlingData;
+    else if (mod == 'purse-seine')
+      return this.PSData;
   }
 
   // Load necessary files
-  loadNecessaryFiles(section, mod){
+  async loadNecessaryFiles(section, mod) {
     if (section == 'map') {
       // Load map files
       if (mod == 'trawling') {
-        if (!this.TrawlingData.mapFilesLoaded) {
-          this.TrawlingData.initMapFilesLoad().then(() => {
-            window.eventBus.emit('DataManager_MapDataLoaded');
-          });
-        }
-      } else if (mod == 'purse-seine')
-        if (!this.PSData.mapFilesLoaded) {
-          this.PSData.initMapFilesLoad().then(() => {
-            window.eventBus.emit('DataManager_MapDataLoaded');
-          });
-        }
+        await this.TrawlingData.initMapFilesLoad();
+        return;
+      } else if (mod == 'purse-seine') {
+        await this.PSData.initMapFilesLoad();
+        return;
+      }
     }
   }
 }

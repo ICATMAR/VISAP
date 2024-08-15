@@ -12,15 +12,15 @@ class FishingData {
   }
   haulsLayer;
   effortMaps = {};
-  effortLayer;
 
+  loadingPromise = null;
   isLoading = false;
   mapFilesLoaded = false;
 
 
   constructor(mod) {
     this.mod = mod;
-    this.haulsLayerName = mod + 'Hauls';
+    this.haulsLayerName = 'fishingHauls'//mod + 'Hauls';
     this.effortLayerName = mod + 'Effort';
   }
 
@@ -28,12 +28,18 @@ class FishingData {
   async initMapFilesLoad() {
 
     // Is in the process of being loaded
-    if (this.isLoading || this.mapFilesLoaded)
-      return;
+    if (this.isLoading) {
+      debugger;
+      return this.loadingPromise; // Is there a way to return the current promise?
+    }
+    // If already loaded
+    if (this.mapFilesLoaded)
+      return Promise.resolve();
+
     this.isLoading = true;
 
     // Load effort maps and hauls
-    await window.FileManager.loadMapFiles(this.mod).then((results) => {
+    this.loadingPromise = window.FileManager.loadMapFiles(this.mod).then((results) => {
       for (let i = 0; i < results.length; i++) {
         let res = results[i];
         // Failed to load
@@ -73,13 +79,14 @@ class FishingData {
           this.processJSONFile(res.value.content);
         }
       }
-      // Create effort layer
-      this.createEffortLayer();
+
       // Status
       this.isLoading = false;
       this.mapFilesLoaded = true;
       console.log("Files for section Map and modality " + this.mod + " loaded.")
     });
+
+    return this.loadingPromise;
   }
 
 
@@ -113,12 +120,14 @@ class FishingData {
       let geometry = wkx.Geometry.parse(wkbBuffer);
       let gJSON = geometry.toGeoJSON();
       delete jsonFile[i].geom; // delete geom, as we do not want it in the features
+      jsonFile[i].geometry = gJSON; // Add geometry to haul info
 
       // Create geoJSON
       let feature = {
         'type': 'Feature',
         'properties': {
           "id": jsonFile[i].Id,
+          "featType": 'haul',
           "info": jsonFile[i],
           'visible': true,
         },
@@ -134,7 +143,7 @@ class FishingData {
     let jsonSTR = JSON.stringify(this.haulsGeoJSON);
     let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(jsonSTR);
     // Create layer
-    this.haulsLayer = new ol.source.Vector({
+    this.haulsLayer = new ol.layer.Vector({
       name: this.haulsLayerName,
       source: new ol.source.Vector({
         url: dataUri,
@@ -196,26 +205,24 @@ class FishingData {
 
 
 
-  // Create effort OL layer
-  createEffortLayer() {
+
+  // Get effort map URI
+  getEffortURI() {
     let unit = window.GUIManager.map.currentEffortUnit;
     let year = window.GUIManager.map.currentEffortYear;
     let eMapsUnit = this.effortMaps[unit];
-    if (!eMapsUnit[year]){
+    if (!eMapsUnit[year]) {
       year = Object.keys(eMapsUnit).shift();
       window.GUIManager.map.currentEffortYear = year; // WARN: should this be an event? Or is the vue effort widget reactive? This only happens once
     }
+    let uri = this.effortMaps[unit][year].src;
 
-    this.effortLayer = new ol.layer.Image({
-      name: this.effortLayerName,
-      source: new ol.source.ImageStatic({
-        url: '',
-        imageExtent: [-1, 39, 6, 44],
-        projection: 'EPSG:4326'
-      }),
-      zIndex: -1,
-      opacity: 0.8,
-    });
+    return uri
+  }
+
+  // Get haul feature by id
+  getHaulById(id) {
+    return this.hauls[id];
   }
 
 } // End of class

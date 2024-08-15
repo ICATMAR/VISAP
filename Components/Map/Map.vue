@@ -257,8 +257,16 @@ export default {
   mounted () {
     this.initMap();
     this.$refs.OLMap.addEventListener('mousemove', this.onMouseMove);
+    
+    // Updates if necessary
+    this.updateFishingDataOnMap();
 
     // EVENTS
+    // Section
+    window.eventBus.on('AppMap_ChangedSection', this.updateFishingDataOnMap);
+    window.eventBus.on('TitleHeader_ChangedSection', this.updateFishingDataOnMap);
+    window.eventBus.on('ModalitySelector_ChangedModality', this.updateFishingDataOnMap);
+
     // Base layer
     window.eventBus.on("WidgetMapOptions_BaseLayerClicked", baseLayerName => {
       this.setBaseLayer(baseLayerName);
@@ -368,13 +376,14 @@ export default {
         if (e.selected[0] === undefined)
           return false;
         // Check if tracks layer is visible
-        let ll = this.getMapLayer('fishingTracks');
+        let ll = this.getMapLayer('fishingHauls');
         if (ll == undefined)
           return
         if (ll.getOpacity() == 0)
           return;
         // Track line is clicked
-        if (e.selected[0].getProperties().featType == "trackLine"){
+        debugger;
+        if (e.selected[0].getProperties().featType == "haul"){
           let id = e.selected[0].getProperties().id;
           this.setSelectedTrack(id);
           // Emit event
@@ -645,7 +654,15 @@ export default {
     // The time range has changed. Update the track lines
     onTimeRangeChange: function(dates){
       // Set starting and ending dates in fishing tracks
-      this.fishingTracks.setStartEndDates(dates[0], dates[1]);
+      //this.fishingTracks.setStartEndDates(dates[0], dates[1]);
+      // TODO: should be controlled by GUIManager via an event?
+      window.GUIManager.map.selStartDate.setTime(dates[0].getTime());
+      window.GUIManager.map.selEndDate.setTime(dates[1].getTime());
+      // Update haul layer style
+      let fdManager = window.DataManager.getFishingDataManager();
+      fdManager.updateStyle();
+      
+
     },
      // The timeline has changed. Update the track lines
     onTimeRangeChangeLimits: function(dates){
@@ -776,15 +793,17 @@ export default {
       }
 
       // Center timeline
-      let feature = FishingTracks.getFeatureById(id);
+      //let feature = FishingTracks.getFeatureById(id);
+      let fishingDataManager = window.DataManager.getFishingDataManager(window.GUIManager.currentModality);
+      let haul = fishingDataManager.getHaulById(id);
       if (this.$refs['timeRangeBar']){
-        let trackDate = new Date(feature.properties.info.Date);
+        let trackDate = new Date(haul.Date);
         this.$refs['timeRangeBar'].centerOnDate(trackDate);
       }
 
       // Center map to track
       let view = this.map.getView();
-      let coord = [...feature.geometry.coordinates[0]];
+      let coord = [...haul.geometry.coordinates[0]];
       let currentZoom = view.getZoom();
       let longCorrection = 0;//currentZoom > 11 ? 0.1 : 0.3;
       view.animate({
@@ -794,8 +813,9 @@ export default {
       });
 
       // Update map style
-      FishingTracks.setSelectedTrack(id);
-      this.fishingTracks.updateStyle();
+      //FishingTracks.setSelectedTrack(id);
+      window.GUIManager.map.currentHaul = id;
+      fishingDataManager.updateStyle();
       
     },
 
@@ -813,6 +833,15 @@ export default {
       });
       // Assign new source to layer
       effortLayer.setSource(source);
+    },
+    setFishingHauls: function(fishingDataManager){
+      // Remove previous layer and add new one
+      let haulsLayer = this.getMapLayer('fishingHauls');
+      if (haulsLayer != undefined){
+        this.map.removeLayer(haulsLayer);
+      }
+      haulsLayer = fishingDataManager.haulsLayer;
+      this.map.addLayer(haulsLayer);
     },
 
     setBaseLayer: function(baseLayerName){
@@ -866,11 +895,30 @@ export default {
 
 
 
+    updateFishingDataOnMap: function(){
+      if (window.GUIManager.currentSection == 'map'){
+        window.DataManager.loadNecessaryFiles('map', window.GUIManager.currentModality)
+        .then(() => {
+          let fishingDataManager = window.DataManager.getFishingDataManager(window.GUIManager.currentModality);
+          // Set hauls
+          this.setFishingHauls(fishingDataManager);
+          // Set effort map
+          this.setEffortMap(fishingDataManager.getEffortURI());
+          // Update haul points in timeline
+          if (this.$refs.tracksTimeLine){
+            this.$refs.tracksTimeLine.setFeatures(fishingDataManager.haulsGeoJSON.features);
+          }
+        });
+      }
+
+    },
+
     // CALLBACKS
     // Once the fishing tracks have been loaded
     onLoadTracks: function(){
+      return;
       // Add to layer
-      this.map.addLayer(this.fishingTracks.getLayer());
+      //this.map.addLayer(this.fishingTracks.getLayer());
       // TODO;
       // Update start and end dates
       // Get start and end from timerange
