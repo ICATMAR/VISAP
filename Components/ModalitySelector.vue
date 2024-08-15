@@ -54,7 +54,7 @@ export default {
     }
   },
   mounted () {
-
+    this.selectedModality = window.GUIManager.currentModality;
   },
   data () {
     return {

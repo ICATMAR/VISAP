@@ -86,20 +86,18 @@ class GUIManager {
   // Set defaults
   setDefaults(){
     // Set default section if undefined
-    let section = window.location.getHashValue('SECTION');
-    if (section == undefined){
-      this.setSection(this.currentSection);
-    }
+    let section = window.location.getHashValue('SECTION') || this.currentSection;
+    this.setSection(section);
+    
     // Set default modality if undefined
-    let mod = window.location.getHashValue('MOD');
-    if (mod == undefined){
-      this.setModality(this.currentModality);
-    }
+    let mod = window.location.getHashValue('MOD') || this.currentModality;
+    this.setModality(mod);
+    
     // Set language
     // Check if there is a language in the url
     let langURL = window.location.getHashValue('LANG');
     if (langURL != undefined){
-      this.currentLanguage = langURL.substring(0,2);
+      this.setLanguage(langURL.substring(0,2));
     } 
     // Use default navigator language if available
     else if (navigator.language.includes('es') || navigator.language.includes('en') || navigator.language.includes('ca')){
