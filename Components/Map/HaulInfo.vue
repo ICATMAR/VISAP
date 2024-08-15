@@ -78,7 +78,7 @@ export default {
     // Default options
     this.selTrack = this.options[0];
     // Default fishing track id comes from GUIManager
-    this.selTrack.id = window.GUIManager.currentHaul;
+    this.selTrack.id = window.GUIManager.map.currentHaul;
     // Set selected fishing track
     FishingTracks.setSelectedTrack(this.selTrack.Id);
   },

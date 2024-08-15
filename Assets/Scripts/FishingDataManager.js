@@ -15,15 +15,17 @@ class FishingData {
   effortLayer;
 
   isLoading = false;
+  mapFilesLoaded = false;
 
 
   constructor(mod) {
     this.mod = mod;
     this.haulsLayerName = mod + 'Hauls';
+    this.effortLayerName = mod + 'Effort';
   }
 
 
-  initMapFilesLoad() {
+  async initMapFilesLoad() {
 
     // Is in the process of being loaded
     if (this.isLoading || this.mapFilesLoaded)
@@ -31,7 +33,7 @@ class FishingData {
     this.isLoading = true;
 
     // Load effort maps and hauls
-    window.FileManager.loadMapFiles(this.mod).then((results) => {
+    await window.FileManager.loadMapFiles(this.mod).then((results) => {
       for (let i = 0; i < results.length; i++) {
         let res = results[i];
         // Failed to load
@@ -48,7 +50,8 @@ class FishingData {
             debugger;
             continue;
           }
-          this.effortMaps[unit] = {};
+          if (this.effortMaps[unit] == undefined)
+            this.effortMaps[unit] = {};
           // Is legend
           if (fileName.includes('legend'))
             this.effortMaps[unit].legend = res.value.content;
@@ -64,13 +67,15 @@ class FishingData {
             }
             this.effortMaps[unit][filtNum[0]] = res.value.content;
           }
-
         }
         // Hauls
         else if (res.value.extension == 'json') {
           this.processJSONFile(res.value.content);
         }
       }
+      // Create effort layer
+      this.createEffortLayer();
+      // Status
       this.isLoading = false;
       this.mapFilesLoaded = true;
       console.log("Files for section Map and modality " + this.mod + " loaded.")
@@ -145,7 +150,7 @@ class FishingData {
   haulsLayerStyle(feature) {
     // If it is not visible
     let featDate = new Date(feature.C.info.Date);
-    let visible = featDate > window.GUIManager.selStartDate && featDate < window.GUIManager.selEndDate;
+    let visible = featDate > window.GUIManager.map.selStartDate && featDate < window.GUIManager.map.selEndDate;
     if (!visible) {
       return new ol.style.Style({
         stroke: new ol.style.Stroke({
@@ -160,7 +165,7 @@ class FishingData {
 
     // Check if this is the selected haul
     let isSelected = false;
-    if (feature.C.info.Id * 1 == window.GUIManager.currentHaul)
+    if (feature.C.info.Id * 1 == window.GUIManager.map.currentHaul)
       isSelected = true;
 
     let portStyle = new ol.style.Style({
@@ -189,6 +194,29 @@ class FishingData {
   }
 
 
+
+
+  // Create effort OL layer
+  createEffortLayer() {
+    let unit = window.GUIManager.map.currentEffortUnit;
+    let year = window.GUIManager.map.currentEffortYear;
+    let eMapsUnit = this.effortMaps[unit];
+    if (!eMapsUnit[year]){
+      year = Object.keys(eMapsUnit).shift();
+      window.GUIManager.map.currentEffortYear = year; // WARN: should this be an event? Or is the vue effort widget reactive? This only happens once
+    }
+
+    this.effortLayer = new ol.layer.Image({
+      name: this.effortLayerName,
+      source: new ol.source.ImageStatic({
+        url: '',
+        imageExtent: [-1, 39, 6, 44],
+        projection: 'EPSG:4326'
+      }),
+      zIndex: -1,
+      opacity: 0.8,
+    });
+  }
 
 } // End of class
 

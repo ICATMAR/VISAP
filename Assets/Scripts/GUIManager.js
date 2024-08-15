@@ -4,10 +4,15 @@ class GUIManager {
   currentModality = 'trawling';
   currentSection = 'map';
   currentLanguage = 'en';
-  currentHaul = 23288;
 
-  selStartDate = new Date(2019, 1, 1);
-  selEndDate = new Date();
+  map = {
+    currentHaul: 23288,
+    currentEffortUnit: 'kg',
+    currentEffortYear: '2020',
+    selStartDate: new Date(2019, 1, 1),
+    selEndDate: new Date()
+  }
+  
 
   // CONSTRUCTOR
   constructor() {
@@ -19,7 +24,7 @@ class GUIManager {
     // Load necessary files for that specific menu
     // TODO / WARN: should this be here? Vue loads all the sections at once, because v-show and not v-if
     // Maybe this should be controlled from vue? I don't know
-    window.eventBus.emit('GUIManager_InitialLoad', window.location.hash);
+    window.eventBus.emit('GUIManager_InitialLoad', this);
 
     // EVENTS
     // Hash changes
