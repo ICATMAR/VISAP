@@ -25,7 +25,6 @@ class FishingData {
   constructor(mod) {
     this.mod = mod;
     this.haulsLayerName = 'fishingHauls'//mod + 'Hauls';
-    this.effortLayerName = mod + 'Effort';
   }
 
 
