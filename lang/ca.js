@@ -1,6 +1,6 @@
 let ca;
 export default ca = {
-  "Fishing tracks": "Recorreguts d'arrossegament",
+  "Fishing tracks": "Mostrejos d'ICATMAR",
   "Fishing effort": "Esforç pesquer",
   "Layers": "Capes",
 

@@ -1,6 +1,6 @@
 let es;
 export default es  = {
-  "Fishing tracks": "Recorridos de arrastre",
+  "Fishing tracks": "Muestreos de ICATMAR",
   "Fishing effort": "Esfuerzo pesquero",
   "Layers": "Capas",
 

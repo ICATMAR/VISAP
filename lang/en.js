@@ -1,6 +1,6 @@
 let en;
 export default en = {
-  "Fishing tracks": "Fishing tracks",
+  "Fishing tracks": "ICATMAR's samplings",
   "Fishing effort": "Fishing effort",
   "Layers": "Layers",
 
