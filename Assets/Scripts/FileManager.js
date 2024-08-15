@@ -78,7 +78,10 @@ class FileManager {
       urls.push(baseURL + 'effort/fishingEffort_' + eUnit + '_' + modCode + '_legend.png');
     });
     
+    // Tracks JSON
+    urls.push(baseURL + modCode + '_hauls.json')
 
+    // Create promises
     for (let i = 0; i < urls.length; i++){
       // Check if this file was already requested
       let fileWasRequested = this.requestedFiles.indexOf(urls[i]) != -1;

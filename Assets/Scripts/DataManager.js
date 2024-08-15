@@ -1,4 +1,4 @@
-import {FishingTrawlingData, FishingPSData} from './FishingDataManager.js'
+import { FishingData } from './FishingDataManager.js'
 
 
 class DataManager {
@@ -9,17 +9,23 @@ class DataManager {
 
   constructor() {
 
-    this.TrawlingData = new FishingTrawlingData();
+    this.TrawlingData = new FishingData('trawling');
+    this.PSData = new FishingData('purse-seine');
 
 
     // EVENTS
-    window.eventBus.on('GUIManager_HashChanged', () => {
+    window.eventBus.on('GUIManager_InitialLoad', () => {
       let section = window.location.getHashValue('SECTION');
       let mod = window.location.getHashValue('MOD');
-
+      
       if (section == 'map') {
+        
         // Load map files
-        window.FileManager.loadMapFiles(mod);
+        if (mod == 'trawling'){
+          this.TrawlingData.initMapFilesLoad()
+        } else if (mod == 'purse-seine')
+          this.PSData.initMapFilesLoad()
+
       }
     });
 
