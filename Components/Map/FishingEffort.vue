@@ -185,10 +185,12 @@ export default {
     },
 
     effortChanged: function () {
+      let fdManager = window.DataManager.getFishingDataManager();
+      // Change units information
+      this.$refs.effortLegend.setUnitsInfo(fdManager.effortUnitsInfo);
       // Effort legend
       this.$refs.effortLegend.setEffortLegend(this.selUnit);
       // Store image data for showing the value in the legend
-      let fdManager = window.DataManager.getFishingDataManager();
       let img = fdManager.getEffortImg();
       this.imageData = img.imageData;
     },

@@ -251,6 +251,11 @@ export default {
 
 
     // PUBLIC METHODS
+    // It changes from Trawling to Purse seine
+    setUnitsInfo: function(unitsInfo){
+      this.unitsInfo = unitsInfo;
+    },
+
     setEffortLegend: function(unit){
       let selGear = 'trawling';
       let url = 'Assets/LegendsFishingEffort/' + unit + '_' + selGear + '.png';

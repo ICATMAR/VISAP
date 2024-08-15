@@ -299,4 +299,58 @@ class FishingData {
 
 
 
-export { FishingData }
+
+
+
+class TrawlingData extends FishingData {
+
+  // Structure to fit with EffortLegend.vue
+  effortUnitsInfo = {
+    kg: {
+      units: 'kg/km<sup>2</sup>',
+      range: [0, 6850]
+    },
+    euros: {
+      units: 'K €/km<sup>2</sup>',
+      range: [0, 132]
+    },
+    hours: {
+      units: 'h/km<sup>2</sup>',
+      range: [0, 400]
+    }
+  }
+
+  constructor() {
+    super('trawling');
+  }
+}
+
+
+
+
+
+class PurseSeineData extends FishingData {
+
+  // Structure to fit with EffortLegend.vue
+  effortUnitsInfo = {
+    kg: {
+      units: 't/km<sup>2</sup>',
+      range: [0, 78]
+    },
+    euros: {
+      units: 'K €/km<sup>2</sup>',
+      range: [0, 79]
+    },
+    hours: {
+      units: 'h/km<sup>2</sup>',
+      range: [0, 230]
+    }
+  }
+
+  constructor() {
+    super('purse-seine');
+  }
+}
+
+
+export { TrawlingData, PurseSeineData }
