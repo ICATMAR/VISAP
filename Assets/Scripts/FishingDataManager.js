@@ -378,11 +378,11 @@ class PurseSeineData extends FishingData {
       image: new ol.style.Circle({
         radius: isSelected ? 9 : 5,
         fill: new ol.style.Fill({
-          color: 'rgba(' + colorPort + ', 1)',
+          color: 'rgba(' + colorPort + ', 0.8)',
         }),
         stroke: new ol.style.Stroke({
           color: 'rgba(0,0,0, 0.8)',
-          width: isSelected ? 6 : 2,
+          width: isSelected ? 3 : 2,
         })
       }),
       zIndex: isSelected ? 100 : 1,
