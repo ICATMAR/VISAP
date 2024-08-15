@@ -64,7 +64,7 @@ class FileManager {
 
     let modURL = mod == 'trawling' ? 'trawlingData' : mod == 'purse-seine' ? 'purseSeineData' : 'recreational';
     let modCode = mod == 'trawling' ? 'trawling' : mod == 'purse-seine' ? 'ps' : 'rec';
-    let baseURL = '/data/' + modURL + '/';
+    let baseURL = '/VISAP/data/' + modURL + '/';
 
     // Effort maps and legends
     // All is not shown in the app, as we separate between fishing modalities
@@ -75,7 +75,7 @@ class FileManager {
       effortYears.forEach(eYear => {
         urls.push(baseURL + 'effort/fishingEffort_' + eUnit + '_' + eYear + '_' + modCode + '.png');
       });
-      url.push(baseURL + 'effort/fishingEffort_' + eUnit + '_' + modCode + '_legend.png');
+      urls.push(baseURL + 'effort/fishingEffort_' + eUnit + '_' + modCode + '_legend.png');
     });
     
 
@@ -94,6 +94,9 @@ class FileManager {
       promises.push(
         fetch(urls[i])
         .then( r => {
+          if (!r.ok){
+            throw new Error(urls[i] + " not found.");
+          }
           // Image
           if (extension == 'png')
             return r.blob();
@@ -102,14 +105,27 @@ class FileManager {
             return r.json();
         })
         .then(res => {
+          let content = undefined;
           // Image
           if (extension == 'png'){
             let img = document.createElement('img');
             img.src = URL.createObjectURL(res);
-            this.loadedFilesLog.push({'url': urls[i], 'content': img});
+            content = img;
           }// JSON
-          else if (extension == 'json' || extension == 'geojson')
-            this.loadedFilesLog.push({'url': urls[i], 'content': res});
+          else if (extension == 'json' || extension == 'geojson') {
+            content = res;
+          }
+          // Response
+          let response = {
+            'url': urls[i],
+            'content': content,
+            'extension': extension
+          }
+          this.loadedFilesLog.push(response);
+          return response;
+        })
+        .catch(e => {
+          //console.error("File not at " + e.stack.split('\n')[1].split('/').pop());
         })
       )
     }

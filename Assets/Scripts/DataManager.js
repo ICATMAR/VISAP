@@ -1,3 +1,4 @@
+import {FishingTrawlingData, FishingPSData} from './FishingDataManager.js'
 
 
 class DataManager {
@@ -7,6 +8,8 @@ class DataManager {
   // ...
 
   constructor() {
+
+    this.TrawlingData = new FishingTrawlingData();
 
 
     // EVENTS
