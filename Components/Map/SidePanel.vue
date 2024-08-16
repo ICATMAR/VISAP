@@ -59,15 +59,15 @@ export default {
   mounted () {
     // EVENTS
     // Open/close fishing tab
-    window.eventBus.on('AppMap_tracksOptionClicked', () => {
+    window.eventBus.on('AppMap_HaulsOptionClicked', () => {
       if (this.selTab == "tracks")
         this.closePanel();
       else
         this.openFishingTab();
     });
     // Track clicked
-    window.eventBus.on('Map_trackClicked', this.openFishingTab);
-    window.eventBus.on('TracksTimeLine_trackClicked', this.openFishingTab);
+    window.eventBus.on('Map_HaulClicked', this.openFishingTab);
+    window.eventBus.on('TracksTimeLine_HaulClicked', this.openFishingTab);
     // Close side panel
     window.eventBus.on('Map_CloseSidePanel', this.closePanel);
 
@@ -132,10 +132,10 @@ export default {
     // iteratively until fishing tracks exist. Not so clean, as the tab Fishing Tracks should only exist once the fishing tracks
     // have been loaded. If there is an error with loading the fishing tracks, the tab should not exist?
 
-    // Opens the fishing tracks tab with the corresponding track id selected
+    // Opens the fishing hauls tab with the corresponding haul id selected
     openFishingTab: function(id){
       if (id == undefined)
-        id = FishingTracks.getSelectedTrack();
+        id = window.GUIManager.map.currentHaul;
       // Select tab
       // Unselect all first
       Object.keys(this.tabs).forEach(kk => this.tabs[kk].isSelected = false);
@@ -143,7 +143,7 @@ export default {
       this.tabs.tracks.isSelected = true;
       this.selTab = 'tracks';
       // Set track id on tracks tab
-      this.$refs["haul-info"].setSelectedFishingTrack(id);
+      this.$refs["haul-info"].setSelectedFishingHaul(id);
       // Open panel if it is not open already
       this.openPanel();
     },
