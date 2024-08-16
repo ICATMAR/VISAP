@@ -124,7 +124,7 @@
 
       // USER ACTIONS
       tracksMenuClicked: function(e){
-        window.eventBus.emit('AppMap_tracksOptionClicked');
+        window.eventBus.emit('AppMap_HaulsOptionClicked');
       }
 
     },

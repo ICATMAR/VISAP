@@ -38,8 +38,8 @@ export default {
   },
   mounted () {
     // EVENTS
-    window.eventBus.on('HaulInfo_SelectedTrack', this.showSelectedTrack);
-    window.eventBus.on('Map_trackClicked', this.showSelectedTrack);
+    window.eventBus.on('HaulInfo_SelectedHaul', this.showSelectedTrack);
+    window.eventBus.on('Map_HaulClicked', this.showSelectedTrack);
   },
   data () {
     return {
@@ -99,7 +99,7 @@ export default {
 
     onTrackClicked: function(event){
       let id = event.target.id;
-      window.eventBus.emit('TracksTimeLine_trackClicked', id);
+      window.eventBus.emit('TracksTimeLine_HaulClicked', id);
     },
 
     // PUBLIC METHODS
