@@ -25,12 +25,14 @@
                                    ('evenRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : ''))]" 
             @click="()=>onSelectHaul(haul.Id)" v-for="(haul, index) in hauls" :key="haul.Id">
 
-              <td v-for="kk in Object.keys(selHaul)">{{ (haul[kk]) }}</td>
-              <!-- <td>{{ haul.Date }}</td>
-                <td>{{ haul.AvgDepth }} m</td>
-                <td>{{ haul.Estacio }}</td>
-                <td>{{ haul.Port }}</td>
-                <td>{{ haul.ZonaPort }}</td> -->
+              <td class="tableCell" v-for="kk in Object.keys(selHaul)">
+                <div><!-- Container -->
+                  <!-- Circle -->
+                  <div :style="setCellStyle(kk, haul[kk])"></div>
+                  <!-- Text -->
+                  {{ (haul[kk]) }}
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -270,32 +272,8 @@ export default {
     },
 
 
-    // Fetch haul data from server of static file
-    // getHaul: function (address, staticFile, info) {
-    //   fetch(address).then(r => r.json()).then(r => {
-    //     this.rawData = r;
-    //     // Create PieChart
-    //     let pieChart = new PieChart();
-    //     let preparedData = pieChart.processSample(r);
-    //     this.$refs.pieChart.innerHTML = "";
 
-    //     // Translations
-    //     if (this.$i18n) {
-    //       this.translateData(preparedData);
-    //     }
-
-    //     pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Date, this.$i18n.t("Biomass"), "kg / km2");
-
-    //   }).catch(e => {
-    //     if (staticFile !== undefined) { // Load static file
-    //       console.error("Could not fetch from " + address + ". Error: " + e + ".");
-    //       window.serverConnection = false;
-    //       getHaul(staticFile, undefined, info);
-    //     } else {
-    //       console.error("Could not fetch from " + address + ". Error: " + e + ".");
-    //     }
-    //   })
-    // },
+    
 
 
 
@@ -356,6 +334,25 @@ export default {
 
 
 
+
+    // STYLE
+    setCellStyle: function(columnName, cellContent){
+      if (columnName == 'Port' || columnName == 'ZonaPort') {
+        let color = palette[cellContent].color;
+        if (color != undefined){
+          return {
+            //'background': 'radial-gradient(rgba('+ color[0] + ','+ color[1] +','+ color[2] +', 1), transparent)',
+            'background': 'rgba('+ color[0] + ','+ color[1] +','+ color[2] +', 1)',
+            'border-radius': '20px',
+            'width': '12px',
+            'height': '12px',
+            'margin': '8px',
+          }
+        }
+      }
+
+      return {}
+    },
   },
   components: {
     "weather-widget": WeatherWidget,
@@ -403,6 +400,9 @@ export default {
   padding: 20px;
   background: var(--blue);
   border-radius: 20px;
+
+  max-height: 500px;
+  overflow: auto;
 }
 
 table {
@@ -414,6 +414,7 @@ table {
 }
 .tableRow {
   text-align: center;
+  text-wrap: none;
 }
 
 .oddRow {
@@ -422,6 +423,13 @@ table {
 
 .evenRow {
 
+}
+
+.tableCell > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .selectedRow {
