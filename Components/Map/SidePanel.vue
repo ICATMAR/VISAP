@@ -8,12 +8,11 @@
 
       <!-- Fixed closing button and top-right menu background -->
       <div class="bannerContainer">
-        <!-- Button -->
-        <button class="closeButton icon-str" type="button" @click='closePanel'>X</button>
         <!--Banner -->
         <div class="topBanner"></div>
-
       </div>
+      <!-- Button -->
+      <button class="closeButton icon-str" type="button" @click='closePanel'>X</button>
 
       <!-- Info container -->
       <div class="side-panel-content g-0">
@@ -180,13 +179,17 @@ export default {
 
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 
   z-index: 1;
 }
 
 .closeButton {
+  position: fixed;
+  right: 30px;
+  top: 80px;
+
   background-color: var(--darkBlue);
   box-shadow: 0px 0px 4px 0px black;
   border-radius: 50%;
