@@ -692,6 +692,7 @@ export default species_es = {
 "Anguilla spp.": "Anguila europea",
 "Actinia sp. 3": "Actinia sp. 3",
 "Target": "Objetivo",
+"By-Catch": "Accesoria",
 "Discarded": "Descarte",
 "Mullus spp.": "Salmonetes nep",
 "Suberites spp.": "Suberites spp.",

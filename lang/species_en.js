@@ -81,6 +81,7 @@ export default species_en = {
 "Trisopterus capelanus": "Poor cod",
 "Inachus communissimus": "Inachus communissimus",
 "Target": "Target",
+"By-Catch": "By-Catch",
 "Crystallogobius linearis": "Crystal goby",
 "Hydrozoa 3": "Hydrozoa 3",
 "Nepinnotheres pinnotheres": "Nepinnotheres pinnotheres",
