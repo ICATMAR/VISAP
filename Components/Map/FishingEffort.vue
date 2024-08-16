@@ -114,7 +114,7 @@ export default {
       if (e.target.value != undefined) {
         this.areTracksVisible = e.target.checked;
         // Activate layer
-        window.eventBus.emit('FishingEffort_setHaulsVisible', ['fishingTracks', this.areTracksVisible]);
+        window.eventBus.emit('FishingEffort_setHaulsVisible', ['fishingHauls', this.areTracksVisible]);
       }
       // Text was clicked --> Invoke click on the element, which calls again this function
       else {
