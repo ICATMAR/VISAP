@@ -9,7 +9,7 @@
     <!-- Drop down -->
     <div class="rowEl p-3 g-0 lightBlue">
       <!-- TODO: This should be a modal with a table where you could sort by date and port. -->
-      <select v-model="selHaul" @change="onSelectHaul">
+      <select :selected="selHaul" @change="onSelectHaul">
         <option :id="option.Id" :key="option.Id" :value="option" v-for="option in options">
           {{ option.Port + " - " + option.Date }}
         </option>
@@ -194,6 +194,8 @@ export default {
     // PRIVATE METHODS
     // Set Fishing haul menu once they are loaded
     setFishingHauls: function (gjsonData) {
+      // Reset options
+      this.options = [];
       // Process features to fit into select HTML
       let features = gjsonData.features;
       features.forEach((ff, index) => {
