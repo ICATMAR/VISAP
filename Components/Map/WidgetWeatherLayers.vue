@@ -70,8 +70,8 @@
     mounted() {
       // EVENTS
       // Fishing track clicked
-      window.eventBus.on('TracksTimeLine_trackClicked', this.updateClimaLayer);
-      window.eventBus.on('Map_trackClicked', this.updateClimaLayer);
+      window.eventBus.on('TracksTimeLine_HaulClicked', this.updateClimaLayer);
+      window.eventBus.on('Map_HaulClicked', this.updateClimaLayer);
       // Map mouse move to update legend WMTS
       window.eventBus.on('Map_mouseMove', coord => this.mapMouseMove(coord));
     },

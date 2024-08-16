@@ -5,7 +5,7 @@
         
 
           <div class="tracksContainer" ref="tracksContainer">
-            <div class="trackMark" :class="{active: ff.selected}" @click="onTrackClicked" :id="ff.properties.id" :key="ff.properties.id" v-for="ff in features" :style="setFeatureStyle(ff)">
+            <div class="trackMark" :class="{active: ff.selected}" @click="onHaulClicked" :id="ff.properties.id" :key="ff.properties.id" v-for="ff in features" :style="setFeatureStyle(ff)">
                 &#11044;
             </div>
           </div>
@@ -38,8 +38,8 @@ export default {
   },
   mounted () {
     // EVENTS
-    window.eventBus.on('HaulInfo_SelectedHaul', this.showSelectedTrack);
-    window.eventBus.on('Map_HaulClicked', this.showSelectedTrack);
+    window.eventBus.on('HaulInfo_SelectedHaul', this.showSelectedHaul);
+    window.eventBus.on('Map_HaulClicked', this.showSelectedHaul);
   },
   data () {
     return {
@@ -97,8 +97,9 @@ export default {
     },
 
 
-    onTrackClicked: function(event){
+    onHaulClicked: function(event){
       let id = event.target.id;
+      this.showSelectedHaul(id);
       window.eventBus.emit('TracksTimeLine_HaulClicked', id);
     },
 
@@ -115,8 +116,8 @@ export default {
       this.features.push([]); // TODO: FIX TRICK, DIRTY HACK. FORCES setFeaturesStyle() in Vue
       this.features.pop();
     },
-    // Show selected track
-    showSelectedTrack: function(id){
+    // Show selected haul
+    showSelectedHaul: function(id){
       this.features.forEach(ff => {
         if (ff.properties.info.Id == id){
           ff.selected = true;
@@ -125,7 +126,7 @@ export default {
       });
     },
     // Hides the selected track (none selected)
-    hideSelectedTrack: function(){
+    hideSelectedHaul: function(){
       this.features.forEach(ff => {
         ff.selected = false;
       });

@@ -285,14 +285,14 @@ export default {
       this.changeStyle(style);
     });
     // Click on track
-    window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedTrack);
-    window.eventBus.on('HaulInfo_SelectedHaul', this.setSelectedTrack);
+    window.eventBus.on('TracksTimeLine_HaulClicked', this.setSelectedHaul);
+    window.eventBus.on('HaulInfo_SelectedHaul', this.setSelectedHaul);
     // Set fishing effort map
     window.eventBus.on('FishingEffort_EffortChanged', this.setEffortMap);
     // Layer visibility
     window.eventBus.on('WidgetMapOptions_setLayerVisible', this.setLayerOpacity);
     window.eventBus.on('FishingEffort_setLayerVisible', this.setLayerOpacity);
-    window.eventBus.on('FishingEffort_setTracksVisible', this.setLayerOpacity);
+    window.eventBus.on('FishingEffort_setHaulsVisible', this.setLayerOpacity);
     // Layer opacity
     window.eventBus.on('FishingEffort_setLayerOpacity', this.setEffortLayerOpacity);
     window.eventBus.on('WidgetMapOptions_setLayerOpacity', this.setLayerOpacity);
@@ -384,7 +384,7 @@ export default {
         // Haul is clicked
         if (e.selected[0].getProperties().featType == "haul"){
           let id = e.selected[0].getProperties().id;
-          this.setSelectedTrack(id);
+          this.setSelectedHaul(id);
           // Emit event
           window.eventBus.emit('Map_HaulClicked', id);
         }
@@ -780,14 +780,14 @@ export default {
 
     // Receive selected track and show it
     // This event can come from HaulInfo.vue or TracksTimeLine
-    setSelectedTrack: function(id){
+    setSelectedHaul: function(id){
       
       // If id is undefined, it hides the selected mark
       if (this.$refs.tracksTimeLine){
         if (id == undefined)
-          this.$refs.tracksTimeLine.hideSelectedTrack(id);
+          this.$refs.tracksTimeLine.hideSelectedHaul(id);
         else{
-          this.$refs.tracksTimeLine.showSelectedTrack(id);
+          this.$refs.tracksTimeLine.showSelectedHaul(id);
         }
       }
 
@@ -913,7 +913,7 @@ export default {
           // Redifine currentHaul if currentHaul does not exists in the fishingDataManager.hauls
           if (fishingDataManager.hauls[window.GUIManager.map.currentHaul] == undefined){
             window.GUIManager.map.currentHaul = Object.keys(fishingDataManager.hauls)[0]; // First haul
-            debugger; // TODO: this should extend to other components?
+            console.warn('Current haul did not exist in fishing modality, changing it.') // TODO: this should extend to other components?
           }
           // Emit event
           window.eventBus.emit('Map_HaulsLoaded', fishingDataManager.haulsGeoJSON);
