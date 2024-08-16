@@ -79,7 +79,10 @@ class GUIManager {
     // Language changes
     window.eventBus.on('LanguageSelector_LanguageChanged', lang => this.setLanguage(lang));
     // Selected haul
-    window.eventBus.on('HaulInfo_SelectedHaul', id => this.currentHaul = id);
+    window.eventBus.on('HaulInfo_SelectedHaul', id => this.map.currentHaul = id);
+    window.eventBus.on('TracksTimeLine_HaulClicked', id => this.map.currentHaul = id);
+    window.eventBus.on('Map_HaulClicked', id => this.map.currentHaul = id);
+
     // Hauls visibility
     window.eventBus.on('FishingEffort_setHaulsVisible', (params) => {
       let opacity = params[1] * 1; // (* 1 turns boolean into a number)
@@ -100,6 +103,9 @@ class GUIManager {
     // Set default modality if undefined
     let mod = window.location.getHashValue('MOD') || this.currentModality;
     this.setModality(mod);
+
+    // Set default currentHaul
+    this.map.currentHaul = this.currentModality == 'trawling' ? 23288 : 16597;
     
     // Set language
     // Check if there is a language in the url
