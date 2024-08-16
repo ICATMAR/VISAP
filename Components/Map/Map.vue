@@ -286,7 +286,7 @@ export default {
     });
     // Click on track
     window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedTrack);
-    window.eventBus.on('HaulInfo_SelectedTrack', this.setSelectedTrack);
+    window.eventBus.on('HaulInfo_SelectedHaul', this.setSelectedTrack);
     // Set fishing effort map
     window.eventBus.on('FishingEffort_EffortChanged', this.setEffortMap);
     // Layer visibility
@@ -369,25 +369,24 @@ export default {
       this.map.on('movestart', this.onMapMoveStart);
 
       // Declare interactions
-      // Interaction (tracks clicked)
+      // Interaction (hauls clicked)
       const selectInteraction = new ol.interaction.Select({style: null});
       selectInteraction.on('select', (e) => {
         // Nothing clicked
         if (e.selected[0] === undefined)
           return false;
-        // Check if tracks layer is visible
+        // Check if hauls layer is visible
         let ll = this.getMapLayer('fishingHauls');
         if (ll == undefined)
           return
         if (ll.getOpacity() == 0)
           return;
-        // Track line is clicked
-        debugger;
+        // Haul is clicked
         if (e.selected[0].getProperties().featType == "haul"){
           let id = e.selected[0].getProperties().id;
           this.setSelectedTrack(id);
           // Emit event
-          window.eventBus.emit('Map_trackClicked', id);
+          window.eventBus.emit('Map_HaulClicked', id);
         }
         // Port is clicked
         // else if (e.selected[0].getProperties().featType == "port") {
@@ -793,9 +792,8 @@ export default {
       }
 
       // Center timeline
-      //let feature = FishingTracks.getFeatureById(id);
       let fishingDataManager = window.DataManager.getFishingDataManager(window.GUIManager.currentModality);
-      let haul = fishingDataManager.getHaulById(id);
+      let haul = fishingDataManager.hauls[id];
       if (this.$refs['timeRangeBar']){
         let trackDate = new Date(haul.Date);
         this.$refs['timeRangeBar'].centerOnDate(trackDate);
@@ -803,7 +801,11 @@ export default {
 
       // Center map to track
       let view = this.map.getView();
-      let coord = [...haul.geometry.coordinates[0]];
+      let coord;
+      if (haul.geometry.type == 'Point')
+        coord = [...haul.geometry.coordinates];
+      else
+        coord = [...haul.geometry.coordinates[0]];
       let currentZoom = view.getZoom();
       let longCorrection = 0;//currentZoom > 11 ? 0.1 : 0.3;
       view.animate({
@@ -908,6 +910,13 @@ export default {
           if (this.$refs.tracksTimeLine){
             this.$refs.tracksTimeLine.setFeatures(fishingDataManager.haulsGeoJSON.features);
           }
+          // Redifine currentHaul if currentHaul does not exists in the fishingDataManager.hauls
+          if (fishingDataManager.hauls[window.GUIManager.map.currentHaul] == undefined){
+            window.GUIManager.map.currentHaul = Object.keys(fishingDataManager.hauls)[0]; // First haul
+            debugger; // TODO: this should extend to other components?
+          }
+          // Emit event
+          window.eventBus.emit('Map_HaulsLoaded', fishingDataManager.haulsGeoJSON);
         });
       }
 
