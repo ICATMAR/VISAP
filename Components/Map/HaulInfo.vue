@@ -7,13 +7,36 @@
       <h4>{{ $t('Fishing tracks') }}</h4>
     </div>
     <!-- Drop down -->
-    <div class="rowEl p-3 g-0 lightBlue">
-      <!-- TODO: This should be a modal with a table where you could sort by date and port. -->
-      <select :selected="selHaul" @change="onSelectHaul">
-        <option :id="option.Id" :key="option.Id" :value="option" v-for="option in options">
-          {{ option.Port + " - " + option.Date }}
-        </option>
-      </select>
+    <div class="rowEl p-3 g-0 lightBlue" style="flex-direction: column">
+
+      <button class="buttonTableOpener" :title="$t('HaulTableOpen')" @click="isTableVisible = !isTableVisible">{{ selHaul.Port }} - {{ selHaul.Date }}</button>
+
+      <Transition>
+        <div class="tableContainer" v-if="areHaulsLoaded && isTableVisible">
+        <table>
+          <thead>
+            <tr>
+              <th class="clickable tableHeader" @click="hauls.sort((a, b) => a[key] - b[key])" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="clickable tableRow" 
+            :class="[index%2 == 0 ? ('oddRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : '')) :
+                                   ('evenRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : ''))]" 
+            @click="()=>onSelectHaul(haul.Id)" v-for="(haul, index) in hauls" :key="haul.Id">
+
+              <td v-for="kk in Object.keys(selHaul)">{{ (haul[kk]) }}</td>
+              <!-- <td>{{ haul.Date }}</td>
+                <td>{{ haul.AvgDepth }} m</td>
+                <td>{{ haul.Estacio }}</td>
+                <td>{{ haul.Port }}</td>
+                <td>{{ haul.ZonaPort }}</td> -->
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </Transition>
+
     </div>
     <!-- Catch composition title -->
     <div class="rowEl p-3" style="background:white; justify-content: space-around !important;">
@@ -75,8 +98,8 @@ import SeaHabitat from 'Components/Map/HaulInfo/SeaHabitat.vue';
 export default {
   name: "haul-info",
   created() {
-    // Default options
-    this.selHaul = this.options[0];
+    // Default haul
+    this.selHaul = this.hauls[0];
     // Default fishing haul id comes from GUIManager
     this.selHaul.id = window.GUIManager.map.currentHaul;
   },
@@ -95,7 +118,7 @@ export default {
     return {
       selHaul: {},
       // Default options
-      options: [{
+      hauls: [{
         AvgDepth: "365.2",
         Date: "2022-11-30",
         Distance: "7360.59",
@@ -107,14 +130,15 @@ export default {
         ZonaPort: "Center",
       },],
       showExportOptions: false,
-
+      areHaulsLoaded: false,
+      isTableVisible: false,
     }
   },
   methods: {
     // USER HTML ACTIONS
     // When a track is selected
     onSelectHaul: function (event) {
-      let id = event.target.selectedOptions[0].id;
+      let id = event;
 
       // Update HaulInfo content
       this.setSelectedFishingHaul(id);
@@ -194,25 +218,26 @@ export default {
     // PRIVATE METHODS
     // Set Fishing haul menu once they are loaded
     setFishingHauls: function (gjsonData) {
-      // Reset options
-      this.options = [];
+      this.areHaulsLoaded = true;
+      // Reset hauls
+      this.hauls = [];
       // Process features to fit into select HTML
       let features = gjsonData.features;
       features.forEach((ff, index) => {
         let info = ff.properties.info;
         //info.name = info.Port + " - " + info.Data;
         // Select info to show
-        this.options[index] = {}
+        this.hauls[index] = {}
         Object.keys(info).forEach(kk => {
           if (kk != 'FishingGroundName' && kk != 'MeshType' && kk != 'Date' && kk != 'Data')
-            this.options[index][kk] = info[kk];
+            this.hauls[index][kk] = info[kk];
           if (kk == 'Date')
-            this.options[index][kk] = info[kk].toISOString().substring(0, 10);
+            this.hauls[index][kk] = info[kk].toISOString().substring(0, 10);
         });
 
       });
       // Order by date
-      this.options.sort((a, b) => {
+      this.hauls.sort((a, b) => {
         let dateDiff = new Date(a.Date) - new Date(b.Date);
 
         if (dateDiff == 0) {
@@ -228,8 +253,8 @@ export default {
       console.log('+++Requesting haul file ' + id);
       // Load haul from server or from file
       //this.getHaul('data/trawlingData/hauls/' + id + '.json', undefined, this.selHaul);
-      window.DataManager.getHaulCatchComposition(id).then((r)=> {
-        
+      window.DataManager.getHaulCatchComposition(id).then((r) => {
+
         let pieChart = new PieChart();
         let preparedData = pieChart.processSample(r);
         this.$refs.pieChart.innerHTML = "";
@@ -291,20 +316,20 @@ export default {
     // Set the selected fishing haul in the select html element
     // Vue automatically updates the HTML element
     setSelectedFishingHaul: function (id) {
-      
+
       this.selHaul = {};
-      this.options.forEach(oo => {
-        if (id == oo.Id){
+      this.hauls.forEach(oo => {
+        if (id == oo.Id) {
           // Copy values
           Object.keys(oo).forEach(key => {
-            if (key != 'catchComposition' &&  key != 'geometry'){
+            if (key != 'catchComposition' && key != 'geometry') {
               this.selHaul[key] = oo[key]
             }
           });
         }
       });
       //this.$forceUpdate(); // Is this necessary? Remodel first the <select> into a button / table
-      
+
       // Update pie chart
       // TODO: again there is a repetition of calling this event twice (sidePanel when openingPanel)
       this.setPieChart(id);
@@ -320,7 +345,7 @@ export default {
         let coords = haul.geometry.coordinates;
         coords = [...coords]; // copy
         // Point geometry
-        if (haul.geometry.type == "Point"){
+        if (haul.geometry.type == "Point") {
           coords = [coords];
         }
         //let middleCoordinate = coords[Math.round(coords.length/2)];
@@ -367,6 +392,40 @@ export default {
   background: var(--darkBlue);
   color: white;
   text-shadow: 0 0 4px black;
+}
+
+.buttonTableOpener:hover {
+  background-color: var(--blue);
+}
+
+.tableContainer {
+  margin: 20px;
+  padding: 20px;
+  background: var(--blue);
+  border-radius: 20px;
+}
+
+table {
+  width: 100%;
+}
+
+.tableHeader {
+  text-align: center;
+}
+.tableRow {
+  text-align: center;
+}
+
+.oddRow {
+  background: linear-gradient(to right, transparent 0%, rgb(40 139 186) 10%, rgb(40 139 186) 90%, transparent 100%);
+}
+
+.evenRow {
+
+}
+
+.selectedRow {
+  background: var(--red);
 }
 
 select {
