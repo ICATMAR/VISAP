@@ -9,7 +9,10 @@
     <!-- Drop down -->
     <div class="rowEl p-3 g-0 lightBlue" style="flex-direction: column">
 
-      <button class="buttonTableOpener" :title="$t('HaulTableOpen')" @click="isTableVisible = !isTableVisible">{{ selHaul.Port }} - {{ selHaul.Date }}</button>
+      <button class="buttonTableOpener" :title="$t('HaulTableOpen')" @click="isTableVisible = !isTableVisible">
+        {{ selHaul.Port }} - {{ selHaul.Date }}
+        <div class="fa" :class="[isTableVisible ? 'rotate0' : 'rotate180']" style="margin-left: 20px">&#xf106;</div>
+      </button>
 
       <Transition>
         <div class="tableContainer" v-if="areHaulsLoaded && isTableVisible">
@@ -395,6 +398,15 @@ export default {
   background-color: var(--blue);
 }
 
+.rotate0 {
+  rotate: 0deg;
+  transition: all 0.7s ease-in-out;
+}
+.rotate180 {
+  rotate: 180deg;
+  transition: all 0.7s ease-in-out;
+}
+
 .tableContainer {
   margin: 20px;
   padding: 20px;
@@ -403,6 +415,8 @@ export default {
 
   max-height: 500px;
   overflow: auto;
+
+  direction: rtl; /* Switches the scroll-bar to the right*/
 }
 
 table {
@@ -468,5 +482,16 @@ select {
   .isVisibleInMobile {
     display: block;
   }
+}
+
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
