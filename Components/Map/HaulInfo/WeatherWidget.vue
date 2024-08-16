@@ -410,6 +410,9 @@ export default {
         this.selHaul = fdManager.hauls[id];
         this.selHaulId = id;
         let middleCoordinate;
+        if (this.selHaul == undefined){
+          debugger;
+        }
         if (this.selHaul.geometry.type == "Point")
           middleCoordinate = this.selHaul.geometry.coordinates;
         else {
