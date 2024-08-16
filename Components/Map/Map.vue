@@ -653,7 +653,6 @@ export default {
     // The time range has changed. Update the track lines
     onTimeRangeChange: function(dates){
       // Set starting and ending dates in fishing tracks
-      //this.fishingTracks.setStartEndDates(dates[0], dates[1]);
       // TODO: should be controlled by GUIManager via an event?
       window.GUIManager.map.selStartDate.setTime(dates[0].getTime());
       window.GUIManager.map.selEndDate.setTime(dates[1].getTime());
@@ -815,7 +814,6 @@ export default {
       });
 
       // Update map style
-      //FishingTracks.setSelectedTrack(id);
       window.GUIManager.map.currentHaul = id;
       fishingDataManager.updateStyle();
       
@@ -911,7 +909,7 @@ export default {
           if (this.$refs.tracksTimeLine){
             this.$refs.tracksTimeLine.setFeatures(fishingDataManager.haulsGeoJSON.features);
           }
-          
+
           // Redifine currentHaul if currentHaul does not exists in the fishingDataManager.hauls
           let haulId = window.GUIManager.map.currentHaul;
           if (fishingDataManager.hauls[haulId] == undefined){
@@ -930,33 +928,6 @@ export default {
         });
       }
 
-    },
-
-    // CALLBACKS
-    // Once the fishing tracks have been loaded
-    onLoadTracks: function(){
-      return;
-      // Add to layer
-      //this.map.addLayer(this.fishingTracks.getLayer());
-      // TODO;
-      // Update start and end dates
-      // Get start and end from timerange
-      //this.fishingTracks.setStartEndDates(); // Set starting and ending dates in fishing tracks
-      
-      // Track lines overlay
-      //let gjson = this.fishingTracks.getGeoJSON();
-      let gjson = FishingTracks.getGeoJSON();
-      if (this.$refs.tracksTimeLine){
-        this.$refs.tracksTimeLine.setFeatures(gjson.features);
-      }
-
-      // Emit geojson loaded
-      window.eventBus.emit('Map_TracksLoaded', gjson);
-      
-      // OPTIONS:
-      // PAINT IN A CANVAS -> TRANSFORM TO IMAGE -> MAKE IMAGE AS BACKGROUND OF TIMERANGE
-      // OVERLAY, BUT BELOW TIMERANGE?
-      // CREATE A VUE OVERLAY INSIDE TIMERANGE?
     },
 
 

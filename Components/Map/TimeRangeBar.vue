@@ -526,7 +526,7 @@ export default {
         // Set handles in range slider
         this.setRangeSlider();
         this.updateHTMLTimeline();
-        // Emit selected dates. This updates the FishingTracks style
+        // Emit selected dates. This updates the fishing hauls style
         this.$emit('changeSelDates', [this.selStartDate, this.selEndDate]);
     
       },
