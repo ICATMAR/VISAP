@@ -183,6 +183,8 @@ export default {
   align-items: center;
 
   z-index: 1;
+
+  pointer-events: none;
 }
 
 .closeButton {
