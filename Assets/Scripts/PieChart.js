@@ -37,6 +37,8 @@ class PieChart {
 		    .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1));
 
 	  root.each(d => d.current = d);
+		// Add units
+		root.each( d => d.unit = unit);
 
 	  const svg = d3.create("svg")
 	      .attr("viewBox", [0, 0, width, width])
@@ -93,7 +95,7 @@ class PieChart {
 		    .attr("dy", "3.5em")
 				.attr("font-size", "0.8em")
 				.attr("class", "biomassText")
-		    .text(format(root.valueCorrected || root.value) + " " + (unit||"kg / km2"));
+		    .text(format(root.valueCorrected || root.value) + " " + (root.unit || "kg / km2"));
 
 
 
@@ -121,7 +123,7 @@ class PieChart {
 	      .on("mouseleave", mouseOffPath);
 
 	  path.append("title") 
-	      .text(d => `${d.ancestors().map(d => (d.data.translation || d.data.species)).reverse().join("/")}\n${format(d.valueCorrected || d.value)}` + " kg/km2"); // TODO show label, modify label https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/#creating-a-tooltip-using-the-title-tag
+	      .text(d => `${d.ancestors().map(d => (d.data.translation || d.data.species)).reverse().join("/")}\n${format(d.valueCorrected || d.value)}` + " " + (d.unit || "kg/km2")); // TODO show label, modify label https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/#creating-a-tooltip-using-the-title-tag
 
 	  const label = g.append("g")
 	      .attr("pointer-events", "none")
@@ -168,7 +170,7 @@ class PieChart {
 			centerLabel
 				.select(".biomassText")
 				.style("visibility", null)
-				.text(format(p.valueCorrected || p.value) +  " kg / km2");
+				.text(format(p.valueCorrected || p.value) + " " + (p.unit || "kg / km2"));
 
 	    // Hide center mouse hover label
 	    centerLabel
@@ -232,7 +234,7 @@ class PieChart {
       centerLabel
         .select(".biomassText")
         .style("visibility", null)
-        .text(format(p.valueCorrected || p.value) +  " kg / km2");
+        .text(format(p.valueCorrected || p.value) + " " + (p.unit || " kg / km2"));
 	    centerLabel
 	      .select(".centerText")
 	      .style("visibility", null)
@@ -277,7 +279,7 @@ class PieChart {
 			centerLabel
 				.select(".biomassText")
 				.style("visibility", null)
-				.text(format(pCenter.valueCorrected || pCenter.value) +  " kg / km2");
+				.text(format(pCenter.valueCorrected || pCenter.value) + " " + (pCenter.unit || "kg / km2"));
 	    centerLabel
 	      .select(".centerText")
 	      .style("visibility", "hidden")
@@ -359,7 +361,7 @@ class PieChart {
 			let nomEspecie = item.ScientificName;
 			let nomComu = item.EnglishName || item.ScientificName;
 			let classCaptura = item.Classification;
-			let biomass = item.Biomass_Kg_Km2;
+			let biomass = item.Biomass_Kg_Km2 || item.Biomass_Kg;
 
 			if (biomass < 0.01) // Do not display items with little biomass
 				continue;
@@ -410,7 +412,7 @@ class PieChart {
 			let nomEspecie = item.NomEspecie;
 			let nomComu = item.NomCatala || item.NomComu || item.NomEspecie;
 			let classCaptura = item.ClassificacioCaptura;
-			let biomass = item.Biomassa_Kg_Km2 || item.Biomassa;
+			let biomass = item.Biomassa_Kg_Km2 || item.Biomassa || item.Biomass_Kg || item.Biomass_Kg;
 
 			if (biomass < 0.01) // Do not display items with little biomass
 				continue;
@@ -455,7 +457,7 @@ class PieChart {
 			let scientificName = item.ScientificName;
 			let catalanName = item.CatalanName || item.ScientificName;
 			let classification = item.Classification;
-			let biomass = item.Biomass_Kg_Km2;
+			let biomass = item.Biomass_Kg_Km2 || item.Biomass_Kg;
 
 			if (biomass < 1) // Do not display items with little biomass
 				continue;
@@ -513,7 +515,7 @@ class PieChart {
 			let scientificName = item.ScientificName;
 			let catalanName = item.CatalanName || item.ScientificName;
 			let classification = item.Classification;
-			let biomass = item.Biomass_Kg_Km2;
+			let biomass = item.Biomass_Kg_Km2 || item.Biomass_Kg;
 
 			if (biomass < 1) // Do not display items with little biomass
 				continue;
@@ -529,7 +531,7 @@ class PieChart {
 				outData.children[yearIndex].children.push({"name": season, "children": [], "species": season});
 
 			let seasonIndex = outData.children[yearIndex].children.findIndex(child => child.name === season)// TODO HERE NOW
-			// Create category level (Landed, Discarded, Restes)
+			// Create category level (Landed, Discarded, Restes, Target)
 			let seasonChilds = outData.children[yearIndex].children[seasonIndex].children;
 			if (seasonChilds.find(child => child.name === classification) === undefined)
 				outData.children[yearIndex].children[seasonIndex].children.push({"name": classification, "children": [], "species": classification});

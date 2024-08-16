@@ -227,8 +227,10 @@ export default {
       // Load haul from server or from file
       //this.getHaul('data/trawlingData/hauls/' + id + '.json', undefined, this.selHaul);
       window.DataManager.getHaulCatchComposition(id).then((r)=> {
+        
         let pieChart = new PieChart();
         let preparedData = pieChart.processSample(r);
+        this.$refs.pieChart.innerHTML = "";
 
         // Translations
         if (this.$i18n) {
@@ -236,7 +238,7 @@ export default {
         }
 
         let info = window.DataManager.getHaulInfo(id);
-        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Date, this.$i18n.t("Biomass"), "kg / km2");
+        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Data, this.$i18n.t("Biomass"), "kg");
       });
     },
 
