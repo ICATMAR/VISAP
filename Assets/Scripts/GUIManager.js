@@ -77,6 +77,8 @@ class GUIManager {
     window.eventBus.on('ModalitySelector_ChangedModality', (mod) => this.setModality(mod));
     // Language changes
     window.eventBus.on('LanguageSelector_LanguageChanged', lang => this.setLanguage(lang));
+    // Selected haul
+    window.eventBus.on('HaulInfo_SelectedHaul', id => this.currentHaul = id);
   }
 
 
