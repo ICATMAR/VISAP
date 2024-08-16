@@ -7,6 +7,7 @@ class GUIManager {
 
   map = {
     currentHaul: 23288,
+    haulsLayerOpacity: 1,
     currentEffortUnit: 'kg',
     currentEffortYear: '2020',
     selStartDate: new Date(2019, 1, 1),
@@ -79,6 +80,11 @@ class GUIManager {
     window.eventBus.on('LanguageSelector_LanguageChanged', lang => this.setLanguage(lang));
     // Selected haul
     window.eventBus.on('HaulInfo_SelectedHaul', id => this.currentHaul = id);
+    // Hauls visibility
+    window.eventBus.on('FishingEffort_setHaulsVisible', (params) => {
+      let opacity = params[1] * 1; // (* 1 turns boolean into a number)
+      this.map.haulsLayerOpacity = opacity;
+    })
   }
 
 

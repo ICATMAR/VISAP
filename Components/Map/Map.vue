@@ -843,6 +843,7 @@ export default {
         this.map.removeLayer(haulsLayer);
       }
       haulsLayer = fishingDataManager.haulsLayer;
+      haulsLayer.setOpacity(window.GUIManager.map.haulsLayerOpacity);
       this.map.addLayer(haulsLayer);
     },
 
