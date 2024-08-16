@@ -4,20 +4,20 @@
     <div class="lightBlue" style="height: 90px;"></div>
     <!-- Title -->
     <div class="rowEl p-3 lightBlue">
-      <h4>{{$t('Fishing tracks')}}</h4>
+      <h4>{{ $t('Fishing tracks') }}</h4>
     </div>
     <!-- Drop down -->
     <div class="rowEl p-3 g-0 lightBlue">
       <!-- TODO: This should be a modal with a table where you could sort by date and port. -->
-      <select v-model="selTrack" @change="onSelectTrack">
-        <option :id="option.Id" :key="option.Id" :value="option" v-for="option in options" >
+      <select v-model="selHaul" @change="onSelectTrack">
+        <option :id="option.Id" :key="option.Id" :value="option" v-for="option in options">
           {{ option.Port + " - " + option.Date }}
         </option>
       </select>
     </div>
     <!-- Catch composition title -->
     <div class="rowEl p-3" style="background:white; justify-content: space-around !important;">
-      <h4>{{$t('Catch composition')}}</h4>
+      <h4>{{ $t('Catch composition') }}</h4>
       <!-- Export buttons -->
       <!-- Export data button -->
       <div>
@@ -37,14 +37,14 @@
     <!-- Pie chart -->
     <div class="rowEl p-2 g-0" style="background: white" ref="pieChart">
     </div>
-    
+
     <!-- Haul info -->
     <div class="rowEl p-2 g-0 darkBlue" style="flex-wrap: wrap; justify-content:flex-start;">
-      <div style="width: 50%" :key="kk.Id" v-for="kk in Object.keys(selTrack)">
+      <div style="width: 50%" :key="kk.Id" v-for="kk in Object.keys(selHaul)">
         <!-- If is not a number -->
-        <span v-if="isNaN(selTrack[kk])">{{$tc("TrackFeatures." + kk)}}: {{$t(selTrack[kk])}}</span>
+        <span v-if="isNaN(selHaul[kk])">{{ $tc("TrackFeatures." + kk) }}: {{ $t(selHaul[kk]) }}</span>
         <!-- If it is a number -->
-        <span v-else>{{$tc("TrackFeatures." + kk, parseFloat(selTrack[kk]))}}</span>
+        <span v-else>{{ $tc("TrackFeatures." + kk, parseFloat(selHaul[kk])) }}</span>
       </div>
     </div>
 
@@ -59,10 +59,11 @@
     </div>
 
     <!-- Empty space for mobile, as map falls on top of last element -->
-    <div class="rowEl isVisibleInMobile p-2 g-0" style="background: var(--darkBlue); height: 200px; color: white; text-shadow: 0 0 4px black;">
+    <div class="rowEl isVisibleInMobile p-2 g-0"
+      style="background: var(--darkBlue); height: 200px; color: white; text-shadow: 0 0 4px black;">
     </div>
   </div>
-  
+
 </template>
 
 
@@ -72,42 +73,38 @@ import WeatherWidget from 'Components/Map/HaulInfo/WeatherWidget.vue';
 import SeaHabitat from 'Components/Map/HaulInfo/SeaHabitat.vue';
 
 export default {
-  // REQUIRES FishingTracks.js
   name: "haul-info",
-  created(){
+  created() {
     // Default options
-    this.selTrack = this.options[0];
-    // Default fishing track id comes from GUIManager
-    this.selTrack.id = window.GUIManager.map.currentHaul;
-    // Set selected fishing track
-    FishingTracks.setSelectedTrack(this.selTrack.Id);
+    this.selHaul = this.options[0];
+    // Default fishing haul id comes from GUIManager
+    this.selHaul.id = window.GUIManager.map.currentHaul;
   },
-  mounted(){    
-    this.getSelectedFishingTrack();
+  mounted() {
     // EVENTS
-    // Tracks loaded
-    window.eventBus.on('Map_TracksLoaded', this.setFishingTracks);
-    // Track selected
-    window.eventBus.on('Map_trackClicked', this.setSelectedFishingTrack);
-    window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedFishingTrack);
+    // Hauls loaded
+    window.eventBus.on('Map_HaulsLoaded', this.setFishingHauls);
+    // Haul selected
+    window.eventBus.on('Map_HaulClicked', this.setSelectedFishingHaul);
+    window.eventBus.on('TracksTimeLine_HaulClicked', this.setSelectedFishingHaul);
     // Language change
-    window.eventBus.on('LanguageSelector_LanguageChanged', ()=> this.setPieChart(this.selTrack.Id));
-    window.eventBus.on('GUIManager_LanguageChanged', ()=> this.setPieChart(this.selTrack.Id));
+    window.eventBus.on('LanguageSelector_LanguageChanged', () => this.setPieChart(this.selHaul.Id));
+    window.eventBus.on('GUIManager_LanguageChanged', () => this.setPieChart(this.selHaul.Id));
   },
-  data(){
+  data() {
     return {
-      selTrack: {},
+      selHaul: {},
       // Default options
       options: [{
-        AvgDepth : "365.2",
-        Date : "2022-11-30",
-        Distance : "7360.59",
-        Duration : "89.68",
-        Estacio : "Autumn",
-        FishingGroundType : "Upper slope",
-        Id : 23288,
-        Port : "Barcelona",
-        ZonaPort : "Center",
+        AvgDepth: "365.2",
+        Date: "2022-11-30",
+        Distance: "7360.59",
+        Duration: "89.68",
+        Estacio: "Autumn",
+        FishingGroundType: "Upper slope",
+        Id: 23288,
+        Port: "Barcelona",
+        ZonaPort: "Center",
       },],
       showExportOptions: false,
 
@@ -116,50 +113,46 @@ export default {
   methods: {
     // USER HTML ACTIONS
     // When a track is selected
-    onSelectTrack: function(event){
-      let selectValue = event.target.value;
+    onSelectHaul: function (event) {
       let id = event.target.selectedOptions[0].id;
 
-      // Set on FishingTracks 
-      FishingTracks.setSelectedTrack(id);
-
       // Update HaulInfo content
-      this.setSelectedFishingTrack(id);
+      this.setSelectedFishingHaul(id);
 
       // Emit selected target
-      window.eventBus.emit('HaulInfo_SelectedTrack', id);
+      window.eventBus.emit('HaulInfo_SelectedHaul', id);
     },
     // Export data
-    exportButtonClicked: function(e){
+    exportButtonClicked: function (e) {
       this.showExportOptions = !this.showExportOptions;
       e.stopPropagation();
       e.preventDefault();
     },
-    closeExportMenu: function(e){
+    closeExportMenu: function (e) {
       this.showExportOptions = false;
     },
     // https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
-    exportJSON: function(event){
+    exportJSON: function (event) {
       this.showExportOptions = false;
       // Data not yet loaded
       if (this.rawData === undefined)
         return;
       // Create
       let dataStr = JSON.stringify(this.rawData);
-      let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
       let linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
-      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.Port.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '') + '_' + this.selTrack.Date;
+      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selHaul.Port.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '') + '_' + this.selHaul.Date;
       linkElement.setAttribute('download', trackFileName + '_ICATMAR');
       linkElement.click();
 
       // Event for GAnalytics
-      window.eventBus.emit("HaulInfo_Export", {fileExtension: "JSON", modality: "trawling", trackId: this.selTrack.Id});
+      window.eventBus.emit("HaulInfo_Export", { fileExtension: "JSON", modality: "trawling", trackId: this.selHaul.Id });
     },
 
 
     // Export data (CSV)
-    exportCSV: function(event){
+    exportCSV: function (event) {
       this.showExportOptions = false;
       // Data not yet loaded
       if (this.rawData === undefined)
@@ -175,32 +168,32 @@ export default {
       let csvStr = csvColumnHeader + lineDelimiter;
 
       jsonData.forEach(item => {
-          keys.forEach((key, index) => {
-              if( (index > 0) && (index < keys.length) ) {
-                  csvStr += columnDelimiter;
-              }
-              csvStr += item[key];
-          });
-          csvStr += lineDelimiter;
+        keys.forEach((key, index) => {
+          if ((index > 0) && (index < keys.length)) {
+            csvStr += columnDelimiter;
+          }
+          csvStr += item[key];
+        });
+        csvStr += lineDelimiter;
       });
 
       // Now make downlodable element
-      let dataUri = 'data:text/csv;charset=utf-8,'+ encodeURIComponent(csvStr);
+      let dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvStr);
       let linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
-      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selTrack.Port.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '') + '_' + this.selTrack.Date;
+      let trackFileName = this.$i18n.t('Catch composition').replaceAll(' ', '') + '_' + this.selHaul.Port.replaceAll("'", '').replaceAll(' - ', '_').replaceAll(' ', '') + '_' + this.selHaul.Date;
       linkElement.setAttribute('download', trackFileName + '_ICATMAR');
       linkElement.click();
 
       // Event for GAnalytics
-      window.eventBus.emit("HaulInfo_Export", {fileExtension: "CSV", modality: "trawling", trackId: this.selTrack.Id});
+      window.eventBus.emit("HaulInfo_Export", { fileExtension: "CSV", modality: "trawling", trackId: this.selHaul.Id });
     },
-  
+
 
 
     // PRIVATE METHODS
-    // Set Fishing track menu once they are loaded
-    setFishingTracks: function(gjsonData){
+    // Set Fishing haul menu once they are loaded
+    setFishingHauls: function (gjsonData) {
       // Process features to fit into select HTML
       let features = gjsonData.features;
       features.forEach((ff, index) => {
@@ -208,59 +201,63 @@ export default {
         //info.name = info.Port + " - " + info.Data;
         // Select info to show
         this.options[index] = {}
-        Object.keys(info).forEach( kk => {
-          if (kk != 'FishingGroundName' && kk!= 'MeshType' && kk!='Date' && kk!='Data')
+        Object.keys(info).forEach(kk => {
+          if (kk != 'FishingGroundName' && kk != 'MeshType' && kk != 'Date' && kk != 'Data')
             this.options[index][kk] = info[kk];
           if (kk == 'Date')
-            this.options[index][kk] = info[kk].toISOString().substring(0,10);
+            this.options[index][kk] = info[kk].toISOString().substring(0, 10);
         });
-        
+
       });
       // Order by date
       this.options.sort((a, b) => {
-          let dateDiff = new Date(a.Date) - new Date(b.Date);
-          
-          if (dateDiff == 0){
-            return a.Port.localeCompare(b.Port);
-          }else 
-            return dateDiff;
-      });
-    },
+        let dateDiff = new Date(a.Date) - new Date(b.Date);
 
-    getSelectedFishingTrack: function(){
-      let selId = FishingTracks.getSelectedTrack(); // This is a general application state. Maybe it should not be stored there
-      this.options.forEach(oo =>{
-        if (selId == oo.Id)
-          this.selTrack = oo;
+        if (dateDiff == 0) {
+          return a.Port.localeCompare(b.Port);
+        } else
+          return dateDiff;
       });
     },
 
 
     // Create and set pie chart
-    setPieChart: function(id){
+    setPieChart: function (id) {
       // Load haul from server or from file
-      this.getHaul('data/trawlingData/hauls/' + id + '.json', undefined, this.selTrack);
+      //this.getHaul('data/trawlingData/hauls/' + id + '.json', undefined, this.selHaul);
+      window.DataManager.getHaulCatchComposition(id).then((r)=> {
+        let pieChart = new PieChart();
+        let preparedData = pieChart.processSample(r);
+
+        // Translations
+        if (this.$i18n) {
+          this.translateData(preparedData);
+        }
+
+        let info = window.DataManager.getHaulInfo(id);
+        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Date, this.$i18n.t("Biomass"), "kg / km2");
+      });
     },
 
 
     // Fetch haul data from server of static file
-    getHaul: function(address, staticFile, info) {
+    getHaul: function (address, staticFile, info) {
       fetch(address).then(r => r.json()).then(r => {
         this.rawData = r;
         // Create PieChart
         let pieChart = new PieChart();
         let preparedData = pieChart.processSample(r);
         this.$refs.pieChart.innerHTML = "";
-        
+
         // Translations
-        if (this.$i18n){
+        if (this.$i18n) {
           this.translateData(preparedData);
         }
-        
+
         pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Date, this.$i18n.t("Biomass"), "kg / km2");
 
       }).catch(e => {
-        if (staticFile !== undefined){ // Load static file
+        if (staticFile !== undefined) { // Load static file
           console.error("Could not fetch from " + address + ". Error: " + e + ".");
           window.serverConnection = false;
           getHaul(staticFile, undefined, info);
@@ -273,12 +270,12 @@ export default {
 
 
     // Translate data using $i18n
-    translateData(prepData){
+    translateData(prepData) {
       Object.keys(prepData).forEach(key => {
         let el = prepData[key];
-        if (typeof(el) == 'object'){
+        if (typeof (el) == 'object') {
           this.translateData(el);
-        } else if (typeof(el) == 'string') {
+        } else if (typeof (el) == 'string') {
           prepData["translation"] = this.$i18n.t(el);
         }
       });
@@ -286,30 +283,32 @@ export default {
 
 
     // PUBLIC METHODS
-    // Set the selected fishing track in the select html element
+    // Set the selected fishing haul in the select html element
     // Vue automatically updates the HTML element
-    setSelectedFishingTrack: function(id){
-      if (id == this.selTrack.id)
+    setSelectedFishingHaul: function (id) {
+
+      if (id == this.selHaul.id)
         return;
 
-      this.options.forEach(oo =>{
+      this.options.forEach(oo => {
         if (id == oo.Id)
-          this.selTrack = oo;
+          this.selHaul = oo;
       });
       // Update pie chart
       this.setPieChart(id);
       // Update weather table
-      if (this.$refs.weatherWidget){
+      if (this.$refs.weatherWidget) {
         this.$refs.weatherWidget.requestDataUpdate(id);
         // Get date, long, and lat
         // let coords = FishingTracks.getFeatureById(id).geometry.coordinates;
         // let middleCoordinate = [...coords[Math.round(coords.length/2)]]; // copy
-        // this.$refs.weatherWidget.updateTable(new Date(this.selTrack.Date), middleCoordinate[0], middleCoordinate[1]);
+        // this.$refs.weatherWidget.updateTable(new Date(this.selHaul.Date), middleCoordinate[0], middleCoordinate[1]);
       }
       // Update sea habitat table
-      if (this.$refs.seaHabitat){
+      if (this.$refs.seaHabitat) {
         // Get lat long
-        let coords = FishingTracks.getFeatureById(id).geometry.coordinates;
+        let haul = window.DataManager.getHaulInfo(id);
+        let coords = haul.geometry.coordinates;
         coords = [...coords]; // copy
         //let middleCoordinate = coords[Math.round(coords.length/2)];
         // Update sea habitat
@@ -317,7 +316,7 @@ export default {
       }
     },
 
-    
+
 
   },
   components: {
@@ -332,23 +331,25 @@ export default {
 
 <style scoped>
 #haul-info {
-  font-size:12px;
+  font-size: 12px;
 }
 
-#haul-info > div {
+#haul-info>div {
   padding: 1.5rem !important;
 }
 
 .rowEl {
-  display:flex;
+  display: flex;
   flex-direction: row;
   justify-content: center;
 }
+
 .lightBlue {
   background: var(--lightBlue);
   color: white;
   text-shadow: 0 0 4px black;
 }
+
 .darkBlue {
   background: var(--darkBlue);
   color: white;
@@ -373,7 +374,7 @@ select {
   flex-direction: column;
 }
 
-.dropdown-content > button {
+.dropdown-content>button {
   text-decoration: none;
   display: block;
   margin: 0px;

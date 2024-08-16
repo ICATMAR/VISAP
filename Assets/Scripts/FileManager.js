@@ -78,7 +78,7 @@ class FileManager {
       urls.push(baseURL + 'effort/fishingEffort_' + eUnit + '_' + modCode + '_legend.png');
     });
     
-    // Tracks JSON
+    // Hauls Info JSON
     urls.push(baseURL + modCode + '_hauls.json')
 
     // Create promises
@@ -134,6 +134,18 @@ class FileManager {
     }
 
     return Promise.allSettled(promises)
+  }
+
+
+  // Load haul file with catch composition information
+  loadHaulCatchCompositionFile = function(id, mod){
+    // Define url
+    let modURL = mod == 'trawling' ? 'trawlingData' : mod == 'purse-seine' ? 'purseSeineData' : 'recreational';
+    let baseURL = '/VISAP/data/' + modURL + '/hauls/';
+
+    let url = baseURL + id + '.json';
+
+    return fetch(url).then(r => r.json());
   }
 
 

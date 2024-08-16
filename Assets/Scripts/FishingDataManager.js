@@ -289,11 +289,34 @@ class FishingData {
 
 
 
-  // Get haul feature by id
-  getHaulById(id) {
-    return this.hauls[id];
-  }
 
+
+  // Load haul file
+  getHaulCatchComposition(id){
+    // Is loading haul file
+    if (this.isLoadingHaulFile){
+      debugger;
+      return this.loadingHaulPromise;
+    }
+    // If is already loaded
+    if (this.hauls[id].catchComposition != undefined){
+      return Promise.resolve(this.hauls[id].catchComposition);
+    }
+
+    this.isLoadingHaulFile = true;
+
+    // Load file
+    this.loadingHaulPromise = window.FileManager.loadHaulCatchCompositionFile(id, this.mod)
+      .then((res) => {
+        this.hauls[id].catchComposition = res;
+        this.isLoadingHaulFile = false;
+        this.loadingHaulPromise = null;
+        console.log("Haul catch composition loaded: " + id);
+        return res;
+      });
+
+    return this.loadingHaulPromise;
+  }
 } // End of class
 
 

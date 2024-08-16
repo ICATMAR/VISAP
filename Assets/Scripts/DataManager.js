@@ -27,6 +27,33 @@ class DataManager {
       return this.PSData;
   }
 
+  // Get haul catch composition
+  getHaulCatchComposition(id){
+    // Get current fishing data manager
+    let fdManager = this.getFishingDataManager();
+    // Check if haul exists in fdManager
+    if (fdManager.hauls[id] == undefined){
+      id = Object.keys(fdManager.hauls)[0];
+      console.error("Requested haul does not exists in fishing modality.")
+      debugger;
+    }
+    // Load .json file
+    return fdManager.getHaulCatchComposition(id);
+  }
+
+  // Get haul info
+  getHaulInfo(id){
+    // Get current fishing data manager
+    let fdManager = this.getFishingDataManager();
+    if (fdManager.hauls[id] == undefined){
+      id = Object.keys(fdManager.hauls)[0];
+      console.error("Requested haul does not exists in fishing modality.")
+      debugger;
+    }
+    return fdManager.hauls[id];
+  }
+
+
   // Load necessary files
   async loadNecessaryFiles(section, mod) {
     if (section == 'map') {
