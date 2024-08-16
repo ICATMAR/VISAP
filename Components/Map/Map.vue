@@ -911,13 +911,22 @@ export default {
           if (this.$refs.tracksTimeLine){
             this.$refs.tracksTimeLine.setFeatures(fishingDataManager.haulsGeoJSON.features);
           }
+          
           // Redifine currentHaul if currentHaul does not exists in the fishingDataManager.hauls
-          if (fishingDataManager.hauls[window.GUIManager.map.currentHaul] == undefined){
-            window.GUIManager.map.currentHaul = Object.keys(fishingDataManager.hauls)[0]; // First haul
+          let haulId = window.GUIManager.map.currentHaul;
+          if (fishingDataManager.hauls[haulId] == undefined){
             console.warn('Current haul did not exist in fishing modality, changing it.') // TODO: this should extend to other components?
+            haulId = window.GUIManager.map.currentHaul = Object.keys(fishingDataManager.hauls)[0]; // First haul
+            this.setSelectedHaul(haulId);
+            // Emit events
+            window.eventBus.emit('Map_HaulsLoaded', fishingDataManager.haulsGeoJSON);
+            window.eventBus.emit('Map_HaulClicked', haulId);
+          } 
+          
+          else {
+            // Emit event
+            window.eventBus.emit('Map_HaulsLoaded', fishingDataManager.haulsGeoJSON);
           }
-          // Emit event
-          window.eventBus.emit('Map_HaulsLoaded', fishingDataManager.haulsGeoJSON);
         });
       }
 
