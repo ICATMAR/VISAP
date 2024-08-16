@@ -9,7 +9,7 @@
     <!-- Drop down -->
     <div class="rowEl p-3 g-0 lightBlue">
       <!-- TODO: This should be a modal with a table where you could sort by date and port. -->
-      <select v-model="selHaul" @change="onSelectTrack">
+      <select v-model="selHaul" @change="onSelectHaul">
         <option :id="option.Id" :key="option.Id" :value="option" v-for="option in options">
           {{ option.Port + " - " + option.Date }}
         </option>
@@ -42,7 +42,7 @@
     <div class="rowEl p-2 g-0 darkBlue" style="flex-wrap: wrap; justify-content:flex-start;">
       <div style="width: 50%" :key="kk.Id" v-for="kk in Object.keys(selHaul)">
         <!-- If is not a number -->
-        <span v-if="isNaN(selHaul[kk])">{{ $tc("TrackFeatures." + kk) }}: {{ $t(selHaul[kk]) }}</span>
+        <span v-if="isNaN(selHaul[kk])">{{ $t("TrackFeatures." + kk) }}: {{ $t(selHaul[kk]) }}</span>
         <!-- If it is a number -->
         <span v-else>{{ $tc("TrackFeatures." + kk, parseFloat(selHaul[kk])) }}</span>
       </div>
@@ -223,6 +223,7 @@ export default {
 
     // Create and set pie chart
     setPieChart: function (id) {
+      console.log('+++Requesting haul file ' + id);
       // Load haul from server or from file
       //this.getHaul('data/trawlingData/hauls/' + id + '.json', undefined, this.selHaul);
       window.DataManager.getHaulCatchComposition(id).then((r)=> {
@@ -241,31 +242,31 @@ export default {
 
 
     // Fetch haul data from server of static file
-    getHaul: function (address, staticFile, info) {
-      fetch(address).then(r => r.json()).then(r => {
-        this.rawData = r;
-        // Create PieChart
-        let pieChart = new PieChart();
-        let preparedData = pieChart.processSample(r);
-        this.$refs.pieChart.innerHTML = "";
+    // getHaul: function (address, staticFile, info) {
+    //   fetch(address).then(r => r.json()).then(r => {
+    //     this.rawData = r;
+    //     // Create PieChart
+    //     let pieChart = new PieChart();
+    //     let preparedData = pieChart.processSample(r);
+    //     this.$refs.pieChart.innerHTML = "";
 
-        // Translations
-        if (this.$i18n) {
-          this.translateData(preparedData);
-        }
+    //     // Translations
+    //     if (this.$i18n) {
+    //       this.translateData(preparedData);
+    //     }
 
-        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Date, this.$i18n.t("Biomass"), "kg / km2");
+    //     pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Date, this.$i18n.t("Biomass"), "kg / km2");
 
-      }).catch(e => {
-        if (staticFile !== undefined) { // Load static file
-          console.error("Could not fetch from " + address + ". Error: " + e + ".");
-          window.serverConnection = false;
-          getHaul(staticFile, undefined, info);
-        } else {
-          console.error("Could not fetch from " + address + ". Error: " + e + ".");
-        }
-      })
-    },
+    //   }).catch(e => {
+    //     if (staticFile !== undefined) { // Load static file
+    //       console.error("Could not fetch from " + address + ". Error: " + e + ".");
+    //       window.serverConnection = false;
+    //       getHaul(staticFile, undefined, info);
+    //     } else {
+    //       console.error("Could not fetch from " + address + ". Error: " + e + ".");
+    //     }
+    //   })
+    // },
 
 
 
@@ -289,27 +290,37 @@ export default {
 
       if (id == this.selHaul.id)
         return;
-
+      
+      this.selHaul = {};
       this.options.forEach(oo => {
-        if (id == oo.Id)
-          this.selHaul = oo;
+        if (id == oo.Id){
+          // Copy values
+          Object.keys(oo).forEach(key => {
+            if (key != 'catchComposition' &&  key != 'geometry'){
+              this.selHaul[key] = oo[key]
+            }
+          });
+        }
       });
+      
       // Update pie chart
+      // TODO: again there is a repetition of calling this event twice (sidePanel when openingPanel)
       this.setPieChart(id);
       // Update weather table
-      if (this.$refs.weatherWidget) {
-        this.$refs.weatherWidget.requestDataUpdate(id);
-        // Get date, long, and lat
-        // let coords = FishingTracks.getFeatureById(id).geometry.coordinates;
-        // let middleCoordinate = [...coords[Math.round(coords.length/2)]]; // copy
-        // this.$refs.weatherWidget.updateTable(new Date(this.selHaul.Date), middleCoordinate[0], middleCoordinate[1]);
-      }
+      // TODO: this is actually called twice, one from SidePanel (it requests to open it, then requesting a data update on weather widget)
+      // if (this.$refs.weatherWidget) {
+      //   this.$refs.weatherWidget.requestDataUpdate(id);
+      // }
       // Update sea habitat table
       if (this.$refs.seaHabitat) {
         // Get lat long
         let haul = window.DataManager.getHaulInfo(id);
         let coords = haul.geometry.coordinates;
         coords = [...coords]; // copy
+        // Point geometry
+        if (haul.geometry.type == "Point"){
+          coords = [coords];
+        }
         //let middleCoordinate = coords[Math.round(coords.length/2)];
         // Update sea habitat
         this.$refs.seaHabitat.updateData(coords);
