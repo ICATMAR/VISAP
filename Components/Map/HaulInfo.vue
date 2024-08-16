@@ -291,9 +291,6 @@ export default {
     // Set the selected fishing haul in the select html element
     // Vue automatically updates the HTML element
     setSelectedFishingHaul: function (id) {
-
-      if (id == this.selHaul.id)
-        return;
       
       this.selHaul = {};
       this.options.forEach(oo => {
@@ -306,6 +303,7 @@ export default {
           });
         }
       });
+      //this.$forceUpdate(); // Is this necessary? Remodel first the <select> into a button / table
       
       // Update pie chart
       // TODO: again there is a repetition of calling this event twice (sidePanel when openingPanel)
