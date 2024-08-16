@@ -34,7 +34,7 @@
 
         <!-- Menu right top -->
         <!-- Buttons -->
-        <div class="menuTopRight" v-show="!isMapMinimized">
+        <div class="menuTopRight" v-show="!isMapMinimized && areHaulsLoaded">
           <!-- Fishing tracks -->
           <div class="menuElement clickable" @click="tracksMenuClicked">
             <!-- FA icon -->
@@ -105,6 +105,7 @@
       window.eventBus.on('SidePanel_isPanelOpen', (isOpen)=> {
         this.isSidePanelOpen = isOpen;
       });
+      window.eventBus.on('Map_HaulsLoaded', ()=> this.areHaulsLoaded = true);
     },
     unmounted(){
   
@@ -112,6 +113,7 @@
     data(){
       return {
         isMapMinimized: false,
+        areHaulsLoaded: false,
         isSidePanelOpen: false,
       }
     },
