@@ -18,19 +18,22 @@
         <div class="tableContainer" v-if="areHaulsLoaded && isTableVisible">
         <table>
           <thead>
+            <!-- TABLE HEADER -->
             <tr>
-              <th class="clickable tableHeader" @click="hauls.sort((a, b) => a[key] - b[key])" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th>
+              <!-- <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th> -->
+              <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th>
             </tr>
           </thead>
           <tbody>
+            <!-- TABLE ROW -->
             <tr class="clickable tableRow" 
             :class="[index%2 == 0 ? ('oddRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : '')) :
                                    ('evenRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : ''))]" 
             @click="()=>onSelectHaul(haul.Id)" v-for="(haul, index) in hauls" :key="haul.Id">
-
+              <!-- TABLE CELL -->
               <td class="tableCell" v-for="kk in Object.keys(selHaul)">
                 <div><!-- Container -->
-                  <!-- Circle -->
+                  <!-- Circle (only is visible for port and zonaport) -->
                   <div :style="setCellStyle(kk, haul[kk])"></div>
                   <!-- Text -->
                   {{ (haul[kk]) }}
@@ -276,9 +279,6 @@ export default {
 
 
 
-    
-
-
 
     // Translate data using $i18n
     translateData(prepData) {
@@ -290,6 +290,21 @@ export default {
           prepData["translation"] = this.$i18n.t(el);
         }
       });
+    },
+
+
+
+    sortHauls(hauls, key){
+      
+      if (isNaN(this.selHaul[key])){
+        if (key == "Data" || key == "Date"){
+          return hauls.sort((a, b) => new Date(a[key]) - new Date(b[key]));
+        } else {
+          return hauls.sort((a, b) => a[key].localeCompare(b[key]));
+        }
+      } else {
+        return hauls.sort((a, b) => a[key] - b[key]);
+      }
     },
 
 
@@ -444,6 +459,7 @@ table {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  text-wrap: nowrap;
 }
 
 .selectedRow {
