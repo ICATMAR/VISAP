@@ -273,7 +273,8 @@ export default {
         }
 
         let info = window.DataManager.getHaulInfo(id);
-        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Data, this.$i18n.t("Biomass"), "kg");
+        let units = window.DataManager.getFishingDataManager().mod == 'trawling' ? 'kg/km2' : 'kg';
+        pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Data, this.$i18n.t("Biomass"), units);
       });
     },
 
