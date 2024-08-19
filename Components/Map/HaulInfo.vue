@@ -36,22 +36,23 @@
               <!-- TABLE HEADER -->
               <tr>
                 <!-- <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th> -->
-                <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{
-                  $t(key) }}</th>
+                <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">
+                  <div> {{$t("HaulTable." + key) }} </div> 
+                </th>
               </tr>
             </thead>
             <tbody>
               <!-- TABLE ROW -->
               <tr class="clickable tableRow" :class="[index % 2 == 0 ? ('oddRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : '')) :
-                ('evenRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : ''))]"
-                @click="() => onSelectHaul(haul.Id)" v-for="(haul, index) in hauls" :key="haul.Id">
+                ('evenRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : ''))]" @click="() => onSelectHaul(haul.Id)"
+                v-for="(haul, index) in hauls" :key="haul.Id">
                 <!-- TABLE CELL -->
                 <td class="tableCell" v-for="kk in Object.keys(selHaul)">
                   <div><!-- Container -->
                     <!-- Circle (only is visible for port and zonaport) -->
                     <div :style="setCellStyle(kk, haul[kk])"></div>
                     <!-- Text -->
-                    {{ (haul[kk]) }}
+                    {{ translateText((haul[kk])) }}
                   </div>
                 </td>
               </tr>
@@ -88,9 +89,9 @@
     <div class="rowEl p-2 g-0 darkBlue" style="flex-wrap: wrap; justify-content:flex-start;">
       <div style="width: 50%" :key="kk.Id" v-for="kk in Object.keys(selHaul)">
         <!-- If is not a number -->
-        <span v-if="isNaN(selHaul[kk])">{{ $t("TrackFeatures." + kk) }}: {{ $t(selHaul[kk]) }}</span>
+        <span v-if="isNaN(selHaul[kk])">{{ $t("HaulFeatures." + kk) }}: {{ $t(selHaul[kk]) }}</span>
         <!-- If it is a number -->
-        <span v-else>{{ $tc("TrackFeatures." + kk, parseFloat(selHaul[kk])) }}</span>
+        <span v-else>{{ $tc("HaulFeatures." + kk, parseFloat(selHaul[kk])) }}</span>
       </div>
     </div>
 
@@ -308,6 +309,12 @@ export default {
       });
     },
 
+    // HACK: for some reason this.$i18n.t(text) does not work nor $t(text) in HTML. We get the translations object and use it.
+    translateText(text) {
+      let translations = this.$i18n.getLocaleMessage(this.$i18n.locale);
+      return translations[text] || text;
+    },
+
 
     // Go to next or previous haul
     nextPrevHaul(isForward) {
@@ -330,7 +337,7 @@ export default {
 
       this.onSelectHaul(this.hauls[nextIndex].Id);
     },
-    
+
 
     // Sort the hauls shown on the table
     sortHauls(hauls, key) {

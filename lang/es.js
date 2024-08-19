@@ -41,7 +41,7 @@ export default es  = {
   "Opacity": "Opacidad",
 
 
-  "TrackFeatures": {
+  "HaulFeatures": {
     "AvgDepth": "Profundidad media: {n} metros",
     "Data": "Fecha",
     "Date": "Fecha",
@@ -54,6 +54,21 @@ export default es  = {
     "MeshType": "Malla de la red",
     "Port": "Puerto",
     "ZonaPort": "Zona del puerto",
+    "name": "Nombre"
+  },
+  "HaulTable": {
+    "AvgDepth": "Profundidad media (m)",
+    "Data": "Fecha",
+    "Date": "Fecha",
+    "Distance": "Distancia (m)",
+    "Duration": "Duración (min)",
+    "Estacio": "Estación",
+    "FishingGroundName": "Caladero",
+    "FishingGroundType": "Fondo marino",
+    "Id": "Id",
+    "MeshType": "Malla de la red",
+    "Port": "Port",
+    "ZonaPort": "Región",
     "name": "Nombre"
   },
   "Estiu": "Verano",

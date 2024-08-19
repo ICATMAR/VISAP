@@ -41,7 +41,7 @@ export default en = {
   "Opacity": "Opacity",
 
 
-  "TrackFeatures": {
+  "HaulFeatures": {
     "AvgDepth": "Average depth: {n} meters",
     "Data": "Date",
     "Date": "Date",
@@ -56,6 +56,22 @@ export default en = {
     "ZonaPort": "Port area",
     "name": "Name"
   },
+  "HaulTable": {
+    "AvgDepth": "Average depth (m)",
+    "Data": "Date",
+    "Date": "Data",
+    "Distance": "Distance (m)",
+    "Duration": "Duration (min)",
+    "Estacio": "Season",
+    "FishingGroundName": "Ground name",
+    "FishingGroundType": "Ground type",
+    "Id": "Id",
+    "MeshType": "Mesh type",
+    "Port": "Port",
+    "ZonaPort": "Region",
+    "name": "Name"
+  },
+
   "Primavera": "Spring",
   "Estiu": "Summer",
   "Tardor": "Autumn",

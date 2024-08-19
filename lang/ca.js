@@ -39,7 +39,7 @@ export default ca = {
   "Opacity": "Opacitat",
 
 
-  "TrackFeatures": {
+  "HaulFeatures": {
     "AvgDepth": "Profunditat mitja: {n} metres",
     "Data": "Data",
     "Date": "Data",
@@ -54,6 +54,22 @@ export default ca = {
     "ZonaPort": "Zona del port",
     "name": "Nom"
   },
+  "HaulTable": {
+    "AvgDepth": "Profunditat mitja (m)",
+    "Data": "Data",
+    "Date": "Data",
+    "Distance": "Distancia (m)",
+    "Duration": "Duració (min)",
+    "Estacio": "Estació",
+    "FishingGroundName": "Calador",
+    "FishingGroundType": "Fons marí",
+    "Id": "Id",
+    "MeshType": "Malla de la xarxa",
+    "Port": "Port",
+    "ZonaPort": "Regió",
+    "name": "Nom"
+  },
+
   "Square": "Quadrada",
   "Primavera": "Primavera",
   "Estiu": "Estiu",
