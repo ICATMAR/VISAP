@@ -1,0 +1,75 @@
+{
+   "type":"FeatureCollection",
+   "features":[
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"L'Escala",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               3.146126,
+               42.117123
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Blanes",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               2.7992,
+               41.675284
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Arenys de Mar",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               2.559814,
+               41.579594
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Vilanova i la Geltrú",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               1.729578,
+               41.214885
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Tarragona",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               1.22237,
+               41.104385
+            ]
+         }
+      }
+   ]
+}

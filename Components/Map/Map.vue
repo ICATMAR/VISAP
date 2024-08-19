@@ -160,8 +160,9 @@ export default {
 
         // Ports
         portsLayer: new ol.layer.Vector({
+          name: 'portsLayer',
           source: new ol.source.Vector({
-            url: 'data/trawlingData/trawling_ports.geojson',
+            url: '',
             format: new ol.format.GeoJSON()
           }),
           minZoom: 3,
@@ -905,6 +906,16 @@ export default {
           this.setFishingHauls(fishingDataManager);
           // Set effort map
           this.setEffortMap(fishingDataManager.getEffortURI());
+          // Set geojson ports
+          let portsLayer = this.getMapLayer('portsLayer');
+          portsLayer.getSource().clear();
+          let newPortsSource = new ol.source.Vector({
+            url: window.GUIManager.currentModality == 'trawling' ? 'data/trawlingData/trawling_ports.geojson' : 'data/purseSeineData/ps_ports.geojson',
+            format: new ol.format.GeoJSON()
+          });
+          portsLayer.setSource(newPortsSource);
+
+
           // Update haul points in timeline
           if (this.$refs.tracksTimeLine){
             this.$refs.tracksTimeLine.setFeatures(fishingDataManager.haulsGeoJSON.features);
