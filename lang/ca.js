@@ -202,7 +202,9 @@ export default ca = {
   "viewData": "Mostrar taula de dades",
   "hideData": "Amagar taula de dades",
 
-  
+  "NextHaul": "Següent mostreig",
+  "PrevHaul": "Anterior mostreig",
+
   "Cookies title": "Valorem la teva privadesa",
   "Cookies text": `Utilitzem tecnologia com ara galetes al nostre lloc per millorar l'experiència d'usuari i analitzar el nostre trànsit. Feu clic per consentir l'ús d'aquesta tecnologia al web. Podeu canviar 
   d'opinió i canviar les vostres opcions de consentiment en qualsevol moment tornant a aquest lloc.`,

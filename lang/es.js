@@ -207,6 +207,9 @@ export default es  = {
   "viewData": "Mostrar tabla de datos",
   "hideData": "Esconder tabla de datos",
 
+  "NextHaul": "Siguiente muestreo",
+  "PrevHaul": "Previo muestreo",
+
   "Cookies title": "Valoramos tu privacidad",
   "Cookies text": `Usamos tecnología como las galletas en nuestro sitio web para mejorar la
   experiencia de usuario y analizar el tráfico. Haz click en "Acepto" para dar consentimiento.

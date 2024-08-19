@@ -9,39 +9,54 @@
     <!-- Drop down -->
     <div class="rowEl p-3 g-0 lightBlue" style="flex-direction: column">
 
-      <button class="buttonTableOpener" :title="$t('HaulTableOpen')" @click="isTableVisible = !isTableVisible">
-        {{ selHaul.Port }} - {{ selHaul.Date }}
-        <div class="fa" :class="[isTableVisible ? 'rotate0' : 'rotate180']" style="margin-left: 20px">&#xf106;</div>
-      </button>
+      <div class="haulSelectorContainer">
+        <!-- Previous haul-->
+        <button class="buttonInPanel clickable" @click="nextPrevHaul(-1)" style="transform: rotate(-90deg) scale(0.8)"
+          :title="$t('PrevHaul')">
+          <div class="fa">&#xf106;</div>
+        </button>
+        <!-- Open/Close table -->
+        <button class="buttonInPanel" :title="$t('HaulTableOpen')" @click="isTableVisible = !isTableVisible">
+          {{ selHaul.Port }} - {{ selHaul.Date }}
+          <div class="fa" :class="[isTableVisible ? 'rotate0' : 'rotate180']" style="margin-left: 20px">&#xf106;</div>
+        </button>
+        <!-- Next haul -->
+        <button class="buttonInPanel clickable" @click="nextPrevHaul(1)" style="transform: rotate(90deg) scale(0.8)"
+          :title="$t('NextHaul')">
+          <div class="fa">&#xf106;</div>
+        </button>
+      </div>
+
+
 
       <Transition>
         <div class="tableContainer" v-if="areHaulsLoaded && isTableVisible">
-        <table>
-          <thead>
-            <!-- TABLE HEADER -->
-            <tr>
-              <!-- <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th> -->
-              <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- TABLE ROW -->
-            <tr class="clickable tableRow" 
-            :class="[index%2 == 0 ? ('oddRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : '')) :
-                                   ('evenRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : ''))]" 
-            @click="()=>onSelectHaul(haul.Id)" v-for="(haul, index) in hauls" :key="haul.Id">
-              <!-- TABLE CELL -->
-              <td class="tableCell" v-for="kk in Object.keys(selHaul)">
-                <div><!-- Container -->
-                  <!-- Circle (only is visible for port and zonaport) -->
-                  <div :style="setCellStyle(kk, haul[kk])"></div>
-                  <!-- Text -->
-                  {{ (haul[kk]) }}
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          <table>
+            <thead>
+              <!-- TABLE HEADER -->
+              <tr>
+                <!-- <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th> -->
+                <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{
+                  $t(key) }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- TABLE ROW -->
+              <tr class="clickable tableRow" :class="[index % 2 == 0 ? ('oddRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : '')) :
+                ('evenRow ' + (haul.Id == selHaul.Id ? 'selectedRow' : ''))]"
+                @click="() => onSelectHaul(haul.Id)" v-for="(haul, index) in hauls" :key="haul.Id">
+                <!-- TABLE CELL -->
+                <td class="tableCell" v-for="kk in Object.keys(selHaul)">
+                  <div><!-- Container -->
+                    <!-- Circle (only is visible for port and zonaport) -->
+                    <div :style="setCellStyle(kk, haul[kk])"></div>
+                    <!-- Text -->
+                    {{ (haul[kk]) }}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </Transition>
 
@@ -294,11 +309,34 @@ export default {
     },
 
 
+    // Go to next or previous haul
+    nextPrevHaul(isForward) {
+      isForward = isForward == 1;
 
-    sortHauls(hauls, key){
-      
-      if (isNaN(this.selHaul[key])){
-        if (key == "Data" || key == "Date"){
+      // Find the index of the selected item
+      let index = this.hauls.findIndex(haul => haul.Id === this.selHaul.Id);
+      // If the selected item is not found
+      if (index === -1) {
+        debugger;
+        return
+      }
+      // Find next or previous index. Wrap around
+      let nextIndex;
+      if (isForward) {
+        nextIndex = (index + 1) % this.hauls.length; // Wrap around if at the end
+      } else {
+        nextIndex = (index - 1 + this.hauls.length) % this.hauls.length; // Wrap around if at the beginning
+      }
+
+      this.onSelectHaul(this.hauls[nextIndex].Id);
+    },
+    
+
+    // Sort the hauls shown on the table
+    sortHauls(hauls, key) {
+
+      if (isNaN(this.selHaul[key])) {
+        if (key == "Data" || key == "Date") {
           return hauls.sort((a, b) => new Date(a[key]) - new Date(b[key]));
         } else {
           return hauls.sort((a, b) => a[key].localeCompare(b[key]));
@@ -355,13 +393,13 @@ export default {
 
 
     // STYLE
-    setCellStyle: function(columnName, cellContent){
+    setCellStyle: function (columnName, cellContent) {
       if (columnName == 'Port' || columnName == 'ZonaPort') {
         let color = palette[cellContent].color;
-        if (color != undefined){
+        if (color != undefined) {
           return {
             //'background': 'radial-gradient(rgba('+ color[0] + ','+ color[1] +','+ color[2] +', 1), transparent)',
-            'background': 'rgba('+ color[0] + ','+ color[1] +','+ color[2] +', 1)',
+            'background': 'rgba(' + color[0] + ',' + color[1] + ',' + color[2] + ', 1)',
             'border-radius': '20px',
             'width': '12px',
             'height': '12px',
@@ -410,7 +448,14 @@ export default {
   text-shadow: 0 0 4px black;
 }
 
-.buttonTableOpener:hover {
+.haulSelectorContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonInPanel:hover {
   background-color: var(--blue);
 }
 
@@ -418,6 +463,7 @@ export default {
   rotate: 0deg;
   transition: all 0.7s ease-in-out;
 }
+
 .rotate180 {
   rotate: 180deg;
   transition: all 0.7s ease-in-out;
@@ -432,7 +478,8 @@ export default {
   max-height: 500px;
   overflow: auto;
 
-  direction: rtl; /* Switches the scroll-bar to the right*/
+  direction: rtl;
+  /* Switches the scroll-bar to the right*/
 }
 
 table {
@@ -442,6 +489,7 @@ table {
 .tableHeader {
   text-align: center;
 }
+
 .tableRow {
   text-align: center;
   text-wrap: none;
@@ -451,11 +499,11 @@ table {
   background: linear-gradient(to right, transparent 0%, rgb(40 139 186) 10%, rgb(40 139 186) 90%, transparent 100%);
 }
 
-.evenRow {
+/* .evenRow {
 
-}
+} */
 
-.tableCell > div {
+.tableCell>div {
   display: flex;
   flex-direction: row;
   justify-content: center;
