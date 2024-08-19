@@ -42,7 +42,7 @@
             <!-- Text -->
             <span class="tracksTitle">{{ $t('Fishing tracks') }}</span>
             <!-- Icon -->
-            <img class="icon-str tracksIcon" src="Assets/TracksIcon.png">
+            <img class="icon-str tracksIcon" :src="haulsIconSrc[fishingModality]">
             
           </div>
 
@@ -105,7 +105,10 @@
       window.eventBus.on('SidePanel_isPanelOpen', (isOpen)=> {
         this.isSidePanelOpen = isOpen;
       });
-      window.eventBus.on('Map_HaulsLoaded', ()=> this.areHaulsLoaded = true);
+      window.eventBus.on('Map_HaulsLoaded', ()=> {
+        this.areHaulsLoaded = true;
+        this.fishingModality = window.GUIManager.currentModality;
+      });
     },
     unmounted(){
   
@@ -115,6 +118,11 @@
         isMapMinimized: false,
         areHaulsLoaded: false,
         isSidePanelOpen: false,
+        fishingModality: 'trawling',
+        haulsIconSrc: {
+          'trawling': 'Assets/HaulsTrawlingIcon.png',
+          'purse-seine': 'Assets/HaulsPurseSeineIcon.png',
+        }
       }
     },
     methods: {

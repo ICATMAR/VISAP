@@ -100,9 +100,9 @@ export default {
   height: 5px;
   z-index: 9;
 }
-.bkg1 {  background-color: rgb(255 155 56);}
-.bkg2 {  background-color: rgb(255, 56, 56);}
-.bkg3 {  background-color: rgb(255 219 56);}
+.bkg1 {  background-color: var(--trawling)}
+.bkg2 {  background-color: var(--purse-seine)}
+.bkg3 {  background-color: var(--recreational)}
 
 .dot {
   height: 18px;

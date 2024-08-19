@@ -7,6 +7,10 @@
   --lightBlueRGB: 82, 181, 217;
   --red: rgb(255, 115, 105);
   --redRGB: 255, 115, 105;
+
+  --trawling: rgb(255 155 56);
+  --purse-seine: rgb(255, 56, 56);
+  --recreational: rgb(255 219 56);
 }
 
 * {
