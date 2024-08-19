@@ -926,7 +926,13 @@ export default {
           if (fishingDataManager.hauls[haulId] == undefined){
             console.warn('Current haul did not exist in fishing modality, changing it.') // TODO: this should extend to other components?
             haulId = window.GUIManager.map.currentHaul = Object.keys(fishingDataManager.hauls)[0]; // First haul
-            this.setSelectedHaul(haulId);
+            //this.setSelectedHaul(haulId);
+            // Short version of setSelectedHaul without map centering
+            let haul = fishingDataManager.hauls[haulId];
+            this.$refs['timeRangeBar'].centerOnDate(new Date(haul.Date));
+            this.$refs.tracksTimeLine.showSelectedHaul(haulId);
+            // Update map style
+            fishingDataManager.updateStyle();
             // Emit events
             window.eventBus.emit('Map_HaulsLoaded', fishingDataManager.haulsGeoJSON);
             window.eventBus.emit('Map_HaulClicked', haulId);
