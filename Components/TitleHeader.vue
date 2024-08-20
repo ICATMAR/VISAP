@@ -86,6 +86,7 @@ export default {
   position: relative;
   text-align: center;
   padding-top: 60px;
+  margin-top: 30px;
 
   color: var(--darkBlue);
   font-family: "Poppins", Sans-serif;
@@ -137,7 +138,6 @@ button {
     font-size: max(4vw, 1rem);
     margin-right: 85px;
     margin-left: 141px;
-    margin-top: 40px;
   }
 
   button {
