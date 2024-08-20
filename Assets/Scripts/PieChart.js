@@ -96,7 +96,7 @@ class PieChart {
 				.attr("font-size", "0.8em")
 				.attr("class", "biomassText")
 		    .text(format(root.valueCorrected || root.value) + " " + (root.unit || "kg / km2"));
-
+			
 
 
 
@@ -138,7 +138,7 @@ class PieChart {
 	      .attr("transform", d => labelTransform(d.current, d.target))
 	      .text(d => d.data.translation || d.data.name);
 
-	  const parent = g.append("circle")
+	  const centralCircle = g.append("circle")
 	      .datum(root)
 	      .attr("r", radius)
 	      .attr("fill", "none")
@@ -155,8 +155,7 @@ class PieChart {
 			// 		that.sizeChart.createGraphInterface(p.data.species, p.parent.parent.data.name, p.parent.parent.parent.data.name, event); // Port or Season, Zona or Year
 			// 	return;
 			// }
-
-			parent.datum(p.parent || root);
+			centralCircle.datum(p.parent || root);
 
 	    root.each(d => d.target = {
 	      x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
@@ -177,6 +176,12 @@ class PieChart {
 	      .select(".centerText")
 	      .style("visibility", "hidden")
 	      .text("")
+
+			// Change style of central circle
+			centralCircle
+				.style("cursor", d => p.ancestors().length > 1 ? "pointer" : "auto")
+				.append("title") 
+	      .text(d => p.ancestors().length > 1 ? "↩" : ""); 
 
 
 	    // Breadcrumb
