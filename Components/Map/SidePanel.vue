@@ -123,14 +123,6 @@ export default {
 
 
     // PUBLIC METHODS
-    // Set fishing tracks once loaded
-    // OPTIONS-TODO:
-    // OPTION 1- Map is loading the tracks. When they are loaded there, an event can be passed to haul info, but the chain is
-    // quite long: Map.vue - AppManager.vue - AppSidePanel.vue - HaulInfo.vue
-    // OPTION 2- We consider FishingTracks class as singleton and we call it directly from HaulInfo.vue. We can make this call
-    // iteratively until fishing tracks exist. Not so clean, as the tab Fishing Tracks should only exist once the fishing tracks
-    // have been loaded. If there is an error with loading the fishing tracks, the tab should not exist?
-
     // Opens the fishing hauls tab with the corresponding haul id selected
     openFishingTab: function(id){
       if (id == undefined)
