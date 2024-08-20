@@ -145,7 +145,7 @@ class FileManager {
     let url = baseURL + id + '.json';
 
     // Check if this file was already requested
-    let fileWasRequested = this.requestedFiles.indexOf(urls[i]) != -1;
+    let fileWasRequested = this.requestedFiles.indexOf(url) != -1;
 
     // Keep track of requested files. Skip if already requested
     if (fileWasRequested) {
@@ -158,7 +158,7 @@ class FileManager {
         let response = {
           'url': url,
           'content': content,
-          'extension': extension
+          'extension': 'json'
         }
         this.loadedFilesLog.push(response);
         return content;
