@@ -2,6 +2,8 @@
     <div id="menuLeft" class="menuLeft">
 
       <widgetMapOptions></widgetMapOptions>
+
+      <widgetDroppedFiles></widgetDroppedFiles>
   
     </div>
   </template>
@@ -11,6 +13,7 @@
   
   
   <script>
+  import WidgetDroppedFiles from "Components/Map/WidgetDroppedFiles.vue"
   import WidgetMapOptions from "Components/Map/WidgetMapOptions.vue"
 
   export default {
@@ -34,6 +37,7 @@
   
     },
     components: {
+      "widgetDroppedFiles": WidgetDroppedFiles,
       "widgetMapOptions": WidgetMapOptions
     },
     computed: {

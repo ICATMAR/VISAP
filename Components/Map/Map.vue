@@ -301,6 +301,37 @@ export default {
     window.eventBus.on('AppMap_isMapMinimized', (isMinimized) => {
       this.isMinimized = isMinimized;
     });
+
+    // Dropped files
+    // Geojson
+    window.eventBus.on('DataManager_geoJSONDataLoaded', () => {
+      let wrappers = window.DataManager.geoJSONWrappers;
+      Object.keys(wrappers).forEach(key => {
+        let wrapper = wrappers[key];
+        // Check if the geojson is not in the map
+        if (!wrapper.isAddedToMap) {
+          this.addGeoJSON(wrapper);
+          wrapper.isAddedToMap = true;
+        }
+      })
+    });
+    // Widget Dropped Files
+    // Show/hide
+    window.eventBus.on('WidgetDroppedFiles_FileVisibilityChanged', (fileName) => {
+      let layer = this.getMapLayer(fileName);
+      let isVisible = window.DataManager.geoJSONWrappers[fileName].isVisible;
+      let opacity = window.DataManager.geoJSONWrappers[fileName].opacity * isVisible;
+      layer.setOpacity(opacity);
+    });
+    // Set opacity
+    window.eventBus.on('WidgetDroppedFiles_FileOpacityChanged', (fileName) => {
+      let layer = this.getMapLayer(fileName);
+      layer.setOpacity(window.DataManager.geoJSONWrappers[fileName].opacity);
+    });
+    // Remove layer
+    window.eventBus.on('WidgetDroppedFiles_FileRemoved', (fileName) => {
+      this.map.removeLayer(this.getMapLayer(fileName));
+    });
   },
   umounted () {
     this.$refs.OLMap.removeEventListener('mousemove', this.onMouseMove);
@@ -427,6 +458,23 @@ export default {
       });
       // Tile load for sea habitats
       this.registerLoadTilesEvents(this.layers.seaHabitats);
+    },
+
+
+    
+    // Add geoJSON
+    addGeoJSON: function (wrapper) {
+      const vectorSource = new ol.source.Vector({
+        features: new ol.format.GeoJSON().readFeatures(wrapper.rawJSON, {
+          featureProjection: 'EPSG:3857'
+        })
+      });
+      const vectorLayer = new ol.layer.Vector({
+        name: wrapper.fileName,
+        source: vectorSource
+      });
+
+      this.map.addLayer(vectorLayer);
     },
 
 
