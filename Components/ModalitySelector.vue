@@ -181,6 +181,10 @@ export default {
 .no-select {
   background-color: gray;
   pointer-events: none;
+  color: rgb(194, 194, 194) !important;
+}
+.no-select > * {
+  background: gray;
 }
 
 /* Links inside the dropdown */
