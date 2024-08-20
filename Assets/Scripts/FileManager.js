@@ -45,7 +45,7 @@ class FileManager {
   // effort
 
   constructor() {
-    
+
 
   }
 
@@ -144,9 +144,97 @@ class FileManager {
 
     let url = baseURL + id + '.json';
 
-    return fetch(url).then(r => r.json());
+    // Check if this file was already requested
+    let fileWasRequested = this.requestedFiles.indexOf(urls[i]) != -1;
+
+    // Keep track of requested files. Skip if already requested
+    if (fileWasRequested) {
+      debugger; // Should never reach this point, for some reason the promises management is done in DataManager
+      return; // TODO: Is this a problem? DataManager stores the json
+    } else {
+      return fetch(url).then(r => {
+        let content = r.json();
+        // Response
+        let response = {
+          'url': url,
+          'content': content,
+          'extension': extension
+        }
+        this.loadedFilesLog.push(response);
+        return content;
+      });
+    }
+
+
   }
 
+
+
+
+  // Load overview files
+  loadOverviewFiles = function (mod) {
+    let urls = [];
+    let promises = [];
+
+    let modURL = mod == 'trawling' ? 'trawlingData' : mod == 'purse-seine' ? 'purseSeineData' : 'recreational';
+    let modCode = mod == 'trawling' ? 'trawling' : mod == 'purse-seine' ? 'ps' : 'rec';
+    let baseURL = '/VISAP/data/' + modURL + '/';
+
+    urls.push(baseURL + modCode + '_port_biomass.json');
+    urls.push(baseURL + modCode + '_season_biomass.json');
+
+
+    // Create promises
+    for (let i = 0; i < urls.length; i++) {
+      // Check if this file was already requested
+      let fileWasRequested = this.requestedFiles.indexOf(urls[i]) != -1;
+
+      // Keep track of requested files. Skip if already requested
+      if (fileWasRequested)
+        continue;
+      else
+        this.requestedFiles.push(urls[i]);
+    
+      // Check file extension
+      let extension = urls[i].split('.').pop();
+      promises.push(
+        fetch(urls[i])
+          .then(r => r.json())
+          .then(res => {
+            // Response
+            let response = {
+              'url': urls[i],
+              'content': res,
+              'extension': extension
+            }
+            this.loadedFilesLog.push(response);
+            return response;
+          })
+          .catch(e => {
+            //console.error("File not at " + e.stack.split('\n')[1].split('/').pop());
+          })
+      )
+    }
+    
+    return Promise.allSettled(promises)
+
+
+
+    // Load test data
+    let url = 'data/trawlingData/';
+    if (this.type == 'port')
+      url += 'trawling_port_biomass.json';
+    else if (this.type == 'season')
+      url += 'trawling_year_biomass.json';
+    // Fetch
+    fetch(url)
+      .then(r => r.json())
+      .then(data => {
+        this.rawData = data;
+        this.updatePieChartData();
+      })
+      .catch(e => console.error(e));
+  }
 
 
   // LEGENDS
@@ -250,9 +338,9 @@ class FileManager {
 
 
 
-  
 
-  
+
+
 
 
 

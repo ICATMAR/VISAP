@@ -118,15 +118,43 @@ class DataManager {
   }
 
 
+  // Get the range of years of the catch composition pie chart
+  getCatchCompositionRangeYears(){
+    // Get current fishing data manager
+    let fdManager = this.getFishingDataManager();
+    // Get season catch composition
+    let data = fdManager.catchComposition.bySeason;
+    // Find range
+    let minYear = new Date().getUTCFullYear();
+    let maxYear = 2018;
+    data.forEach(el => {
+      minYear = el.Year < minYear ? el.Year : minYear;
+      maxYear = el.Year > maxYear ? el.Year : maxYear;
+    })
+    return minYear + "-" + maxYear;
+  }
+
+
   // Load necessary files
   async loadNecessaryFiles(section, mod) {
+    // Map
     if (section == 'map') {
       // Load map files
       if (mod == 'trawling') {
-        await this.TrawlingData.initMapFilesLoad();
+        await this.TrawlingData.loadMapFiles();
         return;
       } else if (mod == 'purse-seine') {
-        await this.PSData.initMapFilesLoad();
+        await this.PSData.loadMapFiles();
+        return;
+      }
+    }
+    // Overview
+    else if (section == 'overview'){
+      if (mod == 'trawling'){
+        await this.TrawlingData.loadOverviewFiles();
+        return;
+      } else if (mod == 'purse-seine'){
+        await this.PSData.loadOverviewFiles();
         return;
       }
     }

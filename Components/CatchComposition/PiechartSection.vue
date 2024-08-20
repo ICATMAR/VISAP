@@ -4,7 +4,7 @@
     
     <!-- Title Section -->
     <div class="titleContainer">
-      <span class="h4">{{$t('Catch per ' + type)}} <span>(2019-2023)</span></span>
+      <span class="h4">{{$t('Catch per ' + type)}} <span>({{rangeYears}})</span></span>
 
       <!-- Show / Hide button -->
       <button @click="showPie = !showPie"> 
@@ -70,23 +70,6 @@ export default {
   },
   mounted() {
     
-    // TEST, ORGANIZE BETTER
-    // Load test data
-    let url = 'data/trawlingData/';
-    if (this.type == 'port')
-      url += 'trawling_port_biomass.json';
-    else if (this.type == 'season')
-      url += 'trawling_year_biomass.json';
-    // Fetch
-    fetch(url)
-      .then(r => r.json())
-      .then(data => {
-        this.rawData = data;
-        this.updatePieChartData();
-      })
-      .catch(e => console.error(e));
-
-    
     // EVENTS
     // Set data to pie chart
     window.eventBus.on('LanguageSelector_LanguageChanged', this.updatePieChartData);
@@ -97,12 +80,16 @@ export default {
       showComparison: false,
       showPie: false,
       showExportOptions: false,
+      rangeYears: '2019-2023'
     }
   },
   methods: {
     // INTERNAL FUNCTIONS
     // Prepare data and update data on the pie charts
     updatePieChartData: function(){
+      if (this.rawData == undefined)
+        return;
+
       let data = this.rawData;
 
       // Update titles
@@ -188,6 +175,27 @@ export default {
 
       // Event for GAnalytics
       window.eventBus.emit("PieChartSection_Export", {fileExtension: "CSV", modality: "trawling", aggregationType: this.type});
+    },
+
+    // PUBLIC
+    // Load the data
+    loadChartData: function(){
+      // Call data manager to load the data
+      window.DataManager.loadNecessaryFiles('overview', window.GUIManager.currentModality)
+        .then(() => {
+          let fdManager = window.DataManager.getFishingDataManager();
+          if (this.type == 'port')
+            this.rawData = fdManager.catchComposition.byPort;
+          else if (this.type == 'season')
+            this.rawData = fdManager.catchComposition.bySeason;
+          
+          // Find years range
+          this.rangeYears = window.DataManager.getCatchCompositionRangeYears();
+
+          this.updatePieChartData();
+          // Emit?
+        })
+        .catch(e => console.error(e));
     },
   },
   watch: {

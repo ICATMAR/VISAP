@@ -17,9 +17,15 @@ class FishingData {
   effortBbox = [-1, 39, 6, 44]; // HARDCODED-> DEPENDS ON THE FISHING EFFORT IMAGE
   effortTmpColor = [];
 
-  loadingPromise = null;
-  isLoading = false;
+  loadingMapFilesPromise = null;
+  isLoadingMapFiles = false;
   mapFilesLoaded = false;
+
+  catchComposition = {}
+
+  loadingOverviewPromise = null;
+  isLoadingOverviewFiles = false;
+  overviewFilesLoaded = false;
 
 
   constructor(mod) {
@@ -28,20 +34,20 @@ class FishingData {
   }
 
 
-  async initMapFilesLoad() {
+  async loadMapFiles() {
 
     // Is in the process of being loaded
-    if (this.isLoading) {
-      return this.loadingPromise; // Returns the current promise
+    if (this.isLoadingMapFiles) {
+      return this.loadingMapFilesPromise; // Returns the current promise
     }
     // If already loaded
     if (this.mapFilesLoaded)
       return Promise.resolve();
 
-    this.isLoading = true;
+    this.isLoadingMapFiles = true;
 
     // Load effort maps and hauls
-    this.loadingPromise = window.FileManager.loadMapFiles(this.mod).then((results) => {
+    this.loadingMapFilesPromise = window.FileManager.loadMapFiles(this.mod).then((results) => {
       for (let i = 0; i < results.length; i++) {
         let res = results[i];
         // Failed to load
@@ -80,24 +86,69 @@ class FishingData {
         }
         // Hauls
         else if (res.value.extension == 'json') {
-          this.processJSONFile(res.value.content);
+          this.processHaulFile(res.value.content);
         }
       }
 
       // Status
-      this.isLoading = false;
-      this.loadingPromise = null;
+      this.isLoadingMapFiles = false;
+      this.loadingMapFilesPromise = null;
       this.mapFilesLoaded = true;
       console.log("Files for section Map and modality " + this.mod + " loaded.")
     });
 
-    return this.loadingPromise;
+    return this.loadingMapFilesPromise;
   }
 
 
-  // Process JSON file
+  async loadOverviewFiles() {
+    // Is in the process of being loaded
+    if (this.isLoadingOverviewFiles) {
+      return this.loadingOverviewPromise; // Returns the current promise
+    }
+    // If already loaded
+    if (this.overviewFilesLoaded)
+      return Promise.resolve();
+
+    this.isLoadingOverviewFiles = true;
+
+    // Load effort maps and hauls
+    this.loadingOverviewPromise = window.FileManager.loadOverviewFiles(this.mod).then((results) => {
+      
+      for (let i = 0; i < results.length; i++) {
+        let res = results[i];
+        // Failed to load
+        if (res.value == undefined)
+          continue;
+        // Catch composition
+        if (res.value.extension == 'json') {
+          // Season or Port catch composition
+          if (res.value.url.split('/').pop().includes('port'))
+            this.catchComposition.byPort = res.value.content;
+          else if (res.value.url.split('/').pop().includes('season'))
+            this.catchComposition.bySeason = res.value.content;
+          
+        }
+      }
+
+      // Status
+      this.isLoadingOverviewFiles = false;
+      this.loadingOverviewPromise = null;
+      this.overviewFilesLoaded = true;
+      console.log("Files for section overview and modality " + this.mod + " loaded.")
+    });
+
+    return this.loadingOverviewPromise;
+  }
+
+
+
+
+
+
+  // Process Haul file
   // Creates geoJSON object and OL Layer
-  processJSONFile(jsonFile) {
+  processHaulFile(jsonFile) {
     this.rawJSON = JSON.parse(JSON.stringify(jsonFile));
 
     // Fill GeoJSON
@@ -292,14 +343,14 @@ class FishingData {
 
 
   // Load haul file
-  getHaulCatchComposition(id){
+  getHaulCatchComposition(id) {
     // Is loading haul file
-    if (this.isLoadingHaulFile){
+    if (this.isLoadingHaulFile) {
       debugger;
       return this.loadingHaulPromise;
     }
     // If is already loaded
-    if (this.hauls[id].catchComposition != undefined){
+    if (this.hauls[id].catchComposition != undefined) {
       return Promise.resolve(this.hauls[id].catchComposition);
     }
 
