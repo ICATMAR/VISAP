@@ -16,7 +16,7 @@
           <div class="fa">&#xf106;</div>
         </button>
         <!-- Open/Close table -->
-        <button class="buttonInPanel" :title="$t('HaulTableOpen')" @click="isTableVisible = !isTableVisible">
+        <button class="buttonInPanel" :title="$t('HaulTableOpen')" @click="isTableVisible = !isTableVisible" style="padding-left: 10px; padding-right: 10px">
           {{ selHaul.Port }} - {{ selHaul.Date }}
           <div class="fa" :class="[isTableVisible ? 'rotate0' : 'rotate180']" style="margin-left: 20px">&#xf106;</div>
         </button>
