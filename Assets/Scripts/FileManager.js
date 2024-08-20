@@ -44,8 +44,7 @@ class FileManager {
   // tracks geometry ~2MB
   // effort
 
-  constructor(){
-    
+  constructor() {
     
 
   }
@@ -55,7 +54,7 @@ class FileManager {
 
 
   // Load map files
-  loadMapFiles = function(mod){
+  loadMapFiles = function (mod) {
     // Effort maps
     // Tracks
     // Current haul
@@ -77,12 +76,12 @@ class FileManager {
       });
       urls.push(baseURL + 'effort/fishingEffort_' + eUnit + '_' + modCode + '_legend.png');
     });
-    
+
     // Hauls Info JSON
     urls.push(baseURL + modCode + '_hauls.json')
 
     // Create promises
-    for (let i = 0; i < urls.length; i++){
+    for (let i = 0; i < urls.length; i++) {
       // Check if this file was already requested
       let fileWasRequested = this.requestedFiles.indexOf(urls[i]) != -1;
 
@@ -96,40 +95,40 @@ class FileManager {
       let extension = urls[i].split('.').pop();
       promises.push(
         fetch(urls[i])
-        .then( r => {
-          if (!r.ok){
-            throw new Error(urls[i] + " not found.");
-          }
-          // Image
-          if (extension == 'png')
-            return r.blob();
-          // JSON
-          else if (extension == 'json' || extension == 'geojson')
-            return r.json();
-        })
-        .then(res => {
-          let content = undefined;
-          // Image
-          if (extension == 'png'){
-            let img = document.createElement('img');
-            img.src = URL.createObjectURL(res);
-            content = img;
-          }// JSON
-          else if (extension == 'json' || extension == 'geojson') {
-            content = res;
-          }
-          // Response
-          let response = {
-            'url': urls[i],
-            'content': content,
-            'extension': extension
-          }
-          this.loadedFilesLog.push(response);
-          return response;
-        })
-        .catch(e => {
-          //console.error("File not at " + e.stack.split('\n')[1].split('/').pop());
-        })
+          .then(r => {
+            if (!r.ok) {
+              throw new Error(urls[i] + " not found.");
+            }
+            // Image
+            if (extension == 'png')
+              return r.blob();
+            // JSON
+            else if (extension == 'json' || extension == 'geojson')
+              return r.json();
+          })
+          .then(res => {
+            let content = undefined;
+            // Image
+            if (extension == 'png') {
+              let img = document.createElement('img');
+              img.src = URL.createObjectURL(res);
+              content = img;
+            }// JSON
+            else if (extension == 'json' || extension == 'geojson') {
+              content = res;
+            }
+            // Response
+            let response = {
+              'url': urls[i],
+              'content': content,
+              'extension': extension
+            }
+            this.loadedFilesLog.push(response);
+            return response;
+          })
+          .catch(e => {
+            //console.error("File not at " + e.stack.split('\n')[1].split('/').pop());
+          })
       )
     }
 
@@ -138,7 +137,7 @@ class FileManager {
 
 
   // Load haul file with catch composition information
-  loadHaulCatchCompositionFile = function(id, mod){
+  loadHaulCatchCompositionFile = function (id, mod) {
     // Define url
     let modURL = mod == 'trawling' ? 'trawlingData' : mod == 'purse-seine' ? 'purseSeineData' : 'recreational';
     let baseURL = '/VISAP/data/' + modURL + '/hauls/';
@@ -152,11 +151,11 @@ class FileManager {
 
   // LEGENDS
   // Load legends
-  loadLegends = function(steps){
+  loadLegends = function (steps) {
     let promises = [];
     steps = steps || 50;
-    
-    for (let i = 0; i < this.LEGENDNAMES.length; i++){
+
+    for (let i = 0; i < this.LEGENDNAMES.length; i++) {
       promises.push(this.getLegend(this.LEGENDNAMES[i], steps));
     }
 
@@ -164,13 +163,13 @@ class FileManager {
   }
 
   // Get legends
-  getLegend = function(legendName, steps){
+  getLegend = function (legendName, steps) {
 
-    return new Promise ((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       let img = new Image();
       img.src = this.legendsFilePath + legendName + '.png';
-      
+
 
       img.onload = () => {
         console.log('Legend loaded')
@@ -180,10 +179,10 @@ class FileManager {
         canvas.height = img.height;
         let ctx = canvas.getContext("2d");
         // Paint image and get image data
-        ctx.drawImage(img, 0,0);
-        let imgData = ctx.getImageData(0, Math.floor(canvas.height/2), canvas.width, 1); // one line in the middle
+        ctx.drawImage(img, 0, 0);
+        let imgData = ctx.getImageData(0, Math.floor(canvas.height / 2), canvas.width, 1); // one line in the middle
         let pixels = imgData.data;
-        
+
         //img.style.position = "absolute";
         //img.style.top = "0px";
         //document.body.append(img);
@@ -193,27 +192,27 @@ class FileManager {
         steps = steps || 10;
         let colorsStr = [];
         let colorsRGB = [];
-        let colorsFloat32 = new Float32Array(steps*3);
-        for (let i = 0; i< steps; i++){
+        let colorsFloat32 = new Float32Array(steps * 3);
+        for (let i = 0; i < steps; i++) {
           let tmp = i * canvas.width / steps;
           let pixelPosition = Math.floor((canvas.width / steps) / 2 + tmp); // Pixel index + Half step (take the middle of the area, not the start)
           // RGB as string
-          colorsStr[i] = 'rgb(' + pixels[pixelPosition*4] + ',' + pixels[pixelPosition*4 + 1] + ',' + pixels[pixelPosition*4+2] + ')';
+          colorsStr[i] = 'rgb(' + pixels[pixelPosition * 4] + ',' + pixels[pixelPosition * 4 + 1] + ',' + pixels[pixelPosition * 4 + 2] + ')';
           // RBG as array
-          colorsRGB[i] = [pixels[pixelPosition*4], pixels[pixelPosition*4+1], pixels[pixelPosition*4+2]];
+          colorsRGB[i] = [pixels[pixelPosition * 4], pixels[pixelPosition * 4 + 1], pixels[pixelPosition * 4 + 2]];
           // RGB as typed array (runs 5x faster in Animation.js)
-          colorsFloat32[i*3] = pixels[pixelPosition*4];
-          colorsFloat32[i*3 + 1] = pixels[pixelPosition*4 + 1];
-          colorsFloat32[i*3 + 2] = pixels[pixelPosition*4 + 2];
+          colorsFloat32[i * 3] = pixels[pixelPosition * 4];
+          colorsFloat32[i * 3 + 1] = pixels[pixelPosition * 4 + 1];
+          colorsFloat32[i * 3 + 2] = pixels[pixelPosition * 4 + 2];
         }
-        
-        resolve({colorsStr, colorsRGB, colorsFloat32, img, legendName});
+
+        resolve({ colorsStr, colorsRGB, colorsFloat32, img, legendName });
       }
       img.onerror = () => {
         console.error('Legend not found with url: ' + img.src);
         reject()
       };
-      
+
     });
 
   }
@@ -223,31 +222,72 @@ class FileManager {
 
 
   // Base layer
-  loadBaseLayerIcons = function(){
+  loadBaseLayerIcons = function () {
     let promises = [];
 
-    for (let i = 0; i < this.BASELAYERURLS.length; i++){
+    for (let i = 0; i < this.BASELAYERURLS.length; i++) {
       promises.push(this.loadImage(this.BASELAYERURLS[i]));
     }
 
     return new Promise(resolve => resolve(Promise.allSettled(promises)));
   }
   // Load image
-  loadImage = function(url){
+  loadImage = function (url) {
 
-    return new Promise ((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let img = new Image();
       img.src = url;
       let name = url.split('/').reverse()[0].replace('.png', '');
-        
+
       img.onload = () => {
-        
-        resolve({name, img});
+
+        resolve({ name, img });
       }
       img.onerror = (e) => console.error(e);
     });
 
   }
+
+
+
+  
+
+  
+
+
+
+  // Reads files from drag and drop
+  readFile = function (file, fileExtension) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.fileName = file.name;
+      reader.fileExtension = fileExtension;
+
+      // On load file
+      reader.addEventListener('load', e => {
+        try {
+          // Parse geojson
+          if (reader.fileExtension == 'geojson') {
+            let parsedGeoJSON = JSON.parse(reader.result);
+            parsedGeoJSON.fileName = reader.fileName;
+            resolve(parsedGeoJSON);
+          }
+        }
+        catch (e) {
+          debugger;
+          reject(e);
+        }
+      });
+      reader.addEventListener('error', e => {
+        console.error('Could not read file ' + reader.file.name);
+        console.error(e);
+        reject(e);
+      })
+      // Read as text
+      reader.readAsText(file);
+    })
+  }
+
 
 }
 
