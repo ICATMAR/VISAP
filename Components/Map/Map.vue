@@ -162,7 +162,7 @@ export default {
         portsLayer: new ol.layer.Vector({
           name: 'portsLayer',
           source: new ol.source.Vector({
-            url: '',
+            //url: '',
             format: new ol.format.GeoJSON()
           }),
           minZoom: 3,
@@ -212,7 +212,7 @@ export default {
         fishingEffort: new ol.layer.Image({
           name: 'fishingEffort',
           source: new ol.source.ImageStatic({
-            url: '',//'data/trawlingData/effort/fishingEffortExample_m1_39_6_44.png',
+            //url: '',//'data/trawlingData/effort/fishingEffortExample_m1_39_6_44.png',
             imageExtent: [-1, 39, 6, 44],
             projection: 'EPSG:4326'
           }),
@@ -249,11 +249,6 @@ export default {
     this.layerData = undefined;
     this.pixelColor = [0, 0, 0, 0];
 
-    // Load fishing tracks
-    // if (window.serverConnection)
-    // getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
-    // getTrackLines('data/trackLines.json', undefined);
-    this.fishingTracks = new FishingTracks('data/trawlingData/trawling_hauls.json', undefined, this.onLoadTracks);//new TrackLines(address, staticFile, onLoadTracks)
   },
   mounted () {
     this.initMap();
