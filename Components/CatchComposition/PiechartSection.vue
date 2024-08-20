@@ -4,7 +4,7 @@
     
     <!-- Title Section -->
     <div class="titleContainer">
-      <span class="h4">{{$t('Catch per ' + type)}}</span>
+      <span class="h4">{{$t('Catch per ' + type)}} <span>(2019-2023)</span></span>
 
       <!-- Show / Hide button -->
       <button @click="showPie = !showPie"> 
@@ -273,6 +273,9 @@ span {
   font-weight: 400;
   text-transform: none;
   line-height: 35px;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .compareButtons {
