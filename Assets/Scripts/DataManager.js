@@ -93,6 +93,7 @@ class DataManager {
 
   // Get haul catch composition
   getHaulCatchComposition(id){
+    id = id || window.GUIManager.map.currentHaul;
     // Get current fishing data manager
     let fdManager = this.getFishingDataManager();
     // Check if haul exists in fdManager
@@ -107,6 +108,7 @@ class DataManager {
 
   // Get haul info
   getHaulInfo(id){
+    id = id || window.GUIManager.map.currentHaul;
     // Get current fishing data manager
     let fdManager = this.getFishingDataManager();
     if (fdManager.hauls[id] == undefined){
@@ -115,6 +117,40 @@ class DataManager {
       debugger;
     }
     return fdManager.hauls[id];
+  }
+
+  // Get haul middle coordinates
+  getHaulMiddleCoordinates(id){
+    id = id || window.GUIManager.map.currentHaul;
+    let fdManager = this.getFishingDataManager();
+    if (fdManager.hauls[id] == undefined){
+      id = Object.keys(fdManager.hauls)[0];
+      console.error("Requested haul does not exists in fishing modality.")
+      debugger;
+    }
+    let haul = fdManager.hauls[id];
+    let coords = haul.geometry.coordinates;
+    coords = [...coords]; // copy
+    // Point geometry
+    if (haul.geometry.type == "Point") {
+      coords = [coords];
+    }
+    // Calculate bbox
+    let bbox = [Infinity, Infinity, -Infinity, -Infinity];
+    for (let i = 0; i < coords.length; i++){
+      // Transform to EPSG:3857
+      coords[i] = ol.proj.transform(coords[i], 'EPSG:4326', 'EPSG:3857');
+      // Find max and min longitude and latitude
+      bbox[0] = Math.min(bbox[0], coords[i][0]);
+      bbox[1] = Math.min(bbox[1], coords[i][1]);
+      bbox[2] = Math.max(bbox[2], coords[i][0]);
+      bbox[3] = Math.max(bbox[3], coords[i][1]);
+    }
+    // Middle point
+    let rangeBBOX = [bbox[2] - bbox[0], bbox[3] - bbox[1]];
+    let middleCoord = [bbox[0] + rangeBBOX[0]/2, bbox[1] + rangeBBOX[1]/2];
+    // Transform to EPSG:4326
+    return ol.proj.transform(middleCoord, 'EPSG:3857', 'EPSG:4326');
   }
 
 

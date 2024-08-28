@@ -16,7 +16,8 @@
           <div class="fa">&#xf106;</div>
         </button>
         <!-- Open/Close table -->
-        <button class="buttonInPanel" :title="$t('HaulTableOpen')" @click="isTableVisible = !isTableVisible" style="padding-left: 10px; padding-right: 10px">
+        <button class="buttonInPanel" :title="$t('HaulTableOpen')" @click="isTableVisible = !isTableVisible"
+          style="padding-left: 10px; padding-right: 10px">
           {{ selHaul.Port }} - {{ selHaul.Date }}
           <div class="fa" :class="[isTableVisible ? 'rotate0' : 'rotate180']" style="margin-left: 20px">&#xf106;</div>
         </button>
@@ -37,7 +38,7 @@
               <tr>
                 <!-- <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th> -->
                 <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">
-                  <div> {{$t("HaulTable." + key) }} </div> 
+                  <div> {{ $t("HaulTable." + key) }} </div>
                 </th>
               </tr>
             </thead>
@@ -182,11 +183,17 @@ export default {
     // https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
     exportJSON: function (event) {
       this.showExportOptions = false;
+      // Get haul
+      let currentHaul = window.DataManager.getHaulInfo();
       // Data not yet loaded
-      if (this.rawData === undefined)
+      if (currentHaul === undefined)
         return;
+      // Add attribution, source and modality
+      currentHaul.attribution = 'ICATMAR (Institut Català de Recerca per a la Governança del Mar)';
+      currentHaul.source = 'https://www.icatmar.cat';
+      currentHaul.modality = window.GUIManager.currentModality;
       // Create
-      let dataStr = JSON.stringify(this.rawData);
+      let dataStr = JSON.stringify(currentHaul);
       let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
       let linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
@@ -194,35 +201,57 @@ export default {
       linkElement.setAttribute('download', trackFileName + '_ICATMAR');
       linkElement.click();
 
+      // Delete added properties
+      delete currentHaul.attribution;
+      delete currentHaul.source;
+      delete currentHaul.modality;
       // Event for GAnalytics
-      window.eventBus.emit("HaulInfo_Export", { fileExtension: "JSON", modality: "trawling", trackId: this.selHaul.Id });
+      window.eventBus.emit("HaulInfo_Export", { fileExtension: "JSON", modality: window.GUIManager.currentModality, trackId: currentHaul.Id });
     },
 
 
     // Export data (CSV)
     exportCSV: function (event) {
       this.showExportOptions = false;
+      // Get haul
+      let currentHaul = window.DataManager.getHaulInfo();
       // Data not yet loaded
-      if (this.rawData === undefined)
+      if (currentHaul === undefined)
         return;
+      if (currentHaul.catchComposition == undefined)
+        return;
+
       // Parse JSON to CSV
-      let jsonData = this.rawData;
+      let jsonData = currentHaul.catchComposition;
       let keys = Object.keys(jsonData[0]);
 
-      let columnDelimiter = ',';
-      let lineDelimiter = '\n';
 
-      let csvColumnHeader = keys.join(columnDelimiter);
-      let csvStr = csvColumnHeader + lineDelimiter;
+      let csvStr = '';
+      let csvColumnHeader = keys.join(',');
+      // Add attribution and source
+      csvStr = 'Attribution,Source,HaulId,Date,Port,Depth,Mean Longtiude,Mean Latitude,Modality,'
+      // Add column headers
+      csvStr += csvColumnHeader + '\n';
 
       jsonData.forEach(item => {
+        // Add attribution and source
+        csvStr += 'ICATMAR (Institut Català de Recerca per a la Governança del Mar),https://www.icatmar.cat,'
+        // Other properties
+        csvStr += currentHaul.Id + ',';
+        csvStr += currentHaul.Data + ',';
+        csvStr += currentHaul.Port + ',';
+        csvStr += currentHaul.AvgDepth + ',';
+        let coords = window.DataManager.getHaulMiddleCoordinates(currentHaul.Id);
+        csvStr += coords[0] + ',' + coords[1] + ',';
+        csvStr += window.GUIManager.currentModality + ',';
+
         keys.forEach((key, index) => {
           if ((index > 0) && (index < keys.length)) {
-            csvStr += columnDelimiter;
+            csvStr += ',';
           }
           csvStr += item[key];
         });
-        csvStr += lineDelimiter;
+        csvStr += '\n';
       });
 
       // Now make downlodable element
@@ -234,7 +263,7 @@ export default {
       linkElement.click();
 
       // Event for GAnalytics
-      window.eventBus.emit("HaulInfo_Export", { fileExtension: "CSV", modality: "trawling", trackId: this.selHaul.Id });
+      window.eventBus.emit("HaulInfo_Export", { fileExtension: "CSV", modality: window.GUIManager.currentModality, trackId: currentHaul.Id });
     },
 
 
