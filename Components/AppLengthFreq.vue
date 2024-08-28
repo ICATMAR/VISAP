@@ -39,8 +39,12 @@
       
     },
     mounted() {
-      this.getDataFile('data/trawlingData/trawling_sizes.json');
-
+      // TODO
+        //this.getDataFile('data/trawlingData/trawling_sizes.json');
+        // Fill filter menu with data
+        // this.$refs.filterMenu.setData(result);
+        // Create graph
+        // this.createGraph(result);
       // EVENTS
       // When language changes, update language of the highchart
       window.eventBus.on('LanguageSelector_LanguageChanged', this.languageChanged);
@@ -80,24 +84,6 @@
 
 
       // INTERNAL METHODS
-      // Load data
-      getDataFile: async function(url){
-        
-        let result = await fetch(url)
-          .then(r => r.json())
-          .catch(e => {
-            console.error("Could not fetch from " + url + ". Error: " + e + ".");
-            alert("Error while loading length frequency data (url: " + url + ").");
-          });
-        // Store raw data
-        this.rawData = result;
-        // Fill filter menu with data
-        this.$refs.filterMenu.setData(result);
-        
-        this.createGraph(result);
-      },
-
-
       createGraph: function(data){
         
         // Create search list
