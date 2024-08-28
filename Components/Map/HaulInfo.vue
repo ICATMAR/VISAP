@@ -192,6 +192,7 @@ export default {
       currentHaul.attribution = 'ICATMAR (Institut Català de Recerca per a la Governança del Mar)';
       currentHaul.source = 'https://www.icatmar.cat';
       currentHaul.modality = window.GUIManager.currentModality;
+      currentHaul.meanCoord = window.DataManager.getHaulMiddleCoordinates(currentHaul.Id);
       // Create
       let dataStr = JSON.stringify(currentHaul);
       let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
@@ -205,6 +206,7 @@ export default {
       delete currentHaul.attribution;
       delete currentHaul.source;
       delete currentHaul.modality;
+      delete currentHaul.meanCoord;
       // Event for GAnalytics
       window.eventBus.emit("HaulInfo_Export", { fileExtension: "JSON", modality: window.GUIManager.currentModality, trackId: currentHaul.Id });
     },
