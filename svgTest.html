@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVG Line Charts</title>
+  <style>
+    .chart {
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    .axis {
+      stroke: #333;
+    }
+
+    .line {
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .translate {
+      transform: translate(40px, 20px);
+      /* Translate axes and line charts */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="charts-container"></div>
+
+  <script>
+
+    fetch('data/trawlingData/trawling_sizes.json').then(r => r.json()).then(res => {
+
+      // Organize data to make plots easier
+      // Create species object
+      let speciesData = {};
+      // Sort by species
+      res.forEach(item => {
+        if (speciesData[item.ScientificName] == undefined)
+          speciesData[item.ScientificName] = {
+            'rawData': [],
+            'byYear': {},
+            'bySeason': {},
+            'bySize': {},
+            'svgPath': '',
+            // Mininum size, Maturity size?
+          };
+        speciesData[item.ScientificName].rawData.push(item);
+        // Species > Size
+        if (speciesData[item.ScientificName].bySize[item.Size] == undefined) {
+          speciesData[item.ScientificName].bySize[item.Size] = {
+            'rawData': [],
+            'numInd': 0,
+          }
+        }
+        speciesData[item.ScientificName].bySize[item.Size].rawData.push(item);
+        speciesData[item.ScientificName].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+      });
+
+
+
+      // Sort by year
+      Object.keys(speciesData).forEach(sName => {
+        let specData = speciesData[sName];
+        // Iterate raw data
+        specData.rawData.forEach(item => {
+
+          // Species > Year
+          if (specData.byYear[item.Year] == undefined) {
+            specData.byYear[item.Year] = {
+              'rawData': [],
+              'bySize': {},
+              'bySeason': {},
+              'svgPath': '',
+            }
+          }
+          specData.byYear[item.Year].rawData.push(item);
+          // Species > Year > Size
+          if (specData.byYear[item.Year].bySize[item.Size] == undefined) {
+            specData.byYear[item.Year].bySize[item.Size] = {
+              'rawData': [],
+              'numInd': 0,
+            }
+          }
+          specData.byYear[item.Year].bySize[item.Size].rawData.push(item);
+          specData.byYear[item.Year].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+
+
+          // Species > Season
+          if (specData.bySeason[item.Season] == undefined) {
+            specData.bySeason[item.Season] = {
+              'rawData': [],
+              'bySize': {},
+              'byYear': {},
+              'svgPath': '',
+            }
+          }
+          specData.bySeason[item.Season].rawData.push(item);
+          // Species > Season > Size
+          if (specData.bySeason[item.Season].bySize[item.Size] == undefined) {
+            specData.bySeason[item.Season].bySize[item.Size] = {
+              'rawData': [],
+              'numInd': 0,
+            }
+          }
+          specData.bySeason[item.Season].bySize[item.Size].rawData.push(item);
+          specData.bySeason[item.Season].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+        });
+      });
+
+
+      // By Year combined with Season and viceversa
+      Object.keys(speciesData).forEach(sName => {
+        let specData = speciesData[sName];
+        // Year
+        Object.keys(specData.byYear).forEach(year => {
+          let specYearData = specData.byYear[year];
+          // Species > Year > Season
+          specYearData.rawData.forEach(item => {
+            if (specYearData.bySeason[item.Season] == undefined) {
+              specYearData.bySeason[item.Season] = {
+                'rawData': [],
+                'bySize': {},
+                'svgPath': '',
+              }
+            }
+            specYearData.bySeason[item.Season].rawData.push(item);
+            // Species > Year > Season > Size
+            if (specYearData.bySeason[item.Season].bySize[item.Size] == undefined) {
+              specYearData.bySeason[item.Season].bySize[item.Size] = {
+                'rawData': [],
+                'numInd': 0,
+              }
+            }
+            specYearData.bySeason[item.Season].bySize[item.Size].rawData.push(item);
+            specYearData.bySeason[item.Season].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+          });
+        });
+
+        // Season
+        Object.keys(specData.bySeason).forEach(season => {
+          let specSeasonData = specData.bySeason[season];
+          // Species > Season > Year
+          specSeasonData.rawData.forEach(item => {
+            if (specSeasonData.byYear[item.Year] == undefined) {
+              specSeasonData.byYear[item.Year] = {
+                'rawData': [],
+                'bySize': {},
+                'svgPath': '',
+              }
+            }
+            specSeasonData.byYear[item.Year].rawData.push(item);
+            // Species > Season > Year > Size
+            if (specSeasonData.byYear[item.Year].bySize[item.Size] == undefined) {
+              specSeasonData.byYear[item.Year].bySize[item.Size] = {
+                'rawData': [],
+                'numInd': 0,
+              }
+            }
+            specSeasonData.byYear[item.Year].bySize[item.Size].rawData.push(item);
+            specSeasonData.byYear[item.Year].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+          });
+        });
+
+      });
+
+      debugger;
+
+    });
+
+
+    // Sample data
+    const data = [
+      { "Year": 2019, "Size": "35", "Abundance_NSpecimen_Km2": "0.428" },
+      { "Year": 2019, "Size": "49", "Abundance_NSpecimen_Km2": "0.367" },
+      { "Year": 2020, "Size": "27", "Abundance_NSpecimen_Km2": "0.323" },
+      { "Year": 2020, "Size": "28", "Abundance_NSpecimen_Km2": "0.645" }
+      // Add all your data here...
+    ];
+
+    // Group data by year
+    const groupedData = data.reduce((acc, curr) => {
+      if (!acc[curr.Year]) {
+        acc[curr.Year] = [];
+      }
+      acc[curr.Year].push(curr);
+      return acc;
+    }, {});
+
+    // SVG chart dimensions
+    const width = 400;
+    const height = 300;
+    const padding = 10; // Padding inside SVG
+    const xOffset = 40; // CSS translation offset for the X axis
+    const yOffset = 20; // CSS translation offset for the Y axis
+
+    const svgNS = "http://www.w3.org/2000/svg";
+
+    function createSVGContainer() {
+      const svg = document.createElementNS(svgNS, "svg");
+      svg.setAttribute("width", width);
+      svg.setAttribute("height", height);
+      svg.setAttribute("class", "chart");
+      return svg;
+    }
+
+    function createAxis(svg) {
+      const xAxis = document.createElementNS(svgNS, "line");
+      xAxis.setAttribute("x1", 0);
+      xAxis.setAttribute("y1", height - padding);
+      xAxis.setAttribute("x2", width);
+      xAxis.setAttribute("y2", height - padding);
+      xAxis.setAttribute("class", "axis translate");
+
+      const yAxis = document.createElementNS(svgNS, "line");
+      yAxis.setAttribute("x1", padding);
+      yAxis.setAttribute("y1", 0);
+      yAxis.setAttribute("x2", padding);
+      yAxis.setAttribute("y2", height);
+      yAxis.setAttribute("class", "axis translate");
+
+      svg.appendChild(xAxis);
+      svg.appendChild(yAxis);
+    }
+
+    function plotLine(svg, data) {
+      const maxAbundance = Math.max(...data.map(d => parseFloat(d.Abundance_NSpecimen_Km2)));
+      const maxSize = Math.max(...data.map(d => parseFloat(d.Size)));
+
+      const linePath = document.createElementNS(svgNS, "path");
+      let pathData = data.map((d, i) => {
+        const x = (parseFloat(d.Abundance_NSpecimen_Km2) / maxAbundance) * (width - padding * 2);
+        const y = height - padding - (parseFloat(d.Size) / maxSize) * (height - padding * 2);
+        return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
+      }).join(' ');
+
+      linePath.setAttribute("d", pathData);
+      linePath.setAttribute("class", "line translate");
+      linePath.setAttribute("stroke", "#007bff");  // You can choose different colors
+      svg.appendChild(linePath);
+    }
+
+    // Render each chart for each year
+    Object.keys(groupedData).forEach(year => {
+      const svg = createSVGContainer();
+      createAxis(svg);
+      plotLine(svg, groupedData[year]);
+      document.getElementById('charts-container').appendChild(svg);
+    });
+  </script>
+</body>
+
+</html>
