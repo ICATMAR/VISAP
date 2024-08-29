@@ -37,7 +37,8 @@
               <!-- TABLE HEADER -->
               <tr>
                 <!-- <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th> -->
-                <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)" :title="$t('Sort')">
+                <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)"
+                  :title="$t('Sort')">
                   <div> {{ $t("HaulTable." + key) }} </div>
                 </th>
               </tr>
@@ -453,6 +454,16 @@ export default {
             'margin': '8px',
           }
         }
+      } else if (columnName == 'AvgDepth') {
+        let normDepth = Math.min(cellContent / 800, 1);
+        return {
+          'background': 'hsl(205, ' + (40 + 60 * (1 - normDepth)) + '%, ' + (30 + 50 * (1 - normDepth)) + '%)',
+          'border-radius': '20px',
+          'width': '12px',
+          'height': '12px',
+          'margin': '8px',
+          'box-shadow': '0 0 4px #00000073',
+        }
       }
 
       return {}
@@ -537,6 +548,7 @@ table {
   text-align: center;
   text-wrap: nowrap;
 }
+
 .tableHeader:after {
   content: '▼ ▲';
 }
