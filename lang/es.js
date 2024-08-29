@@ -224,6 +224,7 @@ export default es  = {
 
   "NextHaul": "Siguiente muestreo",
   "PrevHaul": "Previo muestreo",
+  "Sort": "Ordena per",
 
   "Cookies title": "Valoramos tu privacidad",
   "Cookies text": `Usamos tecnología como las galletas en nuestro sitio web para mejorar la

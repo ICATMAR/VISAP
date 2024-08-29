@@ -153,6 +153,7 @@ export default en = {
 
   "NextHaul": "Show next sampling",
   "PrevHaul": "Show previous sampling",
+  "Sort": "Sort by",
 
   "Cookies title": "We value your privacy",
   "Cookies text": `We use technology such as cookies in our website to improve the user experience and analyze our traffic. 

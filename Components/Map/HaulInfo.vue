@@ -37,7 +37,7 @@
               <!-- TABLE HEADER -->
               <tr>
                 <!-- <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">{{ $t(key) }}</th> -->
-                <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)">
+                <th class="clickable tableHeader" @click="sortHauls(hauls, key)" v-for="key in Object.keys(selHaul)" :title="$t('Sort')">
                   <div> {{ $t("HaulTable." + key) }} </div>
                 </th>
               </tr>
@@ -157,6 +157,7 @@ export default {
       showExportOptions: false,
       areHaulsLoaded: false,
       isTableVisible: false,
+      haulsSorting: {},
     }
   },
   methods: {
@@ -372,15 +373,23 @@ export default {
 
     // Sort the hauls shown on the table
     sortHauls(hauls, key) {
+      // Ascendent, descendent
+      let isAsc;
+      if (this.haulsSorting[key])
+        isAsc = 1;
+      else
+        isAsc = -1;
+      // Switch sorting
+      this.haulsSorting[key] = !this.haulsSorting[key];
 
       if (isNaN(this.selHaul[key])) {
         if (key == "Data" || key == "Date") {
-          return hauls.sort((a, b) => new Date(a[key]) - new Date(b[key]));
+          return hauls.sort((a, b) => isAsc * (new Date(a[key]) - new Date(b[key])));
         } else {
-          return hauls.sort((a, b) => a[key].localeCompare(b[key]));
+          return hauls.sort((a, b) => isAsc * (a[key].localeCompare(b[key])));
         }
       } else {
-        return hauls.sort((a, b) => a[key] - b[key]);
+        return hauls.sort((a, b) => isAsc * (a[key] - b[key]));
       }
     },
 
@@ -526,6 +535,10 @@ table {
 
 .tableHeader {
   text-align: center;
+  text-wrap: nowrap;
+}
+.tableHeader:after {
+  content: '▼ ▲';
 }
 
 .tableRow {
