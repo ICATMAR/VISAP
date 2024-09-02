@@ -50,7 +50,9 @@
 
   <script>
 
-    fetch('data/trawlingData/trawling_sizes.json').then(r => r.json()).then(res => {
+    let url = 'data/trawlingData/trawling_sizes.json';
+    //let url = 'data/purseSeineData/ps_sizes.json'
+    fetch(url).then(r => r.json()).then(res => {
 
       // Organize data to make plots easier
       // Create species object
@@ -79,9 +81,8 @@
         }
         // bySize
         speciesData[item.ScientificName].bySize[item.Size].rawData.push(item);
-        speciesData[item.ScientificName].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+        speciesData[item.ScientificName].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
       });
-
 
 
       // Sort by year
@@ -122,7 +123,7 @@
             }
           }
           specData.byYear[item.Year].bySize[item.Size].rawData.push(item);
-          specData.byYear[item.Year].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+          specData.byYear[item.Year].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
 
 
           // Species > Season
@@ -143,7 +144,7 @@
             }
           }
           specData.bySeason[item.Season].bySize[item.Size].rawData.push(item);
-          specData.bySeason[item.Season].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+          specData.bySeason[item.Season].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
         });
       });
 
@@ -174,7 +175,7 @@
               }
             }
             specYearData.bySeason[item.Season].bySize[item.Size].rawData.push(item);
-            specYearData.bySeason[item.Season].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+            specYearData.bySeason[item.Season].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
           });
         });
 
@@ -201,7 +202,7 @@
               }
             }
             specSeasonData.byYear[item.Year].bySize[item.Size].rawData.push(item);
-            specSeasonData.byYear[item.Year].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
+            specSeasonData.byYear[item.Year].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
           });
         });
 
