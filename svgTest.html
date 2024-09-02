@@ -25,7 +25,17 @@
       stroke-width: 0.01;
       stroke: black;
       transform: translateY(1px) scaleY(-1);
-      
+
+    }
+
+    #charts-container {
+      display: flex;
+      flex-direction: row;
+    }
+    .yearly-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .translate {
@@ -144,6 +154,8 @@
         // Year
         Object.keys(specData.byYear).forEach(year => {
           let specYearData = specData.byYear[year];
+          // Yearly SVG path
+          specYearData.svgPath = generateSVGPath(specYearData.bySize, specData.rangeSize, specData.rangeNumInd)
           // Species > Year > Season
           specYearData.rawData.forEach(item => {
             if (specYearData.bySeason[item.Season] == undefined) {
@@ -169,6 +181,8 @@
         // Season
         Object.keys(specData.bySeason).forEach(season => {
           let specSeasonData = specData.bySeason[season];
+          // Season SVG path
+          specSeasonData.svgPath = generateSVGPath(specSeasonData.bySize, specData.rangeSize, specData.rangeNumInd)
           // Species > Season > Year
           specSeasonData.rawData.forEach(item => {
             if (specSeasonData.byYear[item.Year] == undefined) {
@@ -191,28 +205,114 @@
           });
         });
 
+
+        // Generate remaining SVG paths
+        // Year
+        Object.keys(specData.byYear).forEach(year => {
+          let specYearData = specData.byYear[year];
+          // Year > Season
+          Object.keys(specYearData.bySeason).forEach(season => {
+            let specYearSeasonData = specYearData.bySeason[season];
+            // Year > Season SVG path
+            specYearSeasonData.svgPath = generateSVGPath(specYearSeasonData.bySize, specData.rangeSize, specData.rangeNumInd)
+          });
+        });
+        // Season
+        Object.keys(specData.bySeason).forEach(season => {
+          let specSeasonData = specData.bySeason[season];
+          // Season > Year
+          Object.keys(specSeasonData.byYear).forEach(year => {
+            let specSeasonYearData = specSeasonData.byYear[year];
+            // Season > Year SVG path
+            specSeasonYearData.svgPath = generateSVGPath(specSeasonYearData.bySize, specData.rangeSize, specData.rangeNumInd)
+          });
+        });
       });
 
-      debugger;
 
-      // Create SVG example
-      let specData = speciesData['Abralia veranyi']
-      let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      svg.setAttribute('width', '200');
-      svg.setAttribute('height', '200');
-      svg.setAttribute('viewBox', '0 0 1 1');
 
-      // Create the path element
-      let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', specData.svgPath);
-      path.setAttribute('stroke-linejoin','round');
-      path.classList.add('path');
+      //debugger;
 
-      // Append the path to the SVG
-      svg.appendChild(path);
+      let numPlots = Object.keys(speciesData).length;
+      const generateRandomColors = function (number) {
+        let colors = [];
+        for (let i = 0; i < number; i++) {
+          colors[i] = "hsla(" + 360 * Math.random() + ',' +
+            (25 + 70 * Math.random()) + '%,' +
+            (50 + 10 * Math.random()) + '%,' +
+            '0.85)'
+        }
+        return colors
+      }
+      const colors = generateRandomColors(numPlots);
 
-      // Append the SVG to the document body or any other container
-      document.body.appendChild(svg);
+      let container = document.getElementById('charts-container');
+
+      for (let i = 0; i < numPlots; i++) {
+        let specData = speciesData[Object.keys(speciesData)[i]];
+
+        let yearlyContainer = document.createElement('div');
+        yearlyContainer.classList.add('yearly-container');
+        // Iterate per year
+        Object.keys(specData.byYear).forEach(year => {
+
+          // Create SVG example
+          //let specData = speciesData['Abralia veranyi']
+          let svgYear = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svgYear.setAttribute('width', '200');
+          svgYear.setAttribute('height', '200');
+          svgYear.setAttribute('viewBox', '0 0 1 1');
+          svgYear.style['margin-top'] = '-120px';
+          svgYear.style['border-bottom'] = '#0000004d solid';
+
+          // Create the path element
+          let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('d', specData.byYear[year].svgPath);
+          path.setAttribute('stroke-linejoin', 'round');
+          path.classList.add('path');
+          path.style.stroke = colors[i];
+          path.style.fill = colors[i].replace('0.85)', '0.4)');
+
+          // Append the path to the SVG
+          svgYear.appendChild(path);
+
+          // Append the SVG to the document body or any other container
+          yearlyContainer.appendChild(svgYear);
+          // Year
+          let elYear = document.createElement('div');
+          elYear.innerText = year;
+          yearlyContainer.appendChild(elYear);
+
+        });
+        // Create SVG example
+        //let specData = speciesData['Abralia veranyi']
+        let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', '200');
+        svg.setAttribute('height', '200');
+        svg.setAttribute('viewBox', '0 0 1 1');
+
+        // Create the path element
+        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', specData.svgPath);
+        path.setAttribute('stroke-linejoin', 'round');
+        path.classList.add('path');
+        path.style.stroke = colors[i];
+        path.style.fill = colors[i].replace('0.85)', '0.4)');
+
+        // Append the path to the SVG
+        svg.appendChild(path);
+
+        // Append the SVG to the document body or any other container
+        yearlyContainer.appendChild(svg);
+
+        // Append species name
+        let specName = document.createElement('h2');
+        specName.innerText = Object.keys(speciesData)[i];
+        yearlyContainer.appendChild(specName)
+
+        // Add to DOM
+        container.appendChild(yearlyContainer);
+      }
     });
 
 
@@ -221,8 +321,13 @@
     const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
       let path = '';
       let sizesKeys = Object.keys(sizes);
+      // If there is no data
+      if (sizesKeys[1] == undefined) {
+        return 'M 0.49 0 L 0.5 1 L 0.51 0'; // One peak
+      }
       // First two points
       let step = sizesKeys[0] - (sizesKeys[1] - sizesKeys[0]);
+      if (isNaN(step / rangeSize[1])) { debugger; }
       path += 'M 0 0 L ' + step / rangeSize[1] + ' 0 ';
       // Data points
       for (const sKey of sizesKeys) {
@@ -231,89 +336,11 @@
       }
       // End point
       path += 'L 1 0';
-      
+
       return path;
     }
 
 
-    // Sample data
-    const data = [
-      { "Year": 2019, "Size": "35", "Abundance_NSpecimen_Km2": "0.428" },
-      { "Year": 2019, "Size": "49", "Abundance_NSpecimen_Km2": "0.367" },
-      { "Year": 2020, "Size": "27", "Abundance_NSpecimen_Km2": "0.323" },
-      { "Year": 2020, "Size": "28", "Abundance_NSpecimen_Km2": "0.645" }
-      // Add all your data here...
-    ];
-
-    // Group data by year
-    const groupedData = data.reduce((acc, curr) => {
-      if (!acc[curr.Year]) {
-        acc[curr.Year] = [];
-      }
-      acc[curr.Year].push(curr);
-      return acc;
-    }, {});
-
-    // SVG chart dimensions
-    const width = 400;
-    const height = 300;
-    const padding = 10; // Padding inside SVG
-    const xOffset = 40; // CSS translation offset for the X axis
-    const yOffset = 20; // CSS translation offset for the Y axis
-
-    const svgNS = "http://www.w3.org/2000/svg";
-
-    function createSVGContainer() {
-      const svg = document.createElementNS(svgNS, "svg");
-      svg.setAttribute("width", width);
-      svg.setAttribute("height", height);
-      svg.setAttribute("class", "chart");
-      return svg;
-    }
-
-    function createAxis(svg) {
-      const xAxis = document.createElementNS(svgNS, "line");
-      xAxis.setAttribute("x1", 0);
-      xAxis.setAttribute("y1", height - padding);
-      xAxis.setAttribute("x2", width);
-      xAxis.setAttribute("y2", height - padding);
-      xAxis.setAttribute("class", "axis translate");
-
-      const yAxis = document.createElementNS(svgNS, "line");
-      yAxis.setAttribute("x1", padding);
-      yAxis.setAttribute("y1", 0);
-      yAxis.setAttribute("x2", padding);
-      yAxis.setAttribute("y2", height);
-      yAxis.setAttribute("class", "axis translate");
-
-      svg.appendChild(xAxis);
-      svg.appendChild(yAxis);
-    }
-
-    function plotLine(svg, data) {
-      const maxAbundance = Math.max(...data.map(d => parseFloat(d.Abundance_NSpecimen_Km2)));
-      const maxSize = Math.max(...data.map(d => parseFloat(d.Size)));
-
-      const linePath = document.createElementNS(svgNS, "path");
-      let pathData = data.map((d, i) => {
-        const x = (parseFloat(d.Abundance_NSpecimen_Km2) / maxAbundance) * (width - padding * 2);
-        const y = height - padding - (parseFloat(d.Size) / maxSize) * (height - padding * 2);
-        return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-      }).join(' ');
-
-      linePath.setAttribute("d", pathData);
-      linePath.setAttribute("class", "line translate");
-      linePath.setAttribute("stroke", "#007bff");  // You can choose different colors
-      svg.appendChild(linePath);
-    }
-
-    // Render each chart for each year
-    Object.keys(groupedData).forEach(year => {
-      const svg = createSVGContainer();
-      createAxis(svg);
-      plotLine(svg, groupedData[year]);
-      document.getElementById('charts-container').appendChild(svg);
-    });
   </script>
 </body>
 
