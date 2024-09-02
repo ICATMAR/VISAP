@@ -20,6 +20,14 @@
       stroke-width: 2;
     }
 
+    .path {
+      fill: rgba(255, 0, 0, 0.459);
+      stroke-width: 0.01;
+      stroke: black;
+      transform: translateY(1px) scaleY(-1);
+      
+    }
+
     .translate {
       transform: translate(40px, 20px);
       /* Translate axes and line charts */
@@ -46,6 +54,9 @@
             'bySeason': {},
             'bySize': {},
             'svgPath': '',
+            'rangeSize': [Infinity, -Infinity],
+            'rangeNumInd': [Infinity, -Infinity],
+
             // Mininum size, Maturity size?
           };
         speciesData[item.ScientificName].rawData.push(item);
@@ -56,6 +67,7 @@
             'numInd': 0,
           }
         }
+        // bySize
         speciesData[item.ScientificName].bySize[item.Size].rawData.push(item);
         speciesData[item.ScientificName].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2);
       });
@@ -65,6 +77,20 @@
       // Sort by year
       Object.keys(speciesData).forEach(sName => {
         let specData = speciesData[sName];
+
+        // Find X Y ranges per specie
+        Object.keys(specData.bySize).forEach(sKey => {
+          // Ranges
+          specData.rangeSize[0] = Math.min(specData.rangeSize[0], sKey);
+          specData.rangeSize[1] = Math.max(specData.rangeSize[1], sKey);
+          specData.rangeNumInd[0] = Math.min(specData.rangeNumInd[0], specData.bySize[sKey].numInd);
+          specData.rangeNumInd[1] = Math.max(specData.rangeNumInd[1], specData.bySize[sKey].numInd);
+        });
+        // SVG path
+        specData.svgPath = generateSVGPath(specData.bySize, specData.rangeSize, specData.rangeNumInd);
+
+
+
         // Iterate raw data
         specData.rawData.forEach(item => {
 
@@ -169,7 +195,45 @@
 
       debugger;
 
+      // Create SVG example
+      let specData = speciesData['Abralia veranyi']
+      let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '200');
+      svg.setAttribute('height', '200');
+      svg.setAttribute('viewBox', '0 0 1 1');
+
+      // Create the path element
+      let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', specData.svgPath);
+      path.setAttribute('stroke-linejoin','round');
+      path.classList.add('path');
+
+      // Append the path to the SVG
+      svg.appendChild(path);
+
+      // Append the SVG to the document body or any other container
+      document.body.appendChild(svg);
     });
+
+
+
+    // Generate SVG path
+    const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
+      let path = '';
+      let sizesKeys = Object.keys(sizes);
+      // First two points
+      let step = sizesKeys[0] - (sizesKeys[1] - sizesKeys[0]);
+      path += 'M 0 0 L ' + step / rangeSize[1] + ' 0 ';
+      // Data points
+      for (const sKey of sizesKeys) {
+        path += 'L ' + sKey / rangeSize[1] + ' ' + sizes[sKey].numInd / rangeNumInd[1] + ' ';
+        if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
+      }
+      // End point
+      path += 'L 1 0';
+      
+      return path;
+    }
 
 
     // Sample data
