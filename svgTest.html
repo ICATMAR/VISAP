@@ -32,23 +32,48 @@
       display: flex;
       flex-direction: row;
     }
-    .yearly-container {
+
+    .species-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
-
-    .translate {
-      transform: translate(40px, 20px);
-      /* Translate axes and line charts */
     }
   </style>
 </head>
 
 <body>
+  <div class="options">
+    <button onclick="showBy('byYear')">by Year</button>
+    <button onclick="showBy('bySeason')">by Season</button>
+    <button onclick="showBy('byGround')">by Ground</button>
+  </div>
   <div id="charts-container"></div>
 
   <script>
+    // Fill data structure function
+    const fillDataStruct = (specData, item, keyClassName, attrName) => {
+      if (specData[keyClassName] == undefined) { debugger; }
+      if (specData[keyClassName][item[attrName]] == undefined) {
+        specData[keyClassName][item[attrName]] = {
+          'rawData': [],
+          'bySize': {},
+          //'byYear': {},
+          //'bySeason': {},
+          //'byGround': {},
+          'svgPath': '',
+        }
+      }
+      specData[keyClassName][item[attrName]].rawData.push(item);
+      // Species > Year/Season/Ground > Size
+      if (specData[keyClassName][item[attrName]].bySize[item.Size] == undefined) {
+        specData[keyClassName][item[attrName]].bySize[item.Size] = {
+          'rawData': [],
+          'numInd': 0,
+        }
+      }
+      specData[keyClassName][item[attrName]].bySize[item.Size].rawData.push(item);
+      specData[keyClassName][item[attrName]].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+    };
     // Create species object
     let speciesData = {};
 
@@ -64,6 +89,7 @@
             'rawData': [],
             'byYear': {},
             'bySeason': {},
+            'byGround': {},
             'bySize': {},
             'svgPath': '',
             'rangeSize': [Infinity, -Infinity],
@@ -85,7 +111,7 @@
       });
 
 
-      // Sort by year
+      // Sort by year, season and ground
       Object.keys(speciesData).forEach(sName => {
         let specData = speciesData[sName];
 
@@ -106,45 +132,14 @@
         specData.rawData.forEach(item => {
 
           // Species > Year
-          if (specData.byYear[item.Year] == undefined) {
-            specData.byYear[item.Year] = {
-              'rawData': [],
-              'bySize': {},
-              'bySeason': {},
-              'svgPath': '',
-            }
-          }
-          specData.byYear[item.Year].rawData.push(item);
-          // Species > Year > Size
-          if (specData.byYear[item.Year].bySize[item.Size] == undefined) {
-            specData.byYear[item.Year].bySize[item.Size] = {
-              'rawData': [],
-              'numInd': 0,
-            }
-          }
-          specData.byYear[item.Year].bySize[item.Size].rawData.push(item);
-          specData.byYear[item.Year].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
-
+          fillDataStruct(specData, item, 'byYear', 'Year');
 
           // Species > Season
-          if (specData.bySeason[item.Season] == undefined) {
-            specData.bySeason[item.Season] = {
-              'rawData': [],
-              'bySize': {},
-              'byYear': {},
-              'svgPath': '',
-            }
-          }
-          specData.bySeason[item.Season].rawData.push(item);
-          // Species > Season > Size
-          if (specData.bySeason[item.Season].bySize[item.Size] == undefined) {
-            specData.bySeason[item.Season].bySize[item.Size] = {
-              'rawData': [],
-              'numInd': 0,
-            }
-          }
-          specData.bySeason[item.Season].bySize[item.Size].rawData.push(item);
-          specData.bySeason[item.Season].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+          fillDataStruct(specData, item, 'bySeason', 'Season');
+
+          // Species > Ground
+          fillDataStruct(specData, item, 'byGround', 'FishingGroundType');
+
         });
       });
 
@@ -158,24 +153,9 @@
           // Yearly SVG path
           specYearData.svgPath = generateSVGPath(specYearData.bySize, specData.rangeSize, specData.rangeNumInd)
           // Species > Year > Season
+          specYearData.bySeason = {};
           specYearData.rawData.forEach(item => {
-            if (specYearData.bySeason[item.Season] == undefined) {
-              specYearData.bySeason[item.Season] = {
-                'rawData': [],
-                'bySize': {},
-                'svgPath': '',
-              }
-            }
-            specYearData.bySeason[item.Season].rawData.push(item);
-            // Species > Year > Season > Size
-            if (specYearData.bySeason[item.Season].bySize[item.Size] == undefined) {
-              specYearData.bySeason[item.Season].bySize[item.Size] = {
-                'rawData': [],
-                'numInd': 0,
-              }
-            }
-            specYearData.bySeason[item.Season].bySize[item.Size].rawData.push(item);
-            specYearData.bySeason[item.Season].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+            fillDataStruct(specYearData, item, 'bySeason', 'Season');
           });
         });
 
@@ -185,27 +165,11 @@
           // Season SVG path
           specSeasonData.svgPath = generateSVGPath(specSeasonData.bySize, specData.rangeSize, specData.rangeNumInd)
           // Species > Season > Year
+          specSeasonData.byYear = {};
           specSeasonData.rawData.forEach(item => {
-            if (specSeasonData.byYear[item.Year] == undefined) {
-              specSeasonData.byYear[item.Year] = {
-                'rawData': [],
-                'bySize': {},
-                'svgPath': '',
-              }
-            }
-            specSeasonData.byYear[item.Year].rawData.push(item);
-            // Species > Season > Year > Size
-            if (specSeasonData.byYear[item.Year].bySize[item.Size] == undefined) {
-              specSeasonData.byYear[item.Year].bySize[item.Size] = {
-                'rawData': [],
-                'numInd': 0,
-              }
-            }
-            specSeasonData.byYear[item.Year].bySize[item.Size].rawData.push(item);
-            specSeasonData.byYear[item.Year].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+            fillDataStruct(specSeasonData, item, 'byYear', 'Year');
           });
         });
-
 
         // Generate remaining SVG paths
         // Year
@@ -228,7 +192,14 @@
             specSeasonYearData.svgPath = generateSVGPath(specSeasonYearData.bySize, specData.rangeSize, specData.rangeNumInd)
           });
         });
+
       });
+
+
+
+
+
+
 
 
 
@@ -248,23 +219,24 @@
       const colors = generateRandomColors(numPlots);
 
       let container = document.getElementById('charts-container');
+      container.innerHTML = '';
 
       for (let i = 0; i < numPlots; i++) {
         let specData = speciesData[Object.keys(speciesData)[i]];
 
-        let yearlyContainer = document.createElement('div');
-        yearlyContainer.classList.add('yearly-container');
+        let speciesContainer = document.createElement('div');
+        speciesContainer.classList.add('species-container');
         // Iterate per year
         Object.keys(specData.byYear).forEach(year => {
 
           // Create SVG example
           //let specData = speciesData['Abralia veranyi']
-          let svgYear = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-          svgYear.setAttribute('width', '200');
-          svgYear.setAttribute('height', '200');
-          svgYear.setAttribute('viewBox', '0 0 1 1');
-          svgYear.style['margin-top'] = '-120px';
-          svgYear.style['border-bottom'] = '#0000004d solid';
+          let svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svgEl.setAttribute('width', '200');
+          svgEl.setAttribute('height', '200');
+          svgEl.setAttribute('viewBox', '0 0 1 1');
+          svgEl.style['margin-top'] = '-120px';
+          svgEl.style['border-bottom'] = '#0000004d solid';
 
           // Create the path element
           let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -275,14 +247,14 @@
           path.style.fill = colors[i].replace('0.85)', '0.4)');
 
           // Append the path to the SVG
-          svgYear.appendChild(path);
+          svgEl.appendChild(path);
 
           // Append the SVG to the document body or any other container
-          yearlyContainer.appendChild(svgYear);
+          speciesContainer.appendChild(svgEl);
           // Year
           let elYear = document.createElement('div');
           elYear.innerText = year;
-          yearlyContainer.appendChild(elYear);
+          speciesContainer.appendChild(elYear);
 
         });
         // Create SVG example
@@ -304,15 +276,15 @@
         svg.appendChild(path);
 
         // Append the SVG to the document body or any other container
-        yearlyContainer.appendChild(svg);
+        speciesContainer.appendChild(svg);
 
         // Append species name
         let specName = document.createElement('h2');
         specName.innerText = Object.keys(speciesData)[i];
-        yearlyContainer.appendChild(specName)
+        speciesContainer.appendChild(specName)
 
         // Add to DOM
-        container.appendChild(yearlyContainer);
+        container.appendChild(speciesContainer);
       }
     });
 
@@ -325,7 +297,7 @@
       rangeNumInd = [...rangeNumInd]; // Copy
       rangeSize[1] *= 1.1;
       rangeNumInd[1] *= 1.1;
-      
+
       let sizesKeys = Object.keys(sizes);
       // If there is no data
       if (sizesKeys[1] == undefined) {
