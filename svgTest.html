@@ -49,14 +49,14 @@
   <div id="charts-container"></div>
 
   <script>
+    // Create species object
+    let speciesData = {};
 
     let url = 'data/trawlingData/trawling_sizes.json';
     //let url = 'data/purseSeineData/ps_sizes.json'
     fetch(url).then(r => r.json()).then(res => {
 
       // Organize data to make plots easier
-      // Create species object
-      let speciesData = {};
       // Sort by species
       res.forEach(item => {
         if (speciesData[item.ScientificName] == undefined)
@@ -321,10 +321,16 @@
     // Generate SVG path
     const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
       let path = '';
+      rangeSize = [...rangeSize]; // Copy
+      rangeNumInd = [...rangeNumInd]; // Copy
+      rangeSize[1] *= 1.1;
+      rangeNumInd[1] *= 1.1;
+      
       let sizesKeys = Object.keys(sizes);
       // If there is no data
       if (sizesKeys[1] == undefined) {
-        return 'M 0.49 0 L 0.5 1 L 0.51 0'; // One peak
+        let xPos = sizesKeys[0] / rangeSize[1];
+        return 'M ' + (xPos - 0.01) + ' 0 L ' + xPos + ' ' + sizes[sizesKeys[0]].numInd / rangeNumInd[1] + ' L ' + (xPos + 0.01) + ' 0'; // One peak
       }
       // First two points
       let step = sizesKeys[0] - (sizesKeys[1] - sizesKeys[0]);
