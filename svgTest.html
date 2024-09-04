@@ -283,7 +283,7 @@
 
         //htmlEl.appendChild(speciesContainer);
 
-        let htmlMultipleEl = createMultiplePlotHTMLEl(specData, keyClassName, Object.keys(speciesData)[i], 'Longitude', 'Abundance', colors[i]);
+        let htmlMultipleEl = createMultiplePlotHTMLEl(specData, keyClassName, Object.keys(speciesData)[i] + ' > ' + keyClassName, 'Longitude', 'Abundance', colors[i]);
 
         htmlEl.appendChild(htmlMultipleEl);
         // Add to DOM

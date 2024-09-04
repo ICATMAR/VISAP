@@ -52,6 +52,7 @@
   transition: all 0.2s ease-in-out;
   cursor: pointer;
 }
+
 .path:hover {
   stroke-width: 0.3rem;
 }
@@ -62,10 +63,22 @@
   flex-direction: row;
 }
 
+.xtick {
+  background: black;
+  width: 2px;
+  height: 5px;
+  position: absolute;
+}
+
+.xtickText {
+  font-size: 0.8em;
+}
+
 .xaxis {
   height: 20px;
   background: rgb(112, 84, 234);
   width: 100%;
+  position: relative;
 }
 
 .xlabel {

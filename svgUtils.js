@@ -158,8 +158,17 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
     fillerEl2.classList.add('yaxis');
     xaxisRowEl.append(fillerEl, fillerEl2);
     // xaxis
+    // xticks
+    // Get x ticks
+    // Find minimum step using sort
+    let step = Infinity;
+    Object.keys(specData.bySize).sort((a,b) => step = Math.min(step, Math.abs(a-b)) );
+    if (step == Infinity){debugger}
+    let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
+    
     let xaxisEl = document.createElement('div');
     xaxisEl.classList.add('xaxis');
+    xaxisEl.append(...xTipsEls);
     xaxisRowEl.append(xaxisEl);
     // right: 0, width: same as svg
     plotEl.appendChild(xaxisRowEl);
@@ -193,18 +202,14 @@ const createXAxisTips = (maxValue, width, step) => {
     let skipStep = Math.ceil(maxNumSteps / maxNumTicks);
 
     // Create g to wrap the xticks
-    let gEl = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    let elements = [];
     for (let i = 0; i < Math.floor(maxNumSteps); i += skipStep) {
         let normX = i / maxNumSteps;
-        // path
-        let pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        pathEl.setAttribute('d', 'M ' + normX + ' 0 L ' + normX + ' 0.1');
-        pathEl.setAttribute('stroke-linejoin', 'round');
-        pathEl.setAttribute('vector-effect', 'non-scaling-stroke');
-        pathEl.classList.add('path');
-        pathEl.style.stroke = 'black';
-        pathEl.style.fill = 'none'
-        gEl.appendChild(pathEl);
+        // tick
+        let divEl = document.createElement('div');
+        divEl.classList.add('xtick');
+        divEl.style.left = 100*normX + '%';
+        elements.push(divEl);
     }
-    return gEl;
+    return elements;
 }
