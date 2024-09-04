@@ -1,0 +1,142 @@
+#charts-container {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+}
+
+.options {
+  position: fixed;
+  background: rgba(35, 156, 254, 0.463);
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  z-index: 1;
+  top: 5px;
+  right: 5px;
+  left: 5px;
+}
+
+.species-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.plot-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.ylabel-yaxis-plot-container {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  width: 90vw;
+  height: 50vh;
+}
+
+.ylabel {
+  background: green;
+  width: 20px;
+  height: 100%;
+  text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ylabel-text {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.yaxis {
+  background: rgb(0, 255, 153);
+  width: 50px;
+  height: 100%;
+  position: relative;
+}
+
+.ytick {
+  background: black;
+  width: 5px;
+  height: 2px;
+  position: absolute;
+  right: 0;
+}
+
+.ytickText {
+  position: absolute;
+  right: 10px;
+  transform: translate(0, 50%);
+}
+
+.ytickInsideText {
+  position: absolute;
+  transform: translate(50px, 50%);
+  text-wrap: nowrap;
+}
+
+.plot {
+  width: 100%;
+  border-bottom: black solid;
+  border-left: black solid
+}
+
+.path {
+  fill: rgba(255, 0, 0, 0.459);
+  stroke-width: 0.2rem;
+  stroke: black;
+  transform: translateY(1px) scaleY(-1);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.path:hover {
+  stroke-width: 0.3rem;
+}
+
+.xaxis-container {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+
+.xtick {
+  background: black;
+  width: 2px;
+  height: 5px;
+  position: absolute;
+}
+
+.xtickText {
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%);
+}
+
+.xaxis {
+  height: 30px;
+  background: rgb(112, 84, 234);
+  width: 100%;
+  position: relative;
+}
+
+.xlabel {
+  height: 20px;
+  background: purple;
+  text-align: center;
+}
+
+.title {
+  background: yellow;
+  text-align: center;
+  font-size: large
+}
