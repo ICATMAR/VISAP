@@ -366,7 +366,7 @@ class PieChart {
 			let nomEspecie = item.ScientificName;
 			let nomComu = item.EnglishName || item.ScientificName;
 			let classCaptura = item.Classification;
-			let biomass = item.Biomass_Kg_Km2 || item.Biomass_Kg;
+			let biomass = item.Biomass_Kg_Km2 || item.Biomass_T;
 
 			if (biomass < 0.01) // Do not display items with little biomass
 				continue;
@@ -417,7 +417,7 @@ class PieChart {
 			let nomEspecie = item.NomEspecie;
 			let nomComu = item.NomCatala || item.NomComu || item.NomEspecie;
 			let classCaptura = item.ClassificacioCaptura;
-			let biomass = item.Biomassa_Kg_Km2 || item.Biomassa || item.Biomass_Kg || item.Biomass_Kg;
+			let biomass = item.Biomassa_Kg_Km2 || item.Biomass_T;
 
 			if (biomass < 0.01) // Do not display items with little biomass
 				continue;
@@ -462,7 +462,7 @@ class PieChart {
 			let scientificName = item.ScientificName;
 			let catalanName = item.CatalanName || item.ScientificName;
 			let classification = item.Classification;
-			let biomass = item.Biomass_Kg_Km2 || item.Biomass_Kg;
+			let biomass = item.Biomass_Kg_Km2 || item.Biomass_T;
 
 			if (biomass < 1) // Do not display items with little biomass
 				continue;
@@ -520,7 +520,7 @@ class PieChart {
 			let scientificName = item.ScientificName;
 			let catalanName = item.CatalanName || item.ScientificName;
 			let classification = item.Classification;
-			let biomass = item.Biomass_Kg_Km2 || item.Biomass_Kg;
+			let biomass = item.Biomass_Kg_Km2 || item.Biomass_T;
 
 			if (biomass < 1) // Do not display items with little biomass
 				continue;
