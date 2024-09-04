@@ -1,3 +1,28 @@
+#charts-container {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+}
+
+.options {
+  position: fixed;
+  background: rgba(35, 156, 254, 0.463);
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  z-index: 1;
+  top: 5px;
+  right: 5px;
+  left: 5px;
+}
+
+.species-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
 .plot-container {
   display: flex;
   flex-direction: column;
@@ -56,6 +81,7 @@
 .ytickInsideText {
   position: absolute;
   transform: translate(50px, 50%);
+  text-wrap: nowrap;
 }
 
 .plot {

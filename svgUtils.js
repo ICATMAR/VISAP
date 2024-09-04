@@ -10,7 +10,9 @@ const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
     // If there is no data
     if (sizesKeys[1] == undefined) {
         let xPos = sizesKeys[0] / rangeSize[1];
-        return 'M ' + (xPos - 0.01) + ' 0 L ' + xPos + ' ' + sizes[sizesKeys[0]].numInd / rangeNumInd[1] + ' L ' + (xPos + 0.01) + ' 0'; // One peak
+        path = 'M ' + (xPos - 0.01) + ' 0 L ' + xPos + ' ' + sizes[sizesKeys[0]].numInd / rangeNumInd[1] + ' L ' + (xPos + 0.01) + ' 0'
+        if (path.includes('NaN')){debugger}
+        return path; // One peak
     }
     // First two points
     let step = sizesKeys[0] - (sizesKeys[1] - sizesKeys[0]);
@@ -23,7 +25,7 @@ const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
     }
     // End point
     path += 'L 1 0';
-
+    if (path.includes('NaN')){debugger}
     return path;
 }
 
@@ -127,6 +129,12 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
     // yaxis
     let yaxisEl = document.createElement('div');
     yaxisEl.classList.add('yaxis');
+    // y ticks
+    if (Object.keys(specData) == undefined) {debugger}
+    if (keyClassName == undefined) {debugger}
+    if (Object.keys(specData[keyClassName]) == false) {debugger}
+    let yticksEls = createYAxisCategoryTicks(Object.keys(specData[keyClassName]));
+    yaxisEl.append(...yticksEls);
 
 
     // svg
@@ -259,7 +267,35 @@ const createYAxisTicks = (maxValue, height) => {
         let textEl = document.createElement('div');
         textEl.classList.add('ytickText');
         textEl.style.bottom = 100 * normY + '%';
-        textEl.innerText = noFloatsStep * i;
+        textEl.innerText = Math.floor((noFloatsStep * i) * 1e8) / 1e8;
+        elements.push(textEl);
+
+    }
+    return elements;
+} 
+
+
+// Create y axis ticks for categories
+const createYAxisCategoryTicks = (keys) => {
+    // Num ticks
+    let numTicks = keys.length;
+
+    // Create g to wrap the xticks
+    let elements = [];
+    for (let i = 0; i < numTicks; i ++) {
+
+        let normY = (i+0.5) / (numTicks + 2);
+
+        // tick
+        let divEl = document.createElement('div');
+        divEl.classList.add('ytick');
+        divEl.style.bottom = 100 * normY + '%';
+        elements.push(divEl);
+        // text
+        let textEl = document.createElement('div');
+        textEl.classList.add('ytickInsideText');
+        textEl.style.bottom = 100 * normY + '%';
+        textEl.innerText = keys[i];
         elements.push(textEl);
 
     }
