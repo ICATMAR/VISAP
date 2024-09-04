@@ -34,8 +34,28 @@
 
 .yaxis {
   background: rgb(0, 255, 153);
-  width: 20px;
+  width: 50px;
   height: 100%;
+  position: relative;
+}
+
+.ytick {
+  background: black;
+  width: 5px;
+  height: 2px;
+  position: absolute;
+  right: 0;
+}
+
+.ytickText {
+  position: absolute;
+  right: 10px;
+  transform: translate(0, 50%);
+}
+
+.ytickInsideText {
+  position: absolute;
+  transform: translate(50px, 50%);
 }
 
 .plot {
@@ -71,11 +91,13 @@
 }
 
 .xtickText {
-  font-size: 0.8em;
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%);
 }
 
 .xaxis {
-  height: 20px;
+  height: 30px;
   background: rgb(112, 84, 234);
   width: 100%;
   position: relative;

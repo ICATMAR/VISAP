@@ -246,40 +246,9 @@
         speciesContainer.classList.add('species-container');
         // Iterate per key (season, year, ground)
 
-        if (false)
-          Object.keys(specData[keyClassName]).forEach(key => {
-
-            // Create SVG example
-            //let specData = speciesData['Abralia veranyi']
-            let svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            //svgEl.setAttribute('width', '200');
-            //svgEl.setAttribute('height', '200');
-            svgEl.setAttribute('viewBox', '0 0 1 1');
-            svgEl.setAttribute('preserveAspectRatio', 'none');
-
-            // Create the path element
-            let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', specData[keyClassName][key].svgPath);
-            path.setAttribute('stroke-linejoin', 'round');
-            path.setAttribute('vector-effect', 'non-scaling-stroke');
-            path.classList.add('path');
-            path.style.stroke = colors[i];
-            path.style.fill = colors[i].replace('0.85)', '0.4)');
-
-            // Append the path to the SVG
-            svgEl.appendChild(path);
-
-            // Append the SVG to the document body or any other container
-            speciesContainer.appendChild(svgEl);
-            // Key
-            let elKey = document.createElement('div');
-            elKey.innerText = key;
-            speciesContainer.appendChild(elKey);
-
-          });
 
         // Create SVG example
-        let htmlEl = createPlotHTMLEl(specData.svgPath, Object.keys(speciesData)[i], 'Longitude', 'Abundance', colors[i]);
+        let htmlEl = createPlotHTMLEl(specData, Object.keys(speciesData)[i], 'Longitude', 'Abundance', colors[i]);
 
         //htmlEl.appendChild(speciesContainer);
 

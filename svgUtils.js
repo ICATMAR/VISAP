@@ -32,7 +32,7 @@ const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
 
 
 // Create HTML plot element
-const createPlotHTMLEl = (svgPath, title, xlabel, ylabel, color) => {
+const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
     let plotEl = document.createElement('div');
     plotEl.classList.add('plot-container');
     // First row
@@ -50,6 +50,8 @@ const createPlotHTMLEl = (svgPath, title, xlabel, ylabel, color) => {
     // yaxis
     let yaxisEl = document.createElement('div');
     yaxisEl.classList.add('yaxis');
+    let yTicksEls = createYAxisTicks(specData.rangeNumInd[1], 400);
+    yaxisEl.append(...yTicksEls);
     // svg
     let svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svgEl.classList.add('plot');
@@ -57,7 +59,7 @@ const createPlotHTMLEl = (svgPath, title, xlabel, ylabel, color) => {
     svgEl.setAttribute('preserveAspectRatio', 'none');
     // path
     let pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    pathEl.setAttribute('d', svgPath);
+    pathEl.setAttribute('d', specData.svgPath);
     pathEl.setAttribute('stroke-linejoin', 'round');
     pathEl.setAttribute('vector-effect', 'non-scaling-stroke');
     pathEl.classList.add('path');
@@ -76,8 +78,16 @@ const createPlotHTMLEl = (svgPath, title, xlabel, ylabel, color) => {
     fillerEl2.classList.add('yaxis');
     xaxisRowEl.append(fillerEl, fillerEl2);
     // xaxis
+    // xticks
+    // Get x ticks
+    // Find minimum step using sort
+    let step = Infinity;
+    Object.keys(specData.bySize).sort((a, b) => step = Math.min(step, Math.abs(a - b)));
+    let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
+
     let xaxisEl = document.createElement('div');
     xaxisEl.classList.add('xaxis');
+    xaxisEl.append(...xTipsEls);
     xaxisRowEl.append(xaxisEl);
     // right: 0, width: same as svg
     plotEl.appendChild(xaxisRowEl);
@@ -162,10 +172,9 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
     // Get x ticks
     // Find minimum step using sort
     let step = Infinity;
-    Object.keys(specData.bySize).sort((a,b) => step = Math.min(step, Math.abs(a-b)) );
-    if (step == Infinity){debugger}
+    Object.keys(specData.bySize).sort((a, b) => step = Math.min(step, Math.abs(a - b)));
     let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
-    
+
     let xaxisEl = document.createElement('div');
     xaxisEl.classList.add('xaxis');
     xaxisEl.append(...xTipsEls);
@@ -208,8 +217,51 @@ const createXAxisTips = (maxValue, width, step) => {
         // tick
         let divEl = document.createElement('div');
         divEl.classList.add('xtick');
-        divEl.style.left = 100*normX + '%';
+        divEl.style.left = 100 * normX + '%';
         elements.push(divEl);
+        // text
+        let textEl = document.createElement('div');
+        textEl.classList.add('xtickText');
+        textEl.style.left = 100 * normX + '%';
+        textEl.style.top = '10px';
+        textEl.innerText = step * i;
+        elements.push(textEl);
+
     }
     return elements;
 }
+
+
+// Create y axis tips
+const createYAxisTicks = (maxValue, height) => {
+    // Pixel separation between ticks
+    let pixelSeparation = 50;
+    // Number of ticks
+    let maxNumTicks = (height / pixelSeparation);
+
+    let step = maxValue / maxNumTicks;
+    // Find round step
+    let exp = Math.floor(Math.log10(step));
+    let noFloatsStep = Math.round(step / Math.pow(10, exp)) * Math.pow(10, exp);
+    // Num ticks
+    let numTicks = Math.floor(maxValue / noFloatsStep);
+
+    // Create g to wrap the xticks
+    let elements = [];
+    for (let i = 0; i < numTicks; i ++) {
+        let normY = i / numTicks;
+        // tick
+        let divEl = document.createElement('div');
+        divEl.classList.add('ytick');
+        divEl.style.bottom = 100 * normY + '%';
+        elements.push(divEl);
+        // text
+        let textEl = document.createElement('div');
+        textEl.classList.add('ytickText');
+        textEl.style.bottom = 100 * normY + '%';
+        textEl.innerText = noFloatsStep * i;
+        elements.push(textEl);
+
+    }
+    return elements;
+} 
