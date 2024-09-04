@@ -1,0 +1,81 @@
+.plot-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.ylabel-yaxis-plot-container {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  width: 90vw;
+  height: 50vh;
+}
+
+.ylabel {
+  background: green;
+  width: 20px;
+  height: 100%;
+  text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ylabel-text {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform-origin: center;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.yaxis {
+  background: rgb(0, 255, 153);
+  width: 20px;
+  height: 100%;
+}
+
+.plot {
+  width: 100%;
+  border-bottom: black solid;
+  border-left: black solid
+}
+
+.path {
+  fill: rgba(255, 0, 0, 0.459);
+  stroke-width: 0.2rem;
+  stroke: black;
+  transform: translateY(1px) scaleY(-1);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.path:hover {
+  stroke-width: 0.3rem;
+}
+
+.xaxis-container {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+
+.xaxis {
+  height: 20px;
+  background: rgb(112, 84, 234);
+  width: 100%;
+}
+
+.xlabel {
+  height: 20px;
+  background: purple;
+  text-align: center;
+}
+
+.title {
+  background: yellow;
+  text-align: center;
+  font-size: large
+}

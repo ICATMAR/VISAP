@@ -6,28 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SVG Line Charts</title>
   <style>
-    .chart {
-      border: 1px solid #ccc;
-      margin-bottom: 20px;
-    }
-
-    .axis {
-      stroke: #333;
-    }
-
-    .line {
-      fill: none;
-      stroke-width: 2;
-    }
-
-    .path {
-      fill: rgba(255, 0, 0, 0.459);
-      stroke-width: 0.01;
-      stroke: black;
-      transform: translateY(1px) scaleY(-1);
-
-    }
-
     #charts-container {
       display: flex;
       flex-direction: row;
@@ -49,6 +27,9 @@
       z-index: 1;
     }
   </style>
+  <!-- SVG Style -->
+  <link rel="stylesheet" type="text/css" href="svgStyle.css" media="screen" />
+  <script src="svgUtils.js"></script>
 </head>
 
 <body>
@@ -209,34 +190,7 @@
 
 
 
-    // Generate SVG path
-    const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
-      let path = '';
-      rangeSize = [...rangeSize]; // Copy
-      rangeNumInd = [...rangeNumInd]; // Copy
-      rangeSize[1] *= 1.1;
-      rangeNumInd[1] *= 1.1;
 
-      let sizesKeys = Object.keys(sizes);
-      // If there is no data
-      if (sizesKeys[1] == undefined) {
-        let xPos = sizesKeys[0] / rangeSize[1];
-        return 'M ' + (xPos - 0.01) + ' 0 L ' + xPos + ' ' + sizes[sizesKeys[0]].numInd / rangeNumInd[1] + ' L ' + (xPos + 0.01) + ' 0'; // One peak
-      }
-      // First two points
-      let step = sizesKeys[0] - (sizesKeys[1] - sizesKeys[0]);
-      if (isNaN(step / rangeSize[1])) { debugger; }
-      path += 'M 0 0 L ' + step / rangeSize[1] + ' 0 ';
-      // Data points
-      for (const sKey of sizesKeys) {
-        path += 'L ' + sKey / rangeSize[1] + ' ' + sizes[sKey].numInd / rangeNumInd[1] + ' ';
-        if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
-      }
-      // End point
-      path += 'L 1 0';
-
-      return path;
-    }
 
 
 
@@ -291,67 +245,55 @@
         let speciesContainer = document.createElement('div');
         speciesContainer.classList.add('species-container');
         // Iterate per key (season, year, ground)
-        Object.keys(specData[keyClassName]).forEach(key => {
 
-          // Create SVG example
-          //let specData = speciesData['Abralia veranyi']
-          let svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-          svgEl.setAttribute('width', '200');
-          svgEl.setAttribute('height', '200');
-          svgEl.setAttribute('viewBox', '0 0 1 1');
-          svgEl.style['margin-top'] = '-120px';
-          svgEl.style['border-bottom'] = '#0000004d solid';
+        if (false)
+          Object.keys(specData[keyClassName]).forEach(key => {
 
-          // Create the path element
-          let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          path.setAttribute('d', specData[keyClassName][key].svgPath);
-          path.setAttribute('stroke-linejoin', 'round');
-          path.classList.add('path');
-          path.style.stroke = colors[i];
-          path.style.fill = colors[i].replace('0.85)', '0.4)');
+            // Create SVG example
+            //let specData = speciesData['Abralia veranyi']
+            let svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            //svgEl.setAttribute('width', '200');
+            //svgEl.setAttribute('height', '200');
+            svgEl.setAttribute('viewBox', '0 0 1 1');
+            svgEl.setAttribute('preserveAspectRatio', 'none');
 
-          // Append the path to the SVG
-          svgEl.appendChild(path);
+            // Create the path element
+            let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', specData[keyClassName][key].svgPath);
+            path.setAttribute('stroke-linejoin', 'round');
+            path.setAttribute('vector-effect', 'non-scaling-stroke');
+            path.classList.add('path');
+            path.style.stroke = colors[i];
+            path.style.fill = colors[i].replace('0.85)', '0.4)');
 
-          // Append the SVG to the document body or any other container
-          speciesContainer.appendChild(svgEl);
-          // Key
-          let elKey = document.createElement('div');
-          elKey.innerText = key;
-          speciesContainer.appendChild(elKey);
+            // Append the path to the SVG
+            svgEl.appendChild(path);
 
-        });
+            // Append the SVG to the document body or any other container
+            speciesContainer.appendChild(svgEl);
+            // Key
+            let elKey = document.createElement('div');
+            elKey.innerText = key;
+            speciesContainer.appendChild(elKey);
+
+          });
+
         // Create SVG example
-        //let specData = speciesData['Abralia veranyi']
-        let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('width', '200');
-        svg.setAttribute('height', '200');
-        svg.setAttribute('viewBox', '0 0 1 1');
+        let htmlEl = createPlotHTMLEl(specData.svgPath, Object.keys(speciesData)[i], 'Longitude', 'Abundance', colors[i]);
 
-        // Create the path element
-        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', specData.svgPath);
-        path.setAttribute('stroke-linejoin', 'round');
-        path.classList.add('path');
-        path.style.stroke = colors[i];
-        path.style.fill = colors[i].replace('0.85)', '0.4)');
+        //htmlEl.appendChild(speciesContainer);
 
-        // Append the path to the SVG
-        svg.appendChild(path);
+        let htmlMultipleEl = createMultiplePlotHTMLEl(specData, keyClassName, Object.keys(speciesData)[i], 'Longitude', 'Abundance', colors[i]);
 
-        // Append the SVG to the document body or any other container
-        speciesContainer.appendChild(svg);
-
-        // Append species name
-        let specName = document.createElement('h2');
-        specName.innerText = Object.keys(speciesData)[i];
-        speciesContainer.appendChild(specName)
-
+        htmlEl.appendChild(htmlMultipleEl);
         // Add to DOM
-        container.appendChild(speciesContainer);
+        container.appendChild(htmlEl);
       }
 
     }
+
+
+
 
     // On click events
     let currentKeyClassName = '';
