@@ -11,7 +11,7 @@ const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
     if (sizesKeys[1] == undefined) {
         let xPos = sizesKeys[0] / rangeSize[1];
         path = 'M ' + (xPos - 0.01) + ' 0 L ' + xPos + ' ' + sizes[sizesKeys[0]].numInd / rangeNumInd[1] + ' L ' + (xPos + 0.01) + ' 0'
-        if (path.includes('NaN')){debugger}
+        if (path.includes('NaN')) { debugger }
         return path; // One peak
     }
     // First two points
@@ -25,12 +25,39 @@ const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
     }
     // End point
     path += 'L 1 0';
-    if (path.includes('NaN')){debugger}
+    if (path.includes('NaN')) { debugger }
     return path;
 }
 
 
 
+// Generate circles shown when hovering
+const generateSVGCircles = function (sizes, rangeSize, rangeNumInd) {
+    rangeSize = [...rangeSize]; // Copy
+    rangeNumInd = [...rangeNumInd]; // Copy
+    rangeSize[1] *= 1.1;
+    rangeNumInd[1] *= 1.1;
+
+    let arrayCircles = [];
+
+    let sizesKeys = Object.keys(sizes);
+    // Data points
+    for (const sKey of sizesKeys) {
+        let x = sKey / rangeSize[1];
+        let y = sizes[sKey].numInd / rangeNumInd[1];
+
+        let circleEl = document.createElement('div');
+        circleEl.classList.add('circle');
+        circleEl.style.left = 100*x + '%';
+        circleEl.style.bottom = 100*y + '%';
+
+        arrayCircles.push(circleEl);
+
+        if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
+    }
+
+    return arrayCircles;
+}
 
 
 // Create HTML plot element
@@ -54,8 +81,12 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
     yaxisEl.classList.add('yaxis');
     let yTicksEls = createYAxisTicks(specData.rangeNumInd[1], 400);
     yaxisEl.append(...yTicksEls);
+    // svgContainer
+    let svgContainer = document.createElement('div');
+    svgContainer.classList.add('svgContainer');
     // svg
     let svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgContainer.appendChild(svgEl);
     svgEl.classList.add('plot');
     svgEl.setAttribute('viewBox', '0 0 1 1');
     svgEl.setAttribute('preserveAspectRatio', 'none');
@@ -68,8 +99,18 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
     pathEl.style.stroke = color;
     pathEl.style.fill = color.replace('0.85)', '0.4)');
     svgEl.appendChild(pathEl);
-    topRowEl.append(ylabelEl, yaxisEl, svgEl);
+    //topRowEl.append(ylabelEl, yaxisEl, svgEl);
+    topRowEl.append(ylabelEl, yaxisEl, svgContainer);
     plotEl.appendChild(topRowEl);
+    // Circles
+    let circleContainer = document.createElement('div');
+    for (circleIndex in specData.svgCircles) {
+        let circleEl = specData.svgCircles[circleIndex];
+        circleEl.style.border = '2px ' + color + ' solid';
+        circleEl.style.background = 'white';
+        circleContainer.appendChild(circleEl);
+    }
+    svgContainer.appendChild(circleContainer);
     // Second row
     // xaxis-container
     let xaxisRowEl = document.createElement('div');
@@ -130,9 +171,9 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
     let yaxisEl = document.createElement('div');
     yaxisEl.classList.add('yaxis');
     // y ticks
-    if (Object.keys(specData) == undefined) {debugger}
-    if (keyClassName == undefined) {debugger}
-    if (Object.keys(specData[keyClassName]) == false) {debugger}
+    if (Object.keys(specData) == undefined) { debugger }
+    if (keyClassName == undefined) { debugger }
+    if (Object.keys(specData[keyClassName]) == false) { debugger }
     let yticksEls = createYAxisCategoryTicks(Object.keys(specData[keyClassName]));
     yaxisEl.append(...yticksEls);
 
@@ -256,7 +297,7 @@ const createYAxisTicks = (maxValue, height) => {
 
     // Create g to wrap the xticks
     let elements = [];
-    for (let i = 0; i < numTicks; i ++) {
+    for (let i = 0; i < numTicks; i++) {
         let normY = i / numTicks;
         // tick
         let divEl = document.createElement('div');
@@ -272,7 +313,7 @@ const createYAxisTicks = (maxValue, height) => {
 
     }
     return elements;
-} 
+}
 
 
 // Create y axis ticks for categories
@@ -282,9 +323,9 @@ const createYAxisCategoryTicks = (keys) => {
 
     // Create g to wrap the xticks
     let elements = [];
-    for (let i = 0; i < numTicks; i ++) {
+    for (let i = 0; i < numTicks; i++) {
 
-        let normY = (i+0.5) / (numTicks + 2);
+        let normY = (i + 0.5) / (numTicks + 2);
 
         // tick
         let divEl = document.createElement('div');
