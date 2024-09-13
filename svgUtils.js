@@ -85,7 +85,7 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
     // yaxis
     let yaxisEl = document.createElement('div');
     yaxisEl.classList.add('yaxis');
-    let yTicksEls = createYAxisTicks(specData.rangeNumInd[1], 400);
+    let yTicksEls = createYAxisTicks(specData.rangeNumInd[1] * 1.1, 400);
     yaxisEl.append(...yTicksEls);
     // svgContainer
     let svgContainer = document.createElement('div');
@@ -131,7 +131,7 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
     // Find minimum step using sort
     let step = Infinity;
     Object.keys(specData.bySize).sort((a, b) => step = Math.min(step, Math.abs(a - b)));
-    let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
+    let xTipsEls = createXAxisTips(specData.rangeSize[1] * 1.1, 600, step);
 
     let xaxisEl = document.createElement('div');
     xaxisEl.classList.add('xaxis');
