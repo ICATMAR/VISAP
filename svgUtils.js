@@ -46,12 +46,18 @@ const generateSVGCircles = function (sizes, rangeSize, rangeNumInd) {
         let x = sKey / rangeSize[1];
         let y = sizes[sKey].numInd / rangeNumInd[1];
 
+        let circleBox = document.createElement('div');
+        circleBox.classList.add('circleBox');
+        circleBox.style.left = 100 * x + '%';
+        circleBox.style.bottom = 100 * y + '%';
+        // Circle inside the box
         let circleEl = document.createElement('div');
         circleEl.classList.add('circle');
-        circleEl.style.left = 100*x + '%';
-        circleEl.style.bottom = 100*y + '%';
+        circleBox.appendChild(circleEl);
+        // Add title
+        circleBox.title = 'x: ' + sKey + ', y: ' + (sizes[sKey].numInd).toFixed(1);
 
-        arrayCircles.push(circleEl);
+        arrayCircles.push(circleBox);
 
         if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
     }
@@ -99,16 +105,15 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
     pathEl.style.stroke = color;
     pathEl.style.fill = color.replace('0.85)', '0.4)');
     svgEl.appendChild(pathEl);
-    //topRowEl.append(ylabelEl, yaxisEl, svgEl);
     topRowEl.append(ylabelEl, yaxisEl, svgContainer);
     plotEl.appendChild(topRowEl);
     // Circles
     let circleContainer = document.createElement('div');
     for (circleIndex in specData.svgCircles) {
-        let circleEl = specData.svgCircles[circleIndex];
-        circleEl.style.border = '2px ' + color + ' solid';
-        circleEl.style.background = 'white';
-        circleContainer.appendChild(circleEl);
+        let circleBox = specData.svgCircles[circleIndex];
+        circleBox.children[0].style.border = '2px ' + color + ' solid';
+        circleBox.children[0].style.background = 'white';
+        circleContainer.appendChild(circleBox);
     }
     svgContainer.appendChild(circleContainer);
     // Second row
@@ -177,9 +182,12 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
     let yticksEls = createYAxisCategoryTicks(Object.keys(specData[keyClassName]));
     yaxisEl.append(...yticksEls);
 
-
+    // svgContainer
+    let svgContainer = document.createElement('div');
+    svgContainer.classList.add('svgContainer');
     // svg
     let svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgContainer.appendChild(svgEl);
     svgEl.classList.add('plot');
     svgEl.setAttribute('viewBox', '0 0 1 1');
     svgEl.setAttribute('preserveAspectRatio', 'none');
@@ -202,7 +210,7 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
         svgEl.appendChild(gEl);
     });
 
-    topRowEl.append(ylabelEl, yaxisEl, svgEl);
+    topRowEl.append(ylabelEl, yaxisEl, svgContainer);
     plotEl.appendChild(topRowEl);
 
 
