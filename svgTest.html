@@ -29,7 +29,7 @@
     let url = 'data/trawlingData/trawling_sizes.json';
     //let url = 'data/purseSeineData/ps_sizes.json'
     fetch(url).then(r => r.json()).then(res => {
-      
+
       // Organize data to make plots easier
       // Sort by species
       res.forEach(item => {
@@ -65,39 +65,25 @@
       Object.keys(speciesData).forEach(sName => {
         let specData = speciesData[sName];
 
-        // Find X Y ranges per specie
-        Object.keys(specData.bySize).forEach(sKey => {
-          // Ranges
-          specData.rangeSize[0] = Math.min(specData.rangeSize[0], sKey);
-          specData.rangeSize[1] = Math.max(specData.rangeSize[1], sKey);
-          specData.rangeNumInd[0] = Math.min(specData.rangeNumInd[0], specData.bySize[sKey].numInd);
-          specData.rangeNumInd[1] = Math.max(specData.rangeNumInd[1], specData.bySize[sKey].numInd);
-        });
-        if (specData.rangeNumInd[1] == 0){
-          console.warn('Maximum abundance for ' + sName + ' is zero, but ' + specData.rawData.length + ' entries are present.');
-          specData.rangeNumInd[1] = 1;
-        }
-        // SVG path
-        specData.svgPath = generateSVGPath(specData.bySize, specData.rangeSize, specData.rangeNumInd);
-        specData.svgCircles = generateSVGCircles(specData.bySize, specData.rangeSize, specData.rangeNumInd);
+        // Find X Y ranges per species
+        findSizeAndNumIndRanges(specData, sName);
 
-
+        const categories = ['byYear', 'bySeason', 'byGround', 'byPortArea'];
+        const categoriesKeyAttr = ['Year', 'Season', 'FishingGroundType', 'PortArea'];
         // Iterate raw data
         specData.rawData.forEach(item => {
-
-          // Species > Year
-          fillDataStruct(specData, item, 'byYear', 'Year');
-
-          // Species > Season
-          fillDataStruct(specData, item, 'bySeason', 'Season');
-
-          // Species > Ground
-          fillDataStruct(specData, item, 'byGround', 'FishingGroundType');
-
-          // Species > PortArea
-          fillDataStruct(specData, item, 'byPortArea', 'PortArea');
-
+          // Fill data for the different categories
+          for (let i = 0; i < categories.length; i++) {
+            // Species > Year, Season, Ground...
+            fillDataStruct(specData, item, categories[i], categoriesKeyAttr[i]); // fillDataStruct(specData, item, 'byYear', 'Year');
+          }
         });
+        // Find X Y ranges per species and categories
+        for (let i = 0; i < categories.length; i++) {
+          Object.keys(specData[categories[i]]).forEach(key => {
+            findSizeAndNumIndRanges(specData[categories[i]][key], sName + '>' + categories[i] + '>' + key);
+          });
+        }
       });
 
 
@@ -107,8 +93,6 @@
         // Year
         Object.keys(specData.byYear).forEach(year => {
           let specYearData = specData.byYear[year];
-          // Yearly SVG path
-          specYearData.svgPath = generateSVGPath(specYearData.bySize, specData.rangeSize, specData.rangeNumInd)
           // Species > Year > Season
           specYearData.bySeason = {};
           specYearData.rawData.forEach(item => {
@@ -119,8 +103,6 @@
         // Season
         Object.keys(specData.bySeason).forEach(season => {
           let specSeasonData = specData.bySeason[season];
-          // Season SVG path
-          specSeasonData.svgPath = generateSVGPath(specSeasonData.bySize, specData.rangeSize, specData.rangeNumInd)
           // Species > Season > Year
           specSeasonData.byYear = {};
           specSeasonData.rawData.forEach(item => {
@@ -128,42 +110,7 @@
           });
         });
 
-        // Ground
-        Object.keys(specData.byGround).forEach(ground => {
-          let specGroundData = specData.byGround[ground];
-          // Ground SVG path
-          specGroundData.svgPath = generateSVGPath(specGroundData.bySize, specData.rangeSize, specData.rangeNumInd)
-        });
-        // Port area
-        Object.keys(specData.byPortArea).forEach(portArea => {
-          let specPortAreaData = specData.byPortArea[portArea];
-          // Ground SVG path
-          specPortAreaData.svgPath = generateSVGPath(specPortAreaData.bySize, specData.rangeSize, specData.rangeNumInd)
-        });
 
-
-
-        // Generate remaining SVG paths
-        // Year
-        Object.keys(specData.byYear).forEach(year => {
-          let specYearData = specData.byYear[year];
-          // Year > Season
-          Object.keys(specYearData.bySeason).forEach(season => {
-            let specYearSeasonData = specYearData.bySeason[season];
-            // Year > Season SVG path
-            specYearSeasonData.svgPath = generateSVGPath(specYearSeasonData.bySize, specData.rangeSize, specData.rangeNumInd)
-          });
-        });
-        // Season
-        Object.keys(specData.bySeason).forEach(season => {
-          let specSeasonData = specData.bySeason[season];
-          // Season > Year
-          Object.keys(specSeasonData.byYear).forEach(year => {
-            let specSeasonYearData = specSeasonData.byYear[year];
-            // Season > Year SVG path
-            specSeasonYearData.svgPath = generateSVGPath(specSeasonYearData.bySize, specData.rangeSize, specData.rangeNumInd)
-          });
-        });
 
       });
 
@@ -200,6 +147,27 @@
       specData[keyClassName][item[attrName]].bySize[item.Size].rawData.push(item);
       specData[keyClassName][item[attrName]].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
     };
+
+    // Find ranges of sizes
+    const findSizeAndNumIndRanges = (specData, sName) => {
+      // Reset
+      specData.rangeSize = [Infinity, -Infinity];
+      specData.rangeNumInd = [Infinity, -Infinity];
+      if (specData.bySize == undefined) { debugger }
+
+      // Find X Y ranges per species
+      Object.keys(specData.bySize).forEach(sKey => {
+        // Ranges
+        specData.rangeSize[0] = Math.min(specData.rangeSize[0], sKey);
+        specData.rangeSize[1] = Math.max(specData.rangeSize[1], sKey);
+        specData.rangeNumInd[0] = Math.min(specData.rangeNumInd[0], specData.bySize[sKey].numInd);
+        specData.rangeNumInd[1] = Math.max(specData.rangeNumInd[1], specData.bySize[sKey].numInd);
+      });
+      if (specData.rangeNumInd[1] == 0) {
+        console.warn('Maximum abundance for ' + sName + ' is zero, but ' + specData.rawData.length + ' entries are present.');
+        specData.rangeNumInd[1] = 1;
+      }
+    }
 
 
 

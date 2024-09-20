@@ -109,6 +109,8 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
   svgEl.setAttribute('preserveAspectRatio', 'none');
   // path
   let pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  // Create SVG Path
+  specData.svgPath = generateSVGPath(specData.bySize, specData.rangeSize, specData.rangeNumInd);
   pathEl.setAttribute('d', specData.svgPath);
   pathEl.setAttribute('stroke-linejoin', 'round');
   pathEl.setAttribute('vector-effect', 'non-scaling-stroke');
@@ -120,6 +122,8 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
   plotEl.appendChild(topRowEl);
   // Circles
   let circleContainer = document.createElement('div');
+  // Create SVG circles
+  specData.svgCircles = generateSVGCircles(specData.bySize, specData.rangeSize, specData.rangeNumInd);
   for (circleIndex in specData.svgCircles) {
     let circleBox = specData.svgCircles[circleIndex];
     circleBox.children[0].style.border = '2px ' + color + ' solid';
@@ -163,7 +167,7 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
   // Find minimum step using sort
   let step = Infinity;
   Object.keys(specData.bySize).sort((a, b) => step = Math.min(step, Math.abs(a - b)));
-  let xTipsEls = createXAxisTips(specData.rangeSize[1] * 1.1, 600, step);
+  let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
 
   let xaxisEl = document.createElement('div');
   xaxisEl.classList.add('xaxis');
@@ -230,16 +234,27 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
     let gEl = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     // path
     let pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    // Create SVG Path
+    specData[keyClassName][key].svgPath = generateSVGPath(specData[keyClassName][key].bySize, specData.rangeSize, specData.rangeNumInd);
     pathEl.setAttribute('d', specData[keyClassName][key].svgPath);
     pathEl.setAttribute('stroke-linejoin', 'round');
     pathEl.setAttribute('vector-effect', 'non-scaling-stroke');
     pathEl.classList.add('path');
+    pathEl.classList.add('multipath');
     pathEl.style.stroke = color;
     pathEl.style.fill = color.replace('0.85)', '0.4)');
     gEl.appendChild(pathEl);
 
     gEl.setAttribute('transform', 'translate(0, -' + index / (numSubPlots + 2) + ')');
     svgEl.appendChild(gEl);
+
+    // Click event
+    pathEl.addEventListener('click', () => {
+      debugger;
+      let parentElement = plotEl.parentElement;
+      let subplot = createPlotHTMLEl(specData[keyClassName][key], title + ': ' + key, xlabel, ylabel, color);
+      parentElement.appendChild(subplot);
+    });
   });
 
   topRowEl.append(ylabelEl, yaxisEl, svgContainer);
@@ -290,6 +305,8 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
 
 // Create x axis tips
 const createXAxisTips = (maxValue, width, step) => {
+  // Margins
+  maxValue *= 1.1;
   // Pixel separation between ticks
   let pixelSeparation = 100;
   // Number of ticks

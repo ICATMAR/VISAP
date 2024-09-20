@@ -107,8 +107,11 @@
   transition: all 0.2s ease-in-out;
 }
 
-.path:hover {
-  /* stroke-width: 0.3rem; */
+.multipath {
+  cursor: pointer;
+}
+.multipath:hover {
+  stroke-width: 0.3rem;
 }
 
 .circleBox {
