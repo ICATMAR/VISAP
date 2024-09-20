@@ -187,6 +187,10 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
     circleContainer.appendChild(circleBox);
   }
   svgContainer.appendChild(circleContainer);
+
+  // L50 and MCRS
+  addL50AndMCRS(specData, svgEl);
+
   // Dialog / Tooltip
   let tooltip = document.createElement('div');
   tooltip.classList.add('tooltip');
@@ -277,6 +281,8 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
     // Find ranges
     Object.keys(specData[keyClassName]).forEach(key => {
       findSizeAndNumIndRanges(specData[keyClassName][key]);
+      specData[keyClassName][key].L50 = specData.L50;
+      specData[keyClassName][key].MCRS = specData.MCRS;
     });
   }
 
@@ -345,6 +351,9 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
   topRowEl.append(ylabelEl, yaxisEl, svgContainer);
   plotEl.appendChild(topRowEl);
 
+
+  // L50 and MCRS
+  addL50AndMCRS(specData, svgEl);
 
 
   // Second row
@@ -483,4 +492,31 @@ const createYAxisCategoryTicks = (keys) => {
 
   }
   return elements;
-} 
+}
+
+
+// Add lines for L50 and MCRS
+const addL50AndMCRS = (specData, svgEl) => {
+  // L50 and MCRS
+  if (specData.L50) {
+    let L50El = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    let normPosition = specData.L50 / specData.rangeSize[1];
+    L50El.setAttribute('d', 'M ' + normPosition + ' 0 L ' + normPosition + ' 1');
+    L50El.setAttribute('stroke-linejoin', 'round');
+    L50El.setAttribute('stroke-dasharray', '4');
+    L50El.setAttribute('vector-effect', 'non-scaling-stroke');
+    L50El.classList.add('L50');
+    L50El.style.stroke = 'red';
+    svgEl.appendChild(L50El);
+  }
+  if (specData.MCRS) {
+    let MCRSEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    let normPosition = specData.MCRS / specData.rangeSize[1];
+    MCRSEl.setAttribute('d', 'M ' + normPosition + ' 0 L ' + normPosition + ' 1');
+    MCRSEl.setAttribute('stroke-linejoin', 'round');
+    MCRSEl.setAttribute('vector-effect', 'non-scaling-stroke');
+    MCRSEl.classList.add('MCRS');
+    MCRSEl.style.stroke = 'red';
+    svgEl.appendChild(MCRSEl);
+  }
+}

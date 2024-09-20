@@ -13,10 +13,7 @@
 
 <body>
   <div class="options">
-    <button onclick="showBy('byYear')">by Year</button>
-    <button onclick="showBy('bySeason')">by Season</button>
-    <button onclick="showBy('byGround')">by Ground</button>
-    <button onclick="showBy('byPortArea')">by Port Area</button>
+    <input type="checkbox" onclick="clickOnlyL50(event)" checked>Only L50 samplings</input>
     <input type="checkbox" onclick="clickOnlyTarget(event)" checked>Only +500 samplings</input>
   </div>
   <div id="charts-container"></div>
@@ -44,8 +41,9 @@
             'breadcrumb': '',
             'rangeSize': [Infinity, -Infinity],
             'rangeNumInd': [Infinity, -Infinity],
-
-            // Mininum size, Maturity size?
+            // Mininum size, Maturity size
+            'L50': item.L50,
+            'MCRS': item.MCRS,
           };
         speciesData[item.ScientificName].rawData.push(item);
         // Species > Size
@@ -67,6 +65,7 @@
 
         // Find X Y ranges per species
         findSizeAndNumIndRanges(specData, sName);
+        // L50 and MCRS defined previously
 
         const categories = ['byYear', 'bySeason', 'byGround', 'byPortArea'];
         const categoriesKeyAttr = ['Year', 'Season', 'FishingGroundType', 'PortArea'];
@@ -82,6 +81,8 @@
         for (let i = 0; i < categories.length; i++) {
           Object.keys(specData[categories[i]]).forEach(key => {
             findSizeAndNumIndRanges(specData[categories[i]][key], sName);
+            specData[categories[i]][key].L50 = specData.L50;
+            specData[categories[i]][key].MCRS = specData.MCRS;
           });
         }
       });
@@ -125,6 +126,8 @@
       for (let i = 0; i < numPlots; i++) {
         let specData = speciesData[Object.keys(speciesData)[i]];
         if (specData.rawData.length < 500 && onlyShowTarget)
+          continue;
+        if (specData.isTarget == false)
           continue;
 
         let speciesContainer = document.createElement('div');

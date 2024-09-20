@@ -38,7 +38,6 @@
 }
 
 .ylabel {
-  background: green;
   width: 20px;
   height: 100%;
   text-align: center;
@@ -58,7 +57,6 @@
 }
 
 .yaxis {
-  background: rgb(0, 255, 153);
   width: 50px;
   height: 100%;
   position: relative;
@@ -100,9 +98,7 @@
 }
 
 .path {
-  fill: rgba(255, 0, 0, 0.459);
   stroke-width: 0.2rem;
-  stroke: black;
   transform: translateY(1px) scaleY(-1);
   transition: all 0.2s ease-in-out;
 }
@@ -112,6 +108,10 @@
 }
 .multipath:hover {
   stroke-width: 0.3rem;
+}
+
+.L50, .MCRS {
+  stroke-width: 0.1rem;
 }
 
 .circleBox {
@@ -177,14 +177,12 @@
 
 .xaxis {
   height: 30px;
-  background: rgb(112, 84, 234);
   width: 100%;
   position: relative;
 }
 
 .xlabel {
   height: 20px;
-  background: purple;
   text-align: center;
 }
 
