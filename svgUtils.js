@@ -65,7 +65,7 @@ const generateSVGCircles = function (sizes, rangeSize, rangeNumInd) {
     circleEl.style.left = 100 * (x - betweenPrevXAndX) / (betweenXAndNextX - betweenPrevXAndX) + '%';
     circleEl.style.bottom = 100 * y + '%';
     circleBox.appendChild(circleEl);
-    
+
     // Add title
     circleBox.title = 'x: ' + sKey + ', y: ' + (sizes[sKey].numInd).toFixed(1);
     arrayCircles.push(circleBox);
@@ -127,6 +127,27 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
     circleContainer.appendChild(circleBox);
   }
   svgContainer.appendChild(circleContainer);
+  // Dialog / Tooltip
+  let tooltip = document.createElement('div');
+  tooltip.classList.add('tooltip');
+  for (let i = 0; i < circleContainer.children.length; i++) {
+    let circleBox = circleContainer.children[i];
+    let showTooltip = (e) => {
+      // Prevent the default touch action on mobile
+      e.preventDefault();
+      tooltip.innerText = circleBox.title;
+      tooltip.style.bottom = circleBox.children[0].style.bottom;
+      tooltip.style.left = circleBox.style.left;
+      tooltip.style.border = '2px ' + color + ' solid';
+      tooltip.style.display = 'block';
+    }
+
+    circleBox.addEventListener('mouseover', showTooltip);
+    circleBox.addEventListener('click', showTooltip);
+    circleBox.addEventListener('mouseleave', () => { tooltip.style.display = 'none' });
+  }
+  svgContainer.appendChild(tooltip);
+
   // Second row
   // xaxis-container
   let xaxisRowEl = document.createElement('div');
