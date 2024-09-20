@@ -189,7 +189,7 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
   svgContainer.appendChild(circleContainer);
 
   // L50 and MCRS
-  addL50AndMCRS(specData, svgEl);
+  addL50AndMCRS(specData, svgEl, svgContainer);
 
   // Dialog / Tooltip
   let tooltip = document.createElement('div');
@@ -353,7 +353,7 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
 
 
   // L50 and MCRS
-  addL50AndMCRS(specData, svgEl);
+  addL50AndMCRS(specData, svgEl, svgContainer);
 
 
   // Second row
@@ -496,7 +496,7 @@ const createYAxisCategoryTicks = (keys) => {
 
 
 // Add lines for L50 and MCRS
-const addL50AndMCRS = (specData, svgEl) => {
+const addL50AndMCRS = (specData, svgEl, svgContainer) => {
   // L50 and MCRS
   if (specData.L50) {
     let L50El = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -518,5 +518,37 @@ const addL50AndMCRS = (specData, svgEl) => {
     MCRSEl.classList.add('MCRS');
     MCRSEl.style.stroke = 'red';
     svgEl.appendChild(MCRSEl);
+  }
+  // Legend
+  if (specData.L50 || specData.MCRS){
+    let legendContainer = document.createElement('div');
+    legendContainer.classList.add('legendContainer');
+    if (specData.L50){
+      let L50StrokeEl = document.createElement('div');
+      L50StrokeEl.classList.add('L50LegendStroke');
+      let L50TextEl = document.createElement('div');
+      L50TextEl.innerText = 'L50 ⚤';
+
+      let L50LegendContainer = document.createElement('div');
+      L50LegendContainer.classList.add('itemLegendContainer');
+      L50LegendContainer.title = 'Sexual maturity';
+      L50LegendContainer.appendChild(L50StrokeEl);
+      L50LegendContainer.appendChild(L50TextEl);
+      legendContainer.appendChild(L50LegendContainer);
+    }
+    if (specData.MCRS){
+      let MCRSStrokeEl = document.createElement('div');
+      MCRSStrokeEl.classList.add('MCRSLegendStroke');
+      let MCRSTextEl = document.createElement('div');
+      MCRSTextEl.innerText = 'MCRS ⚖';
+      
+      let MCRSLegendContainer = document.createElement('div');
+      MCRSLegendContainer.classList.add('itemLegendContainer');
+      MCRSLegendContainer.title = 'Minimum Conservation Reference Size';
+      MCRSLegendContainer.appendChild(MCRSStrokeEl);
+      MCRSLegendContainer.appendChild(MCRSTextEl);
+      legendContainer.appendChild(MCRSLegendContainer);
+    }
+    svgContainer.appendChild(legendContainer);
   }
 }

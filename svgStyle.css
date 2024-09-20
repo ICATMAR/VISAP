@@ -106,13 +106,43 @@
 .multipath {
   cursor: pointer;
 }
+
 .multipath:hover {
   stroke-width: 0.3rem;
 }
 
-.L50, .MCRS {
+.L50,
+.MCRS {
   stroke-width: 0.1rem;
 }
+
+.legendContainer {
+  position: absolute;
+  padding: 8px;
+  right: 0;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+.itemLegendContainer {
+  display: flex;
+  align-items: center;
+}
+
+.L50LegendStroke {
+  width: 20px;
+  border: dashed 2px red;
+  margin: 5px;
+}
+
+.MCRSLegendStroke {
+  width: 20px;
+  height: 2px;
+  background: red;
+  margin: 5px;
+}
+
+
 
 .circleBox {
   position: absolute;

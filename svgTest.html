@@ -127,7 +127,7 @@
         let specData = speciesData[Object.keys(speciesData)[i]];
         if (specData.rawData.length < 500 && onlyShowTarget)
           continue;
-        if (specData.isTarget == false)
+        if (specData.L50 == undefined)
           continue;
 
         let speciesContainer = document.createElement('div');
