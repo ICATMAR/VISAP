@@ -1,3 +1,59 @@
+
+const categories = ['byYear', 'bySeason', 'byGround', 'byPortArea'];
+const categoriesKeyAttr = ['Year', 'Season', 'FishingGroundType', 'PortArea'];
+
+
+
+// Fill data structure function
+const fillDataStruct = (specData, item, keyClassName, attrName) => {
+  if (specData[keyClassName] == undefined) { debugger; }
+  if (specData[keyClassName][item[attrName]] == undefined) {
+    specData[keyClassName][item[attrName]] = {
+      'rawData': [],
+      'bySize': {},
+      'breadcrumb': specData.breadcrumb + '>' + keyClassName,
+    }
+  }
+  specData[keyClassName][item[attrName]].rawData.push(item);
+  // Species > Year/Season/Ground > Size
+  if (specData[keyClassName][item[attrName]].bySize[item.Size] == undefined) {
+    specData[keyClassName][item[attrName]].bySize[item.Size] = {
+      'rawData': [],
+      'numInd': 0,
+    }
+  }
+  specData[keyClassName][item[attrName]].bySize[item.Size].rawData.push(item);
+  specData[keyClassName][item[attrName]].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+};
+
+// Find ranges of sizes
+const findSizeAndNumIndRanges = (specData, sName) => {
+  sName = sName || specData.rawData[0].ScientificName;
+  // Reset
+  specData.rangeSize = [Infinity, -Infinity];
+  specData.rangeNumInd = [Infinity, -Infinity];
+  if (specData.bySize == undefined) { debugger }
+
+  // Find X Y ranges per species
+  Object.keys(specData.bySize).forEach(sKey => {
+    // Ranges
+    specData.rangeSize[0] = Math.min(specData.rangeSize[0], sKey);
+    specData.rangeSize[1] = Math.max(specData.rangeSize[1], sKey);
+    specData.rangeNumInd[0] = Math.min(specData.rangeNumInd[0], specData.bySize[sKey].numInd);
+    specData.rangeNumInd[1] = Math.max(specData.rangeNumInd[1], specData.bySize[sKey].numInd);
+  });
+  if (specData.rangeNumInd[1] == 0) {
+    console.warn('Maximum abundance for ' + sName + ' is zero, but ' + specData.rawData.length + ' entries are present.');
+    specData.rangeNumInd[1] = 1;
+  }
+}
+
+
+
+
+
+
+
 // Generate SVG path
 const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
   let path = '';
@@ -189,11 +245,41 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
   titleEl.innerText = title;
   plotEl.appendChild(titleEl);
 
+  // Buttons to show by category
+  let buttonsCategories = document.createElement('div');
+  buttonsCategories.classList.add('buttonsCategories');
+  for (let i = 0; i < categories.length; i++) {
+    if (!specData.breadcrumb.includes(categories[i])) {
+      let buttonEl = document.createElement('button');
+      buttonEl.innerText = categories[i];
+      // buttonEl.classList.add('');
+      buttonEl.addEventListener('click', () => {
+        //let parentElement = plotEl.parentElement;
+        let multipleSubPlots = createMultiplePlotHTMLEl(specData, categories[i], title + ' > ' + categories[i], xlabel, ylabel, color);
+        plotEl.appendChild(multipleSubPlots);
+      });
+      buttonsCategories.appendChild(buttonEl);
+    }
+  }
+  plotEl.appendChild(buttonsCategories);
+
   return plotEl;
 }
 
 
 const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel, color) => {
+  // Generate data
+  if (specData[keyClassName] == undefined) {
+    specData[keyClassName] = {};
+    specData.rawData.forEach(item => {
+      fillDataStruct(specData, item, keyClassName, categoriesKeyAttr[categories.indexOf(keyClassName)]);
+    });
+    // Find ranges
+    Object.keys(specData[keyClassName]).forEach(key => {
+      findSizeAndNumIndRanges(specData[keyClassName][key]);
+    });
+  }
+
   let plotEl = document.createElement('div');
   plotEl.classList.add('plot-container');
   // First row
@@ -250,7 +336,6 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
 
     // Click event
     pathEl.addEventListener('click', () => {
-      debugger;
       let parentElement = plotEl.parentElement;
       let subplot = createPlotHTMLEl(specData[keyClassName][key], title + ': ' + key, xlabel, ylabel, color);
       parentElement.appendChild(subplot);

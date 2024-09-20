@@ -193,3 +193,8 @@
   text-align: center;
   font-size: large
 }
+
+.buttonsCategories {
+  display: flex;
+  justify-content: center;
+}

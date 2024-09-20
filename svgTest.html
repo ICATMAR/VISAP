@@ -39,9 +39,9 @@
             'byYear': {},
             'bySeason': {},
             'byGround': {},
-            'bySize': {},
             'byPortArea': {},
-            'svgPath': '',
+            'bySize': {},
+            'breadcrumb': '',
             'rangeSize': [Infinity, -Infinity],
             'rangeNumInd': [Infinity, -Infinity],
 
@@ -81,38 +81,11 @@
         // Find X Y ranges per species and categories
         for (let i = 0; i < categories.length; i++) {
           Object.keys(specData[categories[i]]).forEach(key => {
-            findSizeAndNumIndRanges(specData[categories[i]][key], sName + '>' + categories[i] + '>' + key);
+            findSizeAndNumIndRanges(specData[categories[i]][key], sName);
           });
         }
       });
 
-
-      // Create SVG paths and combintations
-      Object.keys(speciesData).forEach(sName => {
-        let specData = speciesData[sName];
-        // Year
-        Object.keys(specData.byYear).forEach(year => {
-          let specYearData = specData.byYear[year];
-          // Species > Year > Season
-          specYearData.bySeason = {};
-          specYearData.rawData.forEach(item => {
-            fillDataStruct(specYearData, item, 'bySeason', 'Season');
-          });
-        });
-
-        // Season
-        Object.keys(specData.bySeason).forEach(season => {
-          let specSeasonData = specData.bySeason[season];
-          // Species > Season > Year
-          specSeasonData.byYear = {};
-          specSeasonData.rawData.forEach(item => {
-            fillDataStruct(specSeasonData, item, 'byYear', 'Year');
-          });
-        });
-
-
-
-      });
 
 
       //debugger;
@@ -126,48 +99,7 @@
 
 
 
-    // Fill data structure function
-    const fillDataStruct = (specData, item, keyClassName, attrName) => {
-      if (specData[keyClassName] == undefined) { debugger; }
-      if (specData[keyClassName][item[attrName]] == undefined) {
-        specData[keyClassName][item[attrName]] = {
-          'rawData': [],
-          'bySize': {},
-          'svgPath': '',
-        }
-      }
-      specData[keyClassName][item[attrName]].rawData.push(item);
-      // Species > Year/Season/Ground > Size
-      if (specData[keyClassName][item[attrName]].bySize[item.Size] == undefined) {
-        specData[keyClassName][item[attrName]].bySize[item.Size] = {
-          'rawData': [],
-          'numInd': 0,
-        }
-      }
-      specData[keyClassName][item[attrName]].bySize[item.Size].rawData.push(item);
-      specData[keyClassName][item[attrName]].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
-    };
 
-    // Find ranges of sizes
-    const findSizeAndNumIndRanges = (specData, sName) => {
-      // Reset
-      specData.rangeSize = [Infinity, -Infinity];
-      specData.rangeNumInd = [Infinity, -Infinity];
-      if (specData.bySize == undefined) { debugger }
-
-      // Find X Y ranges per species
-      Object.keys(specData.bySize).forEach(sKey => {
-        // Ranges
-        specData.rangeSize[0] = Math.min(specData.rangeSize[0], sKey);
-        specData.rangeSize[1] = Math.max(specData.rangeSize[1], sKey);
-        specData.rangeNumInd[0] = Math.min(specData.rangeNumInd[0], specData.bySize[sKey].numInd);
-        specData.rangeNumInd[1] = Math.max(specData.rangeNumInd[1], specData.bySize[sKey].numInd);
-      });
-      if (specData.rangeNumInd[1] == 0) {
-        console.warn('Maximum abundance for ' + sName + ' is zero, but ' + specData.rawData.length + ' entries are present.');
-        specData.rangeNumInd[1] = 1;
-      }
-    }
 
 
 
@@ -197,15 +129,10 @@
 
         let speciesContainer = document.createElement('div');
         speciesContainer.classList.add('species-container');
-        // Iterate per key (season, year, ground)
 
-
-        // Create SVG example
+        // Create SVG
         let htmlEl = createPlotHTMLEl(specData, Object.keys(speciesData)[i], 'Longitude', 'Abundance', colors[i]);
 
-        let htmlMultipleEl = createMultiplePlotHTMLEl(specData, keyClassName, Object.keys(speciesData)[i] + ' > ' + keyClassName, 'Longitude', 'Abundance', colors[i]);
-
-        htmlEl.appendChild(htmlMultipleEl);
         // Add to DOM
         container.appendChild(htmlEl);
       }
