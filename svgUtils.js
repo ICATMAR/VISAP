@@ -341,11 +341,20 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
     svgEl.appendChild(gEl);
 
     // Click event
-    pathEl.addEventListener('click', () => {
+    const clickOnSubplot = () => {
       let parentElement = plotEl.parentElement;
       let subplot = createPlotHTMLEl(specData[keyClassName][key], title + ': ' + key, xlabel, ylabel, color);
       parentElement.appendChild(subplot);
-    });
+      // Show that it is selected
+      gEl;
+      debugger;
+    }
+    // Add click event to path
+    pathEl.addEventListener('click', clickOnSubplot);
+    // Add click event to YAxisCategory buttons
+    let btns = yticksEls.filter(el => el.constructor.name == 'HTMLButtonElement');
+    if (btns[index].innerText != key) {debugger;}
+    btns[index].addEventListener('click', clickOnSubplot);
   });
 
   topRowEl.append(ylabelEl, yaxisEl, svgContainer);
@@ -484,7 +493,7 @@ const createYAxisCategoryTicks = (keys) => {
     divEl.style.bottom = 100 * normY + '%';
     elements.push(divEl);
     // text
-    let textEl = document.createElement('div');
+    let textEl = document.createElement('button');
     textEl.classList.add('ytickInsideText');
     textEl.style.bottom = 100 * normY + '%';
     textEl.innerText = keys[i];
@@ -501,7 +510,7 @@ const addL50AndMCRS = (specData, svgEl, svgContainer) => {
   if (specData.L50) {
     let L50El = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     let normPosition = specData.L50 / specData.rangeSize[1];
-    L50El.setAttribute('d', 'M ' + normPosition + ' 0 L ' + normPosition + ' 1');
+    L50El.setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
     L50El.setAttribute('stroke-linejoin', 'round');
     L50El.setAttribute('stroke-dasharray', '4');
     L50El.setAttribute('vector-effect', 'non-scaling-stroke');
@@ -512,7 +521,7 @@ const addL50AndMCRS = (specData, svgEl, svgContainer) => {
   if (specData.MCRS) {
     let MCRSEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     let normPosition = specData.MCRS / specData.rangeSize[1];
-    MCRSEl.setAttribute('d', 'M ' + normPosition + ' 0 L ' + normPosition + ' 1');
+    MCRSEl.setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
     MCRSEl.setAttribute('stroke-linejoin', 'round');
     MCRSEl.setAttribute('vector-effect', 'non-scaling-stroke');
     MCRSEl.classList.add('MCRS');

@@ -78,8 +78,9 @@
 
 .ytickInsideText {
   position: absolute;
-  transform: translate(50px, 50%);
+  transform: translate(60px, 50%);
   text-wrap: nowrap;
+  z-index: 1;
 }
 
 .svgContainer {
@@ -109,6 +110,10 @@
 
 .multipath:hover {
   stroke-width: 0.3rem;
+}
+
+.multipath-selected {
+  stroke-width: 0.4rem;
 }
 
 .L50,
@@ -225,4 +230,8 @@
 .buttonsCategories {
   display: flex;
   justify-content: center;
+}
+
+button {
+  cursor: pointer;
 }
