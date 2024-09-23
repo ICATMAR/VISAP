@@ -1,6 +1,6 @@
 
-const categories = ['byYear', 'bySeason', 'byGround', 'byPortArea'];
-const categoriesKeyAttr = ['Year', 'Season', 'FishingGroundType', 'PortArea'];
+const categories = ['byYear', 'bySeason', 'byMetier', 'byPortArea'];
+const categoriesKeyAttr = ['Year', 'Season', 'Metier', 'PortArea'];
 
 
 
