@@ -20,10 +20,12 @@ const fillDataStruct = (specData, item, keyClassName, attrName) => {
     specData[keyClassName][item[attrName]].bySize[item.Size] = {
       'rawData': [],
       'numInd': 0,
+      'N': 0,
     }
   }
   specData[keyClassName][item[attrName]].bySize[item.Size].rawData.push(item);
   specData[keyClassName][item[attrName]].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+  specData[keyClassName][item[attrName]].bySize[item.Size].N += parseInt(item.N) || 0;
 };
 
 // Find ranges of sizes
@@ -46,6 +48,11 @@ const findSizeAndNumIndRanges = (specData, sName) => {
     console.warn('Maximum abundance for ' + sName + ' is zero, but ' + specData.rawData.length + ' entries are present.');
     specData.rangeNumInd[1] = 1;
   }
+  // Calculate N
+  specData.N = 0;
+  specData.rawData.forEach(item => {
+    specData.N += parseInt(item.N);
+  });
 }
 
 
@@ -88,7 +95,7 @@ const generateSVGPath = function (sizes, rangeSize, rangeNumInd) {
 
 
 // Generate circles shown when hovering
-const generateSVGCircles = function (sizes, rangeSize, rangeNumInd) {
+const generateSVGCircles = function (sizes, rangeSize, rangeNumInd, N) {
   rangeSize = [...rangeSize]; // Copy
   rangeNumInd = [...rangeNumInd]; // Copy
   rangeSize[1] *= 1.1;
@@ -123,7 +130,7 @@ const generateSVGCircles = function (sizes, rangeSize, rangeNumInd) {
     circleBox.appendChild(circleEl);
 
     // Add title
-    circleBox.tooltipText = 'x: ' + sKey + ', y: ' + (sizes[sKey].numInd).toFixed(1);
+    circleBox.tooltipText = 'x: ' + sKey + ', y: ' + (sizes[sKey].numInd).toFixed(1) + ', N = ' + sizes[sKey].N;
     arrayCircles.push(circleBox);
 
     if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
@@ -540,35 +547,43 @@ const addL50AndMCRS = (specData, svgEl, svgContainer) => {
     svgEl.appendChild(MCRSEl);
   }
   // Legend
-  if (specData.L50 || specData.MCRS) {
-    let legendContainer = document.createElement('div');
-    legendContainer.classList.add('legendContainer');
-    if (specData.L50) {
-      let L50StrokeEl = document.createElement('div');
-      L50StrokeEl.classList.add('L50LegendStroke');
-      let L50TextEl = document.createElement('div');
-      L50TextEl.innerText = 'L50 ⚤';
+  let legendContainer = document.createElement('div');
+  legendContainer.classList.add('legendContainer');
+  
+  // N
+  let NEl = document.createElement('div');
+  NEl.innerText = 'N = ' + specData.N;
+  NEl.title = 'Number of measured individuals';
+  legendContainer.append(NEl);
 
-      let L50LegendContainer = document.createElement('div');
-      L50LegendContainer.classList.add('itemLegendContainer');
-      L50LegendContainer.title = 'Sexual maturity';
-      L50LegendContainer.appendChild(L50StrokeEl);
-      L50LegendContainer.appendChild(L50TextEl);
-      legendContainer.appendChild(L50LegendContainer);
-    }
-    if (specData.MCRS) {
-      let MCRSStrokeEl = document.createElement('div');
-      MCRSStrokeEl.classList.add('MCRSLegendStroke');
-      let MCRSTextEl = document.createElement('div');
-      MCRSTextEl.innerText = 'MCRS ⚖';
+  // L50
+  if (specData.L50) {
+    let L50StrokeEl = document.createElement('div');
+    L50StrokeEl.classList.add('L50LegendStroke');
+    let L50TextEl = document.createElement('div');
+    L50TextEl.innerText = 'L50 ⚤';
 
-      let MCRSLegendContainer = document.createElement('div');
-      MCRSLegendContainer.classList.add('itemLegendContainer');
-      MCRSLegendContainer.title = 'Minimum Conservation Reference Size';
-      MCRSLegendContainer.appendChild(MCRSStrokeEl);
-      MCRSLegendContainer.appendChild(MCRSTextEl);
-      legendContainer.appendChild(MCRSLegendContainer);
-    }
-    svgContainer.appendChild(legendContainer);
+    let L50LegendContainer = document.createElement('div');
+    L50LegendContainer.classList.add('itemLegendContainer');
+    L50LegendContainer.title = 'Sexual maturity';
+    L50LegendContainer.appendChild(L50StrokeEl);
+    L50LegendContainer.appendChild(L50TextEl);
+    legendContainer.appendChild(L50LegendContainer);
   }
+  // MCRS
+  if (specData.MCRS) {
+    let MCRSStrokeEl = document.createElement('div');
+    MCRSStrokeEl.classList.add('MCRSLegendStroke');
+    let MCRSTextEl = document.createElement('div');
+    MCRSTextEl.innerText = 'MCRS ⚖';
+
+    let MCRSLegendContainer = document.createElement('div');
+    MCRSLegendContainer.classList.add('itemLegendContainer');
+    MCRSLegendContainer.title = 'Minimum Conservation Reference Size';
+    MCRSLegendContainer.appendChild(MCRSStrokeEl);
+    MCRSLegendContainer.appendChild(MCRSTextEl);
+    legendContainer.appendChild(MCRSLegendContainer);
+  }
+  svgContainer.appendChild(legendContainer);
+
 }

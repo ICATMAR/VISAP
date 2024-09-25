@@ -51,11 +51,13 @@
           speciesData[item.ScientificName].bySize[item.Size] = {
             'rawData': [],
             'numInd': 0,
+            'N': 0,
           }
         }
         // bySize
         speciesData[item.ScientificName].bySize[item.Size].rawData.push(item);
         speciesData[item.ScientificName].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+        speciesData[item.ScientificName].bySize[item.Size].N += parseInt(item.N) || 0;
       });
 
 
