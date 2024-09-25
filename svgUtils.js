@@ -259,8 +259,10 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
       buttonEl.innerText = categories[i];
       // buttonEl.classList.add('');
       buttonEl.addEventListener('click', () => {
-        //let parentElement = plotEl.parentElement;
         let multipleSubPlots = createMultiplePlotHTMLEl(specData, categories[i], title + ' > ' + categories[i], xlabel, ylabel, color);
+        // Remove previous subplot(s)
+        plotEl.querySelectorAll('.plot-container').forEach(ch => ch.remove())
+        // Add subplot
         plotEl.appendChild(multipleSubPlots);
       });
       buttonsCategories.appendChild(buttonEl);
@@ -343,16 +345,18 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
 
     // Click event
     const clickOnSubplot = () => {
-      let parentElement = plotEl.parentElement;
       let subplot = createPlotHTMLEl(specData[keyClassName][key], title + ': ' + key, xlabel, ylabel, color);
-      parentElement.appendChild(subplot);
+      // Remove previous subplot(s)
+      plotEl.querySelectorAll('.plot-container').forEach(ch => ch.remove())
+      // Add subplot
+      plotEl.appendChild(subplot);
       // Show that it is selected
       // Deselect all
-      for (let i = 0; i < svgEl.children.length; i++){
+      for (let i = 0; i < svgEl.children.length; i++) {
         let el = svgEl.children[i];
-        if (el.tagName == 'g'){ // path in multipath is inside a g
+        if (el.tagName == 'g') { // path in multipath is inside a g
           el.children[0].classList.remove('selectedPath')
-        } 
+        }
       }
       pathEl.classList.add('selectedPath');
     }
