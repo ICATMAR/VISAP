@@ -123,7 +123,7 @@ const generateSVGCircles = function (sizes, rangeSize, rangeNumInd) {
     circleBox.appendChild(circleEl);
 
     // Add title
-    circleBox.title = 'x: ' + sKey + ', y: ' + (sizes[sKey].numInd).toFixed(1);
+    circleBox.tooltipText = 'x: ' + sKey + ', y: ' + (sizes[sKey].numInd).toFixed(1);
     arrayCircles.push(circleBox);
 
     if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
@@ -199,9 +199,10 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
     let showTooltip = (e) => {
       // Prevent the default touch action on mobile
       e.preventDefault();
-      tooltip.innerText = circleBox.title;
+      tooltip.innerText = circleBox.tooltipText;
       tooltip.style.bottom = circleBox.children[0].style.bottom;
-      tooltip.style.left = circleBox.style.left;
+      tooltip.style.left = (circleBox.style.left.split('%')[0] * 1 + circleBox.style.width.split('%')[0] / 2) + '%';
+      //tooltip.style.left = circleBox.style.left;
       tooltip.style.border = '2px ' + color + ' solid';
       tooltip.style.display = 'block';
     }
@@ -346,14 +347,20 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
       let subplot = createPlotHTMLEl(specData[keyClassName][key], title + ': ' + key, xlabel, ylabel, color);
       parentElement.appendChild(subplot);
       // Show that it is selected
-      gEl;
-      debugger;
+      // Deselect all
+      for (let i = 0; i < svgEl.children.length; i++){
+        let el = svgEl.children[i];
+        if (el.tagName == 'g'){ // path in multipath is inside a g
+          el.children[0].classList.remove('selectedPath')
+        } 
+      }
+      pathEl.classList.add('selectedPath');
     }
     // Add click event to path
     pathEl.addEventListener('click', clickOnSubplot);
     // Add click event to YAxisCategory buttons
     let btns = yticksEls.filter(el => el.constructor.name == 'HTMLButtonElement');
-    if (btns[index].innerText != key) {debugger;}
+    if (btns[index].innerText != key) { debugger; }
     btns[index].addEventListener('click', clickOnSubplot);
   });
 
@@ -529,10 +536,10 @@ const addL50AndMCRS = (specData, svgEl, svgContainer) => {
     svgEl.appendChild(MCRSEl);
   }
   // Legend
-  if (specData.L50 || specData.MCRS){
+  if (specData.L50 || specData.MCRS) {
     let legendContainer = document.createElement('div');
     legendContainer.classList.add('legendContainer');
-    if (specData.L50){
+    if (specData.L50) {
       let L50StrokeEl = document.createElement('div');
       L50StrokeEl.classList.add('L50LegendStroke');
       let L50TextEl = document.createElement('div');
@@ -545,12 +552,12 @@ const addL50AndMCRS = (specData, svgEl, svgContainer) => {
       L50LegendContainer.appendChild(L50TextEl);
       legendContainer.appendChild(L50LegendContainer);
     }
-    if (specData.MCRS){
+    if (specData.MCRS) {
       let MCRSStrokeEl = document.createElement('div');
       MCRSStrokeEl.classList.add('MCRSLegendStroke');
       let MCRSTextEl = document.createElement('div');
       MCRSTextEl.innerText = 'MCRS ⚖';
-      
+
       let MCRSLegendContainer = document.createElement('div');
       MCRSLegendContainer.classList.add('itemLegendContainer');
       MCRSLegendContainer.title = 'Minimum Conservation Reference Size';
