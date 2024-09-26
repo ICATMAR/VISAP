@@ -3,7 +3,6 @@ const categories = ['byYear', 'bySeason', 'byMetier', 'byPortArea'];
 const categoriesKeyAttr = ['Year', 'Season', 'Metier', 'PortArea'];
 
 
-
 // Fill data structure function
 const fillDataStruct = (specData, item, keyClassName, attrName) => {
   if (specData[keyClassName] == undefined) { debugger; }
@@ -15,7 +14,7 @@ const fillDataStruct = (specData, item, keyClassName, attrName) => {
     }
   }
   specData[keyClassName][item[attrName]].rawData.push(item);
-  // Species > Year/Season/Ground > Size
+  // Species > Year/Season/Metier/Port > Size
   if (specData[keyClassName][item[attrName]].bySize[item.Size] == undefined) {
     specData[keyClassName][item[attrName]].bySize[item.Size] = {
       'rawData': [],
@@ -277,6 +276,10 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
   }
   plotEl.appendChild(buttonsCategories);
 
+
+  // Export
+  addExportButtons(plotEl, svgContainer, specData, title);
+
   return plotEl;
 }
 
@@ -291,8 +294,10 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
     // Find ranges
     Object.keys(specData[keyClassName]).forEach(key => {
       findSizeAndNumIndRanges(specData[keyClassName][key]);
+      // Heritage
       specData[keyClassName][key].L50 = specData.L50;
       specData[keyClassName][key].MCRS = specData.MCRS;
+      specData[keyClassName][key].key = (specData.key || '') + key + '_';
     });
   }
 
@@ -549,7 +554,7 @@ const addL50AndMCRS = (specData, svgEl, svgContainer) => {
   // Legend
   let legendContainer = document.createElement('div');
   legendContainer.classList.add('legendContainer');
-  
+
   // N
   let NEl = document.createElement('div');
   NEl.innerText = 'N = ' + specData.N;
@@ -585,5 +590,56 @@ const addL50AndMCRS = (specData, svgEl, svgContainer) => {
     legendContainer.appendChild(MCRSLegendContainer);
   }
   svgContainer.appendChild(legendContainer);
+
+}
+
+
+const addExportButtons = (plotEl, svgContainer, specData, title) => {
+
+  // Container
+  let exportContainer = document.createElement('div');
+  exportContainer.classList.add('export-container');
+
+  // Button
+  let expButton = document.createElement('button');
+  expButton.classList.add('exportButton');
+  expButton.addEventListener('click', () => {
+
+    expOptContainer.style.display = expOptContainer.style.display == 'flex' ? 'none' : 'flex';
+  })
+
+  // Parental care
+  exportContainer.appendChild(expButton);
+  svgContainer.appendChild(exportContainer);
+
+  // Export options
+  let expOptContainer = document.createElement('div');
+  expOptContainer.classList.add('export-options-container');
+  // PNG
+  let expPNG = document.createElement('button');
+  expPNG.innerText = 'Export as png';
+  expPNG.addEventListener('click', () => {
+    expOptContainer.style.display = 'none';
+    // https://github.com/niklasvh/html2canvas/
+    html2canvas(plotEl).then((canvas) => {
+      let imgURL = canvas.toDataURL();
+      const link = document.createElement('a');
+      link.href = imgURL;
+
+      link.download = 'ICATMAR_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.png'; // WARN: depends on title, maybe it should be somewhere else
+      // Trigger the download by simulating a click on the link
+      link.click();
+    })
+  });
+  // Parental care
+  expOptContainer.appendChild(expPNG);
+  exportContainer.appendChild(expOptContainer);
+
+  // Interaction
+  expButton.addEventListener('click', () => {
+
+
+  });
+
 
 }

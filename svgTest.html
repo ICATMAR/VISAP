@@ -9,6 +9,9 @@
   <!-- SVG Style -->
   <link rel="stylesheet" type="text/css" href="svgStyle.css" media="screen" />
   <script src="svgUtils.js"></script>
+
+  <!-- html2canvas -->
+  <script src="/VISAP/lib/html2canvas/html2canvas.min.js"></script>
 </head>
 
 <body>
@@ -85,6 +88,7 @@
             findSizeAndNumIndRanges(specData[categories[i]][key], sName);
             specData[categories[i]][key].L50 = specData.L50;
             specData[categories[i]][key].MCRS = specData.MCRS;
+            specData[categories[i]][key].key = (specData.key || '') + key + '_';
           });
         }
       });
