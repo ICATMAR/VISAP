@@ -604,8 +604,10 @@ const addExportButtons = (plotEl, svgContainer, specData, title) => {
   let expButton = document.createElement('button');
   expButton.classList.add('exportButton');
   expButton.addEventListener('click', () => {
-
     expOptContainer.style.display = expOptContainer.style.display == 'flex' ? 'none' : 'flex';
+  });
+  exportContainer.addEventListener('mouseleave', () => {
+    expOptContainer.style.display = 'none';
   })
 
   // Parental care
@@ -623,23 +625,57 @@ const addExportButtons = (plotEl, svgContainer, specData, title) => {
     // https://github.com/niklasvh/html2canvas/
     html2canvas(plotEl).then((canvas) => {
       let imgURL = canvas.toDataURL();
-      const link = document.createElement('a');
-      link.href = imgURL;
-
-      link.download = 'ICATMAR_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.png'; // WARN: depends on title, maybe it should be somewhere else
-      // Trigger the download by simulating a click on the link
-      link.click();
+      const linkEl = document.createElement('a');
+      linkEl.href = imgURL;
+      linkEl.download = 'ICATMAR_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.png'; // TODO: add fishing modality
+      linkEl.click();
+      // TODO: GA analytics
     })
   });
-  // Parental care
-  expOptContainer.appendChild(expPNG);
-  exportContainer.appendChild(expOptContainer);
+  // CSV
+  let expCSV = document.createElement('button');
+  expCSV.innerText = 'Export as csv';
+  expCSV.addEventListener('click', () => {
+    let jsonData = specData.rawData;
+    let keys = Object.keys(jsonData[0]);
 
-  // Interaction
-  expButton.addEventListener('click', () => {
+    let columnDelimiter = ',';
+    let lineDelimiter = '\n';
 
+    let csvColumnHeader = keys.join(columnDelimiter);
+    let csvStr = csvColumnHeader + lineDelimiter;
 
+    jsonData.forEach(item => {
+      keys.forEach((key, index) => {
+        if ((index > 0) && (index < keys.length)) {
+          csvStr += columnDelimiter;
+        }
+        csvStr += item[key];
+      });
+      csvStr += lineDelimiter;
+    });
+    let dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvStr);
+    let linkEl = document.createElement('a');
+    linkEl.setAttribute('href', dataUri);
+    linkEl.setAttribute('download', 'ICATMAR_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.csv'); // TODO: add fishing modality
+    linkEl.click();
+    // TODO: GA analytics
+  });
+  let expJSON = document.createElement('button');
+  expJSON.innerText = 'Export as json';
+  expJSON.addEventListener('click', () => {
+    let dataStr = JSON.stringify(specData.rawData);
+    let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+    let linkEl = document.createElement('a');
+    linkEl.setAttribute('href', dataUri);
+    linkEl.setAttribute('download', 'ICATMAR_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.json'); // TODO: add fishing modality
+    linkEl.click();
   });
 
+  // Parental care
+  expOptContainer.appendChild(expPNG);
+  expOptContainer.appendChild(expCSV);
+  expOptContainer.appendChild(expJSON);
+  exportContainer.appendChild(expOptContainer);
 
 }
