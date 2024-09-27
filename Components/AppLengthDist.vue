@@ -3,7 +3,7 @@
     <div id='appLengthDist' ref='appLengthDist'>
   
       <!--Header -->
-      <title-header title="Length distribution"></title-header>
+      <title-header title='Length distribution'></title-header>
 
       <!-- Buttons to add and remove species -->
       <div class="centered-rows" style="margin-top:40px">
@@ -90,6 +90,7 @@
 
 
       // INTERNAL METHODS
+      // Get the data
       updateLengthDistribution: function() {
         if (window.GUIManager.currentSection == 'length-dist') {
           window.DataManager.loadNecessaryFiles('length-dist', window.GUIManager.currentModality)
@@ -102,14 +103,6 @@
         }
       },
 
-      // Get file
-      loadChartData: function() {
-        // Call data manager to load the data
-        window.DataManager.loadNecessaryFiles('length-dist', window.GUIManager.currentModality)
-          .then(() => {
-            debugger;
-          })
-      },
 
       createGraph: function(data){
         
