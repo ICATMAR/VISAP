@@ -38,7 +38,7 @@
             'rawData': [],
             'byYear': {},
             'bySeason': {},
-            'byGround': {},
+            'byMetier': {},
             'byPortArea': {},
             'bySize': {},
             'breadcrumb': '',
@@ -64,7 +64,7 @@
       });
 
 
-      // Sort by year, season and ground
+      // Sort by year, season and metier
       Object.keys(speciesData).forEach(sName => {
         let specData = speciesData[sName];
 
@@ -72,13 +72,13 @@
         findSizeAndNumIndRanges(specData, sName);
         // L50 and MCRS defined previously
 
-        const categories = ['byYear', 'bySeason', 'byGround', 'byPortArea'];
+        const categories = ['byYear', 'bySeason', 'byMetier', 'byPortArea'];
         const categoriesKeyAttr = ['Year', 'Season', 'Metier', 'PortArea'];
         // Iterate raw data
         specData.rawData.forEach(item => {
           // Fill data for the different categories
           for (let i = 0; i < categories.length; i++) {
-            // Species > Year, Season, Ground...
+            // Species > Year, Season, Metier...
             fillDataStruct(specData, item, categories[i], categoriesKeyAttr[i]); // fillDataStruct(specData, item, 'byYear', 'Year');
           }
         });
