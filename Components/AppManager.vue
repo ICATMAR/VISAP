@@ -15,7 +15,7 @@
     <app-overview v-show="section=='overview'"></app-overview>
 
     <!-- APP LENGTH FREQ -->
-    <app-lengthfreq v-show="section=='length-dist'"></app-lengthfreq>
+    <app-lengthdist v-show="section=='length-dist'"></app-lengthdist>
 
     <!-- ICONS -->
     <a href="https://icatmar.cat/">
@@ -49,7 +49,7 @@
 
 // Import components
 import AppOverview from "Components/AppOverview.vue";
-import AppLengthFreq from "Components/AppLengthFreq.vue";
+import AppLengthDist from "Components/AppLengthDist.vue";
 import AppMap from "Components/AppMap.vue";
 import CookieBanner from "Components/CookieBanner.vue";
 
@@ -89,7 +89,7 @@ export default {
   },
   components: {
     "app-overview": AppOverview,
-    "app-lengthfreq": AppLengthFreq,
+    "app-lengthdist": AppLengthDist,
     "app-map": AppMap,
     "cookie-banner": CookieBanner,
     "language-selector": LanguageSelector,

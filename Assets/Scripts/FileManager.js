@@ -211,7 +211,7 @@ class FileManager {
             return response;
           })
           .catch(e => {
-            //console.error("File not at " + e.stack.split('\n')[1].split('/').pop());
+console.error("File not at " + e.stack.split('\n')[1].split('/').pop());            //
           })
       )
     }
@@ -234,6 +234,41 @@ class FileManager {
         this.updatePieChartData();
       })
       .catch(e => console.error(e));
+  }
+
+
+
+  // Load length-distribution file
+  loadLengthDistFile = function (mod) {
+    let modURL = mod == 'trawling' ? 'trawlingData' : mod == 'purse-seine' ? 'purseSeineData' : 'recreational';
+    let modCode = mod == 'trawling' ? 'trawling' : mod == 'purse-seine' ? 'ps' : 'rec';
+    let baseURL = '/VISAP/data/' + modURL + '/';
+
+    let url = baseURL + modCode + '_sizes.json';
+
+    // Check if this file was already requested
+    let fileWasRequested = this.requestedFiles.indexOf(url) != -1;
+
+    // Keep track of requested files. Skip if already requested
+    if (fileWasRequested)
+      return Promise.resolve();
+    else
+      this.requestedFiles.push(url);
+
+    // Load file
+    return fetch(url).then(r => r.json())
+      .then(res => {
+        let response = {
+          'url': url,
+          'content': res,
+          'extension': 'json'
+        }
+        this.loadedFilesLog.push(response);
+        return response;
+      })
+      .catch(e => {
+        console.error("File not at " + e.stack.split('\n')[1].split('/').pop());
+      });
   }
 
 

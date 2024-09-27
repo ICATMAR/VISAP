@@ -27,6 +27,11 @@ class FishingData {
   isLoadingOverviewFiles = false;
   overviewFilesLoaded = false;
 
+  loadingLengthDistPromise = null;
+  isLoadingLengthDist = false;
+  lengthDistFilesLoaded = false;
+
+  lengthDist = undefined;
 
   constructor(mod) {
     this.mod = mod;
@@ -142,7 +147,30 @@ class FishingData {
   }
 
 
+  // Load length distribution (only one file)
+  async loadLengthDistFile() {
+    // Is in the process of being loaded
+    if (this.isLoadingLengthDist) 
+      return this.loadingLengthDistPromise;
+    
+    // If already loaded
+    if (this.lengthDistFilesLoaded)
+      return Promise.resolve();
 
+    this.isLoadingOverviewFiles = true;
+
+    // Load length-distribution file
+    return this.loadingLengthDistPromise = window.FileManager.loadLengthDistFile(this.mod).then((result) => {
+      if (result != undefined){
+        this.lengthDist = result.content;
+      }
+      // Status
+      this.isLoadingLengthDist = false;
+      this.loadingLengthDistPromise = null;
+      this.lengthDistFilesLoaded = true;
+      console.log("Files for section length-distribution and modality " + this.mod + " loaded.")
+    });
+  }
 
 
 
