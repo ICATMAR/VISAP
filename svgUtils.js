@@ -278,7 +278,7 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
 
 
   // Export
-  addExportButtons(plotEl, svgContainer, specData, title);
+  addExportButtons(plotEl, svgContainer, specData);
 
   return plotEl;
 }
@@ -424,6 +424,9 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
   titleEl.classList.add('title')
   titleEl.innerText = title;
   plotEl.appendChild(titleEl);
+
+  
+  addExportButtons(plotEl, svgContainer, specData);
 
   return plotEl;
 }
@@ -594,7 +597,7 @@ const addL50AndMCRS = (specData, svgEl, svgContainer) => {
 }
 
 
-const addExportButtons = (plotEl, svgContainer, specData, title) => {
+const addExportButtons = (plotEl, svgContainer, specData) => {
 
   // Container
   let exportContainer = document.createElement('div');
