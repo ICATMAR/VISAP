@@ -14,6 +14,8 @@
       <!-- Filter menu -->
       <filter-menu ref="filterMenu" @onclose="filterMenuClosed" v-show="isFilterMenuVisible"></filter-menu>
 
+      <!-- Length distribution chart -->
+      <lenghtDistChart></lenghtDistChart>
 
       <!-- High Chart -->
       <figure class="highcharts-figure">
@@ -32,6 +34,7 @@
   // Import components
   import TitleHeader from 'Components/TitleHeader.vue'
   import FilterMenu from 'Components/Utils/FilterMenu.vue'
+  import LengthDistChart from './LengthDist/LengthDistChart.vue';
   
   export default {
     name: 'appLengthDist', // Caps, no -
@@ -354,6 +357,7 @@
     components: {
       titleHeader: TitleHeader,
       filterMenu: FilterMenu,
+      lenghtDistChart: LengthDistChart,
     }
   }
   </script>
