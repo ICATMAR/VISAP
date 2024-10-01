@@ -7,8 +7,8 @@
       <div class='ylabel-yaxis-plot-container'>
         <!-- Y label -->
         <div class='ylabel'>
-          <div class='ylabel-text'>
-            {{$t('Abundance')}}
+          <div class='ylabel-text' :style="{width: plotHeight + 'px'}">
+            {{$t('Abundance (Number of individuals per km2)')}}
           </div>
         </div>
         <!-- Y ticks -->
@@ -24,11 +24,19 @@
           <svg class='plot' viewBox='0 0 1 1' preserveAspectRatio="none">
             <!-- Path -->
             <path class="path" ref="path" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+            <!-- L50 -->
+            <path class="L50" ref="L50" stroke-linejoin="round" vector-effect="non-scaling-stroke" stroke-dasharray="4" v-show="L50 != undefined"></path>
+            <!-- MCRS -->
+            <path class="MCRS" ref="MCRS" stroke-linejoin="round" vector-effect="non-scaling-stroke" v-show="MCRS != undefined"></path>
           </svg>
           <!-- Data points -->
           <div class="circlesContainer">
             <!-- Data points -->
-            <div v-for="dt in dataPointsPos" class="circleBox" :style="{left: dt.leftParent + '%', width: dt.widthParent + '%'}">
+            <div v-for="dt in dataPointsPos" class="circleBox" :style="{left: dt.leftParent + '%', width: dt.widthParent + '%'}"
+              @mouseover="showTooltip($event, dt)"  
+              @click="showTooltip($event, dt)"
+              @mouseleave="hideTooltip($event)"
+            >
               <div class="circle" :style="{left: dt.left + '%', bottom: dt.bottom + '%', border: '2px ' + dt.color + ' solid'}"></div>
             </div>
           </div>
@@ -37,18 +45,18 @@
             <!-- N -->
             <div :title="$t('Number of individuals')">N = {{ N }}</div>
             <!-- L50 -->
-            <div class="itemLegendContainer" :title="$t('Sexual maturity')">
+            <div class="itemLegendContainer" :title="$t('Sexual maturity')" v-show="L50 != undefined">
               <div class="L50LegendStroke"></div>
               <div>L50 ⚤</div>
             </div>
             <!-- MCRS -->
-            <div class="itemLegendContainer" :title="$t('Minimum Conservation Reference Size')">
+            <div class="itemLegendContainer" :title="$t('Minimum Conservation Reference Size')" v-show="MCRS != undefined">
               <div class="MCRSLegendStroke"></div>
               <div>MCRS ⚖</div>
             </div>
           </div>
           <!-- Tooltip -->
-          <div class="tooltip">{{$t('Length')}}: {{x}}, {{$t('Abundance')}}: {{ y }}, {{$t('Number of individuals')}}: {{ N }}</div>
+          <div class="tooltip" ref="tooltip"></div>
           <!-- Export container -->
           <div class="export-container">
             <button class="exportButton"></button>
@@ -105,6 +113,7 @@ export default {
   },
   data (){
     return {
+      plotHeight: 400,
       chartTitle: '',
       categories: ['byYear', 'bySeason', 'byMetier', 'byPortArea'],
       N: '',
@@ -112,66 +121,44 @@ export default {
       y: '',
       yticks: [], // [{bottom: 40, text: '200'}, ...];
       xticks: [],
-      dataPointsPos: [], // [{leftParent: 50, widthParent: 10, left: 20, bottom: 80, color: 'rgba()' tooltip?}, ...]
+      dataPointsPos: [], // [{leftParent: 50, widthParent: 10, left: 20, bottom: 80, color: 'rgba()', x: 23, y: 53, N: 123}, ...]
+      L50: undefined,
+      MCRS: undefined,
     }
   },
   methods: {
     // PUBLIC
     generateGraph: function(specData){
-      this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, 400);
+      this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, this.plotHeight);
       
       let pathEl = this.$refs["path"];
       pathEl.setAttribute('d', this.generateSVGPath(specData.bySize, specData.rangeSize, specData.rangeNumInd));
       // Color from palette
       let colorObj = palette[specData.rawData[0]["ScientificName"]];
-      let color = colorObj == undefined ? [127, 127, 127] : colorObj.color;
+      let color = this.color = colorObj == undefined ? [127, 127, 127] : colorObj.color;
       pathEl.style.stroke = 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.85)';
       pathEl.style.fill = 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.4)';
       
       // Position data circles
       this.positionDataPoints(specData.bySize, specData.rangeSize, specData.rangeNumInd, 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 1)');
-      debugger;
 
+      // N, L50, MCRS
+      this.N = specData.N;
+      this.L50 = specData.L50;
+      this.MCRS = specData.MCRS;
+      // Graph lines
+      if (specData.L50){
+        let normPosition = specData.L50 / specData.rangeSize[1] * 1.1;
+        this.$refs["L50"].setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
+      }
+      if (specData.MCRS){
+        let normPosition = specData.MCRS / specData.rangeSize[1] * 1.1;
+        this.$refs["MCRS"].setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
+      }
+      
+  
+      
       return;
-      // Circles
-      let circleContainer = document.createElement('div');
-      // Create SVG circles
-      specData.svgCircles = generateSVGCircles(specData.bySize, specData.rangeSize, specData.rangeNumInd);
-      for (circleIndex in specData.svgCircles) {
-        let circleBox = specData.svgCircles[circleIndex];
-        circleBox.children[0].style.border = '2px ' + color + ' solid';
-        circleBox.children[0].style.background = 'white';
-        circleContainer.appendChild(circleBox);
-      }
-
-
-
-      // L50 and MCRS
-      addL50AndMCRS(specData, svgEl, svgContainer);
-
-
-
-
-      // Dialog / Tooltip
-      let tooltip = document.createElement('div');
-      tooltip.classList.add('tooltip');
-      for (let i = 0; i < circleContainer.children.length; i++) {
-        let circleBox = circleContainer.children[i];
-        let showTooltip = (e) => {
-          // Prevent the default touch action on mobile
-          e.preventDefault();
-          tooltip.innerText = circleBox.tooltipText;
-          tooltip.style.bottom = circleBox.children[0].style.bottom;
-          tooltip.style.left = (circleBox.style.left.split('%')[0] * 1 + circleBox.style.width.split('%')[0] / 2) + '%';
-          //tooltip.style.left = circleBox.style.left;
-          tooltip.style.border = '2px ' + color + ' solid';
-          tooltip.style.display = 'block';
-        }
-
-        circleBox.addEventListener('mouseover', showTooltip);
-        circleBox.addEventListener('click', showTooltip);
-        circleBox.addEventListener('mouseleave', () => { tooltip.style.display = 'none' });
-      }
 
 
       // xaxis
@@ -277,6 +264,10 @@ export default {
           left: 100 * (x - betweenPrevXAndX) / (betweenXAndNextX - betweenPrevXAndX),
           bottom: 100 * y,
           color: color,
+          // Data
+          x: sKey,
+          y: sizes[sKey].numInd,
+          N: sizes[sKey].N
         });
 
 
@@ -286,6 +277,28 @@ export default {
         if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
       }
     },
+
+
+    // Tooltip
+    showTooltip: function(e, dataPoint){
+      // Prevent the default touch action on mobile
+      e.preventDefault();
+      // Tooltip
+      let tooltip = this.$refs["tooltip"];
+      // Text
+      tooltip.innerText = this.$i18n.t('Abundance') + ': ' + dataPoint.N + this.$i18n.t('individuals of') + dataPoint.x + ' cm ' + this.$i18n.t('per') + ' km²';
+      
+      
+      tooltip.style.bottom = dataPoint.bottom + '%';
+      tooltip.style.left = (dataPoint.leftParent + dataPoint.widthParent / 2) + '%';
+      let colorStr = 'rgb(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ')'
+      tooltip.style.border = '2px ' + colorStr + ' solid';
+      tooltip.style.display = 'block';
+    },
+    hideTooltip: function(e) {
+      let tooltip = this.$refs["tooltip"];
+      tooltip.style.display = 'none';
+    }
 
 
   },
@@ -384,6 +397,7 @@ export default {
 .L50,
 .MCRS {
   stroke-width: 0.1rem;
+  stroke: red;
   pointer-events: none;
 }
 
@@ -437,8 +451,8 @@ export default {
 
 .circle {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   background: white;
 
   border-radius: 50%;
@@ -453,7 +467,7 @@ export default {
   background: white;
   border-radius: 5px;
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 0.85;
   transform: translate(-50%, -10px);
   transition: all 0.1s ease-in-out !important;
 }
