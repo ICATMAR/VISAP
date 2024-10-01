@@ -16,14 +16,22 @@
           <!-- Tick -->
           <div v-for="ytick in yticks" class="ytick" :style="{bottom: ytick.bottom + '%'}"></div>
           <!-- Text -->
-          <div v-for="ytick in yticks" class="ytickText" :style="{bottom: ytick + '%'}">{{ ytick.text }}</div>
+          <div v-for="ytick in yticks" class="ytickText" :style="{bottom: ytick.bottom + '%'}">{{ ytick.text }}</div>
         </div>
 
         <!-- SVG container -->
         <div class='svgContainer'>
-          <svg class='plot' viewBox='0 0 1 1' preserveAspectRatio="none"></svg>
-          <!-- Circles -->
-          <div class="circlesContainer"></div>
+          <svg class='plot' viewBox='0 0 1 1' preserveAspectRatio="none">
+            <!-- Path -->
+            <path class="path" ref="path" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+          </svg>
+          <!-- Data points -->
+          <div class="circlesContainer">
+            <!-- Data points -->
+            <div v-for="dt in dataPointsPos" class="circleBox" :style="{left: dt.leftParent + '%', width: dt.widthParent + '%'}">
+              <div class="circle" :style="{left: dt.left + '%', bottom: dt.bottom + '%', border: '2px ' + dt.color + ' solid'}"></div>
+            </div>
+          </div>
           <!-- Legend -->
           <div class="legendContainer">
             <!-- N -->
@@ -73,7 +81,7 @@
 
       <!-- Divide by category -->
       <div class="buttonsCategories">
-        <div v-for="category in categories" @click="categoryClicked(category)">{{ category }}</div>
+        <div v-for="category in categories" @click="categoryClicked(category)">{{ $t(category) }}</div>
       </div>
 
     </div>
@@ -104,14 +112,181 @@ export default {
       y: '',
       yticks: [], // [{bottom: 40, text: '200'}, ...];
       xticks: [],
-
+      dataPointsPos: [], // [{leftParent: 50, widthParent: 10, left: 20, bottom: 80, color: 'rgba()' tooltip?}, ...]
     }
   },
   methods: {
     // PUBLIC
-    foo: function(){
+    generateGraph: function(specData){
+      this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, 400);
+      
+      let pathEl = this.$refs["path"];
+      pathEl.setAttribute('d', this.generateSVGPath(specData.bySize, specData.rangeSize, specData.rangeNumInd));
+      // Color from palette
+      let colorObj = palette[specData.rawData[0]["ScientificName"]];
+      let color = colorObj == undefined ? [127, 127, 127] : colorObj.color;
+      pathEl.style.stroke = 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.85)';
+      pathEl.style.fill = 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.4)';
+      
+      // Position data circles
+      this.positionDataPoints(specData.bySize, specData.rangeSize, specData.rangeNumInd, 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 1)');
+      debugger;
 
+      return;
+      // Circles
+      let circleContainer = document.createElement('div');
+      // Create SVG circles
+      specData.svgCircles = generateSVGCircles(specData.bySize, specData.rangeSize, specData.rangeNumInd);
+      for (circleIndex in specData.svgCircles) {
+        let circleBox = specData.svgCircles[circleIndex];
+        circleBox.children[0].style.border = '2px ' + color + ' solid';
+        circleBox.children[0].style.background = 'white';
+        circleContainer.appendChild(circleBox);
+      }
+
+
+
+      // L50 and MCRS
+      addL50AndMCRS(specData, svgEl, svgContainer);
+
+
+
+
+      // Dialog / Tooltip
+      let tooltip = document.createElement('div');
+      tooltip.classList.add('tooltip');
+      for (let i = 0; i < circleContainer.children.length; i++) {
+        let circleBox = circleContainer.children[i];
+        let showTooltip = (e) => {
+          // Prevent the default touch action on mobile
+          e.preventDefault();
+          tooltip.innerText = circleBox.tooltipText;
+          tooltip.style.bottom = circleBox.children[0].style.bottom;
+          tooltip.style.left = (circleBox.style.left.split('%')[0] * 1 + circleBox.style.width.split('%')[0] / 2) + '%';
+          //tooltip.style.left = circleBox.style.left;
+          tooltip.style.border = '2px ' + color + ' solid';
+          tooltip.style.display = 'block';
+        }
+
+        circleBox.addEventListener('mouseover', showTooltip);
+        circleBox.addEventListener('click', showTooltip);
+        circleBox.addEventListener('mouseleave', () => { tooltip.style.display = 'none' });
+      }
+
+
+      // xaxis
+      // xticks
+      // Get x ticks
+      // Find minimum step using sort
+      let step = Infinity;
+      Object.keys(specData.bySize).sort((a, b) => step = Math.min(step, Math.abs(a - b)));
+      let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
     },
+
+
+
+
+
+
+
+    // PRIVATE
+    // y axis ticks
+    createYAxisTicks: function(maxValue, height){
+      // Pixel separation between ticks
+      let pixelSeparation = 50;
+      // Number of ticks
+      let maxNumTicks = (height / pixelSeparation);
+      let step = maxValue / maxNumTicks;
+      // Find round step
+      let exp = Math.floor(Math.log10(step));
+      let noFloatsStep = Math.round(step / Math.pow(10, exp)) * Math.pow(10, exp);
+      // Num ticks
+      let numTicks = Math.floor(maxValue / noFloatsStep);
+
+      this.yticks = [];
+      for (let i = 0; i < numTicks; i++) {
+        let normY = i / numTicks;
+        // tick
+        this.yticks.push({
+          bottom: 100 * normY,
+          text: Math.floor((noFloatsStep * i) * 1e8) / 1e8
+        })
+      }
+    },
+
+    // Generate SVG path
+    generateSVGPath: function (sizes, rangeSize, rangeNumInd) {
+      let path = '';
+      rangeSize = [...rangeSize]; // Copy
+      rangeNumInd = [...rangeNumInd]; // Copy
+      rangeSize[1] *= 1.1;
+      rangeNumInd[1] *= 1.1;
+
+      let sizesKeys = Object.keys(sizes);
+      // If there is no data
+      if (sizesKeys[1] == undefined) {
+        let xPos = sizesKeys[0] / rangeSize[1];
+        path = 'M ' + (xPos - 0.01) + ' 0 L ' + xPos + ' ' + sizes[sizesKeys[0]].numInd / rangeNumInd[1] + ' L ' + (xPos + 0.01) + ' 0'
+        if (path.includes('NaN')) { debugger }
+        return path; // One peak
+      }
+      // First two points
+      let step = sizesKeys[0] - (sizesKeys[1] - sizesKeys[0]);
+      if (isNaN(step / rangeSize[1])) { debugger; }
+      path += 'M 0 0 L ' + step / rangeSize[1] + ' 0 ';
+      // Data points
+      for (const sKey of sizesKeys) {
+        path += 'L ' + sKey / rangeSize[1] + ' ' + sizes[sKey].numInd / rangeNumInd[1] + ' ';
+        if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
+      }
+      // End point
+      path += 'L 1 0';
+      if (path.includes('NaN')) { debugger }
+      return path;
+    },
+
+
+
+    // Positions of data points
+    positionDataPoints: function(sizes, rangeSize, rangeNumInd, color) {
+      rangeSize = [...rangeSize]; // Copy
+      rangeNumInd = [...rangeNumInd]; // Copy
+      rangeSize[1] *= 1.1;
+      rangeNumInd[1] *= 1.1;
+
+      this.dataPointsPos = [];
+
+      let sizesKeys = Object.keys(sizes);
+      // Data points
+      for (let i = 0; i < sizesKeys.length; i++) {
+        //for (const sKey of sizesKeys) {
+        let sKey = sizesKeys[i];
+        let x = sKey / rangeSize[1];
+        let y = sizes[sKey].numInd / rangeNumInd[1];
+
+        let prevX = i == 0 ? 0 : sizesKeys[i - 1] / rangeSize[1];
+        let nextX = i == (sizesKeys.length - 1) ? 1 : sizesKeys[i + 1] / rangeSize[1];
+        let betweenXAndNextX = x + (nextX - x) / 2;
+        let betweenPrevXAndX = prevX + (x - prevX) / 2;
+
+        this.dataPointsPos.push({
+          // Circle box
+          leftParent: 100 * betweenPrevXAndX,
+          widthParent: 100 * (betweenXAndNextX - betweenPrevXAndX),
+          // Circle
+          left: 100 * (x - betweenPrevXAndX) / (betweenXAndNextX - betweenPrevXAndX),
+          bottom: 100 * y,
+          color: color,
+        });
+
+
+        // Add title
+        //circleBox.tooltipText = 'x: ' + sKey + ', y: ' + (sizes[sKey].numInd).toFixed(1) + ', N = ' + sizes[sKey].N;
+
+        if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
+      }
+    },
+
 
   },
   components: {
@@ -126,11 +301,15 @@ export default {
 
 <style scoped>
 
+#length-dist-chart {
+  background: white;
+  padding: 20px;
+}
 
 .plot-container {
   display: flex;
   flex-direction: column;
-  flex-wrap: nowrap;
+  flex-wrap: nowrap;  
 }
 
 .ylabel-yaxis-plot-container {
@@ -187,7 +366,6 @@ export default {
   position: relative;
   border-bottom: black solid;
   border-left: black solid;
-  bottom: 3px;
 }
 
 .plot {
@@ -261,9 +439,10 @@ export default {
   position: absolute;
   width: 6px;
   height: 6px;
+  background: white;
 
   border-radius: 50%;
-  transform: translate(-50%, 50%)
+  transform: translate(-50%, 50%);  
 }
 
 

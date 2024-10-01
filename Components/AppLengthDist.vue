@@ -15,7 +15,7 @@
       <filter-menu ref="filterMenu" @onclose="filterMenuClosed" v-show="isFilterMenuVisible"></filter-menu>
 
       <!-- Length distribution chart -->
-      <lenghtDistChart></lenghtDistChart>
+      <lenghtDistChart ref="lengthDistChart"></lenghtDistChart>
 
       <!-- High Chart -->
       <figure class="highcharts-figure">
@@ -99,8 +99,7 @@
           window.DataManager.loadNecessaryFiles('length-dist', window.GUIManager.currentModality)
             .then(() => {
               let fdManager = window.DataManager.getFishingDataManager();
-              debugger;
-              fdManager.lengthDist;
+              this.$refs['lengthDistChart'].generateGraph(fdManager.lengthDist['Merluccius merluccius']);
             })
             .catch(e => {debugger})
         }
