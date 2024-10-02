@@ -226,7 +226,7 @@ export default ca = {
   "byYear": "Any",
   "bySeason": "Estació",
   "byMetier": "Métier",
-  "byPort": "Regió",
+  "byPortArea": "Regió",
 
   "Cookies title": "Valorem la teva privadesa",
   "Cookies text": `Utilitzem tecnologia com ara galetes al nostre lloc per millorar l'experiència d'usuari i analitzar el nostre trànsit. Feu clic per consentir l'ús d'aquesta tecnologia al web. Podeu canviar 

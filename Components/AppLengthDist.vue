@@ -15,7 +15,9 @@
       <filter-menu ref="filterMenu" @onclose="filterMenuClosed" v-show="isFilterMenuVisible"></filter-menu>
 
       <!-- Length distribution chart -->
-      <lenghtDistChart ref="lengthDistChart"></lenghtDistChart>
+      <div class="lengthDistChart-container">
+        <lenghtDistChart ref="lengthDistChart"></lenghtDistChart>
+      </div>
 
       <!-- High Chart -->
       <figure class="highcharts-figure">
@@ -378,6 +380,13 @@
     #appLengthDist {
       overflow-x:auto;
     }
+  }
+
+  .lengthDistChart-container{
+    background: white;
+    padding: 20px;
+    padding-right: clamp(40px, 7%, 200px);
+    padding-left: clamp(20px, 4%, 200px);
   }
   
   

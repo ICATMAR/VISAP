@@ -96,8 +96,11 @@
     <!-- Divide by category -->
     <div class="buttonsCategories">
       <div>{{$t('Viewby')}}: </div>
-      <button v-for="category in availableCategories" @click="categoryClicked(category)">{{ $t(category) }}</button>
+      <button v-for="category in availableCategories" @click="categoryClicked(category)" :class="[category == selectedCategory ? 'button-active' : '']">{{ $t(category) }}</button>
     </div>
+
+    <!-- Length distribution multiple charts -->
+    <ldMultipleChart ref="ldMultipleChart" v-if="isMultipleChartVisible"></ldMultipleChart>
 
 
   </div>
@@ -106,7 +109,7 @@
 
 <script>
 
-
+import LengthDistMultipleChart from './LengthDistMultipleChart.vue';
 
 export default {
   name: 'lengthDistChart', // Caps, no -
@@ -125,6 +128,7 @@ export default {
       plotHeight: 400,
       chartTitle: undefined,
       availableCategories: ['byYear', 'bySeason', 'byMetier', 'byPortArea'],
+      selectedCategory: '',
       N: '',
       x: '',
       y: '',
@@ -134,6 +138,7 @@ export default {
       L50: undefined,
       MCRS: undefined,
       isExportOptVisible: false,
+      isMultipleChartVisible: false,
     }
   },
   methods: {
@@ -180,7 +185,13 @@ export default {
       window.addEventListener('resize', this.onWindowResize);
 
       // Categories to divide data by
-      
+      let categories = ['byYear', 'bySeason', 'byMetier', 'byPortArea'];
+      this.availableCategories = [];
+      for (let i = 0; i < categories.length; i++) {
+        if (!specData.breadcrumb.includes(categories[i])) {
+          this.availableCategories.push(categories[i]);
+        }
+      }
     },
 
 
@@ -190,7 +201,22 @@ export default {
     // USER INTERACTION
     // Category clicked
     categoryClicked: function(category){
-
+      // Hide below
+      if (category == this.selectedCategory){
+        this.isMultipleChartVisible = false;
+        this.selectedCategory = '';
+      } 
+      // Show multiple chart
+      else {
+        this.isMultipleChartVisible = true;
+        this.selectedCategory = category;
+        this.$nextTick(() => {
+          this.$refs['ldMultipleChart'].$el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+          //this.$refs['ldMultipleChart'].generateGraph(specData, category);
+        });
+        
+      }
+      
     },
     // Export
     exportAs: function(format){
@@ -423,6 +449,7 @@ export default {
 
   },
   components: {
+    ldMultipleChart: LengthDistMultipleChart
   }
 }
 </script>
@@ -434,11 +461,6 @@ export default {
 
 <style scoped>
 
-#length-dist-chart {
-  background: white;
-  padding: 20px;
-  padding-right: 40px;
-}
 
 .plot-container {
   display: flex;

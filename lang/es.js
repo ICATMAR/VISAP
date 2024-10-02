@@ -230,7 +230,7 @@ export default es  = {
   "byYear": "Year",
   "bySeason": "Season",
   "byMetier": "Métier",
-  "byPort": "Region",
+  "byPortArea": "Región",
 
   "Cookies title": "Valoramos tu privacidad",
   "Cookies text": `Usamos tecnología como las galletas en nuestro sitio web para mejorar la

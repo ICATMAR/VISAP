@@ -155,11 +155,11 @@ export default en = {
   "PrevHaul": "Show previous sampling",
   "Sort": "Sort by",
 
-  "Viewby": "Ver por",
-  "byYear": "Año",
-  "bySeason": "Estación",
+  "Viewby": "View by",
+  "byYear": "Year",
+  "bySeason": "Season",
   "byMetier": "Métier",
-  "byPort": "Regió",
+  "byPortArea": "Region",
 
   "Cookies title": "We value your privacy",
   "Cookies text": `We use technology such as cookies in our website to improve the user experience and analyze our traffic. 
