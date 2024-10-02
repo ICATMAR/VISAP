@@ -4,7 +4,8 @@
     <!-- Plot container -->
     <div class='plot-container' ref="plot-container">
       <!-- Title -->
-      <div class="title">{{ chartTitle }}</div>
+      <div class="title" v-show="chartTitle != undefined">{{ chartTitle }}</div>
+      <div class="loading-circle fade-enter-from fade-enter-active" v-show="chartTitle == undefined"></div>
       <!-- Y axis and svg container -->
       <div class='ylabel-yaxis-plot-container'>
         <!-- Y label -->
@@ -121,7 +122,7 @@ export default {
   data (){
     return {
       plotHeight: 400,
-      chartTitle: 'Hello',
+      chartTitle: undefined,
       categories: ['byYear', 'bySeason', 'byMetier', 'byPortArea'],
       N: '',
       x: '',
