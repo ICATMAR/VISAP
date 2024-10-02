@@ -114,6 +114,10 @@ export default {
   mounted() {
 
   },
+  unmounted(){
+    // Window resize remove listener
+    window.removeEventListener('resize', this.onWindowResize);
+  },
   data (){
     return {
       plotHeight: 400,
@@ -134,7 +138,7 @@ export default {
     // PUBLIC
     generateGraph: function(specData){
       this.specData = specData;
-      this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, this.plotHeight);
+      
       
       let pathEl = this.$refs["path"];
       pathEl.setAttribute('d', this.generateSVGPath(specData.bySize, specData.rangeSize, specData.rangeNumInd));
@@ -161,18 +165,14 @@ export default {
         this.$refs["MCRS"].setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
       }
       
-  
+
+      // X ticks
+      this.createXAxisTicks(specData.rangeSize[1] * 1.1, window.innerWidth, specData);
+      // Y ticks
+      this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, this.plotHeight);
+      // Window resize
+      window.addEventListener('resize', this.onWindowResize);
       
-      return;
-
-
-      // xaxis
-      // xticks
-      // Get x ticks
-      // Find minimum step using sort
-      let step = Infinity;
-      Object.keys(specData.bySize).sort((a, b) => step = Math.min(step, Math.abs(a - b)));
-      let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
     },
 
 
@@ -274,6 +274,32 @@ export default {
         })
       }
     },
+    // x axis ticks
+    createXAxisTicks: function(maxValue, width, specData){
+      // Find minimum step using sort
+      let step = Infinity;
+      Object.keys(specData.bySize).sort((a, b) => step = Math.min(step, Math.abs(a - b)));
+      // Pixel separation between ticks
+      let pixelSeparation = 100;
+      // Number of ticks
+      let maxNumTicks = (width / pixelSeparation);
+      // Number of possible steps
+      let maxNumSteps = (maxValue / step);
+      // Skip step when iterating steps
+      let skipStep = Math.ceil(maxNumSteps / maxNumTicks);
+
+      this.xticks = [];
+      for (let i = 0; i < Math.floor(maxNumSteps); i += skipStep) {
+        let normX = i / maxNumSteps;
+        this.xticks.push ({
+          left: 100 * normX,
+          text: step * i
+        });
+      }
+    },
+
+
+
 
     // Generate SVG path
     generateSVGPath: function (sizes, rangeSize, rangeNumInd) {
@@ -372,7 +398,14 @@ export default {
     hideTooltip: function(e) {
       let tooltip = this.$refs["tooltip"];
       tooltip.style.display = 'none';
-    }
+    },
+
+
+    // Window resize callback
+    onWindowResize: function() {
+      if (this.specData == undefined){debugger}
+      this.createXAxisTicks(this.specData.rangeSize[1] * 1.1, window.innerWidth, this.specData);
+    },
 
 
   },
@@ -391,6 +424,7 @@ export default {
 #length-dist-chart {
   background: white;
   padding: 20px;
+  padding-right: 40px;
 }
 
 .plot-container {
@@ -403,7 +437,7 @@ export default {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
-  width: 90vw;
+  width: 100%;
   height: 50vh;
 }
 
