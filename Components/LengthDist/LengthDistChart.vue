@@ -91,11 +91,12 @@
       <!-- X label -->
       <div class="xlabel">{{$t('Length')}} (cm)</div>
 
-      <!-- Divide by category -->
-      <div class="buttonsCategories">
-        <div v-for="category in categories" @click="categoryClicked(category)">{{ $t(category) }}</div>
-      </div>
+    </div>
 
+    <!-- Divide by category -->
+    <div class="buttonsCategories">
+      <div>{{$t('Viewby')}}: </div>
+      <button v-for="category in availableCategories" @click="categoryClicked(category)">{{ $t(category) }}</button>
     </div>
 
 
@@ -123,7 +124,7 @@ export default {
     return {
       plotHeight: 400,
       chartTitle: undefined,
-      categories: ['byYear', 'bySeason', 'byMetier', 'byPortArea'],
+      availableCategories: ['byYear', 'bySeason', 'byMetier', 'byPortArea'],
       N: '',
       x: '',
       y: '',
@@ -177,6 +178,8 @@ export default {
       this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, this.plotHeight);
       // Xticks window resize
       window.addEventListener('resize', this.onWindowResize);
+
+      // Categories to divide data by
       
     },
 
@@ -185,6 +188,11 @@ export default {
 
 
     // USER INTERACTION
+    // Category clicked
+    categoryClicked: function(category){
+
+    },
+    // Export
     exportAs: function(format){
       let specData = this.specData;
       // PNG
@@ -631,17 +639,17 @@ export default {
 .buttonsCategories {
   display: flex;
   justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+}
+.buttonsCategories > div {
+  margin-right: 10px;
+}
+.buttonsCategories > button {
+  font-size: 0.8rem;
 }
 
-button {
-  cursor: pointer;
-}
 
-.exportButton {
-  width: 30px;
-  height: 30px;
-  background-color: red;
-}
 
 .export-container {
   top: 0;

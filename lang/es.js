@@ -226,6 +226,12 @@ export default es  = {
   "PrevHaul": "Previo muestreo",
   "Sort": "Ordena per",
 
+  "Viewby": "View by",
+  "byYear": "Year",
+  "bySeason": "Season",
+  "byMetier": "Métier",
+  "byPort": "Region",
+
   "Cookies title": "Valoramos tu privacidad",
   "Cookies text": `Usamos tecnología como las galletas en nuestro sitio web para mejorar la
   experiencia de usuario y analizar el tráfico. Haz click en "Acepto" para dar consentimiento.
