@@ -192,7 +192,6 @@ export default {
           linkEl.href = imgURL;
           linkEl.download = 'ICATMAR_' + window.GUIManager.currentModality + '_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.png';
           linkEl.click();
-          // TODO: GA analytics
         });
       }
       // CSV
@@ -224,7 +223,6 @@ export default {
         linkEl.setAttribute('href', dataUri);
         linkEl.setAttribute('download', 'ICATMAR_' + window.GUIManager.currentModality + + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.csv');
         linkEl.click();
-        // TODO: GA analytics
       }
       // JSON
       else if (format == 'json'){
@@ -239,8 +237,11 @@ export default {
         let linkEl = document.createElement('a');
         linkEl.setAttribute('href', dataUri);
         linkEl.setAttribute('download', 'ICATMAR_' + window.GUIManager.currentModality + + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.json');
-        // TODO: GA analytics
       }
+
+
+      // Event for GAnalytics
+      window.eventBus.emit("LengthDistChart_Export", { fileExtension: format.toUpperCase(), modality: window.GUIManager.currentModality, species: specData.rawData[0].ScientificName });
 
     },
 
