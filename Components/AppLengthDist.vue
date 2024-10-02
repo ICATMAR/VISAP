@@ -18,6 +18,9 @@
       <div class="lengthDistChart-container">
         <lenghtDistChart ref="lengthDistChart"></lenghtDistChart>
       </div>
+      <div class="lengthDistChart-container">
+        <lenghtDistChart ref="lengthDistChart2"></lenghtDistChart>
+      </div>
 
       <!-- High Chart -->
       <figure class="highcharts-figure">
@@ -60,6 +63,12 @@
       // When language changes, update language of the highchart
       window.eventBus.on('LanguageSelector_LanguageChanged', this.languageChanged);
       window.eventBus.on('GUIManager_LanguageChanged', this.languageChanged);
+
+      // LengthDist events
+      window.eventBus.on('LengthDistMultipleChart_showChart', (specData) => {
+        this.$refs["lengthDistChart2"].generateGraph(specData);
+      });
+      window.eventBus.on('LengthDistMultipleChart_hideKeyClicked', );
 
     },
     data (){

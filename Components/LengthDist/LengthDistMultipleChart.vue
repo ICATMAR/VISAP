@@ -209,12 +209,14 @@ export default {
       if (key == this.selectedKey){
         // EMIT TO HIDE NEXT CHART
         this.selectedKey = '';
+        window.eventBus.emit('LengthDistMultipleChart_hideKeyClicked', this.specData.key); // TODO: this will have to be more specific (several ldChart, ldMultChart present)
       } 
       // Show next chart
       else {
         this.selectedKey = key;
         // EMIT TO SHOW NEXT CHART
         // this.specData[this.category][key]
+        window.eventBus.emit('LengthDistMultipleChart_showChart', this.specData[this.category][key]);
       }
       
     },
