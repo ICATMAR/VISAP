@@ -2,7 +2,7 @@
   <!-- Container -->
   <div id='length-dist-chart' ref='length-dist-chart'>
     <!-- Plot container -->
-    <div class='plot-container'>
+    <div class='plot-container' ref="plot-container">
       <!-- Y axis and svg container -->
       <div class='ylabel-yaxis-plot-container'>
         <!-- Y label -->
@@ -58,12 +58,15 @@
           <!-- Tooltip -->
           <div class="tooltip" ref="tooltip"></div>
           <!-- Export container -->
-          <div class="export-container">
-            <button class="exportButton"></button>
-            <div class="export-options-container">
-              <button @click="exportAs('png')">{{$t('Export as')}} png</button>
-              <button @click="exportAs('json')">{{$t('Export as')}} json</button>
-              <button @click="exportAs('csv')">{{$t('Export as')}} csv</button>
+          <div class="export-container" ref="export-container" @mouseleave="isExportOptVisible = false">
+            <button class="clickable export-button" @click="isExportOptVisible = true">
+              <span class="fa">&#xf56d;</span>
+              <span class="button-text">{{ $t('Export data') }}</span>
+            </button>
+            <div class="dropdown-content" v-show="isExportOptVisible">
+              <button @click="exportAs('png')">.png</button>
+              <button @click="exportAs('json')">.json</button>
+              <button @click="exportAs('csv')">.csv</button>
             </div>
           </div>
         </div>
@@ -83,7 +86,7 @@
         </div>
       </div>
       <!-- X label -->
-      <div class="xlabel">{{$t('Length')}}</div>
+      <div class="xlabel">{{$t('Length')}} (cm)</div>
       <!-- Title -->
       <div class="title">{{ chartTitle }}</div>
 
@@ -114,7 +117,7 @@ export default {
   data (){
     return {
       plotHeight: 400,
-      chartTitle: '',
+      chartTitle: 'Hello',
       categories: ['byYear', 'bySeason', 'byMetier', 'byPortArea'],
       N: '',
       x: '',
@@ -124,11 +127,13 @@ export default {
       dataPointsPos: [], // [{leftParent: 50, widthParent: 10, left: 20, bottom: 80, color: 'rgba()', x: 23, y: 53, N: 123}, ...]
       L50: undefined,
       MCRS: undefined,
+      isExportOptVisible: false,
     }
   },
   methods: {
     // PUBLIC
     generateGraph: function(specData){
+      this.specData = specData;
       this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, this.plotHeight);
       
       let pathEl = this.$refs["path"];
@@ -170,6 +175,74 @@ export default {
       let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
     },
 
+
+
+
+
+    // USER INTERACTION
+    exportAs: function(format){
+      let specData = this.specData;
+      // PNG
+      if (format == 'png'){
+        this.$refs['export-container'].style.display = 'none';
+        // https://github.com/niklasvh/html2canvas/
+        html2canvas(this.$refs['plot-container']).then((canvas) => {
+          let imgURL = canvas.toDataURL();
+          const linkEl = document.createElement('a');
+          linkEl.href = imgURL;
+          linkEl.download = 'ICATMAR_' + window.GUIManager.currentModality + '_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.png';
+          linkEl.click();
+          // TODO: GA analytics
+        });
+      }
+      // CSV
+      else if (format == 'csv') {
+        let jsonData = specData.rawData;
+        let keys = Object.keys(jsonData[0]);
+
+        let columnDelimiter = ',';
+        let lineDelimiter = '\n';
+
+        let csvColumnHeader = 'Attribution,Source,'
+        csvColumnHeader += keys.join(columnDelimiter);
+        let csvStr = csvColumnHeader + lineDelimiter;
+
+        jsonData.forEach(item => {
+          // Add attribution and source
+          csvStr += 'ICATMAR (Institut Català de Recerca per a la Governança del Mar),https://www.icatmar.cat,'
+          // Iterate items
+          keys.forEach((key, index) => {
+            if ((index > 0) && (index < keys.length)) {
+              csvStr += columnDelimiter;
+            }
+            csvStr += item[key];
+          });
+          csvStr += lineDelimiter;
+        });
+        let dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvStr);
+        let linkEl = document.createElement('a');
+        linkEl.setAttribute('href', dataUri);
+        linkEl.setAttribute('download', 'ICATMAR_' + window.GUIManager.currentModality + + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.csv');
+        linkEl.click();
+        // TODO: GA analytics
+      }
+      // JSON
+      else if (format == 'json'){
+        let exportObj = {
+          // Add attribution, source and modality
+          attribution: 'ICATMAR (Institut Català de Recerca per a la Governança del Mar)',
+          source: 'https://www.icatmar.cat',
+          data: specData.rawData,
+        }
+        let dataStr = JSON.stringify(exportObj);
+        let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+        let linkEl = document.createElement('a');
+        linkEl.setAttribute('href', dataUri);
+        linkEl.setAttribute('download', 'ICATMAR_' + window.GUIManager.currentModality + + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.json');
+        // TODO: GA analytics
+      }
+
+    },
 
 
 
@@ -286,11 +359,11 @@ export default {
       // Tooltip
       let tooltip = this.$refs["tooltip"];
       // Text
-      tooltip.innerText = this.$i18n.t('Abundance') + ': ' + dataPoint.N + this.$i18n.t('individuals of') + dataPoint.x + ' cm ' + this.$i18n.t('per') + ' km²';
+      tooltip.innerText = this.$i18n.t('Abundance') + ': ' + dataPoint.y.toFixed(2) + this.$i18n.t('individuals of') + dataPoint.x + ' cm ' + this.$i18n.t('per') + ' km² (N = '+ dataPoint.N +')';
       
       
       tooltip.style.bottom = dataPoint.bottom + '%';
-      tooltip.style.left = (dataPoint.leftParent + dataPoint.widthParent / 2) + '%';
+      tooltip.style.left = Math.max(0 , (dataPoint.leftParent + dataPoint.widthParent / 2)) + '%';
       let colorStr = 'rgb(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ')'
       tooltip.style.border = '2px ' + colorStr + ' solid';
       tooltip.style.display = 'block';
@@ -404,8 +477,8 @@ export default {
 .legendContainer {
   position: absolute;
   padding: 8px;
-  right: 0;
-  top: 40px;
+  right: 15px;
+  top: 50px;
   border: 2px solid black;
   border-radius: 5px;
 
@@ -468,7 +541,7 @@ export default {
   border-radius: 5px;
   pointer-events: none;
   opacity: 0.85;
-  transform: translate(-50%, -10px);
+  transform: translate(0%, -10px);
   transition: all 0.1s ease-in-out !important;
 }
 
@@ -541,13 +614,26 @@ button {
   justify-content: flex-start;
 }
 
-.export-options-container {
-  background: blue;
+.export-button {
+  font-size: 0.8rem;
+}
 
-  padding: 20px;
-  display: none;
+.dropdown-content {
+  background-color: var(--darkBlue);
+  min-width: 60px;
+  width: fit-content;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 20%;
+
+  display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  justify-content: flex-start;
+  width: 100%;
+}
+
+.dropdown-content>button {
+  text-decoration: none;
+  display: block;
+  margin: 0px;
+  font-size: 0.8rem;
 }
 </style>
