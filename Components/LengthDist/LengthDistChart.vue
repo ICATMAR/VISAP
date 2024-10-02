@@ -3,6 +3,8 @@
   <div id='length-dist-chart' ref='length-dist-chart'>
     <!-- Plot container -->
     <div class='plot-container' ref="plot-container">
+      <!-- Title -->
+      <div class="title">{{ chartTitle }}</div>
       <!-- Y axis and svg container -->
       <div class='ylabel-yaxis-plot-container'>
         <!-- Y label -->
@@ -87,8 +89,6 @@
       </div>
       <!-- X label -->
       <div class="xlabel">{{$t('Length')}} (cm)</div>
-      <!-- Title -->
-      <div class="title">{{ chartTitle }}</div>
 
       <!-- Divide by category -->
       <div class="buttonsCategories">
@@ -138,11 +138,15 @@ export default {
     // PUBLIC
     generateGraph: function(specData){
       this.specData = specData;
+
+      // Chart title
+      this.chartTitle = specData.rawData[0]["ScientificName"];
+      if (specData.byYear) this.chartTitle += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
       
-      
+      // Generate SVG path
       let pathEl = this.$refs["path"];
       pathEl.setAttribute('d', this.generateSVGPath(specData.bySize, specData.rangeSize, specData.rangeNumInd));
-      // Color from palette
+      // Color path from palette
       let colorObj = palette[specData.rawData[0]["ScientificName"]];
       let color = this.color = colorObj == undefined ? [127, 127, 127] : colorObj.color;
       pathEl.style.stroke = 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.85)';
@@ -155,7 +159,7 @@ export default {
       this.N = specData.N;
       this.L50 = specData.L50;
       this.MCRS = specData.MCRS;
-      // Graph lines
+      // Graph L50 and MCRS lines
       if (specData.L50){
         let normPosition = specData.L50 / specData.rangeSize[1] * 1.1;
         this.$refs["L50"].setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
@@ -170,7 +174,7 @@ export default {
       this.createXAxisTicks(specData.rangeSize[1] * 1.1, window.innerWidth, specData);
       // Y ticks
       this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, this.plotHeight);
-      // Window resize
+      // Xticks window resize
       window.addEventListener('resize', this.onWindowResize);
       
     },
@@ -618,7 +622,7 @@ export default {
 }
 
 .title {
-  background: yellow;
+  font-weight: bold;
   text-align: center;
   font-size: large
 }
