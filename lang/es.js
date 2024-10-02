@@ -226,9 +226,9 @@ export default es  = {
   "PrevHaul": "Previo muestreo",
   "Sort": "Ordena per",
 
-  "Viewby": "View by",
-  "byYear": "Year",
-  "bySeason": "Season",
+  "Viewby": "Ver por",
+  "byYear": "Año",
+  "bySeason": "Estación",
   "byMetier": "Métier",
   "byPortArea": "Región",
 
