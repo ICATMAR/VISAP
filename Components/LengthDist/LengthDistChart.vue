@@ -44,7 +44,7 @@
             </div>
           </div>
           <!-- Legend -->
-          <div class="legendContainer">
+          <div class="legendContainer" v-show="isLoaded">
             <!-- N -->
             <div :title="$t('Number of individuals')">N = {{ N }}</div>
             <!-- L50 -->
@@ -61,7 +61,7 @@
           <!-- Tooltip -->
           <div class="tooltip" ref="tooltip"></div>
           <!-- Export container -->
-          <div class="export-container" ref="export-container" @mouseleave="isExportOptVisible = false">
+          <div class="export-container" ref="export-container" @mouseleave="isExportOptVisible = false" v-show="isLoaded">
             <button class="clickable export-button" @click="isExportOptVisible = true">
               <span class="fa">&#xf56d;</span>
               <span class="button-text">{{ $t('Export data') }}</span>
@@ -94,7 +94,7 @@
     </div>
 
     <!-- Divide by category -->
-    <div class="buttonsCategories">
+    <div class="buttonsCategories" v-show="isLoaded">
       <div>{{$t('Viewby')}}: </div>
       <button v-for="category in availableCategories" @click="categoryClicked(category)" :class="[category == selectedCategory ? 'button-active' : '']">{{ $t(category) }}</button>
     </div>
@@ -137,6 +137,7 @@ export default {
       dataPointsPos: [], // [{leftParent: 50, widthParent: 10, left: 20, bottom: 80, color: 'rgba()', x: 23, y: 53, N: 123}, ...]
       L50: undefined,
       MCRS: undefined,
+      isLoaded: false,
       isExportOptVisible: false,
       isMultipleChartVisible: false,
     }
@@ -144,6 +145,7 @@ export default {
   methods: {
     // PUBLIC
     generateGraph: function(specData){
+      this.isLoaded = true;
       this.specData = specData;
 
       // Chart title
@@ -212,7 +214,7 @@ export default {
         this.selectedCategory = category;
         this.$nextTick(() => {
           this.$refs['ldMultipleChart'].$el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-          //this.$refs['ldMultipleChart'].generateGraph(specData, category);
+          this.$refs['ldMultipleChart'].generateGraph(this.specData, category);
         });
         
       }
@@ -408,10 +410,6 @@ export default {
           y: sizes[sKey].numInd,
           N: sizes[sKey].N
         });
-
-
-        // Add title
-        //circleBox.tooltipText = 'x: ' + sKey + ', y: ' + (sizes[sKey].numInd).toFixed(1) + ', N = ' + sizes[sKey].N;
 
         if (sizes[sKey].numInd / rangeNumInd[1] > 1) { debugger }
       }
@@ -662,6 +660,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding-top: 20px;
+  margin-bottom: 40px;
 }
 .buttonsCategories > div {
   margin-right: 10px;
