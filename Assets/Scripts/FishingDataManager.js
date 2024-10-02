@@ -292,61 +292,6 @@ class FishingData {
 
   // Process length distribution data for the creation of plots
   processLengthDist(rawJSON) {
-    // INTERNAL FUNCTIONS
-    // Fill data structure function
-    const fillDataStruct = (specData, item, keyClassName, attrName) => {
-      if (specData[keyClassName] == undefined) { debugger; }
-      if (specData[keyClassName][item[attrName]] == undefined) {
-        specData[keyClassName][item[attrName]] = {
-          'rawData': [],
-          'bySize': {},
-          'breadcrumb': specData.breadcrumb + '>' + keyClassName,
-        }
-      }
-      specData[keyClassName][item[attrName]].rawData.push(item);
-      // Species > Year/Season/Metier/Port > Size
-      if (specData[keyClassName][item[attrName]].bySize[item.Size] == undefined) {
-        specData[keyClassName][item[attrName]].bySize[item.Size] = {
-          'rawData': [],
-          'numInd': 0,
-          'N': 0,
-        }
-      }
-      specData[keyClassName][item[attrName]].bySize[item.Size].rawData.push(item);
-      specData[keyClassName][item[attrName]].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
-      specData[keyClassName][item[attrName]].bySize[item.Size].N += parseInt(item.N) || 0;
-    };
-
-    // Find ranges of sizes
-    const findSizeAndNumIndRanges = (specData, sName) => {
-      sName = sName || specData.rawData[0].ScientificName;
-      // Reset
-      specData.rangeSize = [Infinity, -Infinity];
-      specData.rangeNumInd = [Infinity, -Infinity];
-      if (specData.bySize == undefined) { debugger }
-
-      // Find X Y ranges per species
-      Object.keys(specData.bySize).forEach(sKey => {
-        // Ranges
-        specData.rangeSize[0] = Math.min(specData.rangeSize[0], sKey);
-        specData.rangeSize[1] = Math.max(specData.rangeSize[1], sKey);
-        specData.rangeNumInd[0] = Math.min(specData.rangeNumInd[0], specData.bySize[sKey].numInd);
-        specData.rangeNumInd[1] = Math.max(specData.rangeNumInd[1], specData.bySize[sKey].numInd);
-      });
-      if (specData.rangeNumInd[1] == 0) {
-        console.warn('Maximum abundance for ' + sName + ' is zero, but ' + specData.rawData.length + ' entries are present.');
-        specData.rangeNumInd[1] = 1;
-      }
-      // Calculate N
-      specData.N = 0;
-      specData.rawData.forEach(item => {
-        specData.N += parseInt(item.N);
-      });
-    }
-
-
-
-    // CODE
     // This code does almost the same as fillDataStruct and findSizeAndNum..., but for the highest level
     let speciesData = {};
 
@@ -390,7 +335,7 @@ class FishingData {
       let specData = speciesData[sName];
 
       // Find X Y ranges per species
-      findSizeAndNumIndRanges(specData, sName);
+      this.findSizeAndNumIndRanges(specData, sName);
       // L50 and MCRS defined previously
 
       // Iterate raw data
@@ -398,13 +343,13 @@ class FishingData {
         // Fill data for the different categories
         for (let i = 0; i < this.lengthDistCategories.length; i++) {
           // Species > Year, Season, Metier...
-          fillDataStruct(specData, item, this.lengthDistCategories[i], this.lengthDistCategoriesKeyAttr[i]); // fillDataStruct(specData, item, 'byYear', 'Year');
+          this.fillDataStruct(specData, item, this.lengthDistCategories[i], this.lengthDistCategoriesKeyAttr[i]); // fillDataStruct(specData, item, 'byYear', 'Year');
         }
       });
       // Find X Y ranges per species and categories
       for (let i = 0; i < this.lengthDistCategories.length; i++) {
         Object.keys(specData[this.lengthDistCategories[i]]).forEach(key => {
-          findSizeAndNumIndRanges(specData[this.lengthDistCategories[i]][key], sName);
+          this.findSizeAndNumIndRanges(specData[this.lengthDistCategories[i]][key], sName);
           specData[this.lengthDistCategories[i]][key].L50 = specData.L50;
           specData[this.lengthDistCategories[i]][key].MCRS = specData.MCRS;
           specData[this.lengthDistCategories[i]][key].key = (specData.key || '') + key + '_';
@@ -415,9 +360,8 @@ class FishingData {
     return speciesData;
   }
 
-  // Get length distribution data or generate it
-  getLengthDistData(specData, keyClassName) {
-    // Generate data
+  // Process length dist for categories
+  processLengthDistPerCategory(specData, keyClassName) {
     if (specData[keyClassName] == undefined) {
       specData[keyClassName] = {};
       specData.rawData.forEach(item => {
@@ -432,9 +376,59 @@ class FishingData {
         specData[keyClassName][key].key = (specData.key || '') + key + '_';
       });
     }
-    return specData[keyClassName];
+    
+    return specData;
   }
 
+  // Fill data structure function
+  fillDataStruct(specData, item, keyClassName, attrName) {
+    if (specData[keyClassName] == undefined) { debugger; }
+    if (specData[keyClassName][item[attrName]] == undefined) {
+      specData[keyClassName][item[attrName]] = {
+        'rawData': [],
+        'bySize': {},
+        'breadcrumb': specData.breadcrumb + '>' + keyClassName,
+      }
+    }
+    specData[keyClassName][item[attrName]].rawData.push(item);
+    // Species > Year/Season/Metier/Port > Size
+    if (specData[keyClassName][item[attrName]].bySize[item.Size] == undefined) {
+      specData[keyClassName][item[attrName]].bySize[item.Size] = {
+        'rawData': [],
+        'numInd': 0,
+        'N': 0,
+      }
+    }
+    specData[keyClassName][item[attrName]].bySize[item.Size].rawData.push(item);
+    specData[keyClassName][item[attrName]].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+    specData[keyClassName][item[attrName]].bySize[item.Size].N += parseInt(item.N) || 0;
+  };
+  // Find ranges of sizes
+  findSizeAndNumIndRanges(specData, sName) {
+    sName = sName || specData.rawData[0].ScientificName;
+    // Reset
+    specData.rangeSize = [Infinity, -Infinity];
+    specData.rangeNumInd = [Infinity, -Infinity];
+    if (specData.bySize == undefined) { debugger }
+
+    // Find X Y ranges per species
+    Object.keys(specData.bySize).forEach(sKey => {
+      // Ranges
+      specData.rangeSize[0] = Math.min(specData.rangeSize[0], sKey);
+      specData.rangeSize[1] = Math.max(specData.rangeSize[1], sKey);
+      specData.rangeNumInd[0] = Math.min(specData.rangeNumInd[0], specData.bySize[sKey].numInd);
+      specData.rangeNumInd[1] = Math.max(specData.rangeNumInd[1], specData.bySize[sKey].numInd);
+    });
+    if (specData.rangeNumInd[1] == 0) {
+      console.warn('Maximum abundance for ' + sName + ' is zero, but ' + specData.rawData.length + ' entries are present.');
+      specData.rangeNumInd[1] = 1;
+    }
+    // Calculate N
+    specData.N = 0;
+    specData.rawData.forEach(item => {
+      specData.N += parseInt(item.N);
+    });
+  }
 
 
 

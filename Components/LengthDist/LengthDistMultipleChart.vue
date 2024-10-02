@@ -19,7 +19,7 @@
           <!-- Tick -->
           <div v-for="ytick in yticks" class="ytick" :style="{bottom: ytick.bottom + '%'}"></div>
           <!-- Text -->
-          <div v-for="ytick in yticks" class="ytickText" :style="{bottom: ytick.bottom + '%'}">{{ ytick.text }}</div>
+          <div v-for="ytick in yticks" class="ytickInsideText" :style="{bottom: ytick.bottom + '%'}">{{ ytick.text }}</div>
         </div>
 
         <!-- SVG container -->
@@ -110,6 +110,8 @@ export default {
       selectedCategory: '', // MUST CHANGE
       yticks: [], // [{bottom: 40, text: '200'}, ...];
       xticks: [],
+      paths: [],
+      N: '',
       L50: undefined,
       MCRS: undefined,
       isExportOptVisible: false,
@@ -118,11 +120,23 @@ export default {
   methods: {
     // PUBLIC
     generateGraph: function(specData, category){
+      
       this.specData = specData;
+
+      // Generate data (if necessary)
+      let fdManager = window.DataManager.getFishingDataManager();
+      specData = fdManager.processLengthDistPerCategory(specData, category);
+
+      
       // MUST CHANGE
       // Chart title
-      this.chartTitle = specData.rawData[0]["ScientificName"];
+      this.chartTitle = specData.rawData[0]["ScientificName"] + ' - ' + this.$i18n.t('per') + ' ' + this.$i18n.t(category);
       if (specData.byYear) this.chartTitle += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
+
+
+      // Y ticks
+      this.createYAxisCategoryTicks(Object.keys(specData[category]));
+      return
       
       // Generate SVG path
       let pathEl = this.$refs["path"];
@@ -153,8 +167,7 @@ export default {
 
       // X ticks
       this.createXAxisTicks(specData.rangeSize[1] * 1.1, window.innerWidth, specData);
-      // Y ticks
-      this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, this.plotHeight);
+      
       // Xticks window resize
       window.addEventListener('resize', this.onWindowResize);
 
@@ -266,26 +279,18 @@ export default {
 
     // PRIVATE
     // y axis ticks
-    createYAxisTicks: function(maxValue, height){
-      // Pixel separation between ticks
-      let pixelSeparation = 50;
-      // Number of ticks
-      let maxNumTicks = (height / pixelSeparation);
-      let step = maxValue / maxNumTicks;
-      // Find round step
-      let exp = Math.floor(Math.log10(step));
-      let noFloatsStep = Math.round(step / Math.pow(10, exp)) * Math.pow(10, exp);
+    createYAxisCategoryTicks: function(keys){
       // Num ticks
-      let numTicks = Math.floor(maxValue / noFloatsStep);
-      
+      let numTicks = keys.length;
       this.yticks = [];
-      for (let i = 0; i <= numTicks; i++) {
-        let normY = i / (maxValue / noFloatsStep);
+      for (let i = 0; i < numTicks; i++) {
+        let normY = (i + 0.5) / (numTicks + 2);
+
         // tick
         this.yticks.push({
           bottom: 100 * normY,
-          text: Math.floor(noFloatsStep * i)
-        })
+          text: keys[i]
+        });
       }
     },
     // x axis ticks
