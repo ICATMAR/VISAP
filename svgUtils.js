@@ -234,7 +234,7 @@ const createPlotHTMLEl = (specData, title, xlabel, ylabel, color) => {
   // Find minimum step using sort
   let step = Infinity;
   Object.keys(specData.bySize).sort((a, b) => step = Math.min(step, Math.abs(a - b)));
-  let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
+  let xTipsEls = createXAxisTicks(specData.rangeSize[1], 600, step);
 
   let xaxisEl = document.createElement('div');
   xaxisEl.classList.add('xaxis');
@@ -403,7 +403,7 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
   // Find minimum step using sort
   let step = Infinity;
   Object.keys(specData.bySize).sort((a, b) => step = Math.min(step, Math.abs(a - b)));
-  let xTipsEls = createXAxisTips(specData.rangeSize[1], 600, step);
+  let xTipsEls = createXAxisTicks(specData.rangeSize[1], 600, step);
 
   let xaxisEl = document.createElement('div');
   xaxisEl.classList.add('xaxis');
@@ -433,7 +433,7 @@ const createMultiplePlotHTMLEl = (specData, keyClassName, title, xlabel, ylabel,
 
 
 // Create x axis tips
-const createXAxisTips = (maxValue, width, step) => {
+const createXAxisTicks = (maxValue, width, step) => {
   // Margins
   maxValue *= 1.1;
   // Pixel separation between ticks
