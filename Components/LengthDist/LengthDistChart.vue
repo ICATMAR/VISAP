@@ -276,14 +276,14 @@ export default {
       let noFloatsStep = Math.round(step / Math.pow(10, exp)) * Math.pow(10, exp);
       // Num ticks
       let numTicks = Math.floor(maxValue / noFloatsStep);
-
+      
       this.yticks = [];
-      for (let i = 0; i < numTicks; i++) {
-        let normY = i / numTicks;
+      for (let i = 0; i <= numTicks; i++) {
+        let normY = i / (maxValue / noFloatsStep);
         // tick
         this.yticks.push({
           bottom: 100 * normY,
-          text: Math.floor((noFloatsStep * i) * 1e8) / 1e8
+          text: Math.floor(noFloatsStep * i)
         })
       }
     },
