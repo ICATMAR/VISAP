@@ -94,7 +94,6 @@ class GAnalyticsManager {
 
     // Length distribution
     window.eventBus.on("LengthDistChart_Export", el => {
-      debugger
       // Exit if in localhost
       if (window.location.href.includes('127.0.0.1'))
         return;
