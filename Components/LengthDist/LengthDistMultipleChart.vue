@@ -11,7 +11,7 @@
         <!-- Y label -->
         <div class='ylabel'>
           <div class='ylabel-text' :style="{width: plotHeight + 'px'}">
-            {{$t('Abundance (Number of individuals per km2)')}}
+            {{$t(category)}}
           </div>
         </div>
         <!-- Y ticks -->
@@ -19,14 +19,29 @@
           <!-- Tick -->
           <div v-for="ytick in yticks" class="ytick" :style="{bottom: ytick.bottom + '%'}"></div>
           <!-- Text -->
-          <div v-for="ytick in yticks" class="ytickInsideText" :style="{bottom: ytick.bottom + '%'}">{{ ytick.text }}</div>
+          <button v-for="ytick in yticks" class="ytickInsideText" 
+            :class="[ytick.key == selectedKey ? 'button-active' : '']" 
+            :style="{bottom: ytick.bottom + '%'}"
+            @click="keyClicked(ytick.key)">
+            {{ $t(ytick.text) }}
+          </button>
         </div>
 
         <!-- SVG container -->
         <div class='svgContainer'>
           <svg class='plot' viewBox='0 0 1 1' preserveAspectRatio="none">
             <!-- Path -->
-            <path v-for="path in paths" class="path" ref="path" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+            <!-- <g v-for="(path, index) in paths" class="path" ref="path" :transform="['translate(0, -' + ( index / ( paths.length + 2)) + ')']"> -->
+            <g v-for="(path, index) in paths" class="path" ref="path" :transform="path.gTransform">
+
+              <path class="path multipath" stroke-linejoin="round" vector-effect="non-scaling-stroke"
+                :class="[path.key == selectedKey ? 'selectedPath' : '']"
+                :d="path.svg" 
+                :style="{stroke: path.colorStroke, fill: path.colorFill, transform: path.transform}"
+                @click="keyClicked(path.key)">
+              </path>
+
+            </g>
             <!-- L50 -->
             <path class="L50" ref="L50" stroke-linejoin="round" vector-effect="non-scaling-stroke" stroke-dasharray="4" v-show="L50 != undefined"></path>
             <!-- MCRS -->
@@ -106,8 +121,8 @@ export default {
     return {
       plotHeight: 400,
       chartTitle: undefined,
-      availableCategories: ['byYear', 'bySeason', 'byMetier', 'byPortArea'], // MUST CHANGE
-      selectedCategory: '', // MUST CHANGE
+      selectedKey: '',
+      category: '',
       yticks: [], // [{bottom: 40, text: '200'}, ...];
       xticks: [],
       paths: [],
@@ -122,13 +137,13 @@ export default {
     generateGraph: function(specData, category){
       
       this.specData = specData;
+      this.category = category;
 
       // Generate data (if necessary)
       let fdManager = window.DataManager.getFishingDataManager();
       specData = fdManager.processLengthDistPerCategory(specData, category);
 
       
-      // MUST CHANGE
       // Chart title
       this.chartTitle = specData.rawData[0]["ScientificName"] + ' - ' + this.$i18n.t('per') + ' ' + this.$i18n.t(category);
       if (specData.byYear) this.chartTitle += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
@@ -136,20 +151,30 @@ export default {
 
       // Y ticks
       this.createYAxisCategoryTicks(Object.keys(specData[category]));
-      return
-      
-      // Generate SVG path
-      let pathEl = this.$refs["path"];
-      pathEl.setAttribute('d', this.generateSVGPath(specData.bySize, specData.rangeSize, specData.rangeNumInd));
+
+      // Subplots
       // Color path from palette
       let colorObj = palette[specData.rawData[0]["ScientificName"]];
       let color = this.color = colorObj == undefined ? [127, 127, 127] : colorObj.color;
-      pathEl.style.stroke = 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.85)';
-      pathEl.style.fill = 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.4)';
+      this.paths = [];
+      Object.keys(specData[category]).forEach((key, index) => {
+        this.paths.push({
+          svg: this.generateSVGPath(specData[category][key].bySize, specData.rangeSize, specData.rangeNumInd),
+          colorStroke: 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.85)',
+          colorFill: 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.4)',
+          transform: '',
+          key: key,
+        });
+      });
+      // Transform (Vue hack)
+      this.$nextTick(() => {
+        this.paths.forEach((path, index) => {
+          path.transform = 'translateY(1px) scaleY(-1)';
+          path.gTransform = 'translate(0, -' + ( index / ( this.paths.length + 2)) + ')';
+        });
+      });
       
-      // Position data circles
-      this.positionDataPoints(specData.bySize, specData.rangeSize, specData.rangeNumInd, 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 1)');
-
+      
       // N, L50, MCRS
       this.N = specData.N;
       this.L50 = specData.L50;
@@ -163,7 +188,6 @@ export default {
         let normPosition = specData.MCRS / specData.rangeSize[1] * 1.1;
         this.$refs["MCRS"].setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
       }
-      
 
       // X ticks
       this.createXAxisTicks(specData.rangeSize[1] * 1.1, window.innerWidth, specData);
@@ -171,14 +195,6 @@ export default {
       // Xticks window resize
       window.addEventListener('resize', this.onWindowResize);
 
-      // Categories to divide data by
-      let categories = ['byYear', 'bySeason', 'byMetier', 'byPortArea'];
-      this.availableCategories = [];
-      for (let i = 0; i < categories.length; i++) {
-        if (!specData.breadcrumb.includes(categories[i])) {
-          this.availableCategories.push(categories[i]);
-        }
-      }
     },
 
 
@@ -188,21 +204,17 @@ export default {
     // USER INTERACTION
     // Category clicked
     // MUST CHANGE
-    categoryClicked: function(category){
+    keyClicked: function(key){
       // Hide below
-      if (category == this.selectedCategory){
-        this.isMultipleChartVisible = false;
-        this.selectedCategory = '';
+      if (key == this.selectedKey){
+        // EMIT TO HIDE NEXT CHART
+        this.selectedKey = '';
       } 
-      // Show multiple chart
+      // Show next chart
       else {
-        this.isMultipleChartVisible = true;
-        this.selectedCategory = category;
-        this.$nextTick(() => {
-          this.$refs['ldMultipleChart'].$el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
-          //this.$refs['ldMultipleChart'].generateGraph(specData, category);
-        });
-        
+        this.selectedKey = key;
+        // EMIT TO SHOW NEXT CHART
+        // this.specData[this.category][key]
       }
       
     },
@@ -289,7 +301,8 @@ export default {
         // tick
         this.yticks.push({
           bottom: 100 * normY,
-          text: keys[i]
+          text: keys[i],
+          key: keys[i]
         });
       }
     },
@@ -432,7 +445,9 @@ export default {
   position: absolute;
   transform: translate(60px, 50%);
   text-wrap: nowrap;
+  font-size: 0.8rem;
   z-index: 1;
+  opacity: 0.75;
 }
 
 .svgContainer {
@@ -451,8 +466,8 @@ export default {
 
 .path {
   stroke-width: 0.2rem;
-  transform: translateY(1px) scaleY(-1);
   transition: all 0.2s ease-in-out;
+  /* transform: translateY(1px) scaleY(-1); */
 }
 
 .multipath {
@@ -489,6 +504,8 @@ export default {
   top: 50px;
   border: 2px solid black;
   border-radius: 5px;
+
+  background: rgba(255, 255, 255);
 
   display: flex;
   flex-direction: column;
