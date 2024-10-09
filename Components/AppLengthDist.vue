@@ -15,12 +15,31 @@
       <filter-menu ref="filterMenu" @onclose="filterMenuClosed" v-show="isFilterMenuVisible"></filter-menu>
 
       <!-- Length distribution chart -->
+       <!-- HACK: REFS DO NOT WORK WELL WITH V-FOR -->
       <div class="lengthDistChart-container">
-        <lenghtDistChart ref="lengthDistChart"></lenghtDistChart>
+        <lenghtDistChart ref="base"></lenghtDistChart>
       </div>
-      <div class="lengthDistChart-container">
-        <lenghtDistChart ref="lengthDistChart2"></lenghtDistChart>
+      <!-- Length distribution chart L1 -->
+      <div class="lengthDistChart-container" v-if="areLevelsVisible[0]">
+        <lenghtDistChart ref="level1"></lenghtDistChart>
       </div>
+      <!-- Length distribution chart L2 -->
+      <div class="lengthDistChart-container" v-if="areLevelsVisible[1]">
+        <lenghtDistChart ref="level2"></lenghtDistChart>
+      </div>
+      <!-- Length distribution chart L3 -->
+      <div class="lengthDistChart-container" v-if="areLevelsVisible[2]">
+        <lenghtDistChart ref="level3"></lenghtDistChart>
+      </div>
+      <!-- Length distribution chart L4 -->
+      <div class="lengthDistChart-container" v-if="areLevelsVisible[3]">
+        <lenghtDistChart ref="level4"></lenghtDistChart>
+      </div>
+      <!-- Length distribution chart L5 -->
+      <div class="lengthDistChart-container" v-if="areLevelsVisible[4]">
+        <lenghtDistChart ref="level5"></lenghtDistChart>
+      </div>
+
 
       <!-- High Chart -->
       <figure class="highcharts-figure">
@@ -53,6 +72,7 @@
         // this.$refs.filterMenu.setData(result);
         // Create graph
         // this.createGraph(result);
+        console.log(this.$refs.items)
       // Updates if necessary
       this.updateLengthDistribution();
       // EVENTS
@@ -66,7 +86,17 @@
 
       // LengthDist events
       window.eventBus.on('LengthDistMultipleChart_showChart', (specData) => {
-        this.$refs["lengthDistChart2"].generateGraph(specData);
+        
+        // Show / hide level charts
+        let numberOfLevels = specData.breadcrumb.split('>').length - 1;
+        for (let i = 0; i < this.areLevelsVisible.length; i++){
+          this.areLevelsVisible[i] = numberOfLevels > i;
+        }
+        this.$nextTick(() => {
+          this.$refs["level" + numberOfLevels].generateGraph(specData);
+        });
+        
+        
       });
       window.eventBus.on('LengthDistMultipleChart_hideKeyClicked', );
 
@@ -74,6 +104,7 @@
     data (){
       return {
         isFilterMenuVisible: false,
+        areLevelsVisible: [false, false, false, false, false],
       }
     },
     methods: {
@@ -110,7 +141,7 @@
           window.DataManager.loadNecessaryFiles('length-dist', window.GUIManager.currentModality)
             .then(() => {
               let fdManager = window.DataManager.getFishingDataManager();
-              this.$refs['lengthDistChart'].generateGraph(fdManager.lengthDist['Merluccius merluccius']);
+              this.$refs['base'].generateGraph(fdManager.lengthDist['Merluccius merluccius']);
             })
             .catch(e => {debugger})
         }

@@ -94,7 +94,7 @@
     </div>
 
     <!-- Divide by category -->
-    <div class="buttonsCategories" v-show="isLoaded">
+    <div class="buttonsCategories" v-show="isLoaded && availableCategories.length != 0">
       <div>{{$t('Viewby')}}: </div>
       <button v-for="category in availableCategories" @click="categoryClicked(category)" :class="[category == selectedCategory ? 'button-active' : '']">{{ $t(category) }}</button>
     </div>
@@ -149,8 +149,18 @@ export default {
       this.specData = specData;
 
       // Chart title
-      this.chartTitle = specData.rawData[0]["ScientificName"];
-      if (specData.byYear) this.chartTitle += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
+      let title = specData.rawData[0]["ScientificName"];
+      // Add levels
+      if (specData.key != undefined){
+        let keys = specData.key.split('_');
+        keys.pop(); // Remove last empty element
+        keys = keys.map(kk => this.$i18n.t(kk));
+        title += ' (' + keys.join(',') + ')';
+        title = title.replaceAll(',', ', ');
+      }
+      if (specData.byYear) title += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
+      debugger;
+      this.chartTitle = title;
       
       // Generate SVG path
       let pathEl = this.$refs["path"];

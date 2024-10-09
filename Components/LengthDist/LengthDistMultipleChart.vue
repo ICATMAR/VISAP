@@ -145,9 +145,19 @@ export default {
 
       
       // Chart title
-      this.chartTitle = specData.rawData[0]["ScientificName"] + ' - ' + this.$i18n.t('per') + ' ' + this.$i18n.t(category);
-      if (specData.byYear) this.chartTitle += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
-
+      let title = specData.rawData[0]["ScientificName"];
+      // Add levels
+      if (specData.key != undefined){
+        let keys = specData.key.split('_');
+        keys.pop(); // Remove last empty element
+        keys = keys.map(kk => this.$i18n.t(kk));
+        title += ' (' + keys.join(',') + ')';
+        title = title.replaceAll(',', ', ');
+      }
+      title += ' - ' + this.$i18n.t('per') + ' ' + this.$i18n.t(category);
+      if (specData.byYear) title += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
+      
+      this.chartTitle = title;
 
       // Y ticks
       this.createYAxisCategoryTicks(Object.keys(specData[category]));

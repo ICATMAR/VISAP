@@ -365,11 +365,11 @@ class FishingData {
     if (specData[keyClassName] == undefined) {
       specData[keyClassName] = {};
       specData.rawData.forEach(item => {
-        fillDataStruct(specData, item, keyClassName, this.lengthDistCategoriesKeyAttr[this.lengthDistCategories.indexOf(keyClassName)]);
+        this.fillDataStruct(specData, item, keyClassName, this.lengthDistCategoriesKeyAttr[this.lengthDistCategories.indexOf(keyClassName)]);
       });
       // Find ranges
       Object.keys(specData[keyClassName]).forEach(key => {
-        findSizeAndNumIndRanges(specData[keyClassName][key]);
+        this.findSizeAndNumIndRanges(specData[keyClassName][key]);
         // Heritage
         specData[keyClassName][key].L50 = specData.L50;
         specData[keyClassName][key].MCRS = specData.MCRS;
