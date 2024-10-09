@@ -94,11 +94,25 @@
         }
         this.$nextTick(() => {
           this.$refs["level" + numberOfLevels].generateGraph(specData);
+          this.$refs["level" + numberOfLevels].$el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         });
         
         
       });
-      window.eventBus.on('LengthDistMultipleChart_hideKeyClicked', );
+      window.eventBus.on('LengthDistMultipleChart_hideKeyClicked', (breadcrumb) => {
+        // Show / hide level charts
+        let numberOfLevels = breadcrumb.split('>').length - 1;
+        for (let i = 0; i < this.areLevelsVisible.length; i++){
+          this.areLevelsVisible[i] = numberOfLevels > i;
+        }
+      });
+      window.eventBus.on('LengthDistChart_categoryClicked', (breadcrumb) => {
+        // Show / hide level charts
+        let numberOfLevels = breadcrumb.split('>').length - 1;
+        for (let i = 0; i < this.areLevelsVisible.length; i++){
+          this.areLevelsVisible[i] = numberOfLevels > i;
+        }
+      });
 
     },
     data (){

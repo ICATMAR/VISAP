@@ -155,7 +155,7 @@ export default {
         title = title.replaceAll(',', ', ');
       }
       title += ' - ' + this.$i18n.t('per') + ' ' + this.$i18n.t(category);
-      if (specData.byYear) title += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
+      //if (Object.keys(specData.byYear)) title += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
       
       this.chartTitle = title;
 
@@ -219,7 +219,7 @@ export default {
       if (key == this.selectedKey){
         // EMIT TO HIDE NEXT CHART
         this.selectedKey = '';
-        window.eventBus.emit('LengthDistMultipleChart_hideKeyClicked', this.specData.key); // TODO: this will have to be more specific (several ldChart, ldMultChart present)
+        window.eventBus.emit('LengthDistMultipleChart_hideKeyClicked', this.specData.breadcrumb); // TODO: this will have to be more specific (several ldChart, ldMultChart present)
       } 
       // Show next chart
       else {

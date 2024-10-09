@@ -146,6 +146,7 @@ export default {
     // PUBLIC
     generateGraph: function(specData){
       this.isLoaded = true;
+      this.isMultipleChartVisible = false; // Hide if open
       this.specData = specData;
 
       // Chart title
@@ -159,7 +160,7 @@ export default {
         title = title.replaceAll(',', ', ');
       }
       if (specData.byYear) title += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
-      debugger;
+
       this.chartTitle = title;
       
       // Generate SVG path
@@ -228,6 +229,8 @@ export default {
         });
         
       }
+
+      window.eventBus.emit('LengthDistChart_categoryClicked', this.specData.breadcrumb);
       
     },
     // Export
