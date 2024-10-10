@@ -593,6 +593,7 @@ export default {
   border: 2px solid black;
   border-radius: 5px;
 
+  background: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
