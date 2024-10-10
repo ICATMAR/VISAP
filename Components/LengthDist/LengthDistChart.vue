@@ -28,9 +28,9 @@
             <!-- Path -->
             <path class="path" ref="path" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
             <!-- L50 -->
-            <path class="L50" ref="L50" stroke-linejoin="round" vector-effect="non-scaling-stroke" stroke-dasharray="4" v-show="L50 != undefined"></path>
+            <path class="L50" ref="L50" stroke-linejoin="round" vector-effect="non-scaling-stroke" stroke-dasharray="4" v-show="L50 != undefined && isL50Visible"></path>
             <!-- MCRS -->
-            <path class="MCRS" ref="MCRS" stroke-linejoin="round" vector-effect="non-scaling-stroke" v-show="MCRS != undefined"></path>
+            <path class="MCRS" ref="MCRS" stroke-linejoin="round" vector-effect="non-scaling-stroke" v-show="MCRS != undefined && isMCRSVisible"></path>
           </svg>
           <!-- Data points -->
           <div class="circlesContainer">
@@ -48,12 +48,16 @@
             <!-- N -->
             <div :title="$t('Number of individuals')">N = {{ N }}</div>
             <!-- L50 -->
-            <div class="itemLegendContainer" :title="$t('Sexual maturity')" v-show="L50 != undefined">
+            <div class="itemLegendContainer clickable" :title="$t('Sexual maturity')" 
+              @click='isL50Visible = !isL50Visible' :class="[isL50Visible ? '':'grayedOut']"
+              v-show="L50 != undefined">
               <div class="L50LegendStroke"></div>
               <div>L50 ⚤</div>
             </div>
             <!-- MCRS -->
-            <div class="itemLegendContainer" :title="$t('Minimum Conservation Reference Size')" v-show="MCRS != undefined">
+            <div class="itemLegendContainer clickable" :title="$t('Minimum Conservation Reference Size')" 
+              @click='isMCRSVisible = !isMCRSVisible' :class="[isMCRSVisible ? '':'grayedOut']"
+              v-show="MCRS != undefined">
               <div class="MCRSLegendStroke"></div>
               <div>MCRS ⚖</div>
             </div>
@@ -137,6 +141,8 @@ export default {
       dataPointsPos: [], // [{leftParent: 50, widthParent: 10, left: 20, bottom: 80, color: 'rgba()', x: 23, y: 53, N: 123}, ...]
       L50: undefined,
       MCRS: undefined,
+      isL50Visible: true,
+      isMCRSVisible: true,
       isLoaded: false,
       isExportOptVisible: false,
       isMultipleChartVisible: false,
@@ -556,6 +562,10 @@ export default {
   pointer-events: none;
 }
 
+.grayedOut {
+  opacity: 0.4;
+}
+
 .legendContainer {
   position: absolute;
   padding: 8px;
@@ -574,6 +584,7 @@ export default {
 .itemLegendContainer {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .L50LegendStroke {
