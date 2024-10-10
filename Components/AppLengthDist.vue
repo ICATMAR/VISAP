@@ -37,13 +37,6 @@
       </div>
 
 
-      <!-- High Chart -->
-      <figure class="highcharts-figure">
-        <div id="tamanyContainer"></div>
-        <p class="highcharts-description">
-
-        </p>
-      </figure>
 
     </div>
   </template>
@@ -62,13 +55,7 @@
       
     },
     mounted() {
-      // TODO
-        //this.getDataFile('data/trawlingData/trawling_sizes.json');
-        // Fill filter menu with data
-        // this.$refs.filterMenu.setData(result);
-        // Create graph
-        // this.createGraph(result);
-        console.log(this.$refs.items)
+
       // Updates if necessary
       this.updateLengthDistribution();
       // EVENTS
@@ -109,6 +96,7 @@
         this.updateVisibleLevels('');
         let fdManager = window.DataManager.getFishingDataManager();
         this.$refs['base'].generateGraph(fdManager.lengthDist[selSpecies]);
+        this.$refs['base'].$el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
 
         return;
         
@@ -158,16 +146,16 @@
 
       createGraph: function(data){
         
-        // Create search list
-        let species = this.getUnique(data, "ScientificName"); // Useful to create species selector
+        // // Create search list
+        // let species = this.getUnique(data, "ScientificName"); // Useful to create species selector
 
 
-        // Get data for a specific species for first chart
-        let randomIndex = Math.floor(Math.random()*species.length);
-        let dataSpeciesForGraph = this.prepareDataForHighChart(data, species[randomIndex])
-        this.$refs.filterMenu.addSelected(species[randomIndex]); // Add species to selected
-        // Create Highchart
-        this.myChart = this.createChart(dataSpeciesForGraph);
+        // // Get data for a specific species for first chart
+        // let randomIndex = Math.floor(Math.random()*species.length);
+        // let dataSpeciesForGraph = this.prepareDataForHighChart(data, species[randomIndex])
+        // this.$refs.filterMenu.addSelected(species[randomIndex]); // Add species to selected
+        // // Create Highchart
+        // this.myChart = this.createChart(dataSpeciesForGraph);
 
       },
       
@@ -203,7 +191,7 @@
       // Create HighCharts
       // Create Highchart
       createChart: function(serieSpecies) {
-
+        return;
         // Translation not possible inside context of Highcharts. Doing hack?
         window.i18n = this.$i18n;
 
@@ -302,24 +290,25 @@
 
 
       languageChanged: function(){
-        // Translate menu options
-        this.translateHighcharts();
-        // Reset graph
-        if (this.rawData){
-          // Fill filter menu with data
-          this.$refs.filterMenu.setData(this.rawData);
-          this.createGraph(this.rawData);
-        }
+        debugger;
+        // // Translate menu options
+        // this.translateHighcharts();
+        // // Reset graph
+        // if (this.rawData){
+        //   // Fill filter menu with data
+        //   this.$refs.filterMenu.setData(this.rawData);
+        //   this.createGraph(this.rawData);
+        // }
       },
 
       // Translate high charts options
       translateHighcharts: function(){
-        let lang = Highcharts.getOptions().lang;
-        Object.keys(lang).forEach(key => {
-          if (this.$i18n.te(key) && typeof(lang[key]) == "string"){
-            lang[key] = this.$i18n.t(key);
-          }
-        })
+        // let lang = Highcharts.getOptions().lang;
+        // Object.keys(lang).forEach(key => {
+        //   if (this.$i18n.te(key) && typeof(lang[key]) == "string"){
+        //     lang[key] = this.$i18n.t(key);
+        //   }
+        // })
       },
 
 
@@ -332,49 +321,49 @@
       // UTILS
       // Get unique keys
       getUnique: function(inData, inKey){
-        let uniqueKeys = [];
-        // Iterate
-        for (let i = 0; i < inData.length; i++){
-          let value = inData[i][inKey];
-          if (value !== undefined && uniqueKeys.findIndex((item) => item == value) == -1)
-            uniqueKeys.push(value);
-        }
-        return uniqueKeys;
+        // let uniqueKeys = [];
+        // // Iterate
+        // for (let i = 0; i < inData.length; i++){
+        //   let value = inData[i][inKey];
+        //   if (value !== undefined && uniqueKeys.findIndex((item) => item == value) == -1)
+        //     uniqueKeys.push(value);
+        // }
+        // return uniqueKeys;
       },
 
       // Prepares the data for the highchart (getDataForSpecieX was the name before)
       prepareDataForHighChart: function(inData, inSpecies) {
-        // Select the data from a species
-        let dataSelSpecies = inData.filter((item) => item.ScientificName == inSpecies);
-        // Categories (sizes)
-        let categories = this.getUnique(dataSelSpecies, "Size"); // Important to create X axis
-        categories.forEach((cat, index) => categories[index] = parseFloat(cat)); // Transform into numbers
-        categories.sort((a, b) => a - b); // Sort
-        // Abundance per size
-        let abundance = this.getAbundancePerCategories(dataSelSpecies, categories);
-        //let numInd = getNumIndPerCategories(dataSelSpecies, categories); // How to include number of individuals?
-        // Prepare for highcharts
-        let dataHC = [];
-        //categories.forEach((catItem, index) => dataHC[index] = [catItem, abundance[index]]); // Make an array as [categoryA,abundanceInA], [categoryB,abundanceInB],...
-        categories.forEach((catItem, index) => dataHC[index] = [catItem, abundance[index]]); // Make an array as [categoryA,abundanceInA], [categoryB,abundanceInB],...
-        // https://www.highcharts.com/demo/spline-irregular-time
+        // // Select the data from a species
+        // let dataSelSpecies = inData.filter((item) => item.ScientificName == inSpecies);
+        // // Categories (sizes)
+        // let categories = this.getUnique(dataSelSpecies, "Size"); // Important to create X axis
+        // categories.forEach((cat, index) => categories[index] = parseFloat(cat)); // Transform into numbers
+        // categories.sort((a, b) => a - b); // Sort
+        // // Abundance per size
+        // let abundance = this.getAbundancePerCategories(dataSelSpecies, categories);
+        // //let numInd = getNumIndPerCategories(dataSelSpecies, categories); // How to include number of individuals?
+        // // Prepare for highcharts
+        // let dataHC = [];
+        // //categories.forEach((catItem, index) => dataHC[index] = [catItem, abundance[index]]); // Make an array as [categoryA,abundanceInA], [categoryB,abundanceInB],...
+        // categories.forEach((catItem, index) => dataHC[index] = [catItem, abundance[index]]); // Make an array as [categoryA,abundanceInA], [categoryB,abundanceInB],...
+        // // https://www.highcharts.com/demo/spline-irregular-time
 
-        // Add translation name if exists  
-        let seriesName = this.$i18n.t(inSpecies) == undefined ? inSpecies : (inSpecies + " ("+ this.$i18n.t(inSpecies) +")")
-        let seriesColor = palette[inSpecies] === undefined ? "rgb(" + palette.Other.color + ")" : "rgb(" + palette[inSpecies].color + ")";
-        let graphSpecies = {name: seriesName, data: dataHC, color: seriesColor };
-        return graphSpecies;
+        // // Add translation name if exists  
+        // let seriesName = this.$i18n.t(inSpecies) == undefined ? inSpecies : (inSpecies + " ("+ this.$i18n.t(inSpecies) +")")
+        // let seriesColor = palette[inSpecies] === undefined ? "rgb(" + palette.Other.color + ")" : "rgb(" + palette[inSpecies].color + ")";
+        // let graphSpecies = {name: seriesName, data: dataHC, color: seriesColor };
+        // return graphSpecies;
       },
 
       // Get abundance given the categories
       getAbundancePerCategories: function(inData, categories) {
-        let numInd = [];
-        inData.forEach(item => {
-          // Find the category index
-          let catIndex = categories.findIndex((catItem) => catItem == item.Size);
-          numInd[catIndex] = numInd[catIndex] === undefined ? parseFloat(item.Abundance_NSpecimen_Km2) : numInd[catIndex] + parseFloat(item.Abundance_NSpecimen_Km2);
-        })
-        return numInd;
+        // let numInd = [];
+        // inData.forEach(item => {
+        //   // Find the category index
+        //   let catIndex = categories.findIndex((catItem) => catItem == item.Size);
+        //   numInd[catIndex] = numInd[catIndex] === undefined ? parseFloat(item.Abundance_NSpecimen_Km2) : numInd[catIndex] + parseFloat(item.Abundance_NSpecimen_Km2);
+        // })
+        // return numInd;
       },
 
 
@@ -391,14 +380,14 @@
       // });
       // Translate data using $i18n
       translateData(prepData){
-        Object.keys(prepData).forEach(key => {
-          let el = prepData[key];
-          if (typeof(el) == 'object'){
-            this.translateData(el);
-          } else if (typeof(el) == 'string') {
-            prepData["translation"] = this.$i18n.t(el);
-          }
-        });
+        // Object.keys(prepData).forEach(key => {
+        //   let el = prepData[key];
+        //   if (typeof(el) == 'object'){
+        //     this.translateData(el);
+        //   } else if (typeof(el) == 'string') {
+        //     prepData["translation"] = this.$i18n.t(el);
+        //   }
+        // });
       },
 
 
