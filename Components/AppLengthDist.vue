@@ -5,14 +5,10 @@
       <!--Header -->
       <title-header title='Length distribution'></title-header>
 
-      <!-- Buttons to add and remove species -->
-      <div class="centered-rows" style="margin-top:40px">
-        <!-- Filter per species button -->
-        <button @click="isFilterMenuVisible = true">&#x25BD; {{ $t('Select species') }}</button>
-      </div>
-
       <!-- Filter menu -->
-      <filter-menu ref="filterMenu" @onclose="filterMenuClosed" v-show="isFilterMenuVisible"></filter-menu>
+      <filter-menu ref="filterMenu"></filter-menu>
+
+
 
       <!-- Length distribution chart -->
        <!-- HACK: REFS DO NOT WORK WELL WITH V-FOR -->
@@ -84,48 +80,37 @@
       window.eventBus.on('LanguageSelector_LanguageChanged', this.languageChanged);
       window.eventBus.on('GUIManager_LanguageChanged', this.languageChanged);
 
+
       // LengthDist events
       window.eventBus.on('LengthDistMultipleChart_showChart', (specData) => {
-        
-        // Show / hide level charts
+        this.updateVisibleLevels(specData.breadcrumb);
         let numberOfLevels = specData.breadcrumb.split('>').length - 1;
-        for (let i = 0; i < this.areLevelsVisible.length; i++){
-          this.areLevelsVisible[i] = numberOfLevels > i;
-        }
         this.$nextTick(() => {
           this.$refs["level" + numberOfLevels].generateGraph(specData);
           this.$refs["level" + numberOfLevels].$el.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         });
-        
-        
       });
-      window.eventBus.on('LengthDistMultipleChart_hideKeyClicked', (breadcrumb) => {
-        // Show / hide level charts
-        let numberOfLevels = breadcrumb.split('>').length - 1;
-        for (let i = 0; i < this.areLevelsVisible.length; i++){
-          this.areLevelsVisible[i] = numberOfLevels > i;
-        }
-      });
-      window.eventBus.on('LengthDistChart_categoryClicked', (breadcrumb) => {
-        // Show / hide level charts
-        let numberOfLevels = breadcrumb.split('>').length - 1;
-        for (let i = 0; i < this.areLevelsVisible.length; i++){
-          this.areLevelsVisible[i] = numberOfLevels > i;
-        }
-      });
+      window.eventBus.on('LengthDistMultipleChart_hideKeyClicked', this.updateVisibleLevels);
+      window.eventBus.on('LengthDistChart_categoryClicked', this.updateVisibleLevels);
+
+      // Filter menu events
+      window.eventBus.on('FilterMenu_SelectedSpecies', this.filterSelectedSpecies);
 
     },
     data (){
       return {
-        isFilterMenuVisible: false,
         areLevelsVisible: [false, false, false, false, false],
       }
     },
     methods: {
       // USER INTERACTION
       // Close the overlay filter menu
-      filterMenuClosed: function(selSpecies){
-        this.isFilterMenuVisible = false;
+      filterSelectedSpecies: function(selSpecies){
+        this.updateVisibleLevels('');
+        let fdManager = window.DataManager.getFishingDataManager();
+        this.$refs['base'].generateGraph(fdManager.lengthDist[selSpecies]);
+
+        return;
         
         // If chart is not yet created
         if (this.myChart == undefined)
@@ -155,9 +140,18 @@
           window.DataManager.loadNecessaryFiles('length-dist', window.GUIManager.currentModality)
             .then(() => {
               let fdManager = window.DataManager.getFishingDataManager();
+              this.$refs.filterMenu.setData(fdManager.lengthDist);
               this.$refs['base'].generateGraph(fdManager.lengthDist['Merluccius merluccius']);
             })
             .catch(e => {debugger})
+        }
+      },
+
+      // Update visible levels
+      updateVisibleLevels: function(breadcrumb){
+        let numberOfLevels = breadcrumb.split('>').length - 1;
+        for (let i = 0; i < this.areLevelsVisible.length; i++){
+          this.areLevelsVisible[i] = numberOfLevels > i;
         }
       },
 
