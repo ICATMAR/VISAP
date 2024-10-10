@@ -6,7 +6,7 @@
     <div class="target-container">
       <!-- Species -->
       <button v-for="sp in targetSpecies" :class="[sp.name == selSpecies ? 'button-active' : '']" @click="clickedSpecies(sp)">
-        <span :style="{color: 'rgb(' + sp.color +')'}" > ■ </span> {{sp.commonName}} ({{sp.name}})
+        <span :style="{color: 'rgb(' + sp.color +')'}" > ■ </span> {{$t(sp.name)}} ({{sp.name}})
       </button>
     </div>
 
