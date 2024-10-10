@@ -22,6 +22,8 @@ export default ca = {
   "Sentence4": "A l'Octubre de 2018 es va posar en marxa el programa de seguiment de les especies de major interès pesquer, on un dels elements clau és la recopilació de dades i la seva estructuració per a poder ser analitzades i visualitzades.",
   "SentenceContact": "En cas de voler més informació sobre l'aplicació, podeu contactar amb en Gerard Llorach (gllorach at bluenetcat.eu). En cas de voler més informació sobre les dades, podeu contactar amb en Jordi Ribera (jribera at icm.csic.es).",
   "SentenceFunding": "La Xarxa Marítima de Catalunya (BlueNetCat) està finançada per la Generalitat de Catalunya i el Fons Europeu de Desenvolupament Regional (FEDER).",
+  "Attributions": "Atribucions",
+  "Source": "Font",
 
   "effortTypes": {
     "hours": "hores",

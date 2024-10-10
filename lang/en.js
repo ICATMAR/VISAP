@@ -23,7 +23,8 @@ export default en = {
   "Sentence4": "In October 2018, the monitoring program for the species of greatest fishing interest was launched, where one of the key elements is the collection of data and their structuring so that they can be analyzed and visualized.",
   "SentenceContact": "For inquiries about the application, please contact Gerard Llorach (gllorach at bluenetcat.eu). For inquiries about the data, please contact Jordi Ribera (jribera at icm.csic.es).",
   "SentenceFunding": "Xarxa Marítima de Catalunya (BlueNetCat) is financed by the Generalitat de Catalunya and by the European Regional Development Fund (ERDF).",
-
+  "Attributions": "Attributions",
+  "Source": "Source",
 
   "effortTypes": {
     "hours": "hours",

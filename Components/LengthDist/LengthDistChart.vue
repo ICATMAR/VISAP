@@ -50,14 +50,14 @@
             <!-- L50 -->
             <div class="itemLegendContainer clickable" :title="$t('Sexual maturity')" 
               @click='isL50Visible = !isL50Visible' :class="[isL50Visible ? '':'grayedOut']"
-              v-show="L50 != undefined">
+              v-show="L50 != undefined && !(isPrinting && !isL50Visible)">
               <div class="L50LegendStroke"></div>
               <div>L50 ⚤</div>
             </div>
             <!-- MCRS -->
             <div class="itemLegendContainer clickable" :title="$t('Minimum Conservation Reference Size')" 
               @click='isMCRSVisible = !isMCRSVisible' :class="[isMCRSVisible ? '':'grayedOut']"
-              v-show="MCRS != undefined">
+              v-show="MCRS != undefined && !(isPrinting && !isMCRSVisible)">
               <div class="MCRSLegendStroke"></div>
               <div>MCRS ⚖</div>
             </div>
@@ -65,7 +65,7 @@
           <!-- Tooltip -->
           <div class="tooltip" ref="tooltip"></div>
           <!-- Export container -->
-          <div class="export-container" ref="export-container" @mouseleave="isExportOptVisible = false" v-show="isLoaded">
+          <div class="export-container" ref="export-container" @mouseleave="isExportOptVisible = false" v-show="isLoaded && !isPrinting">
             <button class="clickable export-button" @click="isExportOptVisible = true">
               <span class="fa">&#xf56d;</span>
               <span class="button-text">{{ $t('Export data') }}</span>
@@ -94,6 +94,18 @@
       </div>
       <!-- X label -->
       <div class="xlabel">{{$t('Length')}} (cm)</div>
+
+
+      <!-- Attributions -->
+      <div class="attributions-container" v-show="isPrinting">
+        <div class="logos-container">
+          <img src="img/logos/ICATMAR512.png">
+          <img src="img/logos/Generalitat.png">
+          <img src="img/logos/icm.png">
+          <img src="img/logos/CSIC.png">
+        </div>
+        <span>{{$t('Attributions')}}: ICATMAR (Institut Català de Recerca per a la Governança del Mar). {{$t('Source')}}: https://www.icatmar.cat/</span>
+      </div>
 
     </div>
 
@@ -146,6 +158,8 @@ export default {
       isLoaded: false,
       isExportOptVisible: false,
       isMultipleChartVisible: false,
+
+      isPrinting: false,
     }
   },
   methods: {
@@ -153,6 +167,7 @@ export default {
     generateGraph: function(specData){
       this.isLoaded = true;
       this.isMultipleChartVisible = false; // Hide if open
+      this.selectedCategory = '';
       this.specData = specData;
 
       // Chart title
@@ -244,15 +259,19 @@ export default {
       let specData = this.specData;
       // PNG
       if (format == 'png'){
-        this.$refs['export-container'].style.display = 'none';
+        this.isPrinting = true;
         // https://github.com/niklasvh/html2canvas/
-        html2canvas(this.$refs['plot-container']).then((canvas) => {
-          let imgURL = canvas.toDataURL();
-          const linkEl = document.createElement('a');
-          linkEl.href = imgURL;
-          linkEl.download = 'ICATMAR_' + window.GUIManager.currentModality + '_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.png';
-          linkEl.click();
+        this.$nextTick(() => {
+          html2canvas(this.$refs['plot-container']).then((canvas) => {
+            let imgURL = canvas.toDataURL();
+            const linkEl = document.createElement('a');
+            linkEl.href = imgURL;
+            linkEl.download = 'ICATMAR_' + window.GUIManager.currentModality + '_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.png';
+            linkEl.click();
+            this.isPrinting = false;
+          });
         });
+        
       }
       // CSV
       else if (format == 'csv') {
@@ -514,7 +533,7 @@ export default {
 }
 
 .yaxis {
-  width: 50px;
+  width: 70px;
   height: 100%;
   position: relative;
 }
@@ -728,5 +747,33 @@ export default {
   display: block;
   margin: 0px;
   font-size: 0.8rem;
+}
+
+.attributions-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.logos-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  
+}
+.logos-container > img {
+  width: 25%;
+  object-fit: contain;
+  padding-left: 2%;
+  padding-right: 2%;
+  max-width: 150px;
+}
+
+.attributions-container > span {
+  color: gray;
+  text-shadow: none;
+  font-size: x-small;
+  font-style: italic;
 }
 </style>

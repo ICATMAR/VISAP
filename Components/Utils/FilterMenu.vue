@@ -5,7 +5,7 @@
     <!-- Target species -->
     <div class="target-container">
       <!-- Species -->
-      <button v-for="sp in targetSpecies" @click="clickedSpecies(sp)">
+      <button v-for="sp in targetSpecies" :class="[sp.name == selSpecies ? 'button-active' : '']" @click="clickedSpecies(sp)">
         <span :style="{color: 'rgb(' + sp.color +')'}" > ■ </span> {{sp.commonName}} ({{sp.name}})
       </button>
     </div>
@@ -69,13 +69,15 @@ export default {
     return {
       showSearchBarSelSpecies: false,
       targetSpecies: [],
-      species: []
+      species: [],
+      selSpecies: ''
     }
   },
   methods: {
     // USER INTERACTION
     // Clicked on species
     clickedSpecies: function(sp){
+      this.selSpecies = sp.name;
       window.eventBus.emit('FilterMenu_SelectedSpecies', sp.name);
     },
 
