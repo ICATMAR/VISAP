@@ -129,8 +129,15 @@
             .then(() => {
               let fdManager = window.DataManager.getFishingDataManager();
               this.$refs.filterMenu.setData(fdManager.lengthDist);
-              this.$refs['filterMenu'].selectRandomTargetSpecies(); // Triggers event that generates graph
-              //this.$refs['base'].generateGraph(fdManager.lengthDist['Merluccius merluccius']);
+              // Check if a species is present in the URL
+              let hashSpecies = window.GUIManager.lengthDist.species;
+              if (hashSpecies != undefined && fdManager.lengthDist[hashSpecies] != undefined){
+                hashSpecies = hashSpecies.replaceAll('%20', ' ');
+                this.$refs['base'].generateGraph(fdManager.lengthDist[hashSpecies]);
+                this.$refs['filterMenu'].selSpecies = hashSpecies;
+              } else
+                this.$refs['filterMenu'].selectRandomTargetSpecies(); // Triggers event that generates graph
+              
             })
             .catch(e => {debugger})
         }
