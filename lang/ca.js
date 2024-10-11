@@ -196,7 +196,7 @@ export default ca = {
   "Show chart": "Mostrar gràfic",
   "Hide chart": "Amagar gràfic",
   "Catch composition": "Composició de captura",
-  "Length frequency": "Freqüència de talles",
+  "Length distribution": "Distribució de talles",
   "Sampling map": "Mapa de mostreig",
 
   "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km2)",

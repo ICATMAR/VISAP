@@ -128,7 +128,7 @@ export default en = {
   "Show chart": "Show chart",
   "Hide chart": "Hide chart",
   "Catch composition": "Catch composition",
-  "Length frequency": "Length frequency",
+  "Length distribution": "Length distribution",
   "Sampling map": "Sampling map",
 
   "Abundance (Number of individuals per km2)": "Abundance (Number of individuals per km2)",
