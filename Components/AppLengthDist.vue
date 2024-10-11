@@ -129,7 +129,8 @@
             .then(() => {
               let fdManager = window.DataManager.getFishingDataManager();
               this.$refs.filterMenu.setData(fdManager.lengthDist);
-              this.$refs['base'].generateGraph(fdManager.lengthDist['Merluccius merluccius']);
+              this.$refs['filterMenu'].selectRandomTargetSpecies(); // Triggers event that generates graph
+              //this.$refs['base'].generateGraph(fdManager.lengthDist['Merluccius merluccius']);
             })
             .catch(e => {debugger})
         }
