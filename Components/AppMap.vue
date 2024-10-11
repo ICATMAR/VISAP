@@ -18,7 +18,7 @@
           </button>
           <button @click="changeSection('length-dist')">
             <span class="fa">&#xe0e3; </span>
-            <span class="button-text hiddenInMobile">{{ $t('Length frequency') }}</span>
+            <span class="button-text hiddenInMobile">{{ $t('Length distribution') }}</span>
           </button>
           <button class="selected">
             <span class="fa">&#xf276; </span>
