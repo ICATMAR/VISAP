@@ -17,9 +17,10 @@ Object.keys(sp_es).forEach(key=> {
 
 
 // Utils for hash and routing
-import {setHashValue, getHashValue} from './Assets/Scripts/utils.js';
+import {setHashValue, getHashValue, removeHash} from './Assets/Scripts/utils.js';
 window.location.setHashValue = setHashValue;
 window.location.getHashValue = getHashValue;
+window.location.removeHash = removeHash;
 
 
 // Declare event emitter
