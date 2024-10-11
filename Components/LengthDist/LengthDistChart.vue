@@ -219,7 +219,8 @@ export default {
       window.addEventListener('resize', this.onWindowResize);
 
       // Categories to divide data by
-      let categories = ['byYear', 'bySeason', 'byMetier', 'byPortArea'];
+      let fdManager = window.DataManager.getFishingDataManager();
+      let categories = fdManager.lengthDistCategories;
       this.availableCategories = [];
       for (let i = 0; i < categories.length; i++) {
         if (!specData.breadcrumb.includes(categories[i])) {

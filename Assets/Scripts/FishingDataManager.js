@@ -302,7 +302,7 @@ class FishingData {
           'rawData': [],
           'byYear': {},
           'bySeason': {},
-          'byMetier': {},
+          'byMetier': {}, // Should not be here in Purse Seine, but it is not essential to fix it
           'byPortArea': {},
           'bySize': {},
           'breadcrumb': '',
@@ -565,6 +565,9 @@ class TrawlingData extends FishingData {
     }
   }
 
+  lengthDistCategories = ['byYear', 'bySeason', 'byMetier', 'byPortArea'];
+  lengthDistCategoriesKeyAttr = ['Year', 'Season', 'Metier', 'PortArea'];
+
   constructor() {
     super('trawling');
   }
@@ -591,6 +594,9 @@ class PurseSeineData extends FishingData {
       range: [0, 230]
     }
   }
+
+  lengthDistCategories = ['byYear', 'bySeason', 'byPortArea'];
+  lengthDistCategoriesKeyAttr = ['Year', 'Season', 'PortArea'];
 
   constructor() {
     super('purse-seine');
