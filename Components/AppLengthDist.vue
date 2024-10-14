@@ -46,7 +46,7 @@
   
   // Import components
   import TitleHeader from 'Components/TitleHeader.vue'
-  import FilterMenu from 'Components/Utils/FilterMenu.vue'
+  import FilterMenu from 'Components/LengthDist/FilterMenu.vue'
   import LengthDistChart from './LengthDist/LengthDistChart.vue';
   
   export default {
