@@ -5,7 +5,7 @@
     <div class='plot-container' ref="plot-container">
       <!-- Title -->
       <div class="title" v-show="chartTitle != undefined">{{ chartTitle }}</div>
-      <div class="subtitle" v-show="subtitle != undefined">{{ $t(subtitle) }}</div>
+      <div class="subtitle" v-show="subtitle != undefined && isPrinting">{{ $t(subtitle) }}</div>
       <div class="loading-circle fade-enter-from fade-enter-active" v-show="chartTitle == undefined"></div>
       <!-- Y axis and svg container -->
       <div class='ylabel-yaxis-plot-container'>
