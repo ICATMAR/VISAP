@@ -194,6 +194,16 @@ class DataManager {
         return;
       }
     }
+    // Length distribution
+    else if (section == 'length-dist'){
+      if (mod == 'trawling'){
+        await this.TrawlingData.loadLengthDistFile();
+        return;
+      } else if (mod == 'purse-seine'){
+        await this.PSData.loadLengthDistFile();
+        return;
+      }
+    }
   }
 }
 

@@ -14,9 +14,9 @@
               <span class="fa">&#xf13d; </span>
               <span class="button-text">{{ $t('Catch composition') }}</span>
             </button>
-            <button :class="{selected: title=='Length frequency'}" @click="changeSection('length-dist')">
+            <button :class="{selected: title=='Length distribution'}" @click="changeSection('length-dist')">
               <span class="fa">&#xe0e3; </span>
-              <span class="button-text">{{ $t('Length frequency') }}</span>
+              <span class="button-text">{{ $t('Length distribution') }}</span>
             </button>
             <button @click="changeSection('map')">
               <span class="fa">&#xf276; </span>

@@ -27,6 +27,13 @@ class FishingData {
   isLoadingOverviewFiles = false;
   overviewFilesLoaded = false;
 
+  loadingLengthDistPromise = null;
+  isLoadingLengthDist = false;
+  lengthDistFilesLoaded = false;
+
+  lengthDist = undefined;
+  lengthDistCategories = ['byYear', 'bySeason', 'byMetier', 'byPortArea'];
+  lengthDistCategoriesKeyAttr = ['Year', 'Season', 'Metier', 'PortArea'];
 
   constructor(mod) {
     this.mod = mod;
@@ -114,7 +121,7 @@ class FishingData {
 
     // Load effort maps and hauls
     this.loadingOverviewPromise = window.FileManager.loadOverviewFiles(this.mod).then((results) => {
-      
+
       for (let i = 0; i < results.length; i++) {
         let res = results[i];
         // Failed to load
@@ -127,7 +134,7 @@ class FishingData {
             this.catchComposition.byPort = res.value.content;
           else if (res.value.url.split('/').pop().includes('season'))
             this.catchComposition.bySeason = res.value.content;
-          
+
         }
       }
 
@@ -142,7 +149,31 @@ class FishingData {
   }
 
 
+  // Load length distribution (only one file)
+  async loadLengthDistFile() {
+    // Is in the process of being loaded
+    if (this.isLoadingLengthDist)
+      return this.loadingLengthDistPromise;
 
+    // If already loaded
+    if (this.lengthDistFilesLoaded)
+      return Promise.resolve();
+
+    this.isLoadingOverviewFiles = true;
+
+    // Load length-distribution file
+    return this.loadingLengthDistPromise = window.FileManager.loadLengthDistFile(this.mod).then((result) => {
+      if (result != undefined) {
+
+        this.lengthDist = this.processLengthDist(result.content);
+      }
+      // Status
+      this.isLoadingLengthDist = false;
+      this.loadingLengthDistPromise = null;
+      this.lengthDistFilesLoaded = true;
+      console.log("Files for section length-distribution and modality " + this.mod + " loaded.")
+    });
+  }
 
 
 
@@ -258,6 +289,146 @@ class FishingData {
       this.haulsLayer.getSource().dispatchEvent('change');
   }
 
+
+  // Process length distribution data for the creation of plots
+  processLengthDist(rawJSON) {
+    // This code does almost the same as fillDataStruct and findSizeAndNum..., but for the highest level
+    let speciesData = {};
+
+    rawJSON.forEach(item => {
+      // Create object per species
+      if (speciesData[item.ScientificName] == undefined) {
+        speciesData[item.ScientificName] = {
+          'rawData': [],
+          'byYear': {},
+          'bySeason': {},
+          'byMetier': {}, // Should not be here in Purse Seine, but it is not essential to fix it
+          'byPortArea': {},
+          'bySize': {},
+          'breadcrumb': '',
+          'rangeSize': [Infinity, -Infinity],
+          'rangeNumInd': [Infinity, -Infinity],
+          // Mininum size, Maturity size
+          'L50': item.L50,
+          'MCRS': item.MCRS,
+        };
+      }
+      // Raw data
+      speciesData[item.ScientificName].rawData.push(item);
+      // Species > Size
+      if (speciesData[item.ScientificName].bySize[item.Size] == undefined) {
+        speciesData[item.ScientificName].bySize[item.Size] = {
+          'rawData': [],
+          'numInd': 0,
+          'N': 0,
+        }
+      }
+      // bySize
+      speciesData[item.ScientificName].bySize[item.Size].rawData.push(item);
+      speciesData[item.ScientificName].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+      speciesData[item.ScientificName].bySize[item.Size].N += parseInt(item.N) || 0;
+    });
+
+
+    // Sort by year, season and metier
+    Object.keys(speciesData).forEach(sName => {
+      let specData = speciesData[sName];
+
+      // Find X Y ranges per species
+      this.findSizeAndNumIndRanges(specData, sName);
+      // L50 and MCRS defined previously
+
+      // Iterate raw data
+      specData.rawData.forEach(item => {
+        // Fill data for the different categories
+        for (let i = 0; i < this.lengthDistCategories.length; i++) {
+          // Species > Year, Season, Metier...
+          this.fillDataStruct(specData, item, this.lengthDistCategories[i], this.lengthDistCategoriesKeyAttr[i]); // fillDataStruct(specData, item, 'byYear', 'Year');
+        }
+      });
+      // Find X Y ranges per species and categories
+      for (let i = 0; i < this.lengthDistCategories.length; i++) {
+        Object.keys(specData[this.lengthDistCategories[i]]).forEach(key => {
+          this.findSizeAndNumIndRanges(specData[this.lengthDistCategories[i]][key], sName);
+          specData[this.lengthDistCategories[i]][key].L50 = specData.L50;
+          specData[this.lengthDistCategories[i]][key].MCRS = specData.MCRS;
+          specData[this.lengthDistCategories[i]][key].key = (specData.key || '') + key + '_';
+        });
+      }
+    });
+
+    return speciesData;
+  }
+
+  // Process length dist for categories
+  processLengthDistPerCategory(specData, keyClassName) {
+    if (specData[keyClassName] == undefined) {
+      specData[keyClassName] = {};
+      specData.rawData.forEach(item => {
+        this.fillDataStruct(specData, item, keyClassName, this.lengthDistCategoriesKeyAttr[this.lengthDistCategories.indexOf(keyClassName)]);
+      });
+      // Find ranges
+      Object.keys(specData[keyClassName]).forEach(key => {
+        this.findSizeAndNumIndRanges(specData[keyClassName][key]);
+        // Heritage
+        specData[keyClassName][key].L50 = specData.L50;
+        specData[keyClassName][key].MCRS = specData.MCRS;
+        specData[keyClassName][key].key = (specData.key || '') + key + '_';
+      });
+    }
+    
+    return specData;
+  }
+
+  // Fill data structure function
+  fillDataStruct(specData, item, keyClassName, attrName) {
+    if (specData[keyClassName] == undefined) { debugger; }
+    if (specData[keyClassName][item[attrName]] == undefined) {
+      specData[keyClassName][item[attrName]] = {
+        'rawData': [],
+        'bySize': {},
+        'breadcrumb': specData.breadcrumb + '>' + keyClassName,
+      }
+    }
+    specData[keyClassName][item[attrName]].rawData.push(item);
+    // Species > Year/Season/Metier/Port > Size
+    if (specData[keyClassName][item[attrName]].bySize[item.Size] == undefined) {
+      specData[keyClassName][item[attrName]].bySize[item.Size] = {
+        'rawData': [],
+        'numInd': 0,
+        'N': 0,
+      }
+    }
+    specData[keyClassName][item[attrName]].bySize[item.Size].rawData.push(item);
+    specData[keyClassName][item[attrName]].bySize[item.Size].numInd += parseFloat(item.Abundance_NSpecimen_Km2 || item.Abundance_NSpecimen);
+    specData[keyClassName][item[attrName]].bySize[item.Size].N += parseInt(item.N) || 0;
+  };
+  // Find ranges of sizes
+  findSizeAndNumIndRanges(specData, sName) {
+    sName = sName || specData.rawData[0].ScientificName;
+    // Reset
+    specData.rangeSize = [Infinity, -Infinity];
+    specData.rangeNumInd = [Infinity, -Infinity];
+    if (specData.bySize == undefined) { debugger }
+
+    // Find X Y ranges per species
+    Object.keys(specData.bySize).forEach(sKey => {
+      // Ranges
+      specData.rangeSize[0] = Math.min(specData.rangeSize[0], sKey);
+      specData.rangeSize[1] = Math.max(specData.rangeSize[1], sKey);
+      specData.rangeNumInd[0] = Math.min(specData.rangeNumInd[0], specData.bySize[sKey].numInd);
+      specData.rangeNumInd[1] = Math.max(specData.rangeNumInd[1], specData.bySize[sKey].numInd);
+    });
+    if (specData.rangeNumInd[1] == 0) {
+      console.warn('Maximum abundance for ' + sName + ' is zero, but ' + specData.rawData.length + ' entries are present.');
+      specData.rangeNumInd[1] = 1;
+    }
+    // Calculate N
+    specData.N = 0;
+    specData.rawData.forEach(item => {
+      specData.N += parseInt(item.N);
+    });
+  }
 
 
 
@@ -394,6 +565,9 @@ class TrawlingData extends FishingData {
     }
   }
 
+  lengthDistCategories = ['byYear', 'bySeason', 'byMetier', 'byPortArea'];
+  lengthDistCategoriesKeyAttr = ['Year', 'Season', 'Metier', 'PortArea'];
+
   constructor() {
     super('trawling');
   }
@@ -420,6 +594,9 @@ class PurseSeineData extends FishingData {
       range: [0, 230]
     }
   }
+
+  lengthDistCategories = ['byYear', 'bySeason', 'byPortArea'];
+  lengthDistCategoriesKeyAttr = ['Year', 'Season', 'PortArea'];
 
   constructor() {
     super('purse-seine');

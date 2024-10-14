@@ -23,7 +23,8 @@ export default es  = {
   "Sentence4": "En Octubre de 2018 se puso en marcha el programa de seguimiento de las especies de mayor interés pesquero, donde uno de los elementos clave es la recopilación de datos y su estructuración para poder ser analizadas y visualizadas.",
   "SentenceContact": "Si necesita más información sobre la aplicación, puede contactar con Gerard Llorach (gllorach at bluenetcat.eu). Si necesita más información sobre los datos, puede contactar con Jordi Ribera (jribera at icm.csic.es).",
   "SentenceFunding": "La Xarxa Marítima de Catalunya (BlueNetCat) está financiada por la Generalitat de Catalunya y el Fondo Europeo de Desarrollo Regional (FEDER).",
-
+  "Attributions": "Atribuciones",
+  "Source": "Fuente",
 
   "effortTypes": {
     "hours": "horas",
@@ -198,7 +199,7 @@ export default es  = {
   "Show chart": "Mostrar gráfico",
   "Hide chart": "Esconder gráfico",
   "Catch composition": "Composición de captura",
-  "Length frequency": "Frecuencia de tallas",
+  "Length distribution": "Distribución de tallas",
   "Sampling map": "Mapa de muestreo",
 
   "Abundance (Number of individuals per km2)": "Abundancia (Nº de individuos por km2)",
@@ -206,6 +207,8 @@ export default es  = {
   "individuals of": " individuos de ",
   "per": "por",
   "Length": "Longitud",
+  "More species": "Más especies",
+  "Sexual maturity": "Madurez sexual",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Salir de la pantalla completa",
@@ -225,6 +228,19 @@ export default es  = {
   "NextHaul": "Siguiente muestreo",
   "PrevHaul": "Previo muestreo",
   "Sort": "Ordena per",
+
+  "Viewby": "Ver por",
+  "byYear": "Año",
+  "bySeason": "Estación",
+  "byMetier": "Métier",
+  "byPortArea": "Región",
+
+  "Coastal Delta shelf": "Plataforma costera del Delta",
+  "Middle Delta shelf": "Plataforma mediana del Delta",
+  "Coastal shelf": "Plataforma costera",
+  "Deeper shelf": "Plataforma profunda",
+  "Upper slope": "Talud superior",
+  "Lower slope": "Talud inferior",
 
   "Cookies title": "Valoramos tu privacidad",
   "Cookies text": `Usamos tecnología como las galletas en nuestro sitio web para mejorar la

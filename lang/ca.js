@@ -22,6 +22,8 @@ export default ca = {
   "Sentence4": "A l'Octubre de 2018 es va posar en marxa el programa de seguiment de les especies de major interès pesquer, on un dels elements clau és la recopilació de dades i la seva estructuració per a poder ser analitzades i visualitzades.",
   "SentenceContact": "En cas de voler més informació sobre l'aplicació, podeu contactar amb en Gerard Llorach (gllorach at bluenetcat.eu). En cas de voler més informació sobre les dades, podeu contactar amb en Jordi Ribera (jribera at icm.csic.es).",
   "SentenceFunding": "La Xarxa Marítima de Catalunya (BlueNetCat) està finançada per la Generalitat de Catalunya i el Fons Europeu de Desenvolupament Regional (FEDER).",
+  "Attributions": "Atribucions",
+  "Source": "Font",
 
   "effortTypes": {
     "hours": "hores",
@@ -194,7 +196,7 @@ export default ca = {
   "Show chart": "Mostrar gràfic",
   "Hide chart": "Amagar gràfic",
   "Catch composition": "Composició de captura",
-  "Length frequency": "Freqüència de talles",
+  "Length distribution": "Distribució de talles",
   "Sampling map": "Mapa de mostreig",
 
   "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km2)",
@@ -202,6 +204,8 @@ export default ca = {
   "individuals of": " individus de ",
   "per": "per",
   "Length": "Longitud",
+  "More species": "Més espècies",
+  "Sexual maturity": "Maduresa sexual",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Sortir de la pantalla completa",
@@ -221,6 +225,19 @@ export default ca = {
   "NextHaul": "Següent mostreig",
   "PrevHaul": "Anterior mostreig",
   "Sort": "Ordena per",
+
+  "Viewby": "Veure per",
+  "byYear": "Any",
+  "bySeason": "Estació",
+  "byMetier": "Métier",
+  "byPortArea": "Regió",
+
+  "Coastal Delta shelf": "Plataforma costanera del Delta",
+  "Middle Delta shelf": "Plataforma mitjana del Delta",
+  "Coastal shelf": "Plataforma costanera",
+  "Deeper shelf": "Plataforma profunda",
+  "Upper slope": "Talús superior", 
+  "Lower slope": "Talús inferior",
 
   "Cookies title": "Valorem la teva privadesa",
   "Cookies text": `Utilitzem tecnologia com ara galetes al nostre lloc per millorar l'experiència d'usuari i analitzar el nostre trànsit. Feu clic per consentir l'ús d'aquesta tecnologia al web. Podeu canviar 
