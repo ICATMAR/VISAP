@@ -207,6 +207,8 @@ export default es  = {
   "individuals of": " individuos de ",
   "per": "por",
   "Length": "Longitud",
+  "More species": "Más especies",
+  "Sexual maturity": "Madurez sexual",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Salir de la pantalla completa",

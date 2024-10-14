@@ -136,6 +136,8 @@ export default en = {
   "individuals of": " individuals of ",
   "per": "per",
   "Length": "Length",
+  "More species": "More species",
+  "Sexual maturity": "Maduresa sexual",
 
   "viewFullscreen": "View in full screen",
   "exitFullscreen": "Exit from full screen",

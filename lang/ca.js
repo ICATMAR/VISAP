@@ -204,6 +204,8 @@ export default ca = {
   "individuals of": " individus de ",
   "per": "per",
   "Length": "Longitud",
+  "More species": "Més espècies",
+  "Sexual maturity": "Maduresa sexual",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Sortir de la pantalla completa",

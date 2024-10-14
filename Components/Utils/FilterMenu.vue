@@ -18,7 +18,7 @@
     </div>
 
     <!-- More species -->
-    <button style="border: 1px solid" @click="isAllSpeciesMenuVisible = true">&#x25BD; {{ $t('More species') }}</button>
+    <button style="border: 1px solid" @click="isAllSpeciesMenuVisible = true">+ {{ $t('More species') }}</button>
 
     <div class="overlay" @click="isAllSpeciesMenuVisible = false" v-show="isAllSpeciesMenuVisible">
       <!-- Wrapper -->
