@@ -191,8 +191,8 @@ export default {
           minYear = Math.min(specData.rawData[i].Year, minYear);
           maxYear = Math.max(specData.rawData[i].Year, maxYear);
         }
-        title += '(' + minYear + '-' + maxYear + ')';
-        title = title.replaceAll(')(', ', ');
+        title += ' (' + minYear + '-' + maxYear + ')';
+        title = title.replaceAll(') (', ', ');
       }
 
       this.chartTitle = title;
