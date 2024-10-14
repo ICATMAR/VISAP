@@ -1,5 +1,9 @@
 <template>
     <div id="app-map">
+
+      <!-- Loading circle-->
+      <div class="loading-circle fade-enter-from fade-enter-active" v-show="isLoading"></div>
+
       <!-- LAYOUT -->
       <!-- OL map -->
       <div id="map" ref="OLMap" :class="isMinimized ? 'miniMap' : ''"></div>
@@ -339,6 +343,7 @@ export default {
         loading: 0,
         loaded: 1
       },
+      isLoading: false,
       isLayerDataReady: false,
       // WMS Data layer
       wmsProgress: {
@@ -941,9 +946,11 @@ export default {
 
 
     updateFishingDataOnMap: function(){
+      this.isLoading = true;
       if (window.GUIManager.currentSection == 'map'){
         window.DataManager.loadNecessaryFiles('map', window.GUIManager.currentModality)
         .then(() => {
+          this.isLoading = false;
           let fishingDataManager = window.DataManager.getFishingDataManager(window.GUIManager.currentModality);
           // Set hauls
           this.setFishingHauls(fishingDataManager);
