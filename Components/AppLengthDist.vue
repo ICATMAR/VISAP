@@ -131,8 +131,8 @@
               this.$refs.filterMenu.setData(fdManager.lengthDist);
               // Check if a species is present in the URL
               let hashSpecies = window.GUIManager.lengthDist.species;
+              hashSpecies = hashSpecies.replaceAll('%20', ' ');
               if (hashSpecies != undefined && fdManager.lengthDist[hashSpecies] != undefined){
-                hashSpecies = hashSpecies.replaceAll('%20', ' ');
                 this.$refs['base'].generateGraph(fdManager.lengthDist[hashSpecies]);
                 this.$refs['filterMenu'].selSpecies = hashSpecies;
               } else
