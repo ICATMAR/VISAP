@@ -235,6 +235,13 @@ export default es  = {
   "byMetier": "Métier",
   "byPortArea": "Región",
 
+  "Coastal Delta shelf": "Plataforma costera del Delta",
+  "Middle Delta shelf": "Plataforma mediana del Delta",
+  "Coastal shelf": "Plataforma costera",
+  "Deeper shelf": "Plataforma profunda",
+  "Upper slope": "Talud superior",
+  "Lower slope": "Talud inferior",
+
   "Cookies title": "Valoramos tu privacidad",
   "Cookies text": `Usamos tecnología como las galletas en nuestro sitio web para mejorar la
   experiencia de usuario y analizar el tráfico. Haz click en "Acepto" para dar consentimiento.

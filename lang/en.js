@@ -164,6 +164,13 @@ export default en = {
   "byMetier": "Métier",
   "byPortArea": "Region",
 
+  "Coastal Delta shelf": "Coastal Delta shelf", 
+  "Middle Delta shelf": "Middle Delta shelf",
+  "Coastal shelf": "Coastal shelf",
+  "Deeper shelf": "Deeper shelf",
+  "Upper slope": "Upper slope",
+  "Lower slope": "Lower slope",
+
   "Cookies title": "We value your privacy",
   "Cookies text": `We use technology such as cookies in our website to improve the user experience and analyze our traffic. 
   Click on accept to give consent to the use of this technology. You can change this option anytime using the button on the
