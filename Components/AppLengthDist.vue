@@ -63,10 +63,6 @@
       window.eventBus.on('AppMap_ChangedSection', this.updateLengthDistribution);
       window.eventBus.on('TitleHeader_ChangedSection', this.updateLengthDistribution);
       window.eventBus.on('ModalitySelector_ChangedModality', this.updateLengthDistribution);
-      // When language changes, update language of the highchart
-      window.eventBus.on('LanguageSelector_LanguageChanged', this.languageChanged);
-      window.eventBus.on('GUIManager_LanguageChanged', this.languageChanged);
-
 
       // LengthDist events
       window.eventBus.on('LengthDistMultipleChart_showChart', (specData) => {
