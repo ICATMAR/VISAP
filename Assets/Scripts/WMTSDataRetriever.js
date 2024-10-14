@@ -108,10 +108,7 @@ export class WMTSDataRetriever {
       dataSet.productName = product.name;
       dataSet.productProvider = product.xml.getElementsByTagNameNS("http://www.opengis.net/ows/1.1", "ProviderName")[0].textContent;
       // Dataset template
-      dataSet.template = ll.querySelector('ResourceURL').attributes.template.textContent;
-      if (dataSet.template.includes('http://')){
-        dataSet.template = dataSet.template.replace('http://', 'https://'); // WARN: BUG FROM WMTS?
-      }
+      dataSet.template = this.getResourceURL(rawXML, ll);
       // Add date to template
       dataSet.template += '&time={Time}';
       // Add style range and color map
@@ -200,6 +197,59 @@ export class WMTSDataRetriever {
     });
 
   }
+
+
+
+
+
+  // Get resource URL
+  getResourceURL = function(rawXML, ll){
+    let template = '';
+    // Using resource oriented architectural style
+    // https://www.ogc.org/standard/wmts/
+    if (ll.querySelector('ResourceURL')){
+      template = ll.querySelector('ResourceURL').attributes.template.textContent;
+      if (template.includes('http://')){
+        template = template.replace('http://', 'https://'); // WARN: BUG FROM WMTS?
+      }
+      debugger; 
+      return template;
+    }
+    // Using procedure oriented architectural style
+    else {
+      // Find the 'ows:Operation' element with name='GetCapabilities'
+      let operations = rawXML.getElementsByTagNameNS('http://www.opengis.net/ows/1.1', 'Operation');
+      let template;
+
+      for (let operation of operations) {
+        // Get link
+        let hrefEls = operation.getElementsByTagNameNS('http://www.opengis.net/ows/1.1', 'Get');
+        let href = hrefEls[0].getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+        if (operation.getAttribute('name') === 'GetTile') {
+          template = href;
+          break;
+        }
+      }
+      if (template == undefined){debugger;}
+      // Get layer url information
+      let layer = ll.getElementsByTagNameNS('http://www.opengis.net/ows/1.1', 'Identifier')[0].textContent;
+      // WMTS url elements
+      template +=
+        '/?service=WMTS' +
+        '&version=1.0.0' +
+        '&request=GetTile' +
+        '&tilematrixset={TileMatrixSet}' +
+        '&style={Style}' +
+        '&tilematrix={TileMatrix}' +
+        '&tilerow={TileRow}' +
+        '&tilecol={TileCol}' +
+        '&layer=' + layer; //e.g. &layer=MEDSEA_MULTIYEAR_WAV_006_012/med-hcmr-wav-rean-h_202105/VHM0
+      return template;
+    }
+
+  }
+
+
 
 
 
