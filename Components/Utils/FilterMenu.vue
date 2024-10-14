@@ -87,41 +87,7 @@ export default {
       // Trigger click event
       this.clickedSpecies(this.selButNotTarget);
     },
-    // Select item
-    selectItem: function(e){
-      e.stopPropagation();
-      //console.log(e.srcElement.innerText.split("■ ")[1]);
-      let speciesName = this.extractSpeciesName(e.currentTarget.innerText);
-      this.switchFromList(speciesName, this.speciesList, this.selSpeciesList, this.deselectItem);
-    },
 
-    // Deselect item
-    deselectItem: function(e){
-      e.stopPropagation();
-      let speciesName = this.extractSpeciesName(e.currentTarget.innerText);
-      this.switchFromList(speciesName, this.selSpeciesList, this.speciesList, this.selectItem);
-    },
-
-    selectAll: function(e){
-      e.stopPropagation();
-      for (var i = 0; i<this.speciesList.items.length; i++){
-        this.switchFromList(this.speciesList.items[i]._values.name, this.speciesList, this.selSpeciesList, this.deselectItem)
-        i--;
-      }
-    },
-
-    deselectAll: function(e){
-      e.stopPropagation();
-      for (var i = 0; i<this.selSpeciesList.items.length; i++){
-        this.switchFromList(this.selSpeciesList.items[i]._values.name, this.selSpeciesList, this.speciesList, this.selectItem)
-        i--;
-      }
-    },
-
-    // Close filter menu
-    closeGUI: function(e){
-      this.$emit('onclose', this.selSpeciesList.toJSON());
-    },
 
     // Separate icon from species name
     extractSpeciesName: function(text){
@@ -140,7 +106,6 @@ export default {
 
       let spObj = [];
       this.targetSpecies = [];
-      let selSpObj = [];
       
       // Get color
       species.forEach((sp, i) => {
@@ -166,14 +131,6 @@ export default {
           </button>
           `
       }
-      let optionsSel = {
-        item: (sp) =>
-          `<button class="selSpeciesItem" title="${sp.commonName}">
-            <span style='color:red'> ✖ </span>
-            <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.name}
-          </button>
-          `
-      }
 
       // If list exists, reindex as HTML changed
       if (this.speciesList != undefined) {
@@ -183,15 +140,9 @@ export default {
 
       // // Create list      
       this.speciesList = new List(this.$refs.availableSpecies, options, spObj);
-      // this.selSpeciesList = new List(this.$refs.selSpecies, optionsSel);
 
       // // Add button events
       this.speciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=>this.clickedSpeciesFromOverlay(e)));
-      // this.selSpeciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=> this.deselectItem(e)));
-      // this.$refs.selectAll.addEventListener("click", (e)=>this.selectAll(e));
-      // this.$refs.deselectAll.addEventListener("click", (e)=>this.deselectAll(e));
-      // this.$refs.closeGUIApply.addEventListener("click", (e) => this.closeGUI(e));
-      // this.$refs.closeGUIClear.addEventListener("click", (e) => {this.deselectAll(e); this.closeGUI(e)});
   
     },
 
@@ -203,54 +154,7 @@ export default {
     },
 
 
-    // Set selected
-    addSelected(speciesName){
-      this.switchFromList(speciesName, this.speciesList, this.selSpeciesList, this.deselectItem);
-    },
 
-
-
-
-
-
-
-    // INTERNAL METHODS
-    // Switch values from one list to the other
-    switchFromList(speciesName, removeFromList, insertToList, callbackFuncBtn){
-      let item = removeFromList.get("name", speciesName)[0];
-      removeFromList.remove("name", speciesName);
-
-      let itNew = insertToList.add({
-        "name": speciesName,
-        'commonName': this.$i18n.t(speciesName), // TODO: check if this is made every time the filter is cliked. maybe yes?
-        "color":  item._values.color
-      });
-      // Add event listener
-      callbackFuncBtn = callbackFuncBtn.bind(this); // bind callback with this
-      itNew[0].elm.addEventListener("click", (e)=>callbackFuncBtn(e));
-
-      // Turn on/off the search bar for selected species
-      this.showSearchBarSelSpecies = this.selSpeciesList.size() > 20 ? true : false;
-      
-    },
-
-
-
-
-
-
-
-    // Get unique values in an array of objects
-    getUnique: function(data, key){
-      let uniqueKeys = [];
-      // Iterate
-      for (let i = 0; i < data.length; i++){
-        let value = data[i][key];
-        if (value !== undefined && uniqueKeys.findIndex((item) => item == value) == -1)
-          uniqueKeys.push(value);
-      }
-      return uniqueKeys;
-    }
   },
   components: {
     //'map': Map,
@@ -301,12 +205,7 @@ export default {
   height: 100%;
 }
 
-.center-buttons {
-  display:flex;
-  flex-direction: row;
-  justify-content: center;
-  padding: 20px;
-}
+
 
 .listSpeciesContainer {
   display: flex;
@@ -319,11 +218,7 @@ export default {
   padding: 20px;
 }
 
-.selSpeciesContainer {
-  background-color: var(--red);
-  flex: 0 0 auto;
-  padding: 20px;
-}
+
 
 
 .search-bar-container{
@@ -353,10 +248,6 @@ input {
   justify-content: center;
 }
 
-.listSel {
-  background-color: var(--red);
-  max-height: 30vh;
-}
 
 .speciesItem {
   margin: 2px;
