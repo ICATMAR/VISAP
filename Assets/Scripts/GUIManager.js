@@ -83,9 +83,10 @@ class GUIManager {
     // Language changes
     window.eventBus.on('LanguageSelector_LanguageChanged', lang => this.setLanguage(lang));
     // Selected haul
-    window.eventBus.on('HaulInfo_SelectedHaul', id => this.map.currentHaul = id);
-    window.eventBus.on('TracksTimeLine_HaulClicked', id => this.map.currentHaul = id);
-    window.eventBus.on('Map_HaulClicked', id => this.map.currentHaul = id);
+    window.eventBus.on('HaulInfo_SelectedHaul', id => this.setHaul(id));
+    window.eventBus.on('TracksTimeLine_HaulClicked', id => this.setHaul(id));
+    window.eventBus.on('Map_HaulClicked', id => this.setHaul(id));
+    
 
     // Hauls visibility
     window.eventBus.on('FishingEffort_setHaulsVisible', (params) => {
@@ -116,7 +117,8 @@ class GUIManager {
     this.setModality(mod);
 
     // Set default currentHaul
-    this.map.currentHaul = this.currentModality == 'trawling' ? 23288 : 16597;
+    let haul = window.location.getHashValue('HAUL');
+    this.map.currentHaul = haul != undefined ? haul : this.currentModality == 'trawling' ? 23288 : 16597;
     
     // Set language
     // Check if there is a language in the url
@@ -167,6 +169,11 @@ class GUIManager {
     window.location.setHashValue('LANG', this.currentLanguage);
     if (!isValid)
       console.warn('Wrong hash introduced in the URL');
+  }
+  // Haul
+  setHaul(id){
+    this.map.currentHaul = id;
+    window.location.setHashValue('HAUL', id);
   }
 
 }
