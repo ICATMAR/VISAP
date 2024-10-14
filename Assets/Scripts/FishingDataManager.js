@@ -159,7 +159,7 @@ class FishingData {
     if (this.lengthDistFilesLoaded)
       return Promise.resolve();
 
-    this.isLoadingOverviewFiles = true;
+    this.isLoadingLengthDist = true;
 
     // Load length-distribution file
     return this.loadingLengthDistPromise = window.FileManager.loadLengthDistFile(this.mod).then((result) => {
