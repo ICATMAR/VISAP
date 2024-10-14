@@ -5,6 +5,7 @@
     <div class='plot-container' ref="plot-container">
       <!-- Title -->
       <div class="title" v-show="chartTitle != undefined">{{ chartTitle }}</div>
+      <div class="subtitle" v-show="subtitle != undefined">{{ $t(subtitle) }}</div>
       <div class="loading-circle fade-enter-from fade-enter-active" v-show="chartTitle == undefined"></div>
       <!-- Y axis and svg container -->
       <div class='ylabel-yaxis-plot-container'>
@@ -139,6 +140,7 @@ export default {
     return {
       plotHeight: 400,
       chartTitle: undefined,
+      subtitle: '',
       selectedKey: '',
       category: '',
       yticks: [], // [{bottom: 40, text: '200'}, ...];
@@ -175,10 +177,27 @@ export default {
         title += ' (' + keys.join(',') + ')';
         title = title.replaceAll(',', ', ');
       }
+      // Add years
+      if (!specData.breadcrumb.includes('byYear')){
+        // Find min and max year
+        let minYear = 9999;
+        let maxYear = 0;
+        for (let i = 0; i < specData.rawData.length; i++){
+          minYear = Math.min(specData.rawData[i].Year, minYear);
+          maxYear = Math.max(specData.rawData[i].Year, maxYear);
+        }
+        title += '(' + minYear + '-' + maxYear + ')';
+        title = title.replaceAll(')(', ', ');
+      }
+
       title += ' - ' + this.$i18n.t('per') + ' ' + this.$i18n.t(category);
-      //if (Object.keys(specData.byYear)) title += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
       
       this.chartTitle = title;
+
+      // Subtitle (fishing modality)
+      let mod = window.GUIManager.currentModality;
+      let modNaming = mod == 'trawling' ? 'TrawlingInfo' : mod == 'purse-seine' ? 'Purse seineInfo': '';
+      this.subtitle = modNaming;
 
       // Y ticks
       this.createYAxisCategoryTicks(Object.keys(specData[category]));
@@ -612,6 +631,11 @@ export default {
   font-weight: bold;
   text-align: center;
   font-size: large
+}
+
+.subtitle {
+  text-align: center;
+  font-style: italic;
 }
 
 .buttonsCategories {
