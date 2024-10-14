@@ -67,7 +67,7 @@
           <div class="tooltip" ref="tooltip"></div>
           <!-- Export container -->
           <div class="export-container" ref="export-container" @mouseleave="isExportOptVisible = false" v-show="isLoaded && !isPrinting">
-            <button class="clickable export-button" @click="isExportOptVisible = true">
+            <button class="clickable export-button" @click="isExportOptVisible = !isExportOptVisible">
               <span class="fa">&#xf56d;</span>
               <span class="button-text">{{ $t('Export data') }}</span>
             </button>
