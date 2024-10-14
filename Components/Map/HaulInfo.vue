@@ -307,6 +307,8 @@ export default {
 
     // Create and set pie chart
     setPieChart: function (id) {
+      if (window.GUIManager.currentSection != 'map')
+        return;
       console.log('+++Requesting haul file ' + id);
       // Load haul from server or from file
       //this.getHaul('data/trawlingData/hauls/' + id + '.json', undefined, this.selHaul);
