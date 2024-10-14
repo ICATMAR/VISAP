@@ -1,7 +1,10 @@
 <template>
   <!-- Container -->
   <div id='piechartSection' ref='piechartSection'>
-    
+
+    <!-- Loading circle-->
+    <div class="loading-circle fade-enter-from fade-enter-active" v-show="isLoading"></div>
+
     <!-- Title Section -->
     <div class="titleContainer">
       <span class="h4">{{$t('Catch per ' + type)}} <span>({{rangeYears}})</span></span>
@@ -80,7 +83,8 @@ export default {
       showComparison: false,
       showPie: false,
       showExportOptions: false,
-      rangeYears: '2019-2023'
+      rangeYears: '2019-2023',
+      isLoading: false,
     }
   },
   methods: {
@@ -180,9 +184,11 @@ export default {
     // PUBLIC
     // Load the data
     loadChartData: function(){
+      this.isLoading = true;
       // Call data manager to load the data
       window.DataManager.loadNecessaryFiles('overview', window.GUIManager.currentModality)
         .then(() => {
+          this.isLoading = false;
           let fdManager = window.DataManager.getFishingDataManager();
           if (this.type == 'port')
             this.rawData = fdManager.catchComposition.byPort;
@@ -195,7 +201,11 @@ export default {
           this.updatePieChartData();
           // Emit?
         })
-        .catch(e => console.error(e));
+        .catch(e =>{
+          debugger;
+          this.isLoading = false;
+          console.error(e)
+          });
     },
   },
   watch: {
