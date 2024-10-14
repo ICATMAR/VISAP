@@ -48,14 +48,14 @@
             <!-- N -->
             <div :title="$t('Number of individuals')">N = {{ N }}</div>
             <!-- L50 -->
-            <div class="itemLegendContainer clickable" :title="$t('Sexual maturity')" 
+            <div class="itemLegendContainer clickable" :title="$t('Sexual maturity') + ': ' + L50 + ' cm.'" 
               @click='isL50Visible = !isL50Visible' :class="[isL50Visible ? '':'grayedOut']"
               v-show="L50 != undefined && !(isPrinting && !isL50Visible)">
               <div class="L50LegendStroke"></div>
               <div>L50 ⚤</div>
             </div>
             <!-- MCRS -->
-            <div class="itemLegendContainer clickable" :title="$t('Minimum Conservation Reference Size')" 
+            <div class="itemLegendContainer clickable" :title="$t('Minimum Conservation Reference Size') + ': ' + MCRS + ' cm.'" 
               @click='isMCRSVisible = !isMCRSVisible' :class="[isMCRSVisible ? '':'grayedOut']"
               v-show="MCRS != undefined && !(isPrinting && !isMCRSVisible)">
               <div class="MCRSLegendStroke"></div>
@@ -202,11 +202,11 @@ export default {
       this.MCRS = specData.MCRS;
       // Graph L50 and MCRS lines
       if (specData.L50){
-        let normPosition = specData.L50 / specData.rangeSize[1] * 1.1;
+        let normPosition = specData.L50 / (specData.rangeSize[1] * 1.1);
         this.$refs["L50"].setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
       }
       if (specData.MCRS){
-        let normPosition = specData.MCRS / specData.rangeSize[1] * 1.1;
+        let normPosition = specData.MCRS / (specData.rangeSize[1] * 1.1);
         this.$refs["MCRS"].setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
       }
       
