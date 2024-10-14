@@ -26,7 +26,10 @@
 
         <!-- Species list -->
         <div ref="availableSpecies" class="listSpeciesContainer">
-          <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" />
+          <div class="search-bar-container">
+            <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" />
+            <button class="icon-str button-active clickable">x</button>
+          </div>
           <div class="list"></div>
         </div>
 
@@ -322,12 +325,19 @@ export default {
   padding: 20px;
 }
 
-input {
-  width: 50%;
+
+.search-bar-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
   margin-top: 20px;
 }
 
-
+input {
+  width: 50%;
+}
 
 .list {
   background: rgba(255, 255, 255, 0.247);
