@@ -35,7 +35,7 @@
     <cookie-banner></cookie-banner>
 
     <!-- Information panel -->
-
+    <information></information>
 
   </div>
   
@@ -54,7 +54,9 @@
 import AppOverview from "Components/AppOverview.vue";
 import AppLengthDist from "Components/AppLengthDist.vue";
 import AppMap from "Components/AppMap.vue";
+
 import CookieBanner from "Components/TopSection/CookieBanner.vue";
+import Information from "./TopSection/Information.vue";
 
 import LanguageSelector from "Components/Utils/LanguageSelector.vue";
 import ModalitySelector from "Components/TopSection/ModalitySelector.vue";
@@ -97,7 +99,7 @@ export default {
     "cookie-banner": CookieBanner,
     "language-selector": LanguageSelector,
     "modality-selector": ModalitySelector,
-    
+    "information": Information,
   },
   computed: {
   

@@ -13,8 +13,24 @@ export default ca = {
 
   "About": "Sobre nosaltres",
   "About ICATMAR": "Sobre ICATMAR",
+
+  "Information": "Informació",
+  "info-sampling": "Les dades mostrades en aquesta aplicació provenen de mostrejos periòdics d'ICATMAR. Per a més informació sobre la metodologia de mostreig, segueix l'enllaç:",
+  "LinkToSampling": "Vull saber més sobre el mostreig",
+  "info-team": "Aquestes dades són recollides per un grup d'observadors que s'embarquen amb els pescadors catalans a diferents punts de la costa.",
+  "LinkToTeam": "Vull conèixer l'equip",
+  "info-science": "La metodologia i eines de com s'ha fet aquesta aplicació i de com s'han tractat les dades estan descrites en el següent article:",
+  "LinkToArticle": "Vull llegir l'article científic",
+
   "Contact": "Contacte",
+  "author-info-gerard": "Per qualsevol dubte, comentari o suggeriment respecte l'aplicació web, podeu contactar amb ",
+  "contact-github-issues": "Si esteu familiaritzats amb github issues, podeu informar d'errors a través de ",
+  "author-info-jordi": "Respecte les dades, el seu tractament i obtenció, contacteu amb ",
+  "contact-icatmar": "Per qualsevol altra cosa, podeu contactar a través de ",
+  
   "Funding": "Finançament",
+  "funding-agencies": "Aquesta acció està finançada per l'ICATMAR (Institut Català de Recerca per a la Governança de la Mar), un òrgan de cooperació entre la Direcció General de Política Marítima i Pesca Sostenible (Generalitat de Catalunya) i l'Institut de Ciències del Mar (ICM-CSIC) amb autonomia de gestió, que neix de la necessitat d'assessorament científic per desenvolupar el programa de l'Estratègia Marítima de Catalunya. Aquesta iniciativa va començar l'any 2021 a la Xarxa Marítima de Catalunya (BlueNetCat) fins al 2022.",
+  
   "Code repository": "Repositori del codi",
   "Sentence1": "Aquesta aplicació és un visualitzador de les dades recollides per ICATMAR per fer un monitoreig científic de les pesqueries, transferir els coneixements adquirits i facilitar la gestió de la pesca a la costa catalana. L'aplicació ha estat desenvolupada per la Xarxa Marítima de Catalunya (BlueNetCat) en col·laboració amb ICATMAR. Actualment l'aplicació només ensenya les dades del mostreig a la flota d'arrossegament.",
   "Sentence2": "L'ICATMAR (Institut Català de Recerca per a la Governança de la Mar) és un òrgan de cooperació entre la Direcció General de Política Marítima i Pesca Sostenible (Generalitat de Catalunya) i l'Institut de Ciències del Mar (ICM-CSIC) amb autonomia de gestió, que neix de la necessitat d'assessorament científic per desenvolupar el programa de l'Estratègia Marítima de Catalunya.",
