@@ -54,7 +54,7 @@
           <!-- Legend -->
           <div class="legendContainer">
             <!-- N -->
-            <div :title="$t('Number of individuals')">N = {{ N }}</div>
+            <div :title="$t('Number of measured individuals')">N = {{ N }}</div>
             <!-- L50 -->
             <div class="itemLegendContainer clickable" :title="$t('Sexual maturity') + ': ' + L50 + ' cm.'" 
               @click='isL50Visible = !isL50Visible' :class="[isL50Visible ? '':'grayedOut']"

@@ -210,6 +210,7 @@ export default es  = {
   "Length": "Longitud",
   "More species": "Más especies",
   "Sexual maturity": "Madurez sexual",
+  "Number of measured individuals": "Número de individuos muestreados",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Salir de la pantalla completa",

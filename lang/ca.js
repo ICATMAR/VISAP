@@ -207,6 +207,7 @@ export default ca = {
   "Length": "Longitud",
   "More species": "Més espècies",
   "Sexual maturity": "Maduresa sexual",
+  "Number of measured individuals": "Nombre d'individus mostrejats",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Sortir de la pantalla completa",

@@ -139,6 +139,7 @@ export default en = {
   "Length": "Length",
   "More species": "More species",
   "Sexual maturity": "Maduresa sexual",
+  "Number of measured individuals": "Number of measured individuals",
 
   "viewFullscreen": "View in full screen",
   "exitFullscreen": "Exit from full screen",
