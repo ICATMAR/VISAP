@@ -319,7 +319,7 @@ export default {
         let dataUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvStr);
         let linkEl = document.createElement('a');
         linkEl.setAttribute('href', dataUri);
-        linkEl.setAttribute('download', 'ICATMAR_' + window.GUIManager.currentModality + + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.csv');
+        linkEl.setAttribute('download', 'ICATMAR_' + window.GUIManager.currentModality + '_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.csv');
         linkEl.click();
       }
       // JSON
@@ -334,7 +334,8 @@ export default {
         let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
         let linkEl = document.createElement('a');
         linkEl.setAttribute('href', dataUri);
-        linkEl.setAttribute('download', 'ICATMAR_' + window.GUIManager.currentModality + + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.json');
+        linkEl.setAttribute('download', 'ICATMAR_' + window.GUIManager.currentModality + '_' + specData.rawData[0].ScientificName + '_' + (specData.key || '') + '.json');
+        linkEl.click();
       }
 
 
