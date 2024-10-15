@@ -3,14 +3,12 @@
   <div id='filterMenu' ref='filterMenu'>
 
     <!-- Wrapper -->
-    <div class="wrapper">
+    <div class="wrapper" @click="deselectAll($event); closeGUI()">
 
       <!-- User buttons -->
-      <div class="center-buttons" ref="controlButtons">
+      <div class="center-buttons top-buttons" ref="controlButtons">
         <button ref="selectAll" onclick="event.stopPropagation();">&#x25C6; {{$t('Select all')}} </button>
         <button ref="deselectAll" onclick="event.stopPropagation();">&#x25C7; {{$t('Deselect all')}} </button>
-        <button ref="closeGUIApply" onclick="event.stopPropagation();"><span class="fa">&#xf0b0;</span> {{$t('Apply filter')}} </button>
-        <button ref="closeGUIClear" onclick="event.stopPropagation();"><span class="fa">&#xe17b;</span> {{$t('Clear filter')}} </button>
       </div>
 
       <!-- Selected species -->
@@ -23,6 +21,12 @@
       <div ref="availableSpecies" class="listSpeciesContainer">
         <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" />
         <div class="list"></div>
+      </div>
+
+      <!-- User buttons -->
+      <div class="center-buttons" ref="controlButtons">
+        <button ref="closeGUIApply" onclick="event.stopPropagation();"><span class="fa">&#xf0b0;</span> {{$t('Apply filter')}} </button>
+        <button ref="closeGUIClear" onclick="event.stopPropagation();"><span class="fa">&#xe17b;</span> {{$t('Clear filter')}} </button>
       </div>
 
 
@@ -249,12 +253,18 @@ export default {
   flex-direction: row;
   justify-content: center;
   padding: 20px;
+  background: rgb(20 120 167 / 70%);;
+}
+
+.top-buttons {
+  padding-top: 50px;
+  font-size: small;
 }
 
 .listSpeciesContainer {
   display: flex;
   flex-flow: column;
-  flex: 1 1 auto;
+  /* flex: 1 1 auto; */
   overflow-y: auto;
 
   align-items: center;

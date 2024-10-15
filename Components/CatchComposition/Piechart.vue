@@ -69,6 +69,7 @@ export default {
       this.piechart.runApp(this.$refs.d3chart, prepData, d3, this.title, this.$i18n.t('Biomass'), unit);
 
       // Fill filter menu with data
+      this.isFilterActive = false;
       this.$refs.filterMenu.setData(rawData);
     },
     // Update the pie chart with filtered or unfiltered data
