@@ -203,7 +203,15 @@ a:hover {
 
 
 
-
+/* MAP ATTRIBUTIONS */
+.ol-attribution {
+  top: auto !important;
+  right: auto;
+  left: 10px !important;
+  bottom: 40px !important;
+  flex-flow: row !important;
+  max-width: 70vw;
+}
 
 
 /* LOADING ELEMENT */
