@@ -1,6 +1,6 @@
 <template>
   
-  <div class="logo-information icon-str clickable" @click="isVisible = !isVisible" v-if="!isVisible" title="Info">
+  <div class="logo-information icon-str clickable" @click="isVisible = !isVisible" v-if="!isVisible" :title="$t('Information')">
     <span>i</span>
     <div class="warning-circle" v-if="isWarningOn"></div>
   </div>
@@ -108,7 +108,7 @@ export default {
   },
   mounted(){
     this.isWarningOn = false; // Define condition (like an ending date) new Date() < new Date(2024, 10 - 1, this.lastDay);
-    this.isVisible = true//this.isWarningOn;
+    this.isVisible = this.isWarningOn;
   },
   data() {
     return {
