@@ -82,7 +82,7 @@
         <!-- Accept button -->
         <div class="buttons-container">
           <!-- Accept -->
-          <button class="btn-accept" @click="acceptClicked">Close</button>
+          <button class="btn-accept" @click="acceptClicked">{{$t('Close')}}</button>
         </div>
       </div>
     </div>
@@ -139,7 +139,9 @@ export default {
 .logo-information{
   position: absolute;
   right: 1px;
-  top: 6px;  
+  top: 6px;
+  width: 28px;
+  height: 28px;
 }
 
 .overlay {
