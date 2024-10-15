@@ -34,6 +34,9 @@
     <!-- Cookie banner -->
     <cookie-banner></cookie-banner>
 
+    <!-- Information panel -->
+
+
   </div>
   
 </template>
@@ -51,10 +54,10 @@
 import AppOverview from "Components/AppOverview.vue";
 import AppLengthDist from "Components/AppLengthDist.vue";
 import AppMap from "Components/AppMap.vue";
-import CookieBanner from "Components/CookieBanner.vue";
+import CookieBanner from "Components/TopSection/CookieBanner.vue";
 
 import LanguageSelector from "Components/Utils/LanguageSelector.vue";
-import ModalitySelector from "./ModalitySelector.vue";
+import ModalitySelector from "Components/TopSection/ModalitySelector.vue";
 
 export default {
   name: "app-manager",
