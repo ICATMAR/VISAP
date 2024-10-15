@@ -324,7 +324,7 @@ export default {
         }
 
         let info = window.DataManager.getHaulInfo(id);
-        let units = window.DataManager.getFishingDataManager().mod == 'trawling' ? 'kg/km2' : 'kg';
+        let units = window.DataManager.getFishingDataManager().mod == 'trawling' ? 'kg/km²' : this.$i18n.t('tonnes');
         pieChart.runApp(this.$refs.pieChart, preparedData, d3, info.Port + ", " + info.Data, this.$i18n.t("Biomass"), units);
       });
     },

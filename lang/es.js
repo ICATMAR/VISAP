@@ -173,6 +173,7 @@ export default es  = {
   "Sea surface temperature": "Temperatura superficial del mar",
   "Sea bottom temperature": "Temperatura del fondo del mar",
   "Salinity": "Salinidad",
+  "tonnes": "toneladas",
 
 
 
@@ -202,7 +203,7 @@ export default es  = {
   "Length distribution": "Distribución de tallas",
   "Sampling map": "Mapa de muestreo",
 
-  "Abundance (Number of individuals per km2)": "Abundancia (Nº de individuos por km2)",
+  "Abundance (Number of individuals per km2)": "Abundancia (Nº de individuos por km²)",
   "Abundance": "Abundancia",
   "individuals of": " individuos de ",
   "per": "por",

@@ -173,6 +173,7 @@ export default ca = {
   "Sea surface temperature": "Temperatura superficial del mar",
   "Sea bottom temperature": "Temperatura del fons del mar",
   "Salinity": "Salinitat",
+  "tonnes": "tones",
 
 
 
@@ -199,7 +200,7 @@ export default ca = {
   "Length distribution": "Distribució de talles",
   "Sampling map": "Mapa de mostreig",
 
-  "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km2)",
+  "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km²)",
   "Abundance": "Abundància",
   "individuals of": " individus de ",
   "per": "per",

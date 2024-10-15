@@ -107,6 +107,7 @@ export default en = {
   "Wind": "Wind",
   "Wave Significant Height": "Wave Significant Height",
   "Current": "Current",
+  "tonnes": "tonnes",
 
 
   "Catch per port": "Catch per port",
@@ -131,7 +132,7 @@ export default en = {
   "Length distribution": "Length distribution",
   "Sampling map": "Sampling map",
 
-  "Abundance (Number of individuals per km2)": "Abundance (Number of individuals per km2)",
+  "Abundance (Number of individuals per km2)": "Abundance (Number of individuals per km²)",
   "Abundance": "Abundance",
   "individuals of": " individuals of ",
   "per": "per",
