@@ -8,76 +8,82 @@
 
 
   <Transition>
-    <div class="container" v-if="isVisible">
+    <div class="overlay" @click="isVisible = false" v-if="isVisible">
+      <div class="container">
 
-      <!-- Informació -->
-      <div class="banner-title">
-        <span>{{$t('Information')}}</span>
-      </div>
-      <div class="banner-text">
-        <span>{{ $t('info-sampling') }}</span>
-        <button><a href="https://www.icatmar.cat/pesca/">{{ $t('LinkToSampling') }}</a></button>
-        <span>{{ $t('info-team') }}</span>
-        <button><a href="https://www.icatmar.cat/qui-som/equip-icatmar/">{{ $t('LinkToTeam') }}</a></button>
-        <span>{{ $t('info-science') }}</span>
-        <button><a href="https://doi.org/10.1093/database/baad067">{{ $t('LinkToArticle') }}</a></button>
-      </div>
-
-      <!-- Title -->
-      <div class="warning-container" v-if="isWarningOn">
-        <div class="banner-title-warning">
-          <span>Warning!</span>
+        <!-- Informació -->
+        <div class="banner-title">
+          <span>{{$t('Information')}}</span>
         </div>
-        <!-- Text -->
-        <div class="banner-text-warning">
-          <span>Real-time data might be unavailable from the 4th to the {{ lastDay }}th of October 2024 due to manteinance. Sorry for the inconvenience.
+        <div class="banner-text">
+          <span>{{ $t('info-sampling') }}</span>
+          <button><a href="https://www.icatmar.cat/pesca/">{{ $t('LinkToSampling') }}</a></button>
+          <span>{{ $t('info-team') }}</span>
+          <button><a href="https://www.icatmar.cat/qui-som/equip-icatmar/">{{ $t('LinkToTeam') }}</a></button>
+          <span>{{ $t('info-science') }}</span>
+          <button><a href="https://doi.org/10.1093/database/baad067">{{ $t('LinkToArticle') }}</a></button>
+        </div>
+
+        <!-- Title -->
+        <div class="warning-container" v-if="isWarningOn">
+          <div class="banner-title-warning">
+            <span>Warning!</span>
+          </div>
+          <!-- Text -->
+          <div class="banner-text-warning">
+            <span>Real-time data might be unavailable from the 4th to the {{ lastDay }}th of October 2024 due to manteinance. Sorry for the inconvenience.
+            </span>
+          </div>
+        </div>
+
+        
+        <!-- Authorship and contact -->
+        <div class="banner-title">
+          <span>{{ $t('Contact') }}</span>
+        </div>
+        <div class="banner-text">
+          <span>
+            {{$t('author-info-gerard')}}
+            <a :href="mailtoGerard" v-text="gerardEmail"></a>.
+            {{$t('contact-github-issues')}}
+            <a href="https://github.com/ICATMAR/HFRadar" target="_blank">github</a>.
+            {{$t('author-info-jordi')}}
+            <a :href="mailToJordi" v-text="jordiEmail"></a>.
+            {{$t('contact-icatmar') }}
+            <a :href="mailtoIcatmar" v-text="icatmarEmail"></a>.
+            </span>
+        </div>
+
+        <!-- Funding -->
+        <!-- Authorship and contact -->
+        <!-- <div class="banner-title">
+          <span>{{ $t('Funding') }}</span>
+        </div>
+        <div class="banner-text">
+          <span>
+            {{$t('funding-agencies')}}
           </span>
+        </div> -->
+
+        <!-- Map attributions -->
+        
+        
+
+        <!-- Funding agencies icons-->
+        <div class="attributions-container">
+          <div class="logos-container">
+            <img src="img/logos/ICATMAR512_white.png">
+            <img src="img/logos/Generalitat_white.png">
+            <img src="img/logos/ICM_white.png">
+            <img src="img/logos/CSIC_white.png">
+          </div>
         </div>
-      </div>
-
-      
-      <!-- Authorship and contact -->
-      <div class="banner-title">
-        <span>{{ $t('Contact') }}</span>
-      </div>
-      <div class="banner-text">
-        <span>
-          {{$t('author-info-gerard')}}
-          <a :href="mailtoGerard" v-text="gerardEmail"></a>.
-          {{$t('contact-github-issues')}}
-          <a href="https://github.com/ICATMAR/HFRadar" target="_blank">github</a>.
-          {{$t('author-info-jordi')}}
-          <a :href="mailToJordi" v-text="jordiEmail"></a>.
-          {{$t('contact-icatmar') }}
-          <a :href="mailtoIcatmar" v-text="icatmarEmail"></a>.
-          </span>
-      </div>
-
-      <!-- Funding -->
-       <!-- Authorship and contact -->
-      <div class="banner-title">
-        <span>{{ $t('Funding') }}</span>
-      </div>
-      <div class="banner-text">
-        <span>
-          {{$t('funding-agencies')}}
-        </span>
-      </div>
-
-      <!-- Attributions -->
-      <div class="attributions-container">
-        <div class="logos-container">
-          <img src="img/logos/ICATMAR512_white.png">
-          <img src="img/logos/Generalitat_white.png">
-          <img src="img/logos/ICM_white.png">
-          <img src="img/logos/CSIC_white.png">
+        
+        <!-- Accept button -->
+        <div class="buttons-container">
+          <!-- Accept -->
+          <button class="btn-accept" @click="acceptClicked">Close</button>
         </div>
-      </div>
-      
-      <!-- Accept button -->
-      <div class="buttons-container">
-        <!-- Accept -->
-        <button class="btn-accept" @click="acceptClicked">Close</button>
       </div>
     </div>
   </Transition>
@@ -135,24 +141,28 @@ export default {
   right: 1px;
   top: 6px;  
 }
-.container {
-  position: fixed;
-  left: 20px;
-  right: 20px;
-  z-index:3;
 
+.overlay {
+  position: absolute;
+  margin: 0;
+  background: rgb(175 230 250 / 77%);
+  width: 100%;
+  height: 100%;
+  align-content: center;
+  z-index: 3;
+}
+
+.container {
   max-width: 800px;
   width: 80%;
-
   display: flex;
   flex-direction: column;
   background: rgb(20 120 167 / 90%);
-  padding: 20px;
+  padding: clamp(20px, 8vw, 50px);
   border-radius: 20px;
-
   user-select: none;
-  transform: translateY(-50%);
-  top: 50%;
+  max-height: 90%;
+  overflow-y: auto;
 }
 
 .banner-title {
