@@ -29,7 +29,7 @@
 <script>
 
 // Import components
-import FilterMenu from 'Components/Utils/FilterMenu.vue'
+import FilterMenu from 'Components/CatchComposition/FilterMenu.vue'
 
 export default {
   name: 'piechart', // Caps, no -
