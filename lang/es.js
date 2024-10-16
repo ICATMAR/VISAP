@@ -224,6 +224,7 @@ export default es  = {
   "Abundance": "Abundancia",
   "individuals of": " individuos de ",
   "per": "por",
+  "Distribution percentage": "Porcentaje de la distribución",
   "Length": "Longitud",
   "More species": "Más especies",
   "Sexual maturity": "Madurez sexual",

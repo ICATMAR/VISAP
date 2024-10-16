@@ -152,6 +152,7 @@ export default en = {
   "Abundance": "Abundance",
   "individuals of": " individuals of ",
   "per": "per",
+  "Distribution percentage": "Distribution percentage",
   "Length": "Length",
   "More species": "More species",
   "Sexual maturity": "Maduresa sexual",

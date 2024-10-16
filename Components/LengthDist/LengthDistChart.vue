@@ -12,7 +12,7 @@
         <!-- Y label -->
         <div class='ylabel'>
           <div class='ylabel-text' :style="{width: plotHeight + 'px'}">
-            {{$t('Abundance (Number of individuals per km2)')}}
+            {{$t(ylabelText)}}
           </div>
         </div>
         <!-- Y ticks -->
@@ -148,8 +148,7 @@ export default {
       availableCategories: ['byYear', 'bySeason', 'byMetier', 'byPortArea'],
       selectedCategory: '',
       N: '',
-      x: '',
-      y: '',
+      ylabelText: '',
       yticks: [], // [{bottom: 40, text: '200'}, ...];
       xticks: [],
       dataPointsPos: [], // [{leftParent: 50, widthParent: 10, left: 20, bottom: 80, color: 'rgba()', x: 23, y: 53, N: 123}, ...]
@@ -198,9 +197,18 @@ export default {
       this.chartTitle = title;
 
       // Subtitle (fishing modality)
-      let mod = window.GUIManager.currentModality;
+      let mod = window.DataManager.getFishingDataManager().mod;
       let modNaming = mod == 'trawling' ? 'TrawlingInfo' : mod == 'purse-seine' ? 'Purse seineInfo': '';
       this.subtitle = modNaming;
+
+      // Y label text
+      if (mod == 'trawling')
+        this.ylabelText = 'Abundance (Number of individuals per km2)';
+      else if (mod == 'purse-seine')
+        this.ylabelText = 'Distribution percentage';
+      else {
+        debugger;
+      }
       
       // Generate SVG path
       let pathEl = this.$refs["path"];
@@ -232,7 +240,7 @@ export default {
       // X ticks
       this.createXAxisTicks(specData.rangeSize[1] * 1.1, window.innerWidth, specData);
       // Y ticks
-      this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, this.plotHeight);
+      this.createYAxisTicks(specData.rangeNumInd[1] * 1.1, this.plotHeight, specData.numInd);
       // Xticks window resize
       window.addEventListener('resize', this.onWindowResize);
 
@@ -351,7 +359,7 @@ export default {
 
     // PRIVATE
     // y axis ticks
-    createYAxisTicks: function(maxValue, height){
+    createYAxisTicks: function(maxValue, height, numInd){
       // Pixel separation between ticks
       let pixelSeparation = 50;
       // Number of ticks
@@ -363,13 +371,24 @@ export default {
       // Num ticks
       let numTicks = Math.floor(maxValue / noFloatsStep);
       
+      // Ticks
       this.yticks = [];
       for (let i = 0; i <= numTicks; i++) {
+        // Position
         let normY = i / (maxValue / noFloatsStep);
-        // tick
+        // Text tick
+        let textContent = ''
+        let fdManager = window.DataManager.getFishingDataManager();
+        if (fdManager.mod == 'trawling')
+          textContent = Math.floor(noFloatsStep * i);
+        else if (fdManager.mod == 'purse-seine'){
+          textContent = (100 *(noFloatsStep * i) / numInd).toFixed(1) + '%';
+        }else {
+          debugger;
+        }
         this.yticks.push({
           bottom: 100 * normY,
-          text: Math.floor(noFloatsStep * i)
+          text: textContent,
         })
       }
     },
@@ -481,7 +500,16 @@ export default {
       // Tooltip
       let tooltip = this.$refs["tooltip"];
       // Text
-      tooltip.innerText = this.$i18n.t('Abundance') + ': ' + dataPoint.y.toFixed(2) + this.$i18n.t('individuals of') + dataPoint.x + ' cm ' + this.$i18n.t('per') + ' km² (N = '+ dataPoint.N +')';
+      let tootTipText = '';
+      let fdManager = window.DataManager.getFishingDataManager();
+      if (fdManager.mod == 'trawling')
+        tootTipText = this.$i18n.t('Abundance') + ': ' + dataPoint.y.toFixed(2) + this.$i18n.t('individuals of') + dataPoint.x + ' cm ' + this.$i18n.t('per') + ' km² (N = '+ dataPoint.N +')';
+      else if (fdManager.mod == 'purse-seine'){
+        tootTipText = (100*dataPoint.y / this.specData.numInd).toFixed(1) + '% ' + this.$i18n.t('individuals of') + dataPoint.x + ' cm (N = '+ dataPoint.N +')';
+      }else {
+        debugger;
+      }
+      tooltip.innerText = tootTipText;
       
       
       tooltip.style.bottom = dataPoint.bottom + '%';

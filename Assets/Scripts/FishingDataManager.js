@@ -425,9 +425,12 @@ class FishingData {
     }
     // Calculate N
     specData.N = 0;
+    specData.numInd = 0;
     specData.rawData.forEach(item => {
       specData.N += parseInt(item.N);
+      specData.numInd += parseFloat(item.Abundance_NSpecimen || item.Abundance_NSpecimen_Km2);
     });
+    specData.numInd = specData.numInd || 1;
   }
 
 

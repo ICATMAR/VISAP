@@ -220,6 +220,7 @@ export default ca = {
   "Abundance": "Abundància",
   "individuals of": " individus de ",
   "per": "per",
+  "Distribution percentage": "Percentatge de la distribució",
   "Length": "Longitud",
   "More species": "Més espècies",
   "Sexual maturity": "Maduresa sexual",
