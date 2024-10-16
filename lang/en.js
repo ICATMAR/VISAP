@@ -14,8 +14,24 @@ export default en = {
 
   "About": "About us",
   "About ICATMAR": "About ICATMAR",
+
+  "Information": "Information",
+  "info-sampling": "The data shown in this application comes from periodic samplings by ICATMAR. For more information about the sampling methodology, follow the link:",
+  "LinkToSampling": "I want to learn more about the sampling",
+  "info-team": "This data is collected by a group of observers who board with Catalan fishermen at different points along the coast.",
+  "LinkToTeam": "I want to meet the team",
+  "info-science": "The methodology and tools used to create this application and process the data are described in the following article:",
+  "LinkToArticle": "I want to read the scientific article",
+  
   "Contact": "Contact",
+  "author-info-gerard": "For any questions, comments, or suggestions regarding the web application, you can contact ",
+  "contact-github-issues": "If you are familiar with GitHub issues, you can report errors through ",
+  "author-info-jordi": "For questions regarding the data, its processing, and acquisition, contact ",
+  "contact-icatmar": "For anything else, you can contact us through ",
+  
   "Funding": "Funding",
+  "funding-agencies": "This action is funded by ICATMAR (Institut Català de Recerca per a la Governança de la Mar), a cooperative body between the Direcció General de Política Marítima i Pesca Sostenible (Generalitat de Catalunya) and the Institut de Ciències del Mar (ICM-CSIC) with management autonomy. It was created out of the need for scientific advice to develop the program of the Catalonia Maritime Strategy. This initiative began in 2021 within the Xarxa Marítima de Catalunya (BlueNetCat) and continued until 2022.",
+
   "Code repository": "Code repository",
   "Sentence1": "This application is a viewer of the data collected by ICATMAR to carry out scientific monitoring of fisheries, transfer the knowledge acquired and facilitate the management of fishing on the Catalan coast. The application has been developed by the Catalan Maritime Network (BlueNetCat) in collaboration with ICATMAR. Currently the application only shows the bottom trawling data.",
   "Sentence2": "ICATMAR (Catalan Research Institute for the Governance of the Sea) is a cooperation body between the General Directorate of Maritime Policy and Sustainable Fisheries (Generalitat de Catalunya) and the Institute of Marine Sciences (ICM-CSIC) with management autonomy, which arises from the need for scientific advice to develop the program of the Maritime Strategy of Catalonia.",
