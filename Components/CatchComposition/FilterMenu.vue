@@ -5,21 +5,39 @@
     <!-- Wrapper -->
     <div class="wrapper" @click="deselectAll($event); closeGUI()">
 
-      <!-- User buttons -->
-      <div class="center-buttons top-buttons" ref="controlButtons">
+      <!-- Filter per category -->
+      <div class="center-buttons top-buttons">
+        <span>{{ $t('Filter per categories') }}</span>
+      </div>
+
+      <!-- Categories list -->
+      <div ref="categories" class="categories-container">
+        <button v-for="cat in categories" :class="[cat.isActive ? 'button-active': '']" @click="categoryClicked($event, cat)">{{$t(cat.name)}}</button>
+      </div>
+
+
+      <!-- Filter per species -->
+      <div class="center-buttons" style="padding: 20px">
+        <span>{{ $t('Filter per species') }}</span>
+      </div>
+
+
+      <!-- Sel/Deselect all buttons -->
+      <div class="center-buttons allOnOrOff" ref="controlButtons">
         <button ref="selectAll" onclick="event.stopPropagation();">&#x25C6; {{$t('Select all')}} </button>
         <button ref="deselectAll" onclick="event.stopPropagation();">&#x25C7; {{$t('Deselect all')}} </button>
       </div>
+      
 
       <!-- Selected species -->
-      <div ref="selSpecies" class="listSpeciesContainer selSpeciesContainer">
+      <div ref="selSpecies" class="listSpeciesContainer selSpeciesContainer" v-show="hasSelectedSpecies">
         <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" v-show="showSearchBarSelSpecies"/>
         <div class="list listSel"></div>
       </div>
 
       <!-- Species list -->
       <div ref="availableSpecies" class="listSpeciesContainer">
-        <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" />
+        <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" v-show="showSearchBarSpecies"/>
         <div class="list"></div>
       </div>
 
@@ -59,11 +77,18 @@ export default {
   data (){
     return {
       showSearchBarSelSpecies: false,
+      showSearchBarSpecies: true,
+      hasSelectedSpecies: false,
+      categories: []
     }
   },
   methods: {
     // USER INTERACTION
-
+    // Category clicked
+    categoryClicked: function(e, cat){
+      e.stopPropagation();
+      cat.isActive = !cat.isActive;
+    },
     // Select item
     selectItem: function(e){
       e.stopPropagation();
@@ -115,6 +140,19 @@ export default {
       let species = this.getUnique(data, "ScientificName");
       if (species.length == 0) // Legacy
         species = this.getUnique(data, "NomEspecie");
+
+      // Get categories
+      let categoriesList = this.getUnique(data, 'Classification');
+      // Create categories object and buttons
+      this.categories = [];
+      categoriesList.forEach(cat => {
+        this.categories.push({
+          name: cat,
+          color: palette[cat] != undefined ? palette[cat].color : [127, 127, 127],
+          isActive: false
+        });
+      })
+      
       
       let spObj = [];
       let selSpObj = [];
@@ -139,8 +177,7 @@ export default {
       }
       let optionsSel = {
         item: (sp) =>
-          `<button class="selSpeciesItem" title="${sp.commonName}">
-            <span style='color:red'> ✖ </span>
+          `<button class="selSpeciesItem button-active" title="${sp.commonName}">
             <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.name}
           </button>
           `
@@ -196,8 +233,12 @@ export default {
       callbackFuncBtn = callbackFuncBtn.bind(this); // bind callback with this
       itNew[0].elm.addEventListener("click", (e)=>callbackFuncBtn(e));
 
+      // Turon on/off selected species container
+      this.hasSelectedSpecies = this.selSpeciesList.size() > 0;
       // Turn on/off the search bar for selected species
       this.showSearchBarSelSpecies = this.selSpeciesList.size() > 20 ? true : false;
+      // Turn on/off the search bar for unselected species
+      this.showSearchBarSpecies = this.speciesList.size() > 20 ? true : false;
       
     },
 
@@ -258,7 +299,27 @@ export default {
 
 .top-buttons {
   padding-top: 50px;
+}
+
+.allOnOrOff{
+  font-size: x-small;
+  padding: 5px;
+}
+.allOnOrOff > button {
+  padding: 5px;
+}
+
+.categories-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
   font-size: small;
+  padding: 20px;
+  background: #bfbfbf94;
+  margin-right: 20px;
+  margin-left: 20px;
+  border-radius: 10px;
 }
 
 .listSpeciesContainer {
@@ -273,14 +334,12 @@ export default {
 }
 
 .selSpeciesContainer {
-  background-color: var(--red);
   flex: 0 0 auto;
   padding: 20px;
 }
 
 input {
-  width: 50%;
-  margin-top: 20px;
+  width: clamp(300px, 50%, 900px);
 }
 
 
@@ -288,9 +347,11 @@ input {
 .list {
   background: rgba(255, 255, 255, 0.247);
 
+  width: 100%;
   overflow-y: auto;
 
   padding: 10px;
+  border-radius: 10px;
   text-align: center;
   font-size: small;
 
@@ -300,7 +361,6 @@ input {
 }
 
 .listSel {
-  background-color: var(--red);
   max-height: 30vh;
 }
 
