@@ -122,14 +122,14 @@ export default {
     selectItem: function(e){
       e.stopPropagation();
       //console.log(e.srcElement.innerText.split("■ ")[1]);
-      let speciesName = this.extractSpeciesName(e.currentTarget.innerText);
+      let speciesName = this.extractSpeciesName(e);
       this.switchFromList(speciesName, this.speciesList, this.selSpeciesList, this.deselectItem);
     },
 
     // Deselect item
     deselectItem: function(e){
       e.stopPropagation();
-      let speciesName = this.extractSpeciesName(e.currentTarget.innerText);
+      let speciesName = this.extractSpeciesName(e);
       this.switchFromList(speciesName, this.selSpeciesList, this.speciesList, this.selectItem);
     },
 
@@ -155,7 +155,10 @@ export default {
     },
 
     // Separate icon from species name
-    extractSpeciesName: function(text){
+    extractSpeciesName: function(e){
+      return e.currentTarget.title;
+      // If the button contains the speciesName, not the translation
+      let text = e.currentTarget.innerText;
       return text.split("■\n")[1];
     },
 
@@ -211,15 +214,15 @@ export default {
       // https://listjs.com/api/
       let options = {
         item: (sp) =>
-          `<button class="speciesItem" title="${sp.commonName}">
-            <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.name}
+          `<button class="speciesItem" title="${sp.name}">
+            <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.commonName}
           </button>
           `
       }
       let optionsSel = {
         item: (sp) =>
-          `<button class="selSpeciesItem button-active" title="${sp.commonName}">
-            <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.name}
+          `<button class="selSpeciesItem button-active" title="${sp.name}">
+            <span style="color: rgb(${sp.color.toString()})" > ■ </span> ${sp.commonName}
           </button>
           `
       }
