@@ -85,7 +85,7 @@ export default {
     },
 
 
-    filterMenuClosed: function(selSpecies){
+    filterMenuClosed: function(selSpecies, categories){
       // Array with objects containing name, commonName and color
       // Close menu
       this.isFilterMenuVisible = false;
@@ -101,25 +101,35 @@ export default {
       let selectedSpecies = [];
       selSpecies.forEach(sp => selectedSpecies.push(sp.name));
       // Filter species
-	    let filteredDataForD3 = this.filterData(selectedSpecies, this.prepData);
+	    let filteredDataForD3 = this.filterData(selectedSpecies, categories, this.prepData);
 	    // Assign to pie chart
 	    this.updateTrawlingChart(filteredDataForD3);
     },
 
-    filterData(selSpecies, dataForD3){
+    filterData(selSpecies, categories, dataForD3){
       let filteredData = JSON.parse(JSON.stringify(dataForD3));
-      this.markItems(filteredData, selSpecies, null);
+      this.markItems(filteredData, categories, selSpecies, null);
       return filteredData;
     },
 
      // This function is not optimal, but real-time is not requiered
-    markItems(itemJSON, selectedSpecies, parentJSON){
+    markItems(itemJSON, categories, selectedSpecies, parentJSON){
       // Has children and its not selected (higher level than species)
       if (itemJSON.children && selectedSpecies.indexOf(itemJSON.species) == -1) {
-        itemJSON.children.forEach((child) => this.markItems(child, selectedSpecies, itemJSON)); // Go to children
+        // Hide children if it is a category and the category is not active (only when one of the categories is active)
+        let mustHide = categories.findIndex((cat)=> !cat.isActive && cat.name == itemJSON.name) != -1;
+        let areAllCategoriesInactive = categories.findIndex(cat => cat.isActive) == -1;
+        if (mustHide && !areAllCategoriesInactive){
+          itemJSON.children.forEach(this.hideHigherLevel);
+        } 
+        // Keep processing the children
+        else {
+          itemJSON.children.forEach((child) => this.markItems(child, categories, selectedSpecies, itemJSON)); // Go to children
+        }        
       }
       // One of the higher levels is selected
       else if (itemJSON.children && selectedSpecies.indexOf(itemJSON.species) != -1) {
+        debugger;
         // Get the tags in the same level
         parentJSON.children.forEach((child) => {if((selectedSpecies.indexOf(child.name) == -1) || (selectedSpecies.indexOf(child.species) == -1) ) hideHigherLevel(child)})
       }
@@ -127,13 +137,15 @@ export default {
       else if (selectedSpecies.indexOf(itemJSON.species) == -1){ // If species is not in the array
         itemJSON.value = 0;
       }
+
+      
     },
 
     // Set children values to 0
     hideHigherLevel(itemJSON){
       // Has children, continue
       if (itemJSON.children)
-        itemJSON.children.forEach((child) => hideHigherLevel(child));
+        itemJSON.children.forEach(this.hideHigherLevel);
       else
         itemJSON.value = 0;
     },

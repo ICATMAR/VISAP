@@ -3,7 +3,7 @@
   <div id='filterMenu' ref='filterMenu'>
 
     <!-- Wrapper -->
-    <div class="wrapper" @click="deselectAll($event); closeGUI()">
+    <div class="wrapper">
 
       <!-- Filter per category -->
       <div class="center-buttons top-buttons">
@@ -42,7 +42,7 @@
       </div>
 
       <!-- User buttons -->
-      <div class="center-buttons" ref="controlButtons">
+      <div class="center-buttons apply-cancel-container" ref="controlButtons" @click="deselectAll($event); closeGUI()">
         <button ref="closeGUIApply" onclick="event.stopPropagation();"><span class="fa">&#xf0b0;</span> {{$t('Apply filter')}} </button>
         <button ref="closeGUIClear" onclick="event.stopPropagation();"><span class="fa">&#xe17b;</span> {{$t('Clear filter')}} </button>
       </div>
@@ -88,6 +88,35 @@ export default {
     categoryClicked: function(e, cat){
       e.stopPropagation();
       cat.isActive = !cat.isActive;
+      // Set to selected the species that have that classification
+      // Check if all are inactive
+      let areAllInactive = true;
+      this.categories.forEach(cc => {if (cc.isActive) areAllInactive = false; });
+      // Use raw data if categories do not filter the data
+      if (areAllInactive){
+        this.createLists(this.rawData);
+        return;
+      }
+      // Filter data
+      let filteredData = [];
+      this.rawData.forEach(item => {
+        // Check if the item's category is in one of the active categories
+        let isItemInActiveCategory = false;
+        this.categories.forEach(cc => {
+          if (cc.name == item.Classification) {
+            if (cc.isActive)
+              isItemInActiveCategory = true;
+          }
+        });
+        // Add to filtered data raw
+        if (isItemInActiveCategory)
+          filteredData.push(item);
+      });
+
+      // Create lists
+      this.createLists(filteredData);
+      // Pie chart data changes with emit on closeGUI
+
     },
     // Select item
     selectItem: function(e){
@@ -122,7 +151,7 @@ export default {
 
     // Close filter menu
     closeGUI: function(e){
-      this.$emit('onclose', this.selSpeciesList.toJSON());
+      this.$emit('onclose', this.selSpeciesList.toJSON(), this.categories);
     },
 
     // Separate icon from species name
@@ -135,15 +164,13 @@ export default {
 
 
     // PUBLIC METHODS
-    //onclick: function(e){},
+    // setData is also internal, as categories affect the data
     setData: function(data){
-      let species = this.getUnique(data, "ScientificName");
-      if (species.length == 0) // Legacy
-        species = this.getUnique(data, "NomEspecie");
+      this.rawData = data;
 
+      // Create categories object and buttons
       // Get categories
       let categoriesList = this.getUnique(data, 'Classification');
-      // Create categories object and buttons
       this.categories = [];
       categoriesList.forEach(cat => {
         this.categories.push({
@@ -151,8 +178,22 @@ export default {
           color: palette[cat] != undefined ? palette[cat].color : [127, 127, 127],
           isActive: false
         });
-      })
+      });
+
+      // Create lists
+      this.createLists(data);
       
+    },
+
+
+
+    // INTERNAL METHODS
+    // Create lists
+    createLists(data){
+      // Get species keys
+      let species = this.getUnique(data, "ScientificName");
+      if (species.length == 0) // Legacy
+        species = this.getUnique(data, "NomEspecie");
       
       let spObj = [];
       let selSpObj = [];
@@ -203,22 +244,21 @@ export default {
       this.$refs.deselectAll.addEventListener("click", (e)=>this.deselectAll(e));
       this.$refs.closeGUIApply.addEventListener("click", (e) => this.closeGUI(e));
       this.$refs.closeGUIClear.addEventListener("click", (e) => {this.deselectAll(e); this.closeGUI(e)});
-  
+
+      // Turn on/off the search bar for unselected species
+      this.showSearchBarSpecies = this.speciesList.size() > 20 ? true : false;
     },
+
+
+
 
 
     // Set selected
     addSelected(speciesName){
       this.switchFromList(speciesName, this.speciesList, this.selSpeciesList, this.deselectItem);
-    },
+    }, 
 
 
-
-
-
-
-
-    // INTERNAL METHODS
     // Switch values from one list to the other
     switchFromList(speciesName, removeFromList, insertToList, callbackFuncBtn){
       let item = removeFromList.get("name", speciesName)[0];
@@ -370,5 +410,15 @@ input {
 
 .selSpeciesItem{
   font-size: medium;
+}
+
+.apply-cancel-container {
+  flex: 1;
+  align-items: center;
+}
+.apply-cancel-container > button {
+  padding: 40px;
+  border-radius: 40px;
+  margin: 5px;
 }
 </style>
