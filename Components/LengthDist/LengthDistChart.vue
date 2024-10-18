@@ -311,6 +311,8 @@ export default {
         let csvColumnHeader = 'Attribution,Source,'
         csvColumnHeader += keys.join(columnDelimiter);
         let csvStr = csvColumnHeader + lineDelimiter;
+        // Replace MCRS, L50 and Size for MCRS_mm, L50_mm, Size_mm
+        csvStr = csvStr.replace('MCRS', 'MCRS_mm').replace('L50', 'L50_mm').replace('Size', 'Size_mm');
 
         jsonData.forEach(item => {
           // Add attribution and source
@@ -338,6 +340,15 @@ export default {
           source: 'https://www.icatmar.cat',
           data: specData.rawData,
         }
+        // Replace MCRS, L50 and Size for MCRS_mm, L50_mm, Size_mm
+        exportObj.data.forEach(item => {
+          item['MCRS_mm'] = item['MCRS'];
+          item['L50_mm'] = item['L50'];
+          item['Size_mm'] = item['Size'];
+          delete item['MCRS'];
+          delete item['L50'];
+          delete item['Size'];
+        });
         let dataStr = JSON.stringify(exportObj);
         let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
         let linkEl = document.createElement('a');
