@@ -585,8 +585,8 @@ export default {
     // Store pixel information once tiles are loaded
     onTilesLoaded: function(e){
       if (e.target.name == 'wmsSource'){
-        this.isLayerDataReady = true;
         this.updateSourceData();
+        this.isLayerDataReady = true;
       }
     },
 
