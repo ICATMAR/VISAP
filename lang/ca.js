@@ -19,7 +19,7 @@ export default ca = {
   "LinkToSampling": "Vull saber més sobre el mostreig",
   "info-team": "Aquestes dades són recollides per un grup d'observadors que s'embarquen amb els pescadors catalans a diferents punts de la costa.",
   "LinkToTeam": "Vull conèixer l'equip",
-  "info-science": "La metodologia i eines de com s'ha fet aquesta aplicació i de com s'han tractat les dades estan descrites en el següent article:",
+  "info-science": "La metodologia i eines de com s'ha fet aquesta aplicació i de com s'han tractat les dades estan descrites en el següent article. Si voleu citar aquesta aplicació, feu servir l'article:",
   "LinkToArticle": "Vull llegir l'article científic",
 
   "Contact": "Contacte",

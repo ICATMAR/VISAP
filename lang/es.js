@@ -20,7 +20,7 @@ export default es  = {
   "LinkToSampling": "Quiero saber más sobre el muestreo",
   "info-team": "Estos datos son recogidos por un grupo de observadores que se embarcan con los pescadores catalanes en diferentes puntos de la costa.",
   "LinkToTeam": "Quiero conocer al equipo",
-  "info-science": "La metodología y las herramientas utilizadas para crear esta aplicación y tratar los datos se describen en el siguiente artículo:",
+  "info-science": "La metodología y las herramientas utilizadas para crear esta aplicación y tratar los datos se describen en el siguiente artículo científico. Si quereis citar esta aplicación, usad este artículo:",
   "LinkToArticle": "Quiero leer el artículo científico",
   
   "Contact": "Contacto",
