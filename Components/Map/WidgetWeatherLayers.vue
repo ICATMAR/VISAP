@@ -86,7 +86,7 @@
           'Salinity', 
           //'Wind',
           'Wave Significant Height', 
-          //'Current'
+          'Current'
         ],
         // https://origin.fontawesome.com/search?o=r&m=free&f=classic
         climaIcons: [
@@ -97,7 +97,7 @@
           '‰',
           //'&#xf72e;',
           '&#xe515;',
-          //'&#xf773;'
+          '&#xf773;'
         ],
         selClimaLayer: '',
         isClimaLayerVisible: false,
