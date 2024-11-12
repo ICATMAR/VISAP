@@ -524,6 +524,7 @@ export class WMTSDataRetriever {
       // If tile was already loaded resolve
       if (window.WMTSTileManager.loadedTiles[url] != undefined){
         resolve(WMTSTileManager.loadedTiles[url].grayImage);
+        return; // Exit function
       }
       // Otherwise create and load tile
       const img = new Image();
