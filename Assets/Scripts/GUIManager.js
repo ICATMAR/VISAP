@@ -1,6 +1,5 @@
 class GUIManager {
 
-  currentFishingTrack = '';
   currentModality = 'trawling';
   currentSection = 'map';
   currentLanguage = 'en';
@@ -12,6 +11,11 @@ class GUIManager {
     currentEffortYear: '2020',
     selStartDate: new Date(2019, 1, 1),
     selEndDate: new Date()
+  }
+
+  lengthDist = {
+    species: '',
+    //breadcrumb: '',
   }
   
 
@@ -88,6 +92,13 @@ class GUIManager {
       let opacity = params[1] * 1; // (* 1 turns boolean into a number)
       this.map.haulsLayerOpacity = opacity;
     })
+
+    // LENGTH DISTRIBUTION
+    // Selected species
+    window.eventBus.on('FilterMenu_SelectedSpecies', (species) => {
+      this.lengthDist.species = species;
+      window.location.setHashValue('SPECIES', species);
+    });
   }
 
 
@@ -121,6 +132,9 @@ class GUIManager {
     else {
       this.setLanguage('en');
     }
+
+    // Set species
+    this.lengthDist.species = window.location.getHashValue('SPECIES');
   }
 
 

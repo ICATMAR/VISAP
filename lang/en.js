@@ -128,7 +128,7 @@ export default en = {
   "Show chart": "Show chart",
   "Hide chart": "Hide chart",
   "Catch composition": "Catch composition",
-  "Length frequency": "Length frequency",
+  "Length distribution": "Length distribution",
   "Sampling map": "Sampling map",
 
   "Abundance (Number of individuals per km2)": "Abundance (Number of individuals per km2)",
@@ -136,6 +136,8 @@ export default en = {
   "individuals of": " individuals of ",
   "per": "per",
   "Length": "Length",
+  "More species": "More species",
+  "Sexual maturity": "Maduresa sexual",
 
   "viewFullscreen": "View in full screen",
   "exitFullscreen": "Exit from full screen",
@@ -161,6 +163,13 @@ export default en = {
   "bySeason": "Season",
   "byMetier": "Métier",
   "byPortArea": "Region",
+
+  "Coastal Delta shelf": "Coastal Delta shelf", 
+  "Middle Delta shelf": "Middle Delta shelf",
+  "Coastal shelf": "Coastal shelf",
+  "Deeper shelf": "Deeper shelf",
+  "Upper slope": "Upper slope",
+  "Lower slope": "Lower slope",
 
   "Cookies title": "We value your privacy",
   "Cookies text": `We use technology such as cookies in our website to improve the user experience and analyze our traffic. 

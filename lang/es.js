@@ -199,7 +199,7 @@ export default es  = {
   "Show chart": "Mostrar gráfico",
   "Hide chart": "Esconder gráfico",
   "Catch composition": "Composición de captura",
-  "Length frequency": "Frecuencia de tallas",
+  "Length distribution": "Distribución de tallas",
   "Sampling map": "Mapa de muestreo",
 
   "Abundance (Number of individuals per km2)": "Abundancia (Nº de individuos por km2)",
@@ -207,6 +207,8 @@ export default es  = {
   "individuals of": " individuos de ",
   "per": "por",
   "Length": "Longitud",
+  "More species": "Más especies",
+  "Sexual maturity": "Madurez sexual",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Salir de la pantalla completa",
@@ -232,6 +234,13 @@ export default es  = {
   "bySeason": "Estación",
   "byMetier": "Métier",
   "byPortArea": "Región",
+
+  "Coastal Delta shelf": "Plataforma costera del Delta",
+  "Middle Delta shelf": "Plataforma mediana del Delta",
+  "Coastal shelf": "Plataforma costera",
+  "Deeper shelf": "Plataforma profunda",
+  "Upper slope": "Talud superior",
+  "Lower slope": "Talud inferior",
 
   "Cookies title": "Valoramos tu privacidad",
   "Cookies text": `Usamos tecnología como las galletas en nuestro sitio web para mejorar la

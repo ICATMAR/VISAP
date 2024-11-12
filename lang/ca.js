@@ -196,7 +196,7 @@ export default ca = {
   "Show chart": "Mostrar gràfic",
   "Hide chart": "Amagar gràfic",
   "Catch composition": "Composició de captura",
-  "Length frequency": "Freqüència de talles",
+  "Length distribution": "Distribució de talles",
   "Sampling map": "Mapa de mostreig",
 
   "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km2)",
@@ -204,6 +204,8 @@ export default ca = {
   "individuals of": " individus de ",
   "per": "per",
   "Length": "Longitud",
+  "More species": "Més espècies",
+  "Sexual maturity": "Maduresa sexual",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Sortir de la pantalla completa",
@@ -229,6 +231,13 @@ export default ca = {
   "bySeason": "Estació",
   "byMetier": "Métier",
   "byPortArea": "Regió",
+
+  "Coastal Delta shelf": "Plataforma costanera del Delta",
+  "Middle Delta shelf": "Plataforma mitjana del Delta",
+  "Coastal shelf": "Plataforma costanera",
+  "Deeper shelf": "Plataforma profunda",
+  "Upper slope": "Talús superior", 
+  "Lower slope": "Talús inferior",
 
   "Cookies title": "Valorem la teva privadesa",
   "Cookies text": `Utilitzem tecnologia com ara galetes al nostre lloc per millorar l'experiència d'usuari i analitzar el nostre trànsit. Feu clic per consentir l'ús d'aquesta tecnologia al web. Podeu canviar 

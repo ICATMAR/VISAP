@@ -3,7 +3,7 @@
     <div id='appLengthFreq' ref='appLengthFreq'>
   
       <!--Header -->
-      <title-header title="Length frequency"></title-header>
+      <title-header title="Length distribution"></title-header>
 
       <!-- Buttons to add and remove species -->
       <div class="centered-rows" style="margin-top:40px">

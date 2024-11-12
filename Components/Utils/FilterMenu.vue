@@ -8,41 +8,30 @@
       <button v-for="sp in targetSpecies" :class="[sp.name == selSpecies ? 'button-active' : '']" @click="clickedSpecies(sp)">
         <span :style="{color: 'rgb(' + sp.color +')'}" > ■ </span> {{$t(sp.name)}} ({{sp.name}})
       </button>
+
+      <!-- Species not target but selected -->
+      <Transition>
+        <button :class="[selButNotTarget.name == selSpecies ? 'button-active' : '']" @click="clickedSpecies(selButNotTarget)" v-show="selButNotTarget.isVisible">
+          <span :style="{color: 'rgb(' + selButNotTarget.color +')'}" > ■ </span> {{$t(selButNotTarget.name)}} ({{selButNotTarget.name}})
+        </button>
+      </Transition>
     </div>
 
     <!-- More species -->
-    <button @click="isFilterMenuVisible = true">&#x25BD; {{ $t('More species') }}</button>
+    <button style="border: 1px solid" @click="isAllSpeciesMenuVisible = true">+ {{ $t('More species') }}</button>
 
-    <div class="overlay" v-show="false">
+    <div class="overlay" @click="isAllSpeciesMenuVisible = false" v-show="isAllSpeciesMenuVisible">
       <!-- Wrapper -->
       <div class="wrapper">
 
-        <!-- User buttons -->
-        <!-- <div class="center-buttons" ref="controlButtons">
-          <button ref="selectAll" onclick="event.stopPropagation();">&#x25C6; {{$t('Select all')}} </button>
-          <button ref="deselectAll" onclick="event.stopPropagation();">&#x25C7; {{$t('Deselect all')}} </button>
-          <button ref="closeGUIApply" onclick="event.stopPropagation();"><span class="fa">&#xf0b0;</span> {{$t('Apply filter')}} </button>
-          <button ref="closeGUIClear" onclick="event.stopPropagation();"><span class="fa">&#xe17b;</span> {{$t('Clear filter')}} </button>
-        </div> -->
-
-        <!-- Selected species -->
-        <!-- <div ref="selSpecies" class="listSpeciesContainer selSpeciesContainer">
-          <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" v-show="showSearchBarSelSpecies"/>
-          <div class="list listSel"></div>
-        </div> -->
-
         <!-- Species list -->
         <div ref="availableSpecies" class="listSpeciesContainer">
-          <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" />
+          <div class="search-bar-container">
+            <input type="search" class="search form-control" onclick="event.stopPropagation();" :placeholder="$t('Search')" />
+            <button class="icon-str button-active clickable">x</button>
+          </div>
           <div class="list"></div>
         </div>
-
-
-      <!-- Species -->
-      <!-- <button v-for="sp in species">
-        <span :style="{color: 'rgb(' + sp.color +')'}" > ■ </span> {{sp.name}}
-      </button> -->
-
 
       </div>
     </div>
@@ -68,9 +57,15 @@ export default {
   data (){
     return {
       showSearchBarSelSpecies: false,
+      isAllSpeciesMenuVisible: false,
       targetSpecies: [],
       species: [],
-      selSpecies: ''
+      selSpecies: '',
+      selButNotTarget: {
+        name: '',
+        color: [127, 127, 127],
+        isVisible: false,
+      }
     }
   },
   methods: {
@@ -81,7 +76,17 @@ export default {
       window.eventBus.emit('FilterMenu_SelectedSpecies', sp.name);
     },
 
-
+    clickedSpeciesFromOverlay: function(e){
+      e.stopPropagation();
+      let speciesName = this.extractSpeciesName(e.currentTarget.innerText);
+      this.selButNotTarget.name = speciesName;
+      this.selButNotTarget.isVisible = true;
+      this.selButNotTarget.color = palette[speciesName] != undefined ? palette[speciesName].color : [127, 127, 127];
+      // Close GUI
+      this.isAllSpeciesMenuVisible = false;
+      // Trigger click event
+      this.clickedSpecies(this.selButNotTarget);
+    },
     // Select item
     selectItem: function(e){
       e.stopPropagation();
@@ -171,26 +176,30 @@ export default {
       }
 
       // If list exists, reindex as HTML changed
-      // if (this.speciesList != undefined) {
-      //   // Update list
-      //   this.speciesList.clear();
-      //   this.speciesList.update();
-      //   this.selSpeciesList.clear();
-      //   this.selSpeciesList.update();
-      // }
+      if (this.speciesList != undefined) {
+        // Update list
+        this.speciesList.clear();
+      }
 
       // // Create list      
       this.speciesList = new List(this.$refs.availableSpecies, options, spObj);
       // this.selSpeciesList = new List(this.$refs.selSpecies, optionsSel);
 
       // // Add button events
-      // this.speciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=>this.selectItem(e)));
+      this.speciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=>this.clickedSpeciesFromOverlay(e)));
       // this.selSpeciesList.list.childNodes.forEach((el)=>el.addEventListener("click", (e)=> this.deselectItem(e)));
       // this.$refs.selectAll.addEventListener("click", (e)=>this.selectAll(e));
       // this.$refs.deselectAll.addEventListener("click", (e)=>this.deselectAll(e));
       // this.$refs.closeGUIApply.addEventListener("click", (e) => this.closeGUI(e));
       // this.$refs.closeGUIClear.addEventListener("click", (e) => {this.deselectAll(e); this.closeGUI(e)});
   
+    },
+
+
+    selectRandomTargetSpecies(){
+      let randIndex = Math.floor(Math.random()*this.targetSpecies.length);
+      this.selSpecies = this.targetSpecies[randIndex].name;
+      window.eventBus.emit('FilterMenu_SelectedSpecies', this.targetSpecies[randIndex].name);
     },
 
 
@@ -316,12 +325,19 @@ export default {
   padding: 20px;
 }
 
-input {
-  width: 50%;
+
+.search-bar-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
   margin-top: 20px;
 }
 
-
+input {
+  width: 50%;
+}
 
 .list {
   background: rgba(255, 255, 255, 0.247);

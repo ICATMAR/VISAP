@@ -5,6 +5,7 @@
     <div class='plot-container' ref="plot-container">
       <!-- Title -->
       <div class="title" v-show="chartTitle != undefined">{{ chartTitle }}</div>
+      <div class="subtitle" v-show="subtitle != undefined && isPrinting">{{ $t(subtitle) }}</div>
       <div class="loading-circle fade-enter-from fade-enter-active" v-show="chartTitle == undefined"></div>
       <!-- Y axis and svg container -->
       <div class='ylabel-yaxis-plot-container'>
@@ -55,14 +56,14 @@
             <!-- N -->
             <div :title="$t('Number of individuals')">N = {{ N }}</div>
             <!-- L50 -->
-            <div class="itemLegendContainer clickable" :title="$t('Sexual maturity')" 
+            <div class="itemLegendContainer clickable" :title="$t('Sexual maturity') + ': ' + L50 + ' cm.'" 
               @click='isL50Visible = !isL50Visible' :class="[isL50Visible ? '':'grayedOut']"
               v-show="L50 != undefined && !(isPrinting && !isL50Visible)">
               <div class="L50LegendStroke"></div>
               <div>L50 ⚤</div>
             </div>
             <!-- MCRS -->
-            <div class="itemLegendContainer clickable" :title="$t('Minimum Conservation Reference Size')" 
+            <div class="itemLegendContainer clickable" :title="$t('Minimum Conservation Reference Size') + ': ' + MCRS + ' cm.'" 
               @click='isMCRSVisible = !isMCRSVisible' :class="[isMCRSVisible ? '':'grayedOut']"
               v-show="MCRS != undefined && !(isPrinting && !isMCRSVisible)">
               <div class="MCRSLegendStroke"></div>
@@ -72,7 +73,7 @@
 
           <!-- Export container -->
           <div class="export-container" ref="export-container" @mouseleave="isExportOptVisible = false" v-show="!isPrinting">
-            <button class="clickable export-button" @click="isExportOptVisible = true">
+            <button class="clickable export-button" @click="isExportOptVisible = !isExportOptVisible">
               <span class="fa">&#xf56d;</span>
               <span class="button-text">{{ $t('Export data') }}</span>
             </button>
@@ -139,6 +140,7 @@ export default {
     return {
       plotHeight: 400,
       chartTitle: undefined,
+      subtitle: '',
       selectedKey: '',
       category: '',
       yticks: [], // [{bottom: 40, text: '200'}, ...];
@@ -175,10 +177,27 @@ export default {
         title += ' (' + keys.join(',') + ')';
         title = title.replaceAll(',', ', ');
       }
+      // Add years
+      if (!specData.breadcrumb.includes('byYear')){
+        // Find min and max year
+        let minYear = 9999;
+        let maxYear = 0;
+        for (let i = 0; i < specData.rawData.length; i++){
+          minYear = Math.min(specData.rawData[i].Year, minYear);
+          maxYear = Math.max(specData.rawData[i].Year, maxYear);
+        }
+        title += ' (' + minYear + '-' + maxYear + ')';
+        title = title.replaceAll(') (', ', ');
+      }
+
       title += ' - ' + this.$i18n.t('per') + ' ' + this.$i18n.t(category);
-      //if (Object.keys(specData.byYear)) title += ' (' + Object.keys(specData.byYear)[0] + '-' + Object.keys(specData.byYear).pop() +')';
       
       this.chartTitle = title;
+
+      // Subtitle (fishing modality)
+      let mod = window.GUIManager.currentModality;
+      let modNaming = mod == 'trawling' ? 'TrawlingInfo' : mod == 'purse-seine' ? 'Purse seineInfo': '';
+      this.subtitle = modNaming;
 
       // Y ticks
       this.createYAxisCategoryTicks(Object.keys(specData[category]));
@@ -212,11 +231,11 @@ export default {
       this.MCRS = specData.MCRS;
       // Graph L50 and MCRS lines
       if (specData.L50){
-        let normPosition = specData.L50 / specData.rangeSize[1] * 1.1;
+        let normPosition = specData.L50 / (specData.rangeSize[1] * 1.1);
         this.$refs["L50"].setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
       }
       if (specData.MCRS){
-        let normPosition = specData.MCRS / specData.rangeSize[1] * 1.1;
+        let normPosition = specData.MCRS / (specData.rangeSize[1] * 1.1);
         this.$refs["MCRS"].setAttribute('d', 'M ' + normPosition + ' 0.05 L ' + normPosition + ' 1');
       }
 
@@ -612,6 +631,11 @@ export default {
   font-weight: bold;
   text-align: center;
   font-size: large
+}
+
+.subtitle {
+  text-align: center;
+  font-style: italic;
 }
 
 .buttonsCategories {
