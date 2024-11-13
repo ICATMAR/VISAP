@@ -190,6 +190,7 @@ export default ca = {
   "Sea bottom temperature": "Temperatura del fons del mar",
   "Salinity": "Salinitat",
   "tonnes": "tones",
+  "kg / haul": "kg / pesca",
 
 
 

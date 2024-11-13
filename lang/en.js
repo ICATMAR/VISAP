@@ -124,6 +124,7 @@ export default en = {
   "Wave Significant Height": "Wave Significant Height",
   "Current": "Current",
   "tonnes": "tonnes",
+  "kg / haul": "kg / haul",
 
 
   "Catch per port": "Catch per port",

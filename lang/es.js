@@ -191,7 +191,7 @@ export default es  = {
   "Sea bottom temperature": "Temperatura del fondo del mar",
   "Salinity": "Salinidad",
   "tonnes": "toneladas",
-
+  "kg / haul": "kg / pesca",
 
 
 

@@ -65,7 +65,7 @@ export default {
 
 
       // HTMLcontainer, data, d3, title, measure, unit
-      let unit = window.DataManager.getFishingDataManager().mod == 'trawling' ? 'kg / km²' : this.$i18n.t('tonnes');
+      let unit = window.DataManager.getFishingDataManager().mod == 'trawling' ? 'kg / km²' : this.$i18n.t('kg / haul');
       this.piechart.runApp(this.$refs.d3chart, prepData, d3, this.title, this.$i18n.t('Biomass'), unit);
 
       // Fill filter menu with data
@@ -80,7 +80,7 @@ export default {
       // }
       // Restart pie charts (TODO: instead of runApp function, update and transition of values)
       this.$refs.d3chart.innerHTML = "";
-      let unit = window.DataManager.getFishingDataManager().mod == 'trawling' ? 'kg / km²' : this.$i18n.t('tonnes');
+      let unit = window.DataManager.getFishingDataManager().mod == 'trawling' ? 'kg / km²' : this.$i18n.t('kg / haul');
       this.piechart.runApp(this.$refs.d3chart, inDataForD3, d3, this.title, this.$i18n.t('Biomass'), unit);
     },
 
