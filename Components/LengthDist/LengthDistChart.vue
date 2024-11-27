@@ -390,9 +390,9 @@ export default {
         // Text tick
         let textContent = ''
         let fdManager = window.DataManager.getFishingDataManager();
-        if (fdManager.mod == 'trawling')
-          textContent = Math.floor(noFloatsStep * i);
-        else if (fdManager.mod == 'purse-seine'){
+        if (fdManager.mod == 'trawling'){
+          textContent = (noFloatsStep * i).toFixed(Math.max(0,noFloatsStep.toExponential().split('e')[1]*-1));
+        } else if (fdManager.mod == 'purse-seine'){
           textContent = (100 *(noFloatsStep * i) / numInd).toFixed(1) + '%';
         }else {
           debugger;
