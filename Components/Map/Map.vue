@@ -991,6 +991,11 @@ export default {
           else {
             // Emit event
             window.eventBus.emit('Map_HaulsLoaded', fishingDataManager.haulsGeoJSON);
+            // Open side panel if haul is present in the hash
+            if (window.location.getHashValue('HAUL') != undefined){
+              this.setSelectedHaul(haulId);
+              window.eventBus.emit('Map_HaulClicked', haulId);
+            }
           }
         });
       }
