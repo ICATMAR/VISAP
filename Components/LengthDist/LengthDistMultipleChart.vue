@@ -56,14 +56,14 @@
             <!-- N -->
             <div :title="$t('Number of measured individuals')">N = {{ N }}</div>
             <!-- L50 -->
-            <div class="itemLegendContainer clickable" :title="$t('Sexual maturity') + ': ' + L50 + ' cm.'" 
+            <div class="itemLegendContainer clickable" :title="$t('Sexual maturity') + ': ' + L50 + ' mm.'" 
               @click='isL50Visible = !isL50Visible' :class="[isL50Visible ? '':'grayedOut']"
               v-show="L50 != undefined && !(isPrinting && !isL50Visible)">
               <div class="L50LegendStroke"></div>
               <div>L50 ⚤</div>
             </div>
             <!-- MCRS -->
-            <div class="itemLegendContainer clickable" :title="$t('Minimum Conservation Reference Size') + ': ' + MCRS + ' cm.'" 
+            <div class="itemLegendContainer clickable" :title="$t('Minimum Conservation Reference Size') + ': ' + MCRS + ' mm.'" 
               @click='isMCRSVisible = !isMCRSVisible' :class="[isMCRSVisible ? '':'grayedOut']"
               v-show="MCRS != undefined && !(isPrinting && !isMCRSVisible)">
               <div class="MCRSLegendStroke"></div>
@@ -100,7 +100,7 @@
         </div>
       </div>
       <!-- X label -->
-      <div class="xlabel">{{$t('Length')}} (cm)</div>
+      <div class="xlabel">{{$t('Length')}} (mm)</div>
 
 
       <!-- Attributions -->
