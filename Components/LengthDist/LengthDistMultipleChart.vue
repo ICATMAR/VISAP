@@ -143,6 +143,11 @@ export default {
       subtitle: '',
       selectedKey: '',
       category: '',
+      order: {
+        'byMetier': ['Lower slope', 'Upper slope', 'Deeper shelf', 'Coastal shelf', 'Middle Delta shelf', 'Coastal Delta shelf'],
+        'bySeason': ['Winter', 'Spring', 'Summer', 'Autumn'],
+        'byPortArea': ['South', 'Center', 'North'],
+      },
       yticks: [], // [{bottom: 40, text: '200'}, ...];
       xticks: [],
       paths: [],
@@ -199,23 +204,30 @@ export default {
       let modNaming = mod == 'trawling' ? 'TrawlingInfo' : mod == 'purse-seine' ? 'Purse seineInfo': '';
       this.subtitle = modNaming;
 
-      // Y ticks
-      this.createYAxisCategoryTicks(Object.keys(specData[category]));
 
       // Subplots
       // Color path from palette
       let colorObj = palette[specData.rawData[0]["ScientificName"]];
       let color = this.color = colorObj == undefined ? [127, 127, 127] : colorObj.color;
       this.paths = [];
+      let tempPaths = [];
+
       Object.keys(specData[category]).forEach((key, index) => {
-        this.paths.push({
+        let orderIdx = category == 'byYear' ? index : this.order[category].indexOf(key);
+        tempPaths[orderIdx] = {
           svg: this.generateSVGPath(specData[category][key].bySize, specData.rangeSize, specData.rangeNumInd),
           colorStroke: 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.85)',
           colorFill: 'rgba('+ color[0] + ', '+ color[1] + ', '+ color[2] + ', 0.4)',
           transform: '',
           key: key,
-        });
+        };
       });
+      // Clear empty paths
+      this.paths = tempPaths.filter(el => el != null);
+
+      // Y ticks
+      this.createYAxisCategoryTicks(this.paths);
+
       // Transform (Vue hack)
       this.$nextTick(() => {
         this.paths.forEach((path, index) => {
@@ -360,7 +372,10 @@ export default {
 
     // PRIVATE
     // y axis ticks
-    createYAxisCategoryTicks: function(keys){
+    createYAxisCategoryTicks: function(paths){
+      // Get keys
+      let keys = [];
+      paths.forEach(p => keys.push(p.key));
       // Num ticks
       let numTicks = keys.length;
       this.yticks = [];
