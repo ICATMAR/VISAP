@@ -521,13 +521,7 @@ export default {
       let coord = this.map.getCoordinateFromPixel([event.clientX, event.clientY]);
       coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
       // Emit
-      window.eventBus.emit('Map_mouseMove', coord);
-      // Change legend tooltip value
-      if (this.isLayerDataReady){
-        let color = this.getDataAtPixel(event.clientX, event.clientY);
-        window.eventBus.emit('Map_MouseOnData_WMSColor', color);
-      }
-      
+      window.eventBus.emit('Map_mouseMove', coord);   
     },
 
     // Map moves
