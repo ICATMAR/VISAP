@@ -23,7 +23,7 @@
       </div>
 
       <!-- Weather and sea -->
-      <div class="titleContainer" v-show="false"> <!-- HIDDEN WEATHER LAYER UNTIL CMEMS FIXES RESOURCEURL -->
+      <div class="titleContainer">
         <div class="clickable menuElement">
           <onOffButton ref="weatherOnOffButton" :checked="false" :inSize="'14px'" @change="weatherLayerOnOff($event)"></onOffButton>
           <span class="visibleInMobile fa" :title="$t('Weather and sea conditions')">&#xf2c9;, C<sub>hl</sub>, ‰, &#xf72e;, &#xf773;</span>
