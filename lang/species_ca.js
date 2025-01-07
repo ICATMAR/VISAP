@@ -658,6 +658,7 @@ export default species_ca = {
 "Myliobatis aquila": "Milana",
 "Katsuwonus pelamis": "Bonítol de ventre ratllat",
 "Target": "Objectiu",
+"By-Catch": "Accessòria",
 "Summer": "Estiu",
 "Macropodia rostrata": "Macropodia rostrata",
 "Suberites ficus": "Suberites ficus",

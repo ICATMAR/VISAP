@@ -21,24 +21,6 @@
 export default {
   name: "app-manager",
   created(){
-    // Set language
-    // Check if there is a language in the url
-    let langURL = window.location.getHashValue('lang');
-    if (langURL != undefined){
-      this.$i18n.locale = langURL.substring(0,2);
-    } 
-    // Use default navigator language if available
-    else if (navigator.language.includes('es') || navigator.language.includes('en') || navigator.language.includes('ca')){
-      this.$i18n.locale = navigator.language.substring(0,2);
-      window.location.setHashValue('lang', this.$i18n.locale);
-    } 
-    // Default is english
-    else {
-      this.$i18n.locale = 'en';
-      window.location.setHashValue('lang', this.$i18n.locale.substring(0,2));
-    }
-    
-
     
     // Close the dropdown menu if the user clicks outside of it
     window.onclick = function(event) {
@@ -55,7 +37,12 @@ export default {
     }
   },
   mounted () {
-
+    // Set language
+    this.$i18n.locale = window.GUIManager.currentLanguage;
+    // EVENTS
+    window.eventBus.on('GUIManager_LanguageChanged', lang => {
+      this.$i18n.locale = lang;
+    })
   },
   data () {
     return {
@@ -71,10 +58,7 @@ export default {
     changeLanguage: function(el){
       let lang = el.target.getAttribute('value');
       this.$i18n.locale = lang;
-      // Set url hash
-      window.location.setHashValue('lang', this.$i18n.locale);
-      // Emit (manual translations such as in Highcharts)
-      window.eventBus.emit('LanguageSelector_languageChange', lang);
+      window.eventBus.emit('LanguageSelector_LanguageChanged', lang);
     },
 
   },
@@ -130,7 +114,7 @@ export default {
 .dropdown {
   position: relative;
   display: inline-block;
-  z-index: 3;
+  z-index: 4;
 }
 
 /* Dropdown Content (Hidden by Default) */

@@ -8,12 +8,11 @@
 
       <!-- Fixed closing button and top-right menu background -->
       <div class="bannerContainer">
-        <!-- Button -->
-        <button class="closeButton icon-str" type="button" @click='closePanel'>X</button>
         <!--Banner -->
         <div class="topBanner"></div>
-
       </div>
+      <!-- Button -->
+      <button class="closeButton icon-str" type="button" @click='closePanel'>X</button>
 
       <!-- Info container -->
       <div class="side-panel-content g-0">
@@ -59,15 +58,15 @@ export default {
   mounted () {
     // EVENTS
     // Open/close fishing tab
-    window.eventBus.on('AppMap_tracksOptionClicked', () => {
+    window.eventBus.on('AppMap_HaulsOptionClicked', () => {
       if (this.selTab == "tracks")
         this.closePanel();
       else
         this.openFishingTab();
     });
     // Track clicked
-    window.eventBus.on('Map_trackClicked', this.openFishingTab);
-    window.eventBus.on('TracksTimeLine_trackClicked', this.openFishingTab);
+    window.eventBus.on('Map_HaulClicked', this.openFishingTab);
+    window.eventBus.on('TracksTimeLine_HaulClicked', this.openFishingTab);
     // Close side panel
     window.eventBus.on('Map_CloseSidePanel', this.closePanel);
 
@@ -124,18 +123,10 @@ export default {
 
 
     // PUBLIC METHODS
-    // Set fishing tracks once loaded
-    // OPTIONS-TODO:
-    // OPTION 1- Map is loading the tracks. When they are loaded there, an event can be passed to haul info, but the chain is
-    // quite long: Map.vue - AppManager.vue - AppSidePanel.vue - HaulInfo.vue
-    // OPTION 2- We consider FishingTracks class as singleton and we call it directly from HaulInfo.vue. We can make this call
-    // iteratively until fishing tracks exist. Not so clean, as the tab Fishing Tracks should only exist once the fishing tracks
-    // have been loaded. If there is an error with loading the fishing tracks, the tab should not exist?
-
-    // Opens the fishing tracks tab with the corresponding track id selected
+    // Opens the fishing hauls tab with the corresponding haul id selected
     openFishingTab: function(id){
       if (id == undefined)
-        id = FishingTracks.getSelectedTrack();
+        id = window.GUIManager.map.currentHaul;
       // Select tab
       // Unselect all first
       Object.keys(this.tabs).forEach(kk => this.tabs[kk].isSelected = false);
@@ -143,7 +134,7 @@ export default {
       this.tabs.tracks.isSelected = true;
       this.selTab = 'tracks';
       // Set track id on tracks tab
-      this.$refs["haul-info"].setSelectedFishingTrack(id);
+      this.$refs["haul-info"].setSelectedFishingHaul(id);
       // Open panel if it is not open already
       this.openPanel();
     },
@@ -180,13 +171,19 @@ export default {
 
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 
   z-index: 1;
+
+  pointer-events: none;
 }
 
 .closeButton {
+  position: fixed;
+  right: 30px;
+  top: 80px;
+
   background-color: var(--darkBlue);
   box-shadow: 0px 0px 4px 0px black;
   border-radius: 50%;

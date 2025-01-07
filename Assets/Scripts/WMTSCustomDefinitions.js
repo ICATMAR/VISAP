@@ -76,6 +76,28 @@ const customDefinitions = {
       type: 'wave'
     },
   },
+  'sea_water_velocity': {
+    shortName: 'Sea water velocity',
+    altNames: ['Sea velocity', 'Current', 'Currents', 'Water velocity'],
+    range: [0, 3],
+    unit: 'm/s',
+    animation: {
+      layerNames: ['uo', 'vo'], // Estward, northward
+      format: 'east_north',
+      range: [-3, 3],
+      type: 'wind',
+      directionFrom: false,
+    },
+    // Styles
+    // Legends from Assets/Legends
+    legends: ['Occam', 'Alg2', 'Inferno', 'OccamPastel', 'Zebra'],
+    legendRanges: [
+      [0, 1],
+      [0, 1.5],
+      [0, 2],
+      [0, 3],
+    ],
+  },
   'uo': {
     range: [0, 2.5],
     unit: 'm/s',

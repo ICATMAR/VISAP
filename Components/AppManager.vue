@@ -2,24 +2,27 @@
 <!-- Container -->
   <div id="app-manager">
 
+    <!-- Modality selector -->
+     <modality-selector></modality-selector>
+
     <!-- Language selector -->
     <language-selector style='position:absolute; top:33px; right:3px;'></language-selector>
 
     <!-- APP MAP -->
-    <app-map v-show="app=='map'"></app-map>
+    <app-map v-show="section=='map'"></app-map>
 
     <!-- APP OVERVIEW -->
-    <app-overview v-show="app=='overview'"></app-overview>
+    <app-overview v-show="section=='overview'"></app-overview>
 
     <!-- APP LENGTH FREQ -->
-    <app-lengthfreq v-show="app=='length-freq'"></app-lengthfreq>
+    <app-lengthdist v-show="section=='length-dist'"></app-lengthdist>
 
     <!-- ICONS -->
     <a href="https://icatmar.cat/">
-      <img class="logo clickable icatmar-logo" src="img/icatmar-mini-logo.svg">
+      <img class="logo logo-big clickable icatmar-logo" src="img/icatmar-mini-logo.svg">
     </a>
     <a href="https://icatmar.cat/visors/visor-pesquer/">
-      <img class="logo clickable visap-logo" src="img/visor-pesquer-mini.svg">
+      <img class="logo logo-big clickable visap-logo" src="img/visor-pesquer-mini.svg">
     </a>
     <!-- Repository -->
     <a href="https://github.com/ICATMAR/VISAP" target="_blank">
@@ -30,6 +33,9 @@
 
     <!-- Cookie banner -->
     <cookie-banner></cookie-banner>
+
+    <!-- Information panel -->
+    <information></information>
 
   </div>
   
@@ -46,11 +52,14 @@
 
 // Import components
 import AppOverview from "Components/AppOverview.vue";
-import AppLengthFreq from "Components/AppLengthFreq.vue";
+import AppLengthDist from "Components/AppLengthDist.vue";
 import AppMap from "Components/AppMap.vue";
-import CookieBanner from "Components/CookieBanner.vue";
+
+import CookieBanner from "Components/TopSection/CookieBanner.vue";
+import Information from "./TopSection/Information.vue";
 
 import LanguageSelector from "Components/Utils/LanguageSelector.vue";
+import ModalitySelector from "Components/TopSection/ModalitySelector.vue";
 
 export default {
   name: "app-manager",
@@ -58,46 +67,39 @@ export default {
     
   },
   mounted () {
-    // Get app from window location hash
-    let appType = window.location.getHashValue('app');
-    // Set default
-    if (appType == undefined){
-      appType = 'map';
-      window.location.setHashValue('app', appType);
-    }
-    // Store
-    this.app = appType;
 
+    // Initial section
+    this.section = window.GUIManager.currentSection;
 
     // EVENTS
-    // Manual hash change
-    window.onhashchange= (event) => {
-      // event.newURL, event.oldURL
-      let appType = window.location.getHashValue('app');
-      this.app = appType;
-      // When using the other apps, if the window is resized, map does not load. Force it here with a window resize event.
-      if (appType == 'map'){
-        // HACK Fix Force openlayers canvas to fill window after 0.5 s
-        setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
-        
-      }
-    }
+    window.eventBus.on('AppMap_ChangedSection', this.setSection);
+    window.eventBus.on('TitleHeader_ChangedSection', this.setSection);
+    window.eventBus.on('GUIManager_SectionChanged', this.setSection);
 
   },
   data () {
     return {
-      app: 'map'
+      section: 'map'
     }
   },
   methods: {
+    setSection: function(section){
+      this.section = section;
+      // HACK When using the other apps, if the window is resized, map does not load. Force it here with a window resize event.
+      if (section == 'map'){
+        // Fix Force openlayers canvas to fill window after 0.5 s
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
+      }
+    }
   },
   components: {
     "app-overview": AppOverview,
-    "app-lengthfreq": AppLengthFreq,
+    "app-lengthdist": AppLengthDist,
     "app-map": AppMap,
     "cookie-banner": CookieBanner,
-    "language-selector": LanguageSelector
-    
+    "language-selector": LanguageSelector,
+    "modality-selector": ModalitySelector,
+    "information": Information,
   },
   computed: {
   
@@ -116,23 +118,24 @@ export default {
 #app-manager {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   width: 100vw;
   height: 100vh;
   position: absolute;
   overflow: hidden;
 }
 
-
 .logo {
-  width: 70px;
-  height: 70px;
   position: fixed;
   top: 10px;
   padding: 0px;
   margin: 0px;
   z-index: 10;
 }
-
+.logo-big {
+  width: 70px;
+  height: 70px;
+}
 .icatmar-logo {
   left: 50px;
 }
@@ -152,6 +155,20 @@ export default {
 
   right: 35px;
   top: 6px;
+}
+
+
+@media screen and (max-width: 770px) {
+  .logo-big {
+    width: 35px;
+    height: 35px;
+  }
+  .icatmar-logo {
+    left: 30px;
+  }
+  .visap-logo {
+    left: 60px;
+  }
 }
 
 </style>

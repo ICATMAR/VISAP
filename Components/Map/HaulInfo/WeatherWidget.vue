@@ -218,7 +218,7 @@ export default {
       currentDateHTML: '',
       lat: '',
       long: '',
-      selTrackId: undefined,
+      selHaulId: undefined,
 
     }
   },
@@ -231,8 +231,8 @@ export default {
     // PRIVATE METHODS
     panelStateChanged: function(isPanelOpen){
       if (isPanelOpen){
-        // Get selected track id
-        let selId = FishingTracks.getSelectedTrack();
+        // Get selected haul id
+        let selId = window.GUIManager.map.currentHaul;
         this.requestDataUpdate(selId);
       }
     },
@@ -403,14 +403,24 @@ export default {
 
     // PUBLIC METHODS
     requestDataUpdate(id){
-      // Is selected track different from previously loaded?
-      if (id != this.selTrackId){
+      // Is selected haul different from previously loaded?
+      if (id != this.selHaulId){
         // If so, load new data
-        this.selTrack = FishingTracks.getFeatureById(id);
-        this.selTrackId = id;
-        let coords = this.selTrack.geometry.coordinates;
-        let middleCoordinate = [...coords[Math.round(coords.length/2)]]; // copy
-        this.updateTable(this.selTrack.properties.info.Date, middleCoordinate[0], middleCoordinate[1]);
+        let fdManager = window.DataManager.getFishingDataManager();
+        this.selHaul = fdManager.hauls[id];
+        this.selHaulId = id;
+        let middleCoordinate;
+        if (this.selHaul == undefined){
+          debugger;
+        }
+        if (this.selHaul.geometry.type == "Point")
+          middleCoordinate = this.selHaul.geometry.coordinates;
+        else {
+          let coords = this.selHaul.geometry.coordinates;
+          middleCoordinate = [...coords[Math.round(coords.length/2)]]; // copy
+        }
+        
+        this.updateTable(this.selHaul.Date, middleCoordinate[0], middleCoordinate[1]);
       }
     },
 

@@ -7,6 +7,10 @@
   --lightBlueRGB: 82, 181, 217;
   --red: rgb(255, 115, 105);
   --redRGB: 255, 115, 105;
+
+  --trawling: rgb(255 155 56);
+  --purse-seine: rgb(255, 56, 56);
+  --recreational: rgb(255 219 56);
 }
 
 * {
@@ -196,6 +200,64 @@ a:hover {
 .fa {
   text-decoration: none;
 }
+
+
+
+/* MAP ATTRIBUTIONS */
+.ol-attribution {
+  top: auto !important;
+  right: auto;
+  left: 10px !important;
+  bottom: 40px !important;
+  flex-flow: row !important;
+  max-width: 70vw;
+}
+
+
+/* LOADING ELEMENT */
+.loading-circle {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index:20;
+  /* user-select: all;
+  pointer-events: all; */
+}
+.loading-circle::before,
+.loading-circle::after {
+  content: '';
+  display: block;
+  background-color: rgb(82 181 217 / 70%);
+  border-radius: 50%;
+  position: absolute;
+  animation: loading-anim 0.5s infinite cubic-bezier(0.165, 0.84, 0.44, 1) alternate;
+}
+.loading-circle::after {
+  width: 100%;
+  height: 100%; 
+}
+.loading-circle::before {
+  width: 50%;
+  height: 50%;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes loading-anim {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
 
 
 

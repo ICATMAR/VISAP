@@ -1,13 +1,36 @@
 let ca;
 export default ca = {
-  "Fishing tracks": "Recorreguts d'arrossegament",
+  "Fishing tracks": "Mostrejos d'ICATMAR",
   "Fishing effort": "Esforç pesquer",
   "Layers": "Capes",
 
+  "trawling": "Arrossegament",
+  "TrawlingInfo": "Pesca d'arrossegament",
+  "purse-seine": "Encerclament",
+  "Purse seineInfo": "Pesca d'encerclament",
+  "Recreational": "Recreativa",
+  "RecreationalInfo": "Pesca des de costa, des d'embarcació i submarina",
+
   "About": "Sobre nosaltres",
   "About ICATMAR": "Sobre ICATMAR",
+
+  "Information": "Informació",
+  "info-sampling": "Les dades mostrades en aquesta aplicació provenen de mostrejos periòdics d'ICATMAR. Per a més informació sobre la metodologia de mostreig, segueix l'enllaç:",
+  "LinkToSampling": "Vull saber més sobre el mostreig",
+  "info-team": "Aquestes dades són recollides per un grup d'observadors que s'embarquen amb els pescadors catalans a diferents punts de la costa.",
+  "LinkToTeam": "Vull conèixer l'equip",
+  "info-science": "La metodologia i eines de com s'ha fet aquesta aplicació i de com s'han tractat les dades estan descrites en el següent article. Si voleu citar aquesta aplicació, feu servir l'article:",
+  "LinkToArticle": "Vull llegir l'article científic",
+
   "Contact": "Contacte",
+  "author-info-gerard": "Per qualsevol dubte, comentari o suggeriment respecte l'aplicació web, podeu contactar amb ",
+  "contact-github-issues": "Si esteu familiaritzats amb github issues, podeu informar d'errors a través de ",
+  "author-info-jordi": "Respecte les dades, el seu tractament i obtenció, contacteu amb ",
+  "contact-icatmar": "Per qualsevol altra cosa, podeu contactar a través de ",
+  
   "Funding": "Finançament",
+  "funding-agencies": "Aquesta acció està finançada per l'ICATMAR (Institut Català de Recerca per a la Governança de la Mar), un òrgan de cooperació entre la Direcció General de Política Marítima i Pesca Sostenible (Generalitat de Catalunya) i l'Institut de Ciències del Mar (ICM-CSIC) amb autonomia de gestió, que neix de la necessitat d'assessorament científic per desenvolupar el programa de l'Estratègia Marítima de Catalunya. Aquesta iniciativa va començar l'any 2021 a la Xarxa Marítima de Catalunya (BlueNetCat) fins al 2022.",
+  
   "Code repository": "Repositori del codi",
   "Sentence1": "Aquesta aplicació és un visualitzador de les dades recollides per ICATMAR per fer un monitoreig científic de les pesqueries, transferir els coneixements adquirits i facilitar la gestió de la pesca a la costa catalana. L'aplicació ha estat desenvolupada per la Xarxa Marítima de Catalunya (BlueNetCat) en col·laboració amb ICATMAR. Actualment l'aplicació només ensenya les dades del mostreig a la flota d'arrossegament.",
   "Sentence2": "L'ICATMAR (Institut Català de Recerca per a la Governança de la Mar) és un òrgan de cooperació entre la Direcció General de Política Marítima i Pesca Sostenible (Generalitat de Catalunya) i l'Institut de Ciències del Mar (ICM-CSIC) amb autonomia de gestió, que neix de la necessitat d'assessorament científic per desenvolupar el programa de l'Estratègia Marítima de Catalunya.",
@@ -15,6 +38,8 @@ export default ca = {
   "Sentence4": "A l'Octubre de 2018 es va posar en marxa el programa de seguiment de les especies de major interès pesquer, on un dels elements clau és la recopilació de dades i la seva estructuració per a poder ser analitzades i visualitzades.",
   "SentenceContact": "En cas de voler més informació sobre l'aplicació, podeu contactar amb en Gerard Llorach (gllorach at bluenetcat.eu). En cas de voler més informació sobre les dades, podeu contactar amb en Jordi Ribera (jribera at icm.csic.es).",
   "SentenceFunding": "La Xarxa Marítima de Catalunya (BlueNetCat) està finançada per la Generalitat de Catalunya i el Fons Europeu de Desenvolupament Regional (FEDER).",
+  "Attributions": "Atribucions",
+  "Source": "Font",
 
   "effortTypes": {
     "hours": "hores",
@@ -32,7 +57,7 @@ export default ca = {
   "Opacity": "Opacitat",
 
 
-  "TrackFeatures": {
+  "HaulFeatures": {
     "AvgDepth": "Profunditat mitja: {n} metres",
     "Data": "Data",
     "Date": "Data",
@@ -47,6 +72,22 @@ export default ca = {
     "ZonaPort": "Zona del port",
     "name": "Nom"
   },
+  "HaulTable": {
+    "AvgDepth": "Profunditat mitja (m)",
+    "Data": "Data",
+    "Date": "Data",
+    "Distance": "Distancia (m)",
+    "Duration": "Duració (min)",
+    "Estacio": "Estació",
+    "FishingGroundName": "Calador",
+    "FishingGroundType": "Fons marí",
+    "Id": "Id",
+    "MeshType": "Malla de la xarxa",
+    "Port": "Port",
+    "ZonaPort": "Regió",
+    "name": "Nom"
+  },
+
   "Square": "Quadrada",
   "Primavera": "Primavera",
   "Estiu": "Estiu",
@@ -148,6 +189,8 @@ export default ca = {
   "Sea surface temperature": "Temperatura superficial del mar",
   "Sea bottom temperature": "Temperatura del fons del mar",
   "Salinity": "Salinitat",
+  "tonnes": "tones",
+  "kg / haul": "kg / pesca",
 
 
 
@@ -157,6 +200,7 @@ export default ca = {
   "port": "port",
   "Biomass": "Biomassa",
   "Filter per species": "Filtrar per espècies",
+  "Filter per categories": "Filtrar per categories",
   "Deactivate filter": "Desactivar filtre",
   "Select species": "Seleccionar espècies",
   "Select all": "Seleccionar totes",
@@ -171,14 +215,18 @@ export default ca = {
   "Show chart": "Mostrar gràfic",
   "Hide chart": "Amagar gràfic",
   "Catch composition": "Composició de captura",
-  "Length frequency": "Freqüència de talles",
+  "Length distribution": "Distribució de talles",
   "Sampling map": "Mapa de mostreig",
 
-  "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km2)",
+  "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km²)",
   "Abundance": "Abundància",
   "individuals of": " individus de ",
   "per": "per",
+  "Distribution percentage": "Percentatge de la distribució",
   "Length": "Longitud",
+  "More species": "Més espècies",
+  "Sexual maturity": "Maduresa sexual",
+  "Number of measured individuals": "Nombre d'individus mostrejats",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Sortir de la pantalla completa",
@@ -195,7 +243,23 @@ export default ca = {
   "viewData": "Mostrar taula de dades",
   "hideData": "Amagar taula de dades",
 
-  
+  "NextHaul": "Següent mostreig",
+  "PrevHaul": "Anterior mostreig",
+  "Sort": "Ordena per",
+
+  "Viewby": "Veure per",
+  "byYear": "Any",
+  "bySeason": "Estació",
+  "byMetier": "Métier",
+  "byPortArea": "Regió",
+
+  "Coastal Delta shelf": "Plataforma costanera del Delta",
+  "Middle Delta shelf": "Plataforma mitjana del Delta",
+  "Coastal shelf": "Plataforma costanera",
+  "Deeper shelf": "Plataforma profunda",
+  "Upper slope": "Talús superior", 
+  "Lower slope": "Talús inferior",
+
   "Cookies title": "Valorem la teva privadesa",
   "Cookies text": `Utilitzem tecnologia com ara galetes al nostre lloc per millorar l'experiència d'usuari i analitzar el nostre trànsit. Feu clic per consentir l'ús d'aquesta tecnologia al web. Podeu canviar 
   d'opinió i canviar les vostres opcions de consentiment en qualsevol moment tornant a aquest lloc.`,

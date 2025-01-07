@@ -17,9 +17,10 @@ Object.keys(sp_es).forEach(key=> {
 
 
 // Utils for hash and routing
-import {setHashValue, getHashValue} from './Assets/Scripts/utils.js';
+import {setHashValue, getHashValue, removeHash} from './Assets/Scripts/utils.js';
 window.location.setHashValue = setHashValue;
 window.location.getHashValue = getHashValue;
+window.location.removeHash = removeHash;
 
 
 // Declare event emitter
@@ -36,12 +37,18 @@ window.WMTSTileManager = new WMTSTileManagerClass();
 
 
 // Import scripts
-// Import file manager
 import FileManager from './Assets/Scripts/FileManager.js';
+import DataManager from './Assets/Scripts/DataManager.js';
+import GUIManager from '../VISAP/Assets/Scripts/GUIManager.js';
 import GAnalyticsManager from './Assets/Scripts/GAnalyticsManager.js';
 
 window.FileManager = new FileManager();
+window.DataManager = new DataManager();
+window.GUIManager = new GUIManager();
 let gaManager = new GAnalyticsManager();
+
+
+
 
 
 

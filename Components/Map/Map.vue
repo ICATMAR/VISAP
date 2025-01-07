@@ -1,5 +1,9 @@
 <template>
     <div id="app-map">
+
+      <!-- Loading circle-->
+      <div class="loading-circle fade-enter-from fade-enter-active" v-show="isLoading"></div>
+
       <!-- LAYOUT -->
       <!-- OL map -->
       <div id="map" ref="OLMap" :class="isMinimized ? 'miniMap' : ''"></div>
@@ -160,8 +164,9 @@ export default {
 
         // Ports
         portsLayer: new ol.layer.Vector({
+          name: 'portsLayer',
           source: new ol.source.Vector({
-            url: 'data/ports.geojson',
+            //url: '',
             format: new ol.format.GeoJSON()
           }),
           minZoom: 3,
@@ -211,7 +216,7 @@ export default {
         fishingEffort: new ol.layer.Image({
           name: 'fishingEffort',
           source: new ol.source.ImageStatic({
-            url: 'data/fishingEffort/fishingEffortExample_m1_39_6_44.png',
+            //url: '',//'data/trawlingData/effort/fishingEffortExample_m1_39_6_44.png',
             imageExtent: [-1, 39, 6, 44],
             projection: 'EPSG:4326'
           }),
@@ -248,17 +253,20 @@ export default {
     this.layerData = undefined;
     this.pixelColor = [0, 0, 0, 0];
 
-    // Load fishing tracks
-    // if (window.serverConnection)
-    // getTrackLines('http://localhost:8080/trackLines', 'data/trackLines.json');
-    // getTrackLines('data/trackLines.json', undefined);
-    this.fishingTracks = new FishingTracks('data/trackLines.json', undefined, this.onLoadTracks);//new TrackLines(address, staticFile, onLoadTracks)
   },
   mounted () {
     this.initMap();
     this.$refs.OLMap.addEventListener('mousemove', this.onMouseMove);
+    
+    // Updates if necessary
+    this.updateFishingDataOnMap();
 
     // EVENTS
+    // Section
+    window.eventBus.on('AppMap_ChangedSection', this.updateFishingDataOnMap);
+    window.eventBus.on('TitleHeader_ChangedSection', this.updateFishingDataOnMap);
+    window.eventBus.on('ModalitySelector_ChangedModality', this.updateFishingDataOnMap);
+
     // Base layer
     window.eventBus.on("WidgetMapOptions_BaseLayerClicked", baseLayerName => {
       this.setBaseLayer(baseLayerName);
@@ -277,20 +285,51 @@ export default {
       this.changeStyle(style);
     });
     // Click on track
-    window.eventBus.on('TracksTimeLine_trackClicked', this.setSelectedTrack);
-    window.eventBus.on('HaulInfo_SelectedTrack', this.setSelectedTrack);
+    window.eventBus.on('TracksTimeLine_HaulClicked', this.setSelectedHaul);
+    window.eventBus.on('HaulInfo_SelectedHaul', this.setSelectedHaul);
     // Set fishing effort map
     window.eventBus.on('FishingEffort_EffortChanged', this.setEffortMap);
     // Layer visibility
     window.eventBus.on('WidgetMapOptions_setLayerVisible', this.setLayerOpacity);
     window.eventBus.on('FishingEffort_setLayerVisible', this.setLayerOpacity);
-    window.eventBus.on('FishingEffort_setTracksVisible', this.setLayerOpacity);
+    window.eventBus.on('FishingEffort_setHaulsVisible', this.setLayerOpacity);
     // Layer opacity
     window.eventBus.on('FishingEffort_setLayerOpacity', this.setEffortLayerOpacity);
     window.eventBus.on('WidgetMapOptions_setLayerOpacity', this.setLayerOpacity);
     // Reactive interface. Map is shown on a corner
     window.eventBus.on('AppMap_isMapMinimized', (isMinimized) => {
       this.isMinimized = isMinimized;
+    });
+
+    // Dropped files
+    // Geojson
+    window.eventBus.on('DataManager_geoJSONDataLoaded', () => {
+      let wrappers = window.DataManager.geoJSONWrappers;
+      Object.keys(wrappers).forEach(key => {
+        let wrapper = wrappers[key];
+        // Check if the geojson is not in the map
+        if (!wrapper.isAddedToMap) {
+          this.addGeoJSON(wrapper);
+          wrapper.isAddedToMap = true;
+        }
+      })
+    });
+    // Widget Dropped Files
+    // Show/hide
+    window.eventBus.on('WidgetDroppedFiles_FileVisibilityChanged', (fileName) => {
+      let layer = this.getMapLayer(fileName);
+      let isVisible = window.DataManager.geoJSONWrappers[fileName].isVisible;
+      let opacity = window.DataManager.geoJSONWrappers[fileName].opacity * isVisible;
+      layer.setOpacity(opacity);
+    });
+    // Set opacity
+    window.eventBus.on('WidgetDroppedFiles_FileOpacityChanged', (fileName) => {
+      let layer = this.getMapLayer(fileName);
+      layer.setOpacity(window.DataManager.geoJSONWrappers[fileName].opacity);
+    });
+    // Remove layer
+    window.eventBus.on('WidgetDroppedFiles_FileRemoved', (fileName) => {
+      this.map.removeLayer(this.getMapLayer(fileName));
     });
   },
   umounted () {
@@ -304,6 +343,7 @@ export default {
         loading: 0,
         loaded: 1
       },
+      isLoading: false,
       isLayerDataReady: false,
       // WMS Data layer
       wmsProgress: {
@@ -361,24 +401,24 @@ export default {
       this.map.on('movestart', this.onMapMoveStart);
 
       // Declare interactions
-      // Interaction (tracks clicked)
+      // Interaction (hauls clicked)
       const selectInteraction = new ol.interaction.Select({style: null});
       selectInteraction.on('select', (e) => {
         // Nothing clicked
         if (e.selected[0] === undefined)
           return false;
-        // Check if tracks layer is visible
-        let ll = this.getMapLayer('fishingTracks');
+        // Check if hauls layer is visible
+        let ll = this.getMapLayer('fishingHauls');
         if (ll == undefined)
           return
         if (ll.getOpacity() == 0)
           return;
-        // Track line is clicked
-        if (e.selected[0].getProperties().featType == "trackLine"){
+        // Haul is clicked
+        if (e.selected[0].getProperties().featType == "haul"){
           let id = e.selected[0].getProperties().id;
-          this.setSelectedTrack(id);
+          this.setSelectedHaul(id);
           // Emit event
-          window.eventBus.emit('Map_trackClicked', id);
+          window.eventBus.emit('Map_HaulClicked', id);
         }
         // Port is clicked
         // else if (e.selected[0].getProperties().featType == "port") {
@@ -418,6 +458,23 @@ export default {
       });
       // Tile load for sea habitats
       this.registerLoadTilesEvents(this.layers.seaHabitats);
+    },
+
+
+    
+    // Add geoJSON
+    addGeoJSON: function (wrapper) {
+      const vectorSource = new ol.source.Vector({
+        features: new ol.format.GeoJSON().readFeatures(wrapper.rawJSON, {
+          featureProjection: 'EPSG:3857'
+        })
+      });
+      const vectorLayer = new ol.layer.Vector({
+        name: wrapper.fileName,
+        source: vectorSource
+      });
+
+      this.map.addLayer(vectorLayer);
     },
 
 
@@ -464,13 +521,7 @@ export default {
       let coord = this.map.getCoordinateFromPixel([event.clientX, event.clientY]);
       coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
       // Emit
-      window.eventBus.emit('Map_mouseMove', coord);
-      // Change legend tooltip value
-      if (this.isLayerDataReady){
-        let color = this.getDataAtPixel(event.clientX, event.clientY);
-        window.eventBus.emit('Map_MouseOnData_WMSColor', color);
-      }
-      
+      window.eventBus.emit('Map_mouseMove', coord);   
     },
 
     // Map moves
@@ -528,8 +579,8 @@ export default {
     // Store pixel information once tiles are loaded
     onTilesLoaded: function(e){
       if (e.target.name == 'wmsSource'){
-        this.isLayerDataReady = true;
         this.updateSourceData();
+        this.isLayerDataReady = true;
       }
     },
 
@@ -645,7 +696,14 @@ export default {
     // The time range has changed. Update the track lines
     onTimeRangeChange: function(dates){
       // Set starting and ending dates in fishing tracks
-      this.fishingTracks.setStartEndDates(dates[0], dates[1]);
+      // TODO: should be controlled by GUIManager via an event?
+      window.GUIManager.map.selStartDate.setTime(dates[0].getTime());
+      window.GUIManager.map.selEndDate.setTime(dates[1].getTime());
+      // Update haul layer style
+      let fdManager = window.DataManager.getFishingDataManager();
+      fdManager.updateStyle();
+      
+
     },
      // The timeline has changed. Update the track lines
     onTimeRangeChangeLimits: function(dates){
@@ -764,27 +822,32 @@ export default {
 
     // Receive selected track and show it
     // This event can come from HaulInfo.vue or TracksTimeLine
-    setSelectedTrack: function(id){
+    setSelectedHaul: function(id){
       
       // If id is undefined, it hides the selected mark
       if (this.$refs.tracksTimeLine){
         if (id == undefined)
-          this.$refs.tracksTimeLine.hideSelectedTrack(id);
+          this.$refs.tracksTimeLine.hideSelectedHaul(id);
         else{
-          this.$refs.tracksTimeLine.showSelectedTrack(id);
+          this.$refs.tracksTimeLine.showSelectedHaul(id);
         }
       }
 
       // Center timeline
-      let feature = FishingTracks.getFeatureById(id);
+      let fishingDataManager = window.DataManager.getFishingDataManager(window.GUIManager.currentModality);
+      let haul = fishingDataManager.hauls[id];
       if (this.$refs['timeRangeBar']){
-        let trackDate = new Date(feature.properties.info.Date);
+        let trackDate = new Date(haul.Date);
         this.$refs['timeRangeBar'].centerOnDate(trackDate);
       }
 
       // Center map to track
       let view = this.map.getView();
-      let coord = [...feature.geometry.coordinates[0]];
+      let coord;
+      if (haul.geometry.type == 'Point')
+        coord = [...haul.geometry.coordinates];
+      else
+        coord = [...haul.geometry.coordinates[0]];
       let currentZoom = view.getZoom();
       let longCorrection = 0;//currentZoom > 11 ? 0.1 : 0.3;
       view.animate({
@@ -794,8 +857,8 @@ export default {
       });
 
       // Update map style
-      FishingTracks.setSelectedTrack(id);
-      this.fishingTracks.updateStyle();
+      window.GUIManager.map.currentHaul = id;
+      fishingDataManager.updateStyle();
       
     },
 
@@ -813,6 +876,16 @@ export default {
       });
       // Assign new source to layer
       effortLayer.setSource(source);
+    },
+    setFishingHauls: function(fishingDataManager){
+      // Remove previous layer and add new one
+      let haulsLayer = this.getMapLayer('fishingHauls');
+      if (haulsLayer != undefined){
+        this.map.removeLayer(haulsLayer);
+      }
+      haulsLayer = fishingDataManager.haulsLayer;
+      haulsLayer.setOpacity(window.GUIManager.map.haulsLayerOpacity);
+      this.map.addLayer(haulsLayer);
     },
 
     setBaseLayer: function(baseLayerName){
@@ -866,30 +939,61 @@ export default {
 
 
 
-    // CALLBACKS
-    // Once the fishing tracks have been loaded
-    onLoadTracks: function(){
-      // Add to layer
-      this.map.addLayer(this.fishingTracks.getLayer());
-      // TODO;
-      // Update start and end dates
-      // Get start and end from timerange
-      //this.fishingTracks.setStartEndDates(); // Set starting and ending dates in fishing tracks
-      
-      // Track lines overlay
-      //let gjson = this.fishingTracks.getGeoJSON();
-      let gjson = FishingTracks.getGeoJSON();
-      if (this.$refs.tracksTimeLine){
-        this.$refs.tracksTimeLine.setFeatures(gjson.features);
+    updateFishingDataOnMap: function(){
+      this.isLoading = true;
+      if (window.GUIManager.currentSection == 'map'){
+        window.DataManager.loadNecessaryFiles('map', window.GUIManager.currentModality)
+        .then(() => {
+          this.isLoading = false;
+          let fishingDataManager = window.DataManager.getFishingDataManager(window.GUIManager.currentModality);
+          // Set hauls
+          this.setFishingHauls(fishingDataManager);
+          // Set effort map
+          this.setEffortMap(fishingDataManager.getEffortURI());
+          // Set geojson ports
+          let portsLayer = this.getMapLayer('portsLayer');
+          portsLayer.getSource().clear();
+          let newPortsSource = new ol.source.Vector({
+            url: window.GUIManager.currentModality == 'trawling' ? 'data/trawlingData/trawling_ports.geojson' : 'data/purseSeineData/ps_ports.geojson',
+            format: new ol.format.GeoJSON()
+          });
+          portsLayer.setSource(newPortsSource);
+
+
+          // Update haul points in timeline
+          if (this.$refs.tracksTimeLine){
+            this.$refs.tracksTimeLine.setFeatures(fishingDataManager.haulsGeoJSON.features);
+          }
+
+          // Redifine currentHaul if currentHaul does not exists in the fishingDataManager.hauls
+          let haulId = window.GUIManager.map.currentHaul;
+          if (fishingDataManager.hauls[haulId] == undefined){
+            console.warn('Current haul did not exist in fishing modality, changing it.') // TODO: this should extend to other components?
+            haulId = window.GUIManager.map.currentHaul = Object.keys(fishingDataManager.hauls)[0]; // First haul
+            //this.setSelectedHaul(haulId);
+            // Short version of setSelectedHaul without map centering
+            let haul = fishingDataManager.hauls[haulId];
+            this.$refs['timeRangeBar'].centerOnDate(new Date(haul.Date));
+            this.$refs.tracksTimeLine.showSelectedHaul(haulId);
+            // Update map style
+            fishingDataManager.updateStyle();
+            // Emit events
+            window.eventBus.emit('Map_HaulsLoaded', fishingDataManager.haulsGeoJSON);
+            window.eventBus.emit('Map_HaulClicked', haulId);
+          } 
+          
+          else {
+            // Emit event
+            window.eventBus.emit('Map_HaulsLoaded', fishingDataManager.haulsGeoJSON);
+            // Open side panel if haul is present in the hash
+            if (window.location.getHashValue('HAUL') != undefined){
+              this.setSelectedHaul(haulId);
+              window.eventBus.emit('Map_HaulClicked', haulId);
+            }
+          }
+        });
       }
 
-      // Emit geojson loaded
-      window.eventBus.emit('Map_TracksLoaded', gjson);
-      
-      // OPTIONS:
-      // PAINT IN A CANVAS -> TRANSFORM TO IMAGE -> MAKE IMAGE AS BACKGROUND OF TIMERANGE
-      // OVERLAY, BUT BELOW TIMERANGE?
-      // CREATE A VUE OVERLAY INSIDE TIMERANGE?
     },
 
 

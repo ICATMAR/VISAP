@@ -37,7 +37,7 @@ const products = {
   "Mediterranean Sea Physics Reanalysis": {
     /*
     Available datasets 
-      uo, vo, wo - Current
+      sea_water_velocity, uo, vo, wo - Current
       so, - Salinity
       zos - Sea Surface Height
       thetao, bottomT - Potential temperature
@@ -45,12 +45,12 @@ const products = {
     wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_MULTIYEAR_PHY_006_004?request=GetCapabilities&service=WMS',
     doi: 'https://doi.org/10.25423/CMCC/MEDSEA_MULTIYEAR_PHY_006_004_E3R1I',
     timeScales: ['h', 'd', 'm'],
-    dataSets: ['uo', 'vo', 'wo', 'so', 'thetao', 'bottomT']
+    dataSets: ['sea_water_velocity', 'uo', 'vo', 'wo', 'so', 'thetao', 'bottomT']
   },
   "Mediterranean Sea Physics Analysis and Forecast": {
     /*
     Available datasets 
-      uo, vo, wo - Current
+      sea_water_velocity, uo, vo, wo - Current
       so, - Salinity
       zos - Sea Surface Height
       thetao, bottomT - Potential temperature
@@ -58,7 +58,7 @@ const products = {
     wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_ANALYSISFORECAST_PHY_006_013?request=GetCapabilities&service=WMS',
     doi: 'https://doi.org/10.25423/CMCC/MEDSEA_ANALYSISFORECAST_PHY_006_013_EAS8',
     timeScales: ['h', 'd', 'm'],
-    dataSets: ['uo', 'vo', 'wo', 'so', 'thetao', 'bottomT']
+    dataSets: ['sea_water_velocity', 'uo', 'vo', 'wo', 'so', 'thetao', 'bottomT']
   },
   "Mediterranean Sea High Resolution and Ultra High Resolution Sea Surface Temperature Analysis": {
     /*

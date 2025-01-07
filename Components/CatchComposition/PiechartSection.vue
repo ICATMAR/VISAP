@@ -1,10 +1,13 @@
 <template>
   <!-- Container -->
   <div id='piechartSection' ref='piechartSection'>
-    
+
+    <!-- Loading circle-->
+    <div class="loading-circle fade-enter-from fade-enter-active" v-show="isLoading"></div>
+
     <!-- Title Section -->
     <div class="titleContainer">
-      <span class="h4">{{$t('Catch per ' + type)}}</span>
+      <span class="h4">{{$t('Catch per ' + type)}} <span>({{rangeYears}})</span></span>
 
       <!-- Show / Hide button -->
       <button @click="showPie = !showPie"> 
@@ -70,40 +73,27 @@ export default {
   },
   mounted() {
     
-    // TEST, ORGANIZE BETTER
-    // Load test data
-    let url = 'data/';
-    if (this.type == 'port')
-      url += 'pesca_arrossegament_port_biomassa.json';
-    else if (this.type == 'season')
-      url += 'pesca_arrossegament_any_biomassa.json';
-    // Fetch
-    fetch(url)
-      .then(r => r.json())
-      .then(data => {
-        this.rawData = data;
-        this.updatePieChartData();
-      })
-      .catch(e => console.error(e));
-
-    
     // EVENTS
-    window.eventBus.on('LanguageSelector_languageChange', () => {
-      // Set data to pie chart
-      this.updatePieChartData();
-    })
+    // Set data to pie chart
+    window.eventBus.on('LanguageSelector_LanguageChanged', this.updatePieChartData);
+    window.eventBus.on('GUIManager_LanguageChanged', this.updatePieChartData);
   },
   data (){
     return {
       showComparison: false,
       showPie: false,
       showExportOptions: false,
+      rangeYears: '2019-2023',
+      isLoading: false,
     }
   },
   methods: {
     // INTERNAL FUNCTIONS
     // Prepare data and update data on the pie charts
     updatePieChartData: function(){
+      if (this.rawData == undefined)
+        return;
+
       let data = this.rawData;
 
       // Update titles
@@ -190,6 +180,33 @@ export default {
       // Event for GAnalytics
       window.eventBus.emit("PieChartSection_Export", {fileExtension: "CSV", modality: "trawling", aggregationType: this.type});
     },
+
+    // PUBLIC
+    // Load the data
+    loadChartData: function(){
+      this.isLoading = true;
+      // Call data manager to load the data
+      window.DataManager.loadNecessaryFiles('overview', window.GUIManager.currentModality)
+        .then(() => {
+          this.isLoading = false;
+          let fdManager = window.DataManager.getFishingDataManager();
+          if (this.type == 'port')
+            this.rawData = fdManager.catchComposition.byPort;
+          else if (this.type == 'season')
+            this.rawData = fdManager.catchComposition.bySeason;
+          
+          // Find years range
+          this.rangeYears = window.DataManager.getCatchCompositionRangeYears();
+
+          this.updatePieChartData();
+          // Emit?
+        })
+        .catch(e =>{
+          debugger;
+          this.isLoading = false;
+          console.error(e)
+          });
+    },
   },
   watch: {
     showPie(current, past){
@@ -274,6 +291,9 @@ span {
   font-weight: 400;
   text-transform: none;
   line-height: 35px;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .compareButtons {

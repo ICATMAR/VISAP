@@ -69,9 +69,10 @@
     },
     mounted() {
       // EVENTS
-      // Fishing track clicked
-      window.eventBus.on('TracksTimeLine_trackClicked', this.updateClimaLayer);
-      window.eventBus.on('Map_trackClicked', this.updateClimaLayer);
+      // Fishing haul clicked
+      window.eventBus.on('TracksTimeLine_HaulClicked', this.updateClimaLayer);
+      window.eventBus.on('Map_HaulClicked', this.updateClimaLayer);
+      window.eventBus.on('HaulInfo_SelectedHaul', this.updateClimaLayer);
       // Map mouse move to update legend WMTS
       window.eventBus.on('Map_mouseMove', coord => this.mapMouseMove(coord));
     },
@@ -85,7 +86,7 @@
           'Salinity', 
           //'Wind',
           'Wave Significant Height', 
-          //'Current'
+          'Current'
         ],
         // https://origin.fontawesome.com/search?o=r&m=free&f=classic
         climaIcons: [
@@ -96,7 +97,7 @@
           '‰',
           //'&#xf72e;',
           '&#xe515;',
-          //'&#xf773;'
+          '&#xf773;'
         ],
         selClimaLayer: '',
         isClimaLayerVisible: false,
@@ -119,20 +120,22 @@
 
 
       // PRIVATE METHODS
-      updateClimaLayer: function(){
+      updateClimaLayer: function(haulId){
         if (this.selClimaLayer == undefined || this.selClimaLayer == '')
           return
         if (!this.isClimaLayerVisible)
           return
+        // Haul id
+        haulId = haulId || window.GUIManager.map.currentHaul;
         // Get date
-        let ff = FishingTracks.getFeatureById(FishingTracks.getSelectedTrack());
+        let ff = window.DataManager.getHaulInfo(haulId);
         if (ff == undefined){
           setTimeout(this.updateClimaLayer, 1000);
-          console.log("Fishing track not found. Trying again in 1s.");
+          console.log("Fishing haul not found. Trying again in 1s.");
           return;
         }
-        this.currentDate = ff.properties.info.Data;
-        let date = ff.properties.info.Data + 'T12:00:00.000Z';
+        this.currentDate = ff.Data;
+        let date = ff.Data + 'T12:00:00.000Z';
         // Get clima URL
         let id = this.dataRetriever.getDataSetIdFromDataName(this.selClimaLayer);
         if (id == undefined){

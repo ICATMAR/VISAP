@@ -89,6 +89,23 @@ export default {
     mounted (){
       this.createHTMLTimeline();
       window.addEventListener('resize', this.setMonthNames);
+
+      // Hauls loaded, define limits of start and end dates
+      window.eventBus.on('Map_HaulsLoaded', geoJSON => {
+        let earliestYear = new Date().getUTCFullYear();
+        let latestYear = 2018;
+        for (let i = 0; i < geoJSON.features.length; i++){
+            let feat = geoJSON.features[i];
+            let year = feat.properties.info.Date.getUTCFullYear();
+            earliestYear = Math.min(earliestYear, year);
+            latestYear = Math.max(latestYear, year);
+        }
+        this.limStartDate = new Date(earliestYear - 1, 10, 1);
+        this.limEndDate = new Date(latestYear + 1, 3, 1);
+        this.startDate = new Date(earliestYear - 1, 10, 1);
+        this.endDate = new Date(latestYear + 1, 3, 1);
+        this.updateHTMLTimeline();
+      });
     },
     unmounted() {
       window.removeEventListener('resize', this.setMonthNames);
@@ -526,7 +543,7 @@ export default {
         // Set handles in range slider
         this.setRangeSlider();
         this.updateHTMLTimeline();
-        // Emit selected dates. This updates the FishingTracks style
+        // Emit selected dates. This updates the fishing hauls style
         this.$emit('changeSelDates', [this.selStartDate, this.selEndDate]);
     
       },

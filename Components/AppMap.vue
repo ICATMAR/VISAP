@@ -12,13 +12,13 @@
         <!-- Buttons to switch from app -->
         <div class="switchPanels" v-show="!isMapMinimized">
           <!-- Buttons -->
-          <button @click="changeHash('overview')" >
+          <button @click="changeSection('overview')" >
             <span class="fa">&#xf13d; </span>
             <span class="button-text hiddenInMobile">{{ $t('Catch composition') }}</span>
           </button>
-          <button @click="changeHash('length-freq')">
+          <button @click="changeSection('length-dist')">
             <span class="fa">&#xe0e3; </span>
-            <span class="button-text hiddenInMobile">{{ $t('Length frequency') }}</span>
+            <span class="button-text hiddenInMobile">{{ $t('Length distribution') }}</span>
           </button>
           <button class="selected">
             <span class="fa">&#xf276; </span>
@@ -34,7 +34,7 @@
 
         <!-- Menu right top -->
         <!-- Buttons -->
-        <div class="menuTopRight" v-show="!isMapMinimized">
+        <div class="menuTopRight" v-show="!isMapMinimized && areHaulsLoaded">
           <!-- Fishing tracks -->
           <div class="menuElement clickable" @click="tracksMenuClicked">
             <!-- FA icon -->
@@ -42,7 +42,7 @@
             <!-- Text -->
             <span class="tracksTitle">{{ $t('Fishing tracks') }}</span>
             <!-- Icon -->
-            <img class="icon-str tracksIcon" src="Assets/TracksIcon.png">
+            <img class="icon-str tracksIcon" :src="haulsIconSrc[fishingModality]">
             
           </div>
 
@@ -105,6 +105,10 @@
       window.eventBus.on('SidePanel_isPanelOpen', (isOpen)=> {
         this.isSidePanelOpen = isOpen;
       });
+      window.eventBus.on('Map_HaulsLoaded', ()=> {
+        this.areHaulsLoaded = true;
+        this.fishingModality = window.GUIManager.currentModality;
+      });
     },
     unmounted(){
   
@@ -112,19 +116,25 @@
     data(){
       return {
         isMapMinimized: false,
+        areHaulsLoaded: false,
         isSidePanelOpen: false,
+        fishingModality: 'trawling',
+        haulsIconSrc: {
+          'trawling': 'Assets/HaulsTrawlingIcon.png',
+          'purse-seine': 'Assets/HaulsPurseSeineIcon.png',
+        }
       }
     },
     methods: {
       // INTERNAL EVENTS
-      // Change hash from application
-      changeHash: function(appType){
-        window.location.setHashValue('app', appType);
+      // Change section from application
+      changeSection: function(section){
+        window.eventBus.emit('AppMap_ChangedSection', section)
       },
 
       // USER ACTIONS
       tracksMenuClicked: function(e){
-        window.eventBus.emit('AppMap_tracksOptionClicked');
+        window.eventBus.emit('AppMap_HaulsOptionClicked');
       }
 
     },

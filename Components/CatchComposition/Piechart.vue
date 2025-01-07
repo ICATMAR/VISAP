@@ -29,7 +29,7 @@
 <script>
 
 // Import components
-import FilterMenu from 'Components/Utils/FilterMenu.vue'
+import FilterMenu from 'Components/CatchComposition/FilterMenu.vue'
 
 export default {
   name: 'piechart', // Caps, no -
@@ -65,9 +65,11 @@ export default {
 
 
       // HTMLcontainer, data, d3, title, measure, unit
-      this.piechart.runApp(this.$refs.d3chart, prepData, d3, this.title, this.$i18n.t('Biomass'), 'kg / km2');
+      let unit = window.DataManager.getFishingDataManager().mod == 'trawling' ? 'kg / km²' : this.$i18n.t('kg / haul');
+      this.piechart.runApp(this.$refs.d3chart, prepData, d3, this.title, this.$i18n.t('Biomass'), unit);
 
       // Fill filter menu with data
+      this.isFilterActive = false;
       this.$refs.filterMenu.setData(rawData);
     },
     // Update the pie chart with filtered or unfiltered data
@@ -78,11 +80,12 @@ export default {
       // }
       // Restart pie charts (TODO: instead of runApp function, update and transition of values)
       this.$refs.d3chart.innerHTML = "";
-      this.piechart.runApp(this.$refs.d3chart, inDataForD3, d3, this.title, this.$i18n.t('Biomass'), 'kg / km2');
+      let unit = window.DataManager.getFishingDataManager().mod == 'trawling' ? 'kg / km²' : this.$i18n.t('kg / haul');
+      this.piechart.runApp(this.$refs.d3chart, inDataForD3, d3, this.title, this.$i18n.t('Biomass'), unit);
     },
 
 
-    filterMenuClosed: function(selSpecies){
+    filterMenuClosed: function(selSpecies, categories){
       // Array with objects containing name, commonName and color
       // Close menu
       this.isFilterMenuVisible = false;
@@ -98,25 +101,35 @@ export default {
       let selectedSpecies = [];
       selSpecies.forEach(sp => selectedSpecies.push(sp.name));
       // Filter species
-	    let filteredDataForD3 = this.filterData(selectedSpecies, this.prepData);
+	    let filteredDataForD3 = this.filterData(selectedSpecies, categories, this.prepData);
 	    // Assign to pie chart
 	    this.updateTrawlingChart(filteredDataForD3);
     },
 
-    filterData(selSpecies, dataForD3){
+    filterData(selSpecies, categories, dataForD3){
       let filteredData = JSON.parse(JSON.stringify(dataForD3));
-      this.markItems(filteredData, selSpecies, null);
+      this.markItems(filteredData, categories, selSpecies, null);
       return filteredData;
     },
 
      // This function is not optimal, but real-time is not requiered
-    markItems(itemJSON, selectedSpecies, parentJSON){
+    markItems(itemJSON, categories, selectedSpecies, parentJSON){
       // Has children and its not selected (higher level than species)
       if (itemJSON.children && selectedSpecies.indexOf(itemJSON.species) == -1) {
-        itemJSON.children.forEach((child) => this.markItems(child, selectedSpecies, itemJSON)); // Go to children
+        // Hide children if it is a category and the category is not active (only when one of the categories is active)
+        let mustHide = categories.findIndex((cat)=> !cat.isActive && cat.name == itemJSON.name) != -1;
+        let areAllCategoriesInactive = categories.findIndex(cat => cat.isActive) == -1;
+        if (mustHide && !areAllCategoriesInactive){
+          itemJSON.children.forEach(this.hideHigherLevel);
+        } 
+        // Keep processing the children
+        else {
+          itemJSON.children.forEach((child) => this.markItems(child, categories, selectedSpecies, itemJSON)); // Go to children
+        }        
       }
       // One of the higher levels is selected
       else if (itemJSON.children && selectedSpecies.indexOf(itemJSON.species) != -1) {
+        debugger;
         // Get the tags in the same level
         parentJSON.children.forEach((child) => {if((selectedSpecies.indexOf(child.name) == -1) || (selectedSpecies.indexOf(child.species) == -1) ) hideHigherLevel(child)})
       }
@@ -124,13 +137,15 @@ export default {
       else if (selectedSpecies.indexOf(itemJSON.species) == -1){ // If species is not in the array
         itemJSON.value = 0;
       }
+
+      
     },
 
     // Set children values to 0
     hideHigherLevel(itemJSON){
       // Has children, continue
       if (itemJSON.children)
-        itemJSON.children.forEach((child) => hideHigherLevel(child));
+        itemJSON.children.forEach(this.hideHigherLevel);
       else
         itemJSON.value = 0;
     },

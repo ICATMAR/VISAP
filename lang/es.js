@@ -1,14 +1,38 @@
 let es;
 export default es  = {
-  "Fishing tracks": "Recorridos de arrastre",
+  "Fishing tracks": "Muestreos de ICATMAR",
   "Fishing effort": "Esfuerzo pesquero",
   "Layers": "Capas",
+
+  "trawling": "Arrastre",
+  "TrawlingInfo": "Pesca de arrastre",
+  "purse-seine": "Cerco",
+  "Purse seineInfo": "Pesca de cerco",
+  "Recreational": "Recreo",
+  "RecreationalInfo": "Pesca desde costa, desde embarcación y submarina",
 
 
   "About": "Acerca de nosotros",
   "About ICATMAR": "Acerca de ICATMAR",
+  
+  "Information": "Información",
+  "info-sampling": "Los datos mostrados en esta aplicación provienen de muestreos periódicos de ICATMAR. Para más información sobre la metodología de muestreo, sigue el enlace:",
+  "LinkToSampling": "Quiero saber más sobre el muestreo",
+  "info-team": "Estos datos son recogidos por un grupo de observadores que se embarcan con los pescadores catalanes en diferentes puntos de la costa.",
+  "LinkToTeam": "Quiero conocer al equipo",
+  "info-science": "La metodología y las herramientas utilizadas para crear esta aplicación y tratar los datos se describen en el siguiente artículo científico. Si quereis citar esta aplicación, usad este artículo:",
+  "LinkToArticle": "Quiero leer el artículo científico",
+  
   "Contact": "Contacto",
-  "Funding": "Financiamiento",
+  "author-info-gerard": "Para cualquier duda, comentario o sugerencia sobre la aplicación web, puedes contactar con ",
+  "contact-github-issues": "Si estás familiarizado con GitHub issues, puedes informar de errores a través de ",
+  "author-info-jordi": "Para consultas sobre los datos, su tratamiento y obtención, contacta con ",
+  "contact-icatmar": "Para cualquier otra cosa, puedes contactar a través de ",
+  
+  "Funding": "Financiación",
+  "funding-agencies": "Esta acción está financiada por ICATMAR (Institut Català de Recerca per a la Governança de la Mar), un organismo de cooperación entre la Direcció General de Política Marítima i Pesca Sostenible (Generalitat de Catalunya) y el Institut de Ciències del Mar (ICM-CSIC) con autonomía de gestión, que nace de la necesidad de asesoramiento científico para desarrollar el programa de la Estrategia Marítima de Cataluña. Esta iniciativa comenzó en 2021 en la Xarxa Marítima de Catalunya (BlueNetCat) y continuó hasta 2022.",
+
+
   "Code repository": "Repositorio del código",
   "Sentence1": "Esta aplicación es un visualizador de los datos recogidos por ICATMAR para realizar un monitoreo científico de las pesquerías, transferir los conocimientos adquiridos y facilitar la gestión de la pesca en la costa catalana. La aplicación ha sido desarrollada por la Xarxa Marítima de Catalunya (BlueNetCat) en colaboración con ICATMAR. Actualmente la aplicación sólo enseña los datos del muestreo en la flota de arrastre.",
   "Sentence2": "El ICATMAR (Instituto Catalán de Investigación para la Gobernanza del Mar) es un órgano de cooperación entre la Dirección General de Política Marítima y Pesca Sostenible (Generalitat de Catalunya) y el Instituto de Ciencias del Mar (ICM-CSIC) con autonomía de gestión, que nace de la necesidad de asesoramiento científico para desarrollar el programa de la Estrategia Marítima de Catalunya.",
@@ -16,7 +40,8 @@ export default es  = {
   "Sentence4": "En Octubre de 2018 se puso en marcha el programa de seguimiento de las especies de mayor interés pesquero, donde uno de los elementos clave es la recopilación de datos y su estructuración para poder ser analizadas y visualizadas.",
   "SentenceContact": "Si necesita más información sobre la aplicación, puede contactar con Gerard Llorach (gllorach at bluenetcat.eu). Si necesita más información sobre los datos, puede contactar con Jordi Ribera (jribera at icm.csic.es).",
   "SentenceFunding": "La Xarxa Marítima de Catalunya (BlueNetCat) está financiada por la Generalitat de Catalunya y el Fondo Europeo de Desarrollo Regional (FEDER).",
-
+  "Attributions": "Atribuciones",
+  "Source": "Fuente",
 
   "effortTypes": {
     "hours": "horas",
@@ -34,7 +59,7 @@ export default es  = {
   "Opacity": "Opacidad",
 
 
-  "TrackFeatures": {
+  "HaulFeatures": {
     "AvgDepth": "Profundidad media: {n} metros",
     "Data": "Fecha",
     "Date": "Fecha",
@@ -47,6 +72,21 @@ export default es  = {
     "MeshType": "Malla de la red",
     "Port": "Puerto",
     "ZonaPort": "Zona del puerto",
+    "name": "Nombre"
+  },
+  "HaulTable": {
+    "AvgDepth": "Profundidad media (m)",
+    "Data": "Fecha",
+    "Date": "Fecha",
+    "Distance": "Distancia (m)",
+    "Duration": "Duración (min)",
+    "Estacio": "Estación",
+    "FishingGroundName": "Caladero",
+    "FishingGroundType": "Fondo marino",
+    "Id": "Id",
+    "MeshType": "Malla de la red",
+    "Port": "Port",
+    "ZonaPort": "Región",
     "name": "Nombre"
   },
   "Estiu": "Verano",
@@ -150,7 +190,8 @@ export default es  = {
   "Sea surface temperature": "Temperatura superficial del mar",
   "Sea bottom temperature": "Temperatura del fondo del mar",
   "Salinity": "Salinidad",
-
+  "tonnes": "toneladas",
+  "kg / haul": "kg / pesca",
 
 
 
@@ -162,6 +203,7 @@ export default es  = {
   "port": "puerto",
   "Biomass": "Biomasa",
   "Filter per species": "Filtrar por especies",
+  "Filter per categories": "Filtrar por categorías",
   "Deactivate filter": "Desactivar filtro",
   "Select species": "Seleccionar especies",
   "Select all": "Seleccionar todas",
@@ -176,14 +218,18 @@ export default es  = {
   "Show chart": "Mostrar gráfico",
   "Hide chart": "Esconder gráfico",
   "Catch composition": "Composición de captura",
-  "Length frequency": "Frecuencia de tallas",
+  "Length distribution": "Distribución de tallas",
   "Sampling map": "Mapa de muestreo",
 
-  "Abundance (Number of individuals per km2)": "Abundancia (Nº de individuos por km2)",
+  "Abundance (Number of individuals per km2)": "Abundancia (Nº de individuos por km²)",
   "Abundance": "Abundancia",
   "individuals of": " individuos de ",
   "per": "por",
+  "Distribution percentage": "Porcentaje de la distribución",
   "Length": "Longitud",
+  "More species": "Más especies",
+  "Sexual maturity": "Madurez sexual",
+  "Number of measured individuals": "Número de individuos muestreados",
 
   "viewFullscreen": "Pantalla completa",
   "exitFullscreen": "Salir de la pantalla completa",
@@ -199,6 +245,23 @@ export default es  = {
   "downloadXLS": "Exportar datos (XLS)",
   "viewData": "Mostrar tabla de datos",
   "hideData": "Esconder tabla de datos",
+
+  "NextHaul": "Siguiente muestreo",
+  "PrevHaul": "Previo muestreo",
+  "Sort": "Ordena per",
+
+  "Viewby": "Ver por",
+  "byYear": "Año",
+  "bySeason": "Estación",
+  "byMetier": "Métier",
+  "byPortArea": "Región",
+
+  "Coastal Delta shelf": "Plataforma costera del Delta",
+  "Middle Delta shelf": "Plataforma mediana del Delta",
+  "Coastal shelf": "Plataforma costera",
+  "Deeper shelf": "Plataforma profunda",
+  "Upper slope": "Talud superior",
+  "Lower slope": "Talud inferior",
 
   "Cookies title": "Valoramos tu privacidad",
   "Cookies text": `Usamos tecnología como las galletas en nuestro sitio web para mejorar la

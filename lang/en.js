@@ -1,14 +1,37 @@
 let en;
 export default en = {
-  "Fishing tracks": "Fishing tracks",
+  "Fishing tracks": "ICATMAR's samplings",
   "Fishing effort": "Fishing effort",
   "Layers": "Layers",
+
+  "trawling": "Trawling",
+  "TrawlingInfo": "Bottom trawling",
+  "purse-seine": "Purse seine",
+  "Purse seineInfo": "Purse seine",
+  "Recreational": "Recreational",
+  "RecreationalInfo": "Shore angling, boat angling and spearfishing",
 
 
   "About": "About us",
   "About ICATMAR": "About ICATMAR",
+
+  "Information": "Information",
+  "info-sampling": "The data shown in this application comes from periodic samplings by ICATMAR. For more information about the sampling methodology, follow the link:",
+  "LinkToSampling": "I want to learn more about the sampling",
+  "info-team": "This data is collected by a group of observers who board with Catalan fishermen at different points along the coast.",
+  "LinkToTeam": "I want to meet the team",
+  "info-science": "The methodology and tools used to create this application and process the data are described in the following journal article. If you want to cite the web appliction, please use this article:",
+  "LinkToArticle": "I want to read the scientific article",
+  
   "Contact": "Contact",
+  "author-info-gerard": "For any questions, comments, or suggestions regarding the web application, you can contact ",
+  "contact-github-issues": "If you are familiar with GitHub issues, you can report errors through ",
+  "author-info-jordi": "For questions regarding the data, its processing, and acquisition, contact ",
+  "contact-icatmar": "For anything else, you can contact us through ",
+  
   "Funding": "Funding",
+  "funding-agencies": "This action is funded by ICATMAR (Institut Català de Recerca per a la Governança de la Mar), a cooperative body between the Direcció General de Política Marítima i Pesca Sostenible (Generalitat de Catalunya) and the Institut de Ciències del Mar (ICM-CSIC) with management autonomy. It was created out of the need for scientific advice to develop the program of the Catalonia Maritime Strategy. This initiative began in 2021 within the Xarxa Marítima de Catalunya (BlueNetCat) and continued until 2022.",
+
   "Code repository": "Code repository",
   "Sentence1": "This application is a viewer of the data collected by ICATMAR to carry out scientific monitoring of fisheries, transfer the knowledge acquired and facilitate the management of fishing on the Catalan coast. The application has been developed by the Catalan Maritime Network (BlueNetCat) in collaboration with ICATMAR. Currently the application only shows the bottom trawling data.",
   "Sentence2": "ICATMAR (Catalan Research Institute for the Governance of the Sea) is a cooperation body between the General Directorate of Maritime Policy and Sustainable Fisheries (Generalitat de Catalunya) and the Institute of Marine Sciences (ICM-CSIC) with management autonomy, which arises from the need for scientific advice to develop the program of the Maritime Strategy of Catalonia.",
@@ -16,7 +39,8 @@ export default en = {
   "Sentence4": "In October 2018, the monitoring program for the species of greatest fishing interest was launched, where one of the key elements is the collection of data and their structuring so that they can be analyzed and visualized.",
   "SentenceContact": "For inquiries about the application, please contact Gerard Llorach (gllorach at bluenetcat.eu). For inquiries about the data, please contact Jordi Ribera (jribera at icm.csic.es).",
   "SentenceFunding": "Xarxa Marítima de Catalunya (BlueNetCat) is financed by the Generalitat de Catalunya and by the European Regional Development Fund (ERDF).",
-
+  "Attributions": "Attributions",
+  "Source": "Source",
 
   "effortTypes": {
     "hours": "hours",
@@ -34,7 +58,7 @@ export default en = {
   "Opacity": "Opacity",
 
 
-  "TrackFeatures": {
+  "HaulFeatures": {
     "AvgDepth": "Average depth: {n} meters",
     "Data": "Date",
     "Date": "Date",
@@ -49,6 +73,22 @@ export default en = {
     "ZonaPort": "Port area",
     "name": "Name"
   },
+  "HaulTable": {
+    "AvgDepth": "Average depth (m)",
+    "Data": "Date",
+    "Date": "Data",
+    "Distance": "Distance (m)",
+    "Duration": "Duration (min)",
+    "Estacio": "Season",
+    "FishingGroundName": "Ground name",
+    "FishingGroundType": "Ground type",
+    "Id": "Id",
+    "MeshType": "Mesh type",
+    "Port": "Port",
+    "ZonaPort": "Region",
+    "name": "Name"
+  },
+
   "Primavera": "Spring",
   "Estiu": "Summer",
   "Tardor": "Autumn",
@@ -83,6 +123,8 @@ export default en = {
   "Wind": "Wind",
   "Wave Significant Height": "Wave Significant Height",
   "Current": "Current",
+  "tonnes": "tonnes",
+  "kg / haul": "kg / haul",
 
 
   "Catch per port": "Catch per port",
@@ -91,6 +133,7 @@ export default en = {
   "port": "port",
   "Biomass": "Biomass",
   "Filter per species": "Filter per species",
+  "Filter per categories": "Filter per categories",
   "Select species": "Select species",
   "Select all": "Select all",
   "Deselect all": "Deselect all",
@@ -104,14 +147,18 @@ export default en = {
   "Show chart": "Show chart",
   "Hide chart": "Hide chart",
   "Catch composition": "Catch composition",
-  "Length frequency": "Length frequency",
+  "Length distribution": "Length distribution",
   "Sampling map": "Sampling map",
 
-  "Abundance (Number of individuals per km2)": "Abundance (Number of individuals per km2)",
+  "Abundance (Number of individuals per km2)": "Abundance (Number of individuals per km²)",
   "Abundance": "Abundance",
   "individuals of": " individuals of ",
   "per": "per",
+  "Distribution percentage": "Distribution percentage",
   "Length": "Length",
+  "More species": "More species",
+  "Sexual maturity": "Maduresa sexual",
+  "Number of measured individuals": "Number of measured individuals",
 
   "viewFullscreen": "View in full screen",
   "exitFullscreen": "Exit from full screen",
@@ -127,6 +174,23 @@ export default en = {
   "downloadXLS": "Download XLS",
   "viewData": "View data table",
   "hideData": "Hide data table",
+
+  "NextHaul": "Show next sampling",
+  "PrevHaul": "Show previous sampling",
+  "Sort": "Sort by",
+
+  "Viewby": "View by",
+  "byYear": "Year",
+  "bySeason": "Season",
+  "byMetier": "Métier",
+  "byPortArea": "Region",
+
+  "Coastal Delta shelf": "Coastal Delta shelf", 
+  "Middle Delta shelf": "Middle Delta shelf",
+  "Coastal shelf": "Coastal shelf",
+  "Deeper shelf": "Deeper shelf",
+  "Upper slope": "Upper slope",
+  "Lower slope": "Lower slope",
 
   "Cookies title": "We value your privacy",
   "Cookies text": `We use technology such as cookies in our website to improve the user experience and analyze our traffic. 
