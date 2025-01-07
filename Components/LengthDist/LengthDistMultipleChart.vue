@@ -130,7 +130,10 @@ export default {
     
   },
   mounted() {
-
+    if (window.GUIManager){
+      this.order.bySeason = [...window.GUIManager.seasonsOrder]; // Copy
+      this.order.bySeason.reverse();
+    }
   },
   unmounted(){
     // Window resize remove listener
@@ -145,7 +148,7 @@ export default {
       category: '',
       order: {
         'byMetier': ['Lower slope', 'Upper slope', 'Deeper shelf', 'Coastal shelf', 'Middle Delta shelf', 'Coastal Delta shelf'],
-        'bySeason': ['Winter', 'Spring', 'Summer', 'Autumn'],
+        'bySeason': ['Autumn', 'Summer', 'Spring', 'Winter'],
         'byPortArea': ['South', 'Center', 'North'],
       },
       yticks: [], // [{bottom: 40, text: '200'}, ...];
