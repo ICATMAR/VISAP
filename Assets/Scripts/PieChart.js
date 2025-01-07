@@ -322,7 +322,21 @@ class PieChart {
 	  function partition(data){
 	    const root = d3.hierarchy(data)
 	        .sum(d => d.value) // Assing a value to each partition, based on the value of the smallest items
-	        .sort((a, b) => b.value - a.value) // Organize partitions (here from big to small)
+	        .sort((a, b) => {
+						// Sort by year and by season
+						let seasonsOrder;
+						if (window.GUIManager)
+							seasonsOrder = window.GUIManager.seasonsOrder; // HACK: requires GUIMananger
+						else
+							seasonsOrder = ['Winter', 'Spring', 'Summer', 'Autumn'];
+						if (a.depth == 1 && !isNaN(a.data.name)){
+							return b.data.name - a.data.name
+						} else if (a.depth == 2 && seasonsOrder.includes(a.data.name)){
+							return seasonsOrder.indexOf(b) - seasonsOrder.indexOf(a);
+						}
+						// Otherwise sort by biomass
+						return b.value - a.value
+					}) // Organize partitions (here from big to small)
 	  			.sort((a, b) => b.data.name == "Other" ? -1 : 1) // Put category others at the end
       
       // Rectify higher levels where biomass needs to be averaged instead of agreggated

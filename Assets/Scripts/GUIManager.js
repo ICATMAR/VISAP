@@ -17,6 +17,9 @@ class GUIManager {
     species: '',
     //breadcrumb: '',
   }
+
+  // Pie chart to sort by season
+  seasonsOrder = ['Winter', 'Spring', 'Summer', 'Autumn'];
   
 
   // CONSTRUCTOR
