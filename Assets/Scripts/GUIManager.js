@@ -8,7 +8,7 @@ class GUIManager {
     currentHaul: 23288,
     haulsLayerOpacity: 1,
     currentEffortUnit: 'kg',
-    currentEffortYear: '2020',
+    currentEffortYear: '2023',
     selStartDate: new Date(2019, 1, 1),
     selEndDate: new Date()
   }
