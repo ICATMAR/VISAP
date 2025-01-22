@@ -9,7 +9,7 @@ const products = {
       VTM01_SW1, VTM01_SW2, VTM01_WW, VTM02
       VTM10
     */
-    wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_MULTIYEAR_WAV_006_012/med-hcmr-wav-rean-h_202105?request=GetCapabilities&service=WMS',
+    wmtsURL: 'https://wmts.marine.copernicus.eu/teroWmts/MEDSEA_MULTIYEAR_WAV_006_012?request=GetCapabilities&service=WMS',
     doi: "https://doi.org/10.25423/cmcc/medsea_multiyear_wav_006_012",
     timeScales: ['h'],
     dataSets: ['VHM0', 'VHM0_WW', 'VHM0_SW1', 'VHM0_SW2',
