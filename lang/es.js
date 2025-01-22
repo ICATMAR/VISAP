@@ -219,7 +219,7 @@ export default es  = {
   "Hide chart": "Esconder gráfico",
   "Catch composition": "Composición de captura",
   "Length distribution": "Distribución de tallas",
-  "Sampling map": "Mapa de muestreo",
+  "Sampling map": "Mapa de muestreos",
 
   "Abundance (Number of individuals per km2)": "Abundancia (Nº de individuos por km²)",
   "Abundance": "Abundancia",
