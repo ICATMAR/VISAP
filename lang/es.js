@@ -22,7 +22,10 @@ export default es  = {
   "LinkToTeam": "Quiero conocer al equipo",
   "info-science": "La metodología y las herramientas utilizadas para crear esta aplicación y tratar los datos se describen en el siguiente artículo científico. Si quereis citar esta aplicación, usad este artículo:",
   "LinkToArticle": "Quiero leer el artículo científico",
-  
+  "Licenses": "Licencias y uso de datos",
+  "license-code": "El código está abierto y libre bajo una licencia ",
+  "license-data": "Los datos son abiertos con atribución bajo una licencia ",
+
   "Contact": "Contacto",
   "author-info-gerard": "Para cualquier duda, comentario o sugerencia sobre la aplicación web, puedes contactar con ",
   "contact-github-issues": "Si estás familiarizado con GitHub issues, puedes informar de errores a través de ",

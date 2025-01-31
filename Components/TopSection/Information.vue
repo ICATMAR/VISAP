@@ -36,6 +36,20 @@
           </div>
         </div>
 
+
+        <!-- Licenses -->
+        <div class="banner-title">
+          <span>{{  $t('Licenses') }}</span>
+        </div>
+        <div class="banner-text">
+          <span>
+            {{$t('license-code')}}
+            <a href="https://github.com/ICATMAR/VISAP" target="_blank">MIT</a>.
+            {{$t('license-data')}}
+            <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC-BY 4.0</a>.
+          </span>
+        </div>
+
         
         <!-- Authorship and contact -->
         <div class="banner-title">
@@ -46,7 +60,7 @@
             {{$t('author-info-gerard')}}
             <a :href="mailtoGerard" v-text="gerardEmail"></a>.
             {{$t('contact-github-issues')}}
-            <a href="https://github.com/ICATMAR/HFRadar" target="_blank">github</a>.
+            <a href="https://github.com/ICATMAR/VISAP" target="_blank">github</a>.
             {{$t('author-info-jordi')}}
             <a :href="mailToJordi" v-text="jordiEmail"></a>.
             {{$t('contact-icatmar') }}

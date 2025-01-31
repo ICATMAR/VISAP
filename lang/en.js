@@ -22,7 +22,10 @@ export default en = {
   "LinkToTeam": "I want to meet the team",
   "info-science": "The methodology and tools used to create this application and process the data are described in the following journal article. If you want to cite the web appliction, please use this article:",
   "LinkToArticle": "I want to read the scientific article",
-  
+  "Licenses": "Licenses and data usage",
+  "license-code": "Codi is open-source under a license ",
+  "license-data": "Data is open with attribution under a license ",
+
   "Contact": "Contact",
   "author-info-gerard": "For any questions, comments, or suggestions regarding the web application, you can contact ",
   "contact-github-issues": "If you are familiar with GitHub issues, you can report errors through ",

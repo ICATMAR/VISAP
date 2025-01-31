@@ -21,6 +21,9 @@ export default ca = {
   "LinkToTeam": "Vull conèixer l'equip",
   "info-science": "La metodologia i eines de com s'ha fet aquesta aplicació i de com s'han tractat les dades estan descrites en el següent article. Si voleu citar aquesta aplicació, feu servir l'article:",
   "LinkToArticle": "Vull llegir l'article científic",
+  "Licenses": "Llicències i ús de dades",
+  "license-code": "El codi està obert i és lliure sota una llicència ",
+  "license-data": "Les dades són obertes amb atribució sota una llicència ",
 
   "Contact": "Contacte",
   "author-info-gerard": "Per qualsevol dubte, comentari o suggeriment respecte l'aplicació web, podeu contactar amb ",
