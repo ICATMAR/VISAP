@@ -25,14 +25,14 @@ export default {
     this.source = new ol.source.TileWMS({
       url: 'https://ows.emodnet-seabedhabitats.eu/geoserver/emodnet_view/wms',
       params: {
-        'LAYERS': 'eusm2021_eunis2019_group',
+        'LAYERS': 'eusm2023_eunis2019_group',
         'TILED': 'TRUE',
       },
       attributions: "© EMODnet Seabed Habitats initiative",
       crossOrigin: 'anonymous',
     });
     // WMS Legend
-    this.legendURL = 'https://ows.emodnet-seabedhabitats.eu/geoserver/emodnet_view/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&LAYER=eusm2021_eunis2019_full&FORMAT=image/png&LEGEND_OPTIONS=fontAntiAliasing:true;fontColor:0x000000&TRANSPARENT=TRUE';
+    this.legendURL = 'https://ows.emodnet-seabedhabitats.eu/geoserver/emodnet_view/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&LAYER=eusm2023_eunis2019_group&FORMAT=image/png&LEGEND_OPTIONS=fontAntiAliasing:true;fontColor:0x000000&TRANSPARENT=TRUE';
 
 
     // Pre-load -- Error, refs is not ready yet?
