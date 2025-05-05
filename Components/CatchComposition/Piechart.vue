@@ -157,6 +157,10 @@ export default {
     translateData(prepData){
 
       Object.keys(prepData).forEach(key => {
+        // Skip translation of the key "translation"
+        if (key == "translation"){
+          return;
+        }
         let el = prepData[key];
         if (typeof(el) == 'object'){
           this.translateData(el);
