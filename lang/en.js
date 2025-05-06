@@ -152,6 +152,7 @@ export default en = {
   "Catch composition": "Catch composition",
   "Length distribution": "Length distribution",
   "Sampling map": "Sampling map",
+  "Data from ICATMAR": "Data from ICATMAR's samplings",
 
   "Abundance (Number of individuals per km2)": "Abundance (Number of individuals per km²)",
   "Abundance": "Abundance",

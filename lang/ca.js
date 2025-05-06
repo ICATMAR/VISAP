@@ -220,6 +220,7 @@ export default ca = {
   "Catch composition": "Composició de captura",
   "Length distribution": "Distribució de talles",
   "Sampling map": "Mapa de mostrejos",
+  "Data from ICATMAR": "Dades dels mostrejos d'ICATMAR",
 
   "Abundance (Number of individuals per km2)": "Abundància (Nº d\'individus per km²)",
   "Abundance": "Abundància",

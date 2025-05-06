@@ -223,6 +223,7 @@ export default es  = {
   "Catch composition": "Composición de captura",
   "Length distribution": "Distribución de tallas",
   "Sampling map": "Mapa de muestreos",
+  "Data from ICATMAR": "Datos de muestreos de ICATMAR",
 
   "Abundance (Number of individuals per km2)": "Abundancia (Nº de individuos por km²)",
   "Abundance": "Abundancia",
