@@ -84,7 +84,7 @@ const customDefinitions = {
     animation: {
       layerNames: ['uo', 'vo'], // Estward, northward
       format: 'east_north',
-      range: [-3, 3],
+      range: [-0.5, 0.5],
       type: 'wind',
       directionFrom: false,
     },
