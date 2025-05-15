@@ -1288,7 +1288,7 @@ const palette =
       237
     ]
   },
-  "By-Catch": {
+  "By-catch": {
     "color": [
       179,
       225,
