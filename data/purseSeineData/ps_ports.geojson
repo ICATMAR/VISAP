@@ -18,6 +18,34 @@
       {
          "type":"Feature",
          "properties":{
+            "name":"Palamós",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               3.127977,
+               41.845045
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Sant Feliu de Guíxols",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               3.03704,
+               41.78039               
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
             "name":"Blanes",
             "featType": "port"
          },
@@ -46,6 +74,20 @@
       {
          "type":"Feature",
          "properties":{
+            "name":"Barcelona",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               2.180703,
+               41.37552
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
             "name":"Vilanova i la Geltrú",
             "featType": "port"
          },
@@ -68,6 +110,34 @@
             "coordinates":[
                1.22237,
                41.104385
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"Cambrils",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               1.0615,
+               41.06598
+            ]
+         }
+      },
+      {
+         "type":"Feature",
+         "properties":{
+            "name":"L'Ametlla de Mar",
+            "featType": "port"
+         },
+         "geometry":{
+            "type":"Point",
+            "coordinates":[
+               0.801746,
+               40.881106
             ]
          }
       }

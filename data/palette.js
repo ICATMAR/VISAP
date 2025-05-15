@@ -1162,6 +1162,13 @@ const palette =
       6
     ]
   },
+  "Cambrils": {
+    "color": [
+      255,
+      0,
+      0
+    ]
+  },
   "Tarragona": {
     "color": [
       255,
@@ -1197,6 +1204,13 @@ const palette =
       255
     ]
   },
+  "Sant Feliu de Guíxols": {
+    "color": [
+      93,
+      196,
+      255
+    ]
+  },
   "Palamós": {
     "color": [
       35,
@@ -1206,9 +1220,9 @@ const palette =
   },
   "L'Escala": {
     "color": [
-      85,
-      165,
-      255
+      0,
+      126,
+      204
     ]
   },
   "Roses": {
