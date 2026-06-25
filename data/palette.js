@@ -1232,6 +1232,13 @@ const palette =
       204
     ]
   },
+  "Llançà": {
+    "color": [
+      0,
+      115,
+      156
+    ]
+  },
   "Nord": {
     "color": [
       176,
