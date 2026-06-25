@@ -68,7 +68,7 @@ class FileManager {
     // Effort maps and legends
     // All is not shown in the app, as we separate between fishing modalities
     let effortUnits = ['euros', 'hours', 'kg'];
-    let effortYears = ['2019', '2020', '2021', '2022', '2023', '2024'];
+    let effortYears = ['2019', '2020', '2021', '2022', '2023', '2024', '2025'];
 
     effortUnits.forEach(eUnit => {
       effortYears.forEach(eYear => {
